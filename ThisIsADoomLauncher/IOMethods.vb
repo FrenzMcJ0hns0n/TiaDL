@@ -9,7 +9,6 @@ Module IOMethods
 
     End Sub
 
-
     ''' <summary>
     ''' Check if all directories can be found
     ''' Validate paths
@@ -72,10 +71,6 @@ Module IOMethods
 
     End Sub
 
-
-
-
-
     'Function CheckFile(wadInfo As FileInfo) As String
 
     '    Dim name As String = wadInfo.Name.ToLowerInvariant
@@ -91,8 +86,6 @@ Module IOMethods
     '    Return "invalid"
 
     'End Function
-
-
 
     ''' <summary>
     ''' Is this filepath refer to an IWAD or a Level ? Return answer
@@ -123,9 +116,6 @@ Module IOMethods
 
     End Function
 
-
-
-
     'Not used
     Function CheckPath(filename As String) As Boolean
 
@@ -135,9 +125,6 @@ Module IOMethods
         Return False
 
     End Function
-
-
-
 
     ''' <summary>
     ''' Return the filename for all files found in /mods/ directory
@@ -162,9 +149,6 @@ Module IOMethods
 
     End Function
 
-
-
-
     ''' <summary>
     ''' Return parsed values, from file "presets.txt"
     ''' As a list of list of string
@@ -177,7 +161,7 @@ Module IOMethods
         Dim presetLines As List(Of List(Of String)) = New List(Of List(Of String))
 
         If Not File.Exists(My.Settings.RootDirPath & "\presets.txt") Then
-            Return presetLines 'Handle presetLines Is Nothing
+            Return presetLines 'presetLines is Nothing
         End If
 
         Try
@@ -190,59 +174,48 @@ Module IOMethods
                 If line.Contains("Name =") And line.Contains("IWAD =") Then
 
                     Dim argLine As List(Of String) = New List(Of String)
-                    Dim _start As Integer = 0
-                    Dim _end As Integer = 0
+                    Dim _start As Integer
+                    Dim _end As Integer
 
                     'Name -------------------------------------------------------------------------------------
-
                     _start = line.IndexOf("Name =") + 6
                     _end = line.IndexOf("IWAD =") - 6
                     Dim presetName As String = line.Substring(_start, _end).Trim 'need test
                     argLine.Add(presetName)
 
                     'IWAD -------------------------------------------------------------------------------------
-
                     Dim presetIwad As String = ""
-
                     If Not line.Contains("Level =") Then
                         _start = line.IndexOf("IWAD =") + 6
                         presetIwad = line.Substring(_start).Trim 'need test
                         argLine.Add(presetIwad)
-                        presetLines.Add(argLine) '--> Return preset with : Name, IWAD
+                        presetLines.Add(argLine) '=> Return preset with : Name, IWAD
                         Continue For
                     End If
-
                     _start = line.IndexOf("IWAD =") + 6
                     _end = line.IndexOf("Level =")
                     presetIwad = line.Substring(_start, _end - _start).Trim 'need test
                     argLine.Add(presetIwad)
 
                     'Level -------------------------------------------------------------------------------------
-
                     Dim presetLevel As String = ""
-
                     If Not line.Contains("Misc. =") Then
                         _start = line.IndexOf("Level =") + 7
                         presetLevel = line.Substring(_start).Trim 'need test
                         argLine.Add(presetLevel)
-                        presetLines.Add(argLine) '--> Return preset with : Name, IWAD, Level
+                        presetLines.Add(argLine) '=> Return preset with : Name, IWAD, Level
                         Continue For
                     End If
-
                     _start = line.IndexOf("Level =") + 7
                     _end = line.IndexOf("Misc. =")
                     presetLevel = line.Substring(_start, _end - _start).Trim 'need test
                     argLine.Add(presetLevel)
 
                     'Misc. -------------------------------------------------------------------------------------
-
                     _start = line.IndexOf("Misc. =") + 7
                     Dim presetMisc As String = line.Substring(_start).Trim 'need test
                     argLine.Add(presetMisc)
-
-                    presetLines.Add(argLine) '--> Return preset with : Name, IWAD, Level, Misc.
-                Else
-                    Continue For
+                    presetLines.Add(argLine) '=> Return preset with : Name, IWAD, Level, Misc.
                 End If
             Next
 
@@ -251,21 +224,6 @@ Module IOMethods
         End Try
 
         Return presetLines
-
-        'Format to display in MessageBox
-
-        'Dim str As String = ""
-        'Dim i As Integer = 1
-
-        'For Each argLine As List(Of String) In presetLines
-        '    str &= Environment.NewLine & i & " - "
-        '    For Each arg As String In argLine
-        '        str &= arg & Environment.NewLine
-        '    Next
-        '    i += 1
-        'Next
-
-        'MessageBox.Show(str)
 
     End Function
 
@@ -331,9 +289,6 @@ Module IOMethods
 
     End Sub
 
-
-
-
     ''' <summary>
     ''' Write attributes for New user preset
     ''' As line in 'presets.txt'
@@ -372,9 +327,6 @@ Module IOMethods
 
     End Sub
 
-
-
-
     ''' <summary>
     ''' Logging - Debug
     ''' </summary>
@@ -385,6 +337,5 @@ Module IOMethods
         End Using
 
     End Sub
-
 
 End Module

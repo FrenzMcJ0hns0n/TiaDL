@@ -118,7 +118,7 @@ Public Class SettingsWindow
     Private Sub ComboBox_BrutalDoomVersions_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboBox_BrutalDoomVersions.SelectionChanged
 
         With My.Settings
-            .BrutalDoomVersion = .ModDir & "\" & ComboBox_BrutalDoomVersions.SelectedValue ':complete absolute path
+            .BrutalDoomVersion = .ModDir & "\" & ComboBox_BrutalDoomVersions.SelectedValue
             .Save()
         End With
 

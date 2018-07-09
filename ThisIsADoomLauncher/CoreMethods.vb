@@ -14,7 +14,6 @@
                 '1. - Base command line instructions
 
                 Select Case .SelectedEngine.ToLowerInvariant
-
                     Case "gzdoom"
                         commandLine = String.Format(
                             "/c start """" ""{0}"" -width {1} -height {2} +fullscreen {3} -iwad ""{4}""",
@@ -24,27 +23,25 @@
                             Int(.FullscreenEnabled).ToString,
                             .SelectedIwad
                         )
-
                     Case "zandronum"
-                        'TODO!
+                        'TODO
                         'commandLine = String.Format("{0}{1}",value0, value1) ...
-
                 End Select
 
 
                 '2. - Additional command line instructions
-                commandLine &= If(.SelectedLevel = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedLevel))
-
-                'commandLine &= If(.SelectedMisc = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMisc))
 
                 If .UseBrutalDoom Then
                     commandLine &= If(.BrutalDoomVersion = Nothing, Nothing, String.Format(" -file ""{0}""", .BrutalDoomVersion))
                 End If
-
+                commandLine &= If(.SelectedLevel = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedLevel))
+                'commandLine &= If(.SelectedMisc = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMisc))
                 commandLine &= If(.SelectedMusic = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMusic))
-
                 commandLine &= If(.UseTurbo = True, " -turbo 125", Nothing)
+
+                'TODO (v2+)
                 'commandLine &= If(.UseTurbo = True, String.Format(" -turbo {0}", turboValue), Nothing)
+
 
                 Return commandLine
             End With
@@ -59,57 +56,86 @@
 
     End Function
 
-
-
-
     ''' <summary>
-    ''' Create buttons then return Button and String objects
+    ''' For each valid preset : create a button + return values
     ''' As List of IEnumerable
     ''' 
-    ''' tuple example : MyPresetName, Doom2, LevelPath
+    ''' To be valid, each preset (as a line of 'presets.txt') must have at least a Name and an Iwad
+    ''' values(0) : Preset Name
+    ''' values(1) : Preset Iwad
+    ''' values(2) : Preset Level
+    ''' values(3) : Preset Misc.
     ''' </summary>
-    Function FormatPresetsData(presets As List(Of List(Of String))) As List(Of IEnumerable(Of Object))
+    Function FormatPresetsData(presetsData As List(Of List(Of String))) As List(Of IEnumerable(Of Object))
 
-        'Destination
-        Dim buttons As List(Of Button) = New List(Of Button)
-        Dim values As List(Of String) = New List(Of String)
-        Dim buttonsAndValues As List(Of IEnumerable(Of Object)) = New List(Of IEnumerable(Of Object))
+        Dim buttonsList As List(Of Button) = New List(Of Button)
+        Dim valuesList As List(Of String) = New List(Of String)
 
-
-        'Parse data then return it
-        Dim tuple As List(Of String)
-        For Each tuple In presets
-
-            If Not tuple(0) = "" And Not tuple(0) Is Nothing Then
-                WriteToLog("Test args/tuples : " & tuple(0) & tuple(1) & tuple(2)) 'debug
-
-                Dim button As Button = New Button With {
-                    .Margin = New Thickness(0, 0, 0, 2),
-                    .Height = 28,
-                    .FontSize = 14,
-                    .Content = tuple(0)
-                }
-
-                buttons.Add(button)
-                'TODO : better values storage
-                'For now it's values(0-1-2) for preset1, values(3,4,5) for preset2, etc.
-                values.Add(tuple(0))
-                values.Add(tuple(1))
-                values.Add(tuple(2))
-
-                buttonsAndValues.Add(buttons)
-                buttonsAndValues.Add(values)
-            Else
-                MessageBox.Show("was """" or nothing") ' TODO : Choose between "" and Nothing
+        For Each values As List(Of String) In presetsData
+            If values.Count < 2 Then
+                Continue For 'invalid preset. Ignore it
             End If
+
+            buttonsList.Add(New Button With {
+                .Margin = New Thickness(0, 0, 0, 2),
+                .Height = 28,
+                .FontSize = 14,
+                .Content = values(0)
+            })
+
+            valuesList.Add(values(1))
+
+            For i As Integer = 1 To values.Count - 1
+                If values(i) = Nothing Then
+                    Exit For
+                End If
+                valuesList.Add(values(i))
+            Next
         Next
 
-        Return buttonsAndValues
+        Return New List(Of IEnumerable(Of Object)) From {buttonsList, valuesList}
 
     End Function
 
+    Sub DisplayLoadedPresets(readPresetsData As List(Of List(Of String)))
 
+        For Each values As List(Of String) In readPresetsData
+            If values.Count < 2 Then
+                Continue For 'invalid preset. Ignore it
+            End If
 
+            Dim button As New Button With
+            {
+                .Margin = New Thickness(0, 0, 0, 2),
+                .Height = 28,
+                .FontSize = 14,
+                .Content = values(0)
+            }
+
+            'Not sure
+            Dim valuesList As List(Of String) = New List(Of String)
+            For i As Integer = 1 To values.Count - 1
+                If values(i) = Nothing Then
+                    Exit For
+                End If
+                valuesList.Add(values(i))
+            Next
+
+            'TODO Give to HandleUserPresetClick a variable amount of args ? String[]
+
+            'Build an anonymous function to get clickable button for each valid preset
+            AddHandler button.Click,
+                Sub(sender, e)
+                    HandleUserPresetClick(
+                        presetName,
+                        presetIwad,
+                        presetLevel
+                    )
+                End Sub
+
+        Next
+
+    End Sub
 
     ''' <summary>
     ''' Launch an instance of cmd.exe as a process, with specified args

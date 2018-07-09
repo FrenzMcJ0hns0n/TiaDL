@@ -11,11 +11,42 @@ Class MainWindow
 
         Try
 
+            'Dim str As String = ""
+            'For i As Integer = 1 To 1
+            '    str &= "hola"
+            'Next
+            'MessageBox.Show(str)
+
+
+            'Dim str As String = ""
+
+            'MessageBox.Show(If(str = Nothing, "Nothing", """"))
+
             'TEST
             'MessageBox.Show(CheckIwadPath("Doom.wad"))
 
+            'MessageBox.Show(str)
+
             'Directories
             SetRootDirPath()
+            'Dim clochard As List(Of List(Of String)) = GetPresetsFromFile(My.Settings.RootDirPath & "\presets.txt")
+
+
+            'Dim str As String = ""
+            'Dim i As Integer = 1
+
+            'For Each argLine As List(Of String) In clochard
+            '    str &= Environment.NewLine & i & " - "
+            '    For Each arg As String In argLine
+            '        str &= arg & Environment.NewLine
+            '    Next
+            '    i += 1
+            'Next
+            'MessageBox.Show(str)
+
+
+
+
             ValidateDirectories()
 
             'Settings
@@ -37,13 +68,15 @@ Class MainWindow
         With My.Settings
             TextBox_IwadToLaunch.Text = .SelectedIwad
             TextBox_LevelToLaunch.Text = .SelectedLevel
+            'TextBox_MiscToLaunch.Text = "" TODO
             CheckBox_Load_DoomMetal.IsChecked = If(.SelectedMusic = Nothing, False, True)
             CheckBox_EnableTurbo.IsChecked = .UseTurbo
-            'TextBox_MiscToLaunch.Text = "" TODO
 
             'User presets (2nd tab)
-            Dim presets As List(Of IEnumerable(Of Object)) = New List(Of IEnumerable(Of Object))
-            presets = FormatPresetsData(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
+            Dim presets As List(Of IEnumerable(Of Object)) = New List(Of IEnumerable(Of Object)) From {
+                FormatPresetsData(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
+            }
+            '<=> presets = FormatPresetsData(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
             DisplayUserPresets(presets)
         End With
 
@@ -846,7 +879,7 @@ Class MainWindow
         'My.Settings.BrutalDoomVersion = "bd21testApr25.pk3"
         'My.Settings.Save()
 
-        MessageBox.Show(ValidateFile("C:\Users\Frenz\source\repos\AnotherYoutubeAudioDownloader\AnotherYoutuion Of DOOM.mp3"))
+        'MessageBox.Show(ValidateFile("C:\Users\Frenz\source\repos\AnotherYoutubeAudioDownloader\AnotherYoutuion Of DOOM.mp3"))
 
     End Sub
 
