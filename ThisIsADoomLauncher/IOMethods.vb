@@ -13,7 +13,7 @@ Module IOMethods
     ''' Check if all directories can be found
     ''' Validate paths
     ''' </summary>
-
+    ''' 
     Sub ValidateDirectories()
         'TODO
         'engine\gzdoom
@@ -71,26 +71,11 @@ Module IOMethods
 
     End Sub
 
-    'Function CheckFile(wadInfo As FileInfo) As String
-
-    '    Dim name As String = wadInfo.Name.ToLowerInvariant
-    '    If name = "doom.wad" Or name = "doom2.wad" Or name = "tnt.wad" Or name = "plutonia.wad" Then
-    '        Return "iwad"
-    '    End If
-
-    '    Dim ext As String = wadInfo.Extension.ToLowerInvariant
-    '    If ext = ".wad" Or ext = ".pk3" Then
-    '        Return "level"
-    '    End If
-
-    '    Return "invalid"
-
-    'End Function
-
     ''' <summary>
     ''' Is this filepath refer to an IWAD or a Level ? Return answer
     ''' As string
     ''' </summary>
+    ''' 
     Function ValidateFile(path As String) As String
 
         Try
@@ -99,15 +84,21 @@ Module IOMethods
                 Return "does not exist"
             End If
 
-            Dim name As String = fileInfo.Name.ToLowerInvariant
-            If name = "doom.wad" Or name = "doom2.wad" Or name = "tnt.wad" Or name = "plutonia.wad" Then
+            Dim iwadList As List(Of String) = New List(Of String) From
+            {
+                "doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"
+            }
+            If iwadList.Contains(fileInfo.Name.ToLowerInvariant) Then
                 Return "iwad"
             End If
 
             Dim extension As String = fileInfo.Extension.ToLowerInvariant
             If extension = ".wad" Or extension = ".pk3" Then
                 Return "level"
+            ElseIf extension = ".bex" Or extension = ".deh" Then
+                Return "misc"
             End If
+
             Return "unrecognized"
 
         Catch ex As Exception
@@ -116,20 +107,11 @@ Module IOMethods
 
     End Function
 
-    'Not used
-    Function CheckPath(filename As String) As Boolean
-
-        If File.Exists(filename) Then
-            Return True
-        End If
-        Return False
-
-    End Function
-
     ''' <summary>
     ''' Return the filename for all files found in /mods/ directory
     ''' As list of string
     ''' </summary>
+    ''' 
     Function GetLocalBrutalDoomVersions() As List(Of String)
 
         Dim versionsFound As List(Of String) = New List(Of String)
@@ -149,122 +131,30 @@ Module IOMethods
 
     End Function
 
+
     ''' <summary>
-    ''' Return parsed values, from file "presets.txt"
-    ''' As a list of list of string
-    ''' 
-    ''' For instance : 
-    ''' ("MyFirstPreset","Doom2","Level.wad"), ("MySecondPreset", "Doom2", "AnotherLevel.wad")
+    ''' Build absolute path from iwad relative filename (Common presets)
     ''' </summary>
-    Function GetPresetsFromFile(presetFile As String) As List(Of List(Of String))
-
-        Dim presetLines As List(Of List(Of String)) = New List(Of List(Of String))
-
-        If Not File.Exists(My.Settings.RootDirPath & "\presets.txt") Then
-            Return presetLines 'presetLines is Nothing
-        End If
-
-        Try
-            For Each line As String In File.ReadLines(My.Settings.RootDirPath & "\presets.txt")
-
-                If line.Trim.StartsWith("#") Then
-                    Continue For 'Ignore lines with "#" as first read char
-                End If
-
-                If line.Contains("Name =") And line.Contains("IWAD =") Then
-
-                    Dim argLine As List(Of String) = New List(Of String)
-                    Dim _start As Integer
-                    Dim _end As Integer
-
-                    'Name -------------------------------------------------------------------------------------
-                    _start = line.IndexOf("Name =") + 6
-                    _end = line.IndexOf("IWAD =") - 6
-                    Dim presetName As String = line.Substring(_start, _end).Trim 'need test
-                    argLine.Add(presetName)
-
-                    'IWAD -------------------------------------------------------------------------------------
-                    Dim presetIwad As String = ""
-                    If Not line.Contains("Level =") Then
-                        _start = line.IndexOf("IWAD =") + 6
-                        presetIwad = line.Substring(_start).Trim 'need test
-                        argLine.Add(presetIwad)
-                        presetLines.Add(argLine) '=> Return preset with : Name, IWAD
-                        Continue For
-                    End If
-                    _start = line.IndexOf("IWAD =") + 6
-                    _end = line.IndexOf("Level =")
-                    presetIwad = line.Substring(_start, _end - _start).Trim 'need test
-                    argLine.Add(presetIwad)
-
-                    'Level -------------------------------------------------------------------------------------
-                    Dim presetLevel As String = ""
-                    If Not line.Contains("Misc. =") Then
-                        _start = line.IndexOf("Level =") + 7
-                        presetLevel = line.Substring(_start).Trim 'need test
-                        argLine.Add(presetLevel)
-                        presetLines.Add(argLine) '=> Return preset with : Name, IWAD, Level
-                        Continue For
-                    End If
-                    _start = line.IndexOf("Level =") + 7
-                    _end = line.IndexOf("Misc. =")
-                    presetLevel = line.Substring(_start, _end - _start).Trim 'need test
-                    argLine.Add(presetLevel)
-
-                    'Misc. -------------------------------------------------------------------------------------
-                    _start = line.IndexOf("Misc. =") + 7
-                    Dim presetMisc As String = line.Substring(_start).Trim 'need test
-                    argLine.Add(presetMisc)
-                    presetLines.Add(argLine) '=> Return preset with : Name, IWAD, Level, Misc.
-                End If
-            Next
-
-        Catch ex As Exception
-            MessageBox.Show("Error. Exception :" & Environment.NewLine & ex.ToString)
-        End Try
-
-        Return presetLines
-
-    End Function
-
+    ''' 
     Public Function BuildIwadPath(iwad As String) As String
 
         With My.Settings
-
-            If File.Exists(.IwadsDir & "\" & iwad) Then
-                Return .IwadsDir & "\" & iwad
-            End If
-            Return Nothing
-
+            Return If(File.Exists(.IwadsDir & "\" & iwad), .IwadsDir & "\" & iwad, Nothing)
         End With
 
     End Function
 
+    ''' <summary>
+    ''' Build absolute path from level relative filename (Common presets)
+    ''' </summary>
+    ''' 
     Public Function BuildLevelPath(level As String) As String
 
         With My.Settings
-
-            If File.Exists(.LevelsDir & "\" & level) Then
-                Return .LevelsDir & "\" & level
-            End If
-            Return Nothing
-
+            Return If(File.Exists(.LevelsDir & "\" & level), .LevelsDir & "\" & level, Nothing)
         End With
 
     End Function
-
-    'Public Function BuildMiscPath(misc As String) As String
-
-    '    With My.Settings
-
-    '        If File.Exists(misc) Then
-    '            Return .LevelsDir & "\" & level
-    '        End If
-    '        Return Nothing
-
-    '    End With
-
-    'End Function
 
     ''' <summary>
     ''' Handle .ini files management
@@ -289,43 +179,7 @@ Module IOMethods
 
     End Sub
 
-    ''' <summary>
-    ''' Write attributes for New user preset
-    ''' As line in 'presets.txt'
-    ''' </summary>
-    Sub WritePresetToFile(name As String, iwad As String, level As String, misc As String)
 
-        Try
-            Dim pathToPreset As String = My.Settings.RootDirPath & "\presets.txt"
-
-            'A DEPLACER >
-            'Create file with some lines
-            If Not File.Exists(pathToPreset) Then
-                Using streamWriter As New StreamWriter(pathToPreset, True, Text.Encoding.Unicode)
-                    streamWriter.WriteLine("# Lines starting with ""#"" are ignored by the program")
-                    streamWriter.WriteLine()
-                    streamWriter.WriteLine("# Preset pattern :")
-                    streamWriter.WriteLine("# Name = <value> IWAD = <path> [Level = <path> Misc. = <path>]")
-                    streamWriter.WriteLine("# 'Name' and 'IWAD' are mandatory values")
-                    streamWriter.WriteLine("# 'Misc.' refers to .deh or .dex files")
-                    streamWriter.WriteLine("")
-                    streamWriter.WriteLine("# Presets")
-                End Using
-            End If
-
-            'Write the preset
-            Using streamWriter As New StreamWriter(pathToPreset, True, Text.Encoding.Unicode)
-                streamWriter.WriteLine(String.Format(
-                    "Name = {0} IWAD = {1} Level = {2} Misc = {3}",
-                    name, iwad, level, misc))
-            End Using
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'WritePresetToFile()'. Exception : " & ex.ToString)
-        End Try
-
-
-    End Sub
 
     ''' <summary>
     ''' Logging - Debug

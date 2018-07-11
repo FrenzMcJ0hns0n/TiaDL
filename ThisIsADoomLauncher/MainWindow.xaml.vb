@@ -10,53 +10,10 @@ Class MainWindow
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 
         Try
-
-            'Dim str As String = ""
-            'For i As Integer = 1 To 1
-            '    str &= "hola"
-            'Next
-            'MessageBox.Show(str)
-
-
-            'Dim str As String = ""
-
-            'MessageBox.Show(If(str = Nothing, "Nothing", """"))
-
-            'TEST
-            'MessageBox.Show(CheckIwadPath("Doom.wad"))
-
-            'MessageBox.Show(str)
-
-            'Directories
             SetRootDirPath()
-            'Dim clochard As List(Of List(Of String)) = GetPresetsFromFile(My.Settings.RootDirPath & "\presets.txt")
-
-
-            'Dim str As String = ""
-            'Dim i As Integer = 1
-
-            'For Each argLine As List(Of String) In clochard
-            '    str &= Environment.NewLine & i & " - "
-            '    For Each arg As String In argLine
-            '        str &= arg & Environment.NewLine
-            '    Next
-            '    i += 1
-            'Next
-            'MessageBox.Show(str)
-
-
-
-
             ValidateDirectories()
-
-            'Settings
             InitializeGUI()
-
-
             'AutoSetResolution()
-
-
-
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'Window_Loaded()'. Exception : " & ex.ToString)
         End Try
@@ -68,16 +25,17 @@ Class MainWindow
         With My.Settings
             TextBox_IwadToLaunch.Text = .SelectedIwad
             TextBox_LevelToLaunch.Text = .SelectedLevel
-            'TextBox_MiscToLaunch.Text = "" TODO
+            TextBox_MiscToLaunch.Text = .SelectedMisc
             CheckBox_Load_DoomMetal.IsChecked = If(.SelectedMusic = Nothing, False, True)
             CheckBox_EnableTurbo.IsChecked = .UseTurbo
 
             'User presets (2nd tab)
-            Dim presets As List(Of IEnumerable(Of Object)) = New List(Of IEnumerable(Of Object)) From {
-                FormatPresetsData(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
-            }
+            DisplayLoadedPresets(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
+            'DisplayLoadedPresets(presets)
+            'LoadedPresetsButtonClick(presets)
+
             '<=> presets = FormatPresetsData(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
-            DisplayUserPresets(presets)
+            'DisplayUserPresets(presets)
         End With
 
     End Sub
@@ -749,6 +707,11 @@ Class MainWindow
 
     End Function
 
+
+
+
+#Region "Add new preset"
+
     Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
 
         'IWAD
@@ -801,14 +764,6 @@ Class MainWindow
 
     End Sub
 
-    'Private Sub Button_LaunchParameters_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_LaunchParameters_Reset.Click
-
-    '    TextBox_IwadToLaunch.Text = Nothing
-    '    TextBox_LevelToLaunch.Text = Nothing
-    '    TextBox_MiscToLaunch.Text = Nothing
-
-    'End Sub
-
     Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
 
         If TextBox_NewPreset_Name.Text = "Enter preset name ..." Then
@@ -828,6 +783,19 @@ Class MainWindow
         End If
 
     End Sub
+
+#End Region
+
+
+
+
+    'Private Sub Button_LaunchParameters_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_LaunchParameters_Reset.Click
+
+    '    TextBox_IwadToLaunch.Text = Nothing
+    '    TextBox_LevelToLaunch.Text = Nothing
+    '    TextBox_MiscToLaunch.Text = Nothing
+
+    'End Sub
 
 
     Private Sub CheckBox_Load_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Load_DoomMetal.Checked

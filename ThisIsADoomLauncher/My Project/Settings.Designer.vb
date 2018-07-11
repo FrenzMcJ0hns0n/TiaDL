@@ -256,6 +256,18 @@ Partial Friend NotInheritable Class MySettings
             Me("UseTurbo") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+    Public Property SelectedMisc() As String
+        Get
+            Return CType(Me("SelectedMisc"),String)
+        End Get
+        Set
+            Me("SelectedMisc") = value
+        End Set
+    End Property
 End Class
 
 Namespace My
