@@ -534,6 +534,60 @@ Class MainWindow
 
 #Region "Add new preset : GUI items"
 
+
+    Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
+
+        'IWAD
+        TextBox_IwadToLaunch.Text = NewPreset_GetSelectedIwad()
+        My.Settings.SelectedIwad = NewPreset_GetSelectedIwad()
+
+        'Level
+        TextBox_LevelToLaunch.Text = NewPreset_GetSelectedLevel()
+        My.Settings.SelectedLevel = NewPreset_GetSelectedLevel()
+
+    End Sub
+
+    Private Sub Button_NewPreset_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Reset.Click
+
+        Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
+        Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
+        Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
+        Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
+
+        TextBox_DropWadFile.FontStyle = FontStyles.Italic
+        TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
+        TextBox_DropWadFile.Foreground = New BrushConverter().ConvertFrom("#444")
+        TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
+
+        TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
+        TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
+        TextBox_NewPreset_Name.Text = "Enter preset name ..."
+
+    End Sub
+
+    Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
+
+        If TextBox_NewPreset_Name.Text = "Enter preset name ..." Or TextBox_NewPreset_Name.Text = Nothing Then
+            MessageBox.Show("New user preset requires a name to be saved")
+            Return
+        End If
+
+        If NewPreset_GetSelectedIwad() = Nothing Then
+            MessageBox.Show("New user preset requires an IWAD to be saved")
+            Return
+        End If
+
+        'TODO : Check input validity !
+
+        Dim nameToSave As String = TextBox_NewPreset_Name.Text
+        Dim iwadToSave As String = NewPreset_GetSelectedIwad()
+        Dim levelToSave As String = NewPreset_GetSelectedLevel() 'can be Nothing -> ok for String.Format ?
+        Dim miscToSave As String = NewPreset_GetSelectedMisc() 'can be Nothing -> ok for String.Format ?
+        WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
+
+    End Sub
+
+
     Private Sub Button_NewPreset_SetDoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoomIwad.Click
 
         With My.Settings
@@ -628,33 +682,23 @@ Class MainWindow
 
     End Sub
 
-#End Region
+    Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
 
+        If TextBox_NewPreset_Name.Text = "Enter preset name ..." Then
+            TextBox_NewPreset_Name.Text = ""
+            TextBox_NewPreset_Name.ClearValue(FontStyleProperty)
+            TextBox_NewPreset_Name.ClearValue(ForegroundProperty)
+        End If
 
+    End Sub
 
+    Private Sub TextBox_NewPreset_Name_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.LostFocus
 
-    Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
-
-        With My.Settings
-
-            MessageBox.Show(String.Format(
-                "ScreenWidth = {0}{1}ScreenHeight = {2}{3}FullscreenEnabled = {4}{5}SelectedIwad = {6}{7}SelectedLevel = {8}{9}UseBrutalDoom = {10}{11}BrutalDoomVersion = {12}{13}SelectedMusicMod = {14}{15}UseTurbo = {16}{17}SelectedEngine = {18}",
-                .ScreenWidth.ToString, Environment.NewLine,
-                .ScreenHeight.ToString, Environment.NewLine,
-                .FullscreenEnabled.ToString, Environment.NewLine,
-                .SelectedIwad, Environment.NewLine,
-                .SelectedLevel, Environment.NewLine,
-                .UseBrutalDoom.ToString, Environment.NewLine,
-                .BrutalDoomVersion, Environment.NewLine,
-                .SelectedMusic, Environment.NewLine,
-                .UseTurbo, Environment.NewLine,
-                .SelectedEngine
-            ))
-            '.SelectedMisc, Environment.NewLine,
-
-        End With
-
-        'SaveNewSettings()
+        If TextBox_NewPreset_Name.Text Is Nothing Or TextBox_NewPreset_Name.Text = "" Then
+            TextBox_NewPreset_Name.Text = "Enter preset name ..."
+            TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
+            TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
+        End If
 
     End Sub
 
@@ -689,102 +733,47 @@ Class MainWindow
 
     Private Function NewPreset_GetSelectedLevel() As String
 
-        If TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..." Then
-            Return Nothing
-        End If
-        Return TextBox_DropWadFile.Text
+        Return If(TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ...", Nothing, TextBox_DropWadFile.Text)
 
     End Function
 
     Private Function NewPreset_GetSelectedMisc() As String
 
-        'TODO : change text
-
-        If TextBox_DropMiscFile.Text = "Drop a .deh/.??? file here ..." Then
-            Return Nothing
-        End If
-        Return TextBox_DropMiscFile.Text
+        Return If(TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here ...", Nothing, TextBox_DropMiscFile.Text)
 
     End Function
 
 
-
-
-#Region "Add new preset"
-
-    Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
-
-        'IWAD
-        TextBox_IwadToLaunch.Text = NewPreset_GetSelectedIwad()
-        My.Settings.SelectedIwad = NewPreset_GetSelectedIwad()
-
-        'Level
-        TextBox_LevelToLaunch.Text = NewPreset_GetSelectedLevel()
-        My.Settings.SelectedLevel = NewPreset_GetSelectedLevel()
-
-    End Sub
-
-    Private Sub Button_NewPreset_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Reset.Click
-
-        Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-        Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-        Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-        Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-
-        TextBox_DropWadFile.FontStyle = FontStyles.Italic
-        TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
-        TextBox_DropWadFile.Foreground = New BrushConverter().ConvertFrom("#444")
-        TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
-
-        TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-        TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
-        TextBox_NewPreset_Name.Text = "Enter preset name ..."
-
-    End Sub
-
-    Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
-
-        If TextBox_NewPreset_Name.Text = "Enter preset name ..." Or TextBox_NewPreset_Name.Text = Nothing Then
-            MessageBox.Show("New user preset requires a name to be saved")
-            Return
-        End If
-
-        If NewPreset_GetSelectedIwad() = Nothing Then
-            MessageBox.Show("New user preset requires at least an IWAD to be saved")
-            Return
-        End If
-
-        'TODO : Check input validity !
-
-        Dim nameToSave As String = TextBox_NewPreset_Name.Text
-        Dim iwadToSave As String = NewPreset_GetSelectedIwad()
-        Dim levelToSave As String = NewPreset_GetSelectedLevel() 'can be Nothing -> ok for String.Format ?
-        Dim miscToSave As String = NewPreset_GetSelectedMisc() 'can be Nothing -> ok for String.Format ?
-        WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
-
-    End Sub
-
-    Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
-
-        If TextBox_NewPreset_Name.Text = "Enter preset name ..." Then
-            TextBox_NewPreset_Name.Text = ""
-            TextBox_NewPreset_Name.ClearValue(FontStyleProperty)
-            TextBox_NewPreset_Name.ClearValue(ForegroundProperty)
-        End If
-
-    End Sub
-
-    Private Sub TextBox_NewPreset_Name_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.LostFocus
-
-        If TextBox_NewPreset_Name.Text Is Nothing Or TextBox_NewPreset_Name.Text = "" Then
-            TextBox_NewPreset_Name.Text = "Enter preset name ..."
-            TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-            TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
-        End If
-
-    End Sub
-
 #End Region
+
+
+
+
+    Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
+
+        With My.Settings
+
+            MessageBox.Show(String.Format(
+                "ScreenWidth = {0}{1}ScreenHeight = {2}{3}FullscreenEnabled = {4}{5}SelectedIwad = {6}{7}SelectedLevel = {8}{9}UseBrutalDoom = {10}{11}BrutalDoomVersion = {12}{13}SelectedMusicMod = {14}{15}UseTurbo = {16}{17}SelectedEngine = {18}",
+                .ScreenWidth.ToString, Environment.NewLine & Environment.NewLine,
+                .ScreenHeight.ToString, Environment.NewLine & Environment.NewLine,
+                .FullscreenEnabled.ToString, Environment.NewLine & Environment.NewLine,
+                .SelectedIwad, Environment.NewLine & Environment.NewLine,
+                .SelectedLevel, Environment.NewLine & Environment.NewLine,
+                .UseBrutalDoom.ToString, Environment.NewLine & Environment.NewLine,
+                .BrutalDoomVersion, Environment.NewLine & Environment.NewLine,
+                .SelectedMusic, Environment.NewLine & Environment.NewLine,
+                .UseTurbo, Environment.NewLine & Environment.NewLine,
+                .SelectedEngine
+            ))
+            '.SelectedMisc, Environment.NewLine,
+
+        End With
+
+        'SaveNewSettings()
+
+    End Sub
+
 
 
 
@@ -797,6 +786,7 @@ Class MainWindow
 
     'End Sub
 
+#Region "Extra launch parameters"
 
     Private Sub CheckBox_Load_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Load_DoomMetal.Checked
 
@@ -839,6 +829,8 @@ Class MainWindow
         End With
 
     End Sub
+
+#End Region
 
 
     Private Sub Test()

@@ -14,6 +14,12 @@ Module LoadPresetsMethods
     ''' 
     Sub DisplayLoadedPresets(readPresetsData As List(Of List(Of String)))
 
+        'TODO : test when 'presets.txt' does not exist ! To see the value of ReadPresetsData
+
+        'If readPresetsData = Nothing Then
+        '    Return
+        'End If
+
         Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
 
         For Each values As List(Of String) In readPresetsData
@@ -49,10 +55,12 @@ Module LoadPresetsMethods
     ''' 
     Function GetPresetsFromFile(presetFile As String) As List(Of List(Of String))
 
+        'TODO : test when 'presets.txt' does not exist ! To see the value of ReadPresetsData (see function above)
+
         Dim presetLines As List(Of List(Of String)) = New List(Of List(Of String))
 
         If Not File.Exists(My.Settings.RootDirPath & "\presets.txt") Then
-            Return presetLines 'presetLines is Nothing
+            Return Nothing 'Or 'Return presetLines' ?
         End If
 
         Try

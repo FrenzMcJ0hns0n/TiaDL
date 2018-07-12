@@ -79,7 +79,6 @@ Module IOMethods
     Function ValidateFile(path As String) As String
 
         Try
-            Dim fileInfo As FileInfo = New FileInfo(path)
             If Not File.Exists(path) Then
                 Return "does not exist"
             End If
@@ -88,11 +87,11 @@ Module IOMethods
             {
                 "doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"
             }
-            If iwadList.Contains(fileInfo.Name.ToLowerInvariant) Then
+            If iwadList.Contains(File_GetName(path).ToLowerInvariant) Then
                 Return "iwad"
             End If
 
-            Dim extension As String = fileInfo.Extension.ToLowerInvariant
+            Dim extension As String = File_GetExtension(path).ToLowerInvariant
             If extension = ".wad" Or extension = ".pk3" Then
                 Return "level"
             ElseIf extension = ".bex" Or extension = ".deh" Then
@@ -119,8 +118,9 @@ Module IOMethods
         Try
             Dim files() = Directory.GetFiles(My.Settings.ModDir)
             For Each file As String In files
-                Dim name As String = New FileInfo(file).Name
-                versionsFound.Add(name)
+                'Dim name As String = New FileInfo(file).Name
+                'versionsFound.Add(name)
+                versionsFound.Add(File_GetName(file))
             Next
             Return versionsFound
 
@@ -132,29 +132,7 @@ Module IOMethods
     End Function
 
 
-    ''' <summary>
-    ''' Build absolute path from iwad relative filename (Common presets)
-    ''' </summary>
-    ''' 
-    Public Function BuildIwadPath(iwad As String) As String
 
-        With My.Settings
-            Return If(File.Exists(.IwadsDir & "\" & iwad), .IwadsDir & "\" & iwad, Nothing)
-        End With
-
-    End Function
-
-    ''' <summary>
-    ''' Build absolute path from level relative filename (Common presets)
-    ''' </summary>
-    ''' 
-    Public Function BuildLevelPath(level As String) As String
-
-        With My.Settings
-            Return If(File.Exists(.LevelsDir & "\" & level), .LevelsDir & "\" & level, Nothing)
-        End With
-
-    End Function
 
     ''' <summary>
     ''' Handle .ini files management

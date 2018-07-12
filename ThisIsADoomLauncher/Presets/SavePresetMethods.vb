@@ -3,11 +3,11 @@
 Module SavePresetMethods
 
     ''' <summary>
-    ''' Write attributes for New user preset
+    ''' Write attributes for New user preset.
     ''' As line in 'presets.txt'
     ''' </summary>
     ''' 
-    Sub WritePresetToFile(name As String, iwad As String, level As String, misc As String)
+    Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
 
         Try
             Dim pathToPreset As String = My.Settings.RootDirPath & "\presets.txt"
@@ -27,10 +27,14 @@ Module SavePresetMethods
 
             'Write preset
             Using streamWriter As New StreamWriter(pathToPreset, True, Text.Encoding.Unicode)
-                streamWriter.WriteLine(String.Format(
-                    "Name = {0} IWAD = {1} Level = {2} Misc = {3}",
-                    name, iwad, level, misc
-                ))
+
+                Dim presetLine As String = String.Format("Name = {0} IWAD = {1}", name, iwad)
+
+                presetLine &= If(level = Nothing, Nothing, " Level = " & level)
+                presetLine &= If(misc = Nothing, Nothing, " Misc = " & misc)
+
+                streamWriter.WriteLine(presetLine)
+
             End Using
 
         Catch ex As Exception

@@ -420,7 +420,7 @@
                                      VerticalContentAlignment="Center"
                                      FontStyle="Italic"
                                      Foreground="#444"
-                                     Text="Drop a .deh/.??? file here ..."
+                                     Text="Drop a .deh/.bex file here ..."
                                      Cursor="Arrow"
                                      IsReadOnly="True" 
                                      PreviewDragOver="TextBox_wad_file_PreviewDragOver"
@@ -588,20 +588,6 @@
                           VerticalAlignment="Center"
                           Content="Doom Metal v4" 
                           />
-                <!--<RadioButton x:Name="RadioButton_Music_Normal" 
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
-                             Margin="56,84,0,0"
-                             GroupName="Music selection"
-                             Content="Normal" 
-                             />
-                <RadioButton x:Name="RadioButton_Music_DoomMetal" 
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top"
-                             Margin="156,84,0,0"
-                             GroupName="Music selection"
-                             Content="Doom Metal v4" 
-                             />-->
                 <!-- TODO : User-selectable amount of turbo -->
                 <CheckBox x:Name="CheckBox_EnableTurbo"
                           Grid.Row="4"
@@ -636,50 +622,74 @@
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
 
-                <!-- Options -->
+                <!-- Sidebar options -->
 
                 <DockPanel Grid.Row="0"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            >
-                    <Button x:Name="Button_Help"  
+                    <Button x:Name="Button_Help"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Content="Help"/>
-                </DockPanel>
-
-                <DockPanel Grid.Row="1"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch"
-                           >
-                    <Button HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Content="Levels"/>
-                </DockPanel>
-
-                <DockPanel Grid.Row="2"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Stretch"
-                           >
-                    <Button HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Margin="6"
+                            Margin="14"
                             Cursor="Hand"
+                            ToolTip="Help"
                             >
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="BD_Image" Source="Resources/BrutalDoom_chrisb1994.png" />
+                        <Image Name="Help_Image" Source="Resources/index.png" />
+                    </Button>
+                </DockPanel>
+
+                <DockPanel Grid.Row="1"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           >
+                    <Button x:Name="Button_Levels" 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="13"
+                            Cursor="Hand"
+                            ToolTip="Levels"
+                            >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Name="DoomWorld_Image" Source="Resources/300x50_blackAndWhite_edit_def.gif" />
+                    </Button>
+                </DockPanel>
+
+                <DockPanel Grid.Row="2"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           >
+                    <Button x:Name="Button_DoomResources" 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="15"
+                            Cursor="Hand"
+                            ToolTip="Engines and mods"
+                            >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Name="DommResources_Image" Source="Resources/images_edit.jpg" />
                     </Button>
                 </DockPanel>
 
                 <DockPanel Grid.Row="3"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
+                           ToolTip="TiaDL root folder"
                            >
-                    <Button x:Name="Button_Menu_Settings" 
+                    <Button x:Name="Button_ExploreFolder" 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="16"
@@ -690,18 +700,19 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Settings_Image" Source="Resources/Settings.png" />
+                        <Image Name="Folder_Image" Source="Resources/Folder.png" />
                     </Button>
                 </DockPanel>
 
                 <DockPanel Grid.Row="4"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
+                           ToolTip="Settings"
                            >
-                    <Button x:Name="Button_ExploreFolder"
+                    <Button x:Name="Button_Menu_Settings"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Margin="18,16,16,16"
+                            Margin="14,16,16,16"
                             Cursor="Hand"
                             >
                         <Button.Template>
@@ -709,7 +720,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Folder_Image" Source="Resources/Folder.png" />
+                        <Image Name="Settings_Image" Source="Resources/settings_darker.png" />
                     </Button>
 
                 </DockPanel>
@@ -723,33 +734,15 @@
                             VerticalAlignment="Center"
                             Width="50" Height="50"
                             Cursor="Hand"
-                            Margin="4,0,0,6"
+                            Margin="2,0,0,0"
                             >
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Play_Image" Source="Resources/play_brighter.png" />
+                        <Image Name="Play_Image" Source="Resources/play_darker.png" />
                     </Button>
-                    <!--<Button x:Name="Button_Launch"
-                            
-                            FontWeight="DemiBold" 
-                            HorizontalAlignment="Center" 
-                            VerticalAlignment="Center"
-                            Padding="6,-5,0,0"
-                            Width="50" 
-                            Height="50" 
-                            Cursor="Hand"
-                            BorderThickness="0"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Background="Transparent"
-                            Foreground="Green"
-                            FontSize="42"
-                            Content="▶" 
-                            />-->
-
                 </DockPanel>
 
             </Grid>

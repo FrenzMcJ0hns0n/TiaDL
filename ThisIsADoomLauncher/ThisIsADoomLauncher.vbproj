@@ -84,10 +84,11 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CliHandlingMethods.vb" />
+    <Compile Include="Common\IOHelper.vb" />
     <Compile Include="GUIMethods.vb" />
-    <Compile Include="IOMethods.vb" />
-    <Compile Include="Presets handling\LoadPresetsMethods.vb" />
-    <Compile Include="Presets handling\SavePresetMethods.vb" />
+    <Compile Include="Common\IOMethods.vb" />
+    <Compile Include="Presets\LoadPresetsMethods.vb" />
+    <Compile Include="Presets\SavePresetMethods.vb" />
     <Compile Include="SettingsWindow.xaml.vb">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -169,16 +170,19 @@
     <Resource Include="Resources\Folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\BrutalDoom_chrisb1994.png" />
+    <Resource Include="Resources\images_edit.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Settings.png" />
+    <Resource Include="Resources\settings_darker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\play2.PNG" />
+    <Resource Include="Resources\play_darker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\play_brighter.png" />
+    <Resource Include="Resources\index.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\300x50_blackAndWhite_edit_def.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

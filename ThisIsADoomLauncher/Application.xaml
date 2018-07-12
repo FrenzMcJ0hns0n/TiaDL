@@ -4,6 +4,6 @@
     xmlns:local="clr-namespace:ThisIsADoomLauncher"
     StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <Image x:Key="folder" Source="Resources\folder.png" />
+        
     </Application.Resources>
 </Application>
