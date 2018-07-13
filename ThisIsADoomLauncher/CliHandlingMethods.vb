@@ -13,18 +13,28 @@
                 '1. - Base command line instructions
 
                 Select Case .SelectedEngine.ToLowerInvariant
+
                     Case "gzdoom"
                         commandLine = String.Format(
-                            "/c start """" ""{0}"" -width {1} -height {2} +fullscreen {3} -iwad ""{4}""",
+                            "/c start """" ""{0}"" +fullscreen {1} -width {2} -height {3} -iwad ""{4}""",
                             .GzdoomDir & "\gzdoom.exe",
+                            Int(.FullscreenEnabled).ToString,
                             .ScreenWidth.ToString,
                             .ScreenHeight.ToString,
-                            Int(.FullscreenEnabled).ToString,
                             .SelectedIwad
                         )
+
                     Case "zandronum"
-                        'TODO
-                        'commandLine = String.Format("{0}{1}",value0, value1) ...
+                        'IOMethods.HandleCfg()
+                        commandLine = String.Format(
+                            "/c start """" ""{0}"" +fullscreen {1} +vid_defwidth {2} +vid_defheight {3} -iwad ""{4}""",
+                            .ZandronumDir & "\zandronum.exe",
+                            Int(.FullscreenEnabled).ToString,
+                            .ScreenWidth.ToString,
+                            .ScreenHeight.ToString,
+                            .SelectedIwad
+                        )
+
                 End Select
 
 

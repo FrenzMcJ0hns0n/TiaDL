@@ -12,6 +12,7 @@ Class MainWindow
         Try
             SetRootDirPath()
             ValidateDirectories()
+            SetEngineIni()
             InitializeGUI()
             'AutoSetResolution()
         Catch ex As Exception
@@ -54,17 +55,27 @@ Class MainWindow
 
     End Sub
 
-    'Private Sub Button_SearchDoomWorldDB_Click(sender As Object, e As RoutedEventArgs) Handles Button_SearchDoomWorldDB.Click
+    Private Sub Button_Levels_Click(sender As Object, e As RoutedEventArgs) Handles Button_Levels.Click
 
-    '    Dim url As String = "https://www.doomworld.com/idgames/levels/"
-    '    Process.Start(url)
+        Try
+            Process.Start("https://www.doomworld.com/idgames/levels/")
 
-    'End Sub
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'Button_Levels_Click()'. Exception : " & ex.ToString)
+        End Try
 
-    Private Sub Button_Menu_Settings_Click(sender As Object, e As RoutedEventArgs) Handles Button_Menu_Settings.Click
+    End Sub
 
-        Dim settingsWindow As SettingsWindow = New SettingsWindow()
-        settingsWindow.ShowDialog()
+    Private Sub Button_DoomResources_Click(sender As Object, e As RoutedEventArgs) Handles Button_DoomResources.Click
+
+        Try
+            Process.Start("https://zdoom.org/index")
+            Process.Start("https://zandronum.com/")
+            Process.Start("https://www.moddb.com/mods/brutal-doom")
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'Button_DoomResources_Click()'. Exception : " & ex.ToString)
+        End Try
 
     End Sub
 
@@ -76,6 +87,12 @@ Class MainWindow
             WriteToLog(DateTime.Now & " - Error in 'Button_ExploreFolder_Click()'. Exception : " & ex.ToString)
         End Try
 
+    End Sub
+
+    Private Sub Button_Menu_Settings_Click(sender As Object, e As RoutedEventArgs) Handles Button_Menu_Settings.Click
+
+        Dim settingsWindow As SettingsWindow = New SettingsWindow()
+        settingsWindow.ShowDialog()
 
     End Sub
 
@@ -86,7 +103,6 @@ Class MainWindow
                 MessageBox.Show("Error : an IWAD must be selected")
                 Return
             Else
-                SetEngineIni()
                 Dim bcli As String = BuildCommandLineInstructions()
                 LaunchProcess(bcli)
                 WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & bcli)
@@ -592,8 +608,8 @@ Class MainWindow
 
         With My.Settings
             If File.Exists(.IwadsDir & "\Doom.wad") Then
-                Button_NewPreset_SetDoom2Iwad.Background = Brushes.LightGreen
-                Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
+                Button_NewPreset_SetDoomIwad.Background = Brushes.LightGreen
+                Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
                 Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
                 Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
             Else
@@ -670,9 +686,45 @@ Class MainWindow
             ElseIf ValidateFile(file(0)) = "iwad" Then
                 MessageBox.Show("Error : this file is an IWAD")
 
+            ElseIf ValidateFile(file(0)) = "misc" Then
+                MessageBox.Show("Error : this file refers to a 'Misc.' file")
+
             Else
                 MessageBox.Show("Error : not a .wad/.pk3 file")
-                'ResetInput_wad(False) 'Same as above for IWAD
+
+            End If
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'TextBox_wad_file_Drop()'. Exception : " & ex.ToString)
+        End Try
+
+    End Sub
+
+    Private Sub TextBox_DropMiscFile_PreviewDragOver(sender As Object, e As DragEventArgs)
+
+        e.Handled = True
+
+    End Sub
+
+    Private Sub TextBox_DropMiscFile_Drop(sender As Object, e As DragEventArgs)
+
+        Try
+            Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+
+            If ValidateFile(file(0)) = "misc" Then
+                TextBox_DropWadFile.Background = Brushes.LightGreen
+                TextBox_DropWadFile.ClearValue(FontStyleProperty)
+                TextBox_DropWadFile.ClearValue(ForegroundProperty)
+                TextBox_DropWadFile.Text = file(0)
+
+            ElseIf ValidateFile(file(0)) = "iwad" Then
+                MessageBox.Show("Error : this file is an IWAD")
+
+            ElseIf ValidateFile(file(0)) = "level" Then
+                MessageBox.Show("Error : this file refers to 'Level'")
+
+            Else
+                MessageBox.Show("Error : not a .deh/.bex file")
 
             End If
 

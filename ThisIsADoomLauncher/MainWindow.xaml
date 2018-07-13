@@ -423,9 +423,9 @@
                                      Text="Drop a .deh/.bex file here ..."
                                      Cursor="Arrow"
                                      IsReadOnly="True" 
-                                     PreviewDragOver="TextBox_wad_file_PreviewDragOver"
+                                     PreviewDragOver="TextBox_DropMiscFile_PreviewDragOver"
                                      AllowDrop="True" 
-                                     Drop="TextBox_wad_file_Drop"
+                                     Drop="TextBox_DropMiscFile_Drop"
                                      />
 
                             <Label Grid.Row="12"
@@ -667,6 +667,7 @@
                 <DockPanel Grid.Row="2"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
+                           Margin="0,2,0,0"
                            >
                     <Button x:Name="Button_DoomResources" 
                             HorizontalAlignment="Center"
@@ -753,14 +754,15 @@
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
                 Width="75"/>
-        <Button Content="test" 
+        
+        <!--<Button Content="test" 
                 Grid.Row="1"
                 Grid.Column="1" 
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Width="75" 
                 Height="80"
-                Click="Button_Click"/>
+                Click="Button_Click"/>-->
 
     </Grid>
 </Window>

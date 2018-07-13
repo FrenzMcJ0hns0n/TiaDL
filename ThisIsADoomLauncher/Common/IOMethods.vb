@@ -15,24 +15,22 @@ Module IOMethods
     ''' </summary>
     ''' 
     Sub ValidateDirectories()
-        'TODO
-        'engine\gzdoom
-        'engine\zandronum
 
         Try
             Dim errorText As String = ""
 
             With My.Settings
-                If Directory.Exists(.RootDirPath & "\gzdoom") Then
-                    .GzdoomDir = .RootDirPath & "\gzdoom"
+
+                If Directory.Exists(.RootDirPath & "\engine\gzdoom\") Then
+                    .GzdoomDir = .RootDirPath & "\engine\gzdoom\"
                 Else
-                    errorText &= Environment.NewLine & "- gzdoom"
+                    errorText &= Environment.NewLine & "- engine/gzdoom"
                 End If
 
-                If Directory.Exists(.RootDirPath & "\zandronum") Then
-                    .ZandronumDir = .RootDirPath & "\zandronum"
+                If Directory.Exists(.RootDirPath & "\engine\zandronum\") Then
+                    .ZandronumDir = .RootDirPath & "\engine\zandronum\"
                 Else
-                    errorText &= Environment.NewLine & "- zandronum"
+                    errorText &= Environment.NewLine & "- engine/zandronum"
                 End If
 
                 If Directory.Exists(.RootDirPath & "\iwads") Then
@@ -101,6 +99,7 @@ Module IOMethods
             Return "unrecognized"
 
         Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFile()'. Exception : " & ex.ToString)
             Return "invalid"
         End Try
 
@@ -141,19 +140,29 @@ Module IOMethods
     ''' </summary>
     Sub SetEngineIni()
 
-        With My.Settings
-            Select Case .SelectedEngine.ToLowerInvariant
-                Case "gzdoom"
-                    If File.Exists(.GzdoomDir & "\gzdoom-model.ini") Then
-                        File.Move(
-                            .GzdoomDir & "\gzdoom-model.ini",
-                            .GzdoomDir & "\gzdoom-" & Environment.UserName & ".ini")
-                    End If
-                Case "zandronum"
-                    'TODO
-                    '...
-            End Select
-        End With
+        Try
+            With My.Settings
+                Select Case .SelectedEngine.ToLowerInvariant
+
+                    Case "gzdoom"
+                        If File.Exists(.GzdoomDir & "\gzdoom-model.ini") Then
+                            File.Move(
+                                .GzdoomDir & "\gzdoom-model.ini",
+                                .GzdoomDir & "\gzdoom-" & Environment.UserName & ".ini")
+                        End If
+
+                    Case "zandronum"
+                        If File.Exists(.ZandronumDir & "\zandronum-model.ini") Then
+                            File.Move(
+                                .ZandronumDir & "\zandronum-model.ini",
+                                .ZandronumDir & "\zandronum-" & Environment.UserName & ".ini")
+                        End If
+
+                End Select
+            End With
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'SetEngineIni()'. Exception : " & ex.ToString)
+        End Try
 
     End Sub
 

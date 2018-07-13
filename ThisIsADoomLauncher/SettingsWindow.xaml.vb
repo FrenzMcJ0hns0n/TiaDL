@@ -7,33 +7,18 @@ Public Class SettingsWindow
         With My.Settings
 
             'Engine
-            If .SelectedEngine.ToLowerInvariant = "gzdoom" Then
-                RadioButton_Engine_GZDoom.IsChecked = True
-            ElseIf .SelectedEngine.ToLowerInvariant = "zandronum" Then
-                RadioButton_Engine_Zandronum.IsChecked = True
-            End If
+            RadioButton_Engine_GZDoom.IsChecked = If(.SelectedEngine.ToLowerInvariant = "gzdoom", True, False)
+            RadioButton_Engine_Zandronum.IsChecked = If(.SelectedEngine.ToLowerInvariant = "zandronum", True, False)
 
             'Resolution
             TextBox_Resolution_Width.Text = .ScreenWidth
             TextBox_Resolution_Height.Text = .ScreenHeight
-
-            If .FullscreenEnabled Then
-                CheckBox_Fullscreen.IsChecked = True
-            End If
+            CheckBox_Fullscreen.IsChecked = .FullscreenEnabled
 
             'Brutal Doom
+            CheckBox_UseBrutalDoom.IsChecked = .UseBrutalDoom
             ComboBox_BrutalDoomVersions.ItemsSource = GetLocalBrutalDoomVersions() '-> Fill BD versions ComboBox
-
-            If .UseBrutalDoom Then
-                CheckBox_UseBrutalDoom.IsChecked = True
-            End If
-
             ComboBox_BrutalDoomVersions.SelectedItem = If(.BrutalDoomVersion, Nothing)
-
-            'If Not .BrutalDoomVersion Is Nothing Then
-            '    'TODO : Does the program crash if ConfirmedBruVer string is not in ComboBox ?
-            '    ComboBox_BrutalDoomVersions.SelectedItem = .BrutalDoomVersion
-            'End If
 
         End With
 
