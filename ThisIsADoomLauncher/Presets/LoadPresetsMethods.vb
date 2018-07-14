@@ -7,18 +7,17 @@ Module LoadPresetsMethods
     ''' <para>
     ''' For each valid preset : create a button with a .Click function 'HandleUserPresetClick'.
     ''' To be valid, each preset must have at least a Name and an Iwad.
-    ''' readPresetsData = presets as lines read from 'presets.txt', values = each line
+    ''' readPresetsData = presets as lines read from 'presets.txt', values = each line.
     ''' | values(0) : Preset Name | values(1) : Preset Iwad | values(2) : Preset Level | values(3) : Preset Misc |
     ''' </para>
     ''' </summary>
     ''' 
     Sub DisplayLoadedPresets(readPresetsData As List(Of List(Of String)))
 
-        'TODO : test when 'presets.txt' does not exist ! To see the value of ReadPresetsData
-
-        'If readPresetsData = Nothing Then
-        '    Return
-        'End If
+        'Nothing to read : exit
+        If readPresetsData Is Nothing Then
+            Return
+        End If
 
         Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
 
@@ -38,6 +37,7 @@ Module LoadPresetsMethods
             AddHandler button.Click,
                 Sub(sender, e)
                     HandleUserPresetClick(values(1), If(values.Count >= 3, values(2), Nothing), If(values.Count = 4, values(3), Nothing))
+                    'TODO v2+ : HandleUserPresetDelete() ?
                 End Sub
 
             mainWindow.Label_NoUserPresetsFound.Visibility = Visibility.Collapsed

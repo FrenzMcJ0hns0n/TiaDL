@@ -100,7 +100,7 @@ Public Class SettingsWindow
 
     End Sub
 
-    Private Sub ComboBox_BrutalDoomVersions_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles ComboBox_BrutalDoomVersions.SelectionChanged
+    Private Sub ComboBox_BrutalDoomVersions_DropDownClosed(sender As Object, e As EventArgs) Handles ComboBox_BrutalDoomVersions.DropDownClosed
 
         With My.Settings
             .BrutalDoomVersion = .ModDir & "\" & ComboBox_BrutalDoomVersions.SelectedValue

@@ -37,6 +37,7 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*" />
@@ -48,16 +49,20 @@
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="1"
-                           Grid.Column="2"
-                           Grid.ColumnSpan="2"
+                           Grid.RowSpan="2"
+                           Grid.Column="1"
+                           Grid.ColumnSpan="4"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           Content="(Default engine : GZDoom)"
-                           />
+                           >
+                        <TextBlock TextAlignment="Center"
+                                   Text="Recommended for single player : GZDoom&#x0d;&#x0a;Recommended for multi player : Zandronum"/>
+                    </Label>
+
 
                     <RadioButton x:Name="RadioButton_Engine_GZDoom"
                                  GroupName="Engine choice"
-                                 Grid.Row="3"
+                                 Grid.Row="4"
                                  Grid.Column="2"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
@@ -65,7 +70,7 @@
                                  />
                     <RadioButton x:Name="RadioButton_Engine_Zandronum"
                                  GroupName="Engine choice"
-                                 Grid.Row="3"
+                                 Grid.Row="4"
                                  Grid.Column="3"
                                  HorizontalAlignment="Center"
                                  VerticalAlignment="Center"
@@ -201,7 +206,7 @@
                 VerticalAlignment="Center"
                 Width="52" Height="24"
                 FontSize="14"
-                Content="Ok"
+                Content="OK"
                 />
 
     </Grid>
