@@ -794,14 +794,14 @@
                 VerticalAlignment="Top" 
                 Width="75"/>
         
-        <!--<Button Content="test" 
+        <Button Content="test" 
                 Grid.Row="1"
                 Grid.Column="1" 
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Width="75" 
                 Height="80"
-                Click="Button_Click"/>-->
+                Click="Button_Click"/>
 
     </Grid>
 </Window>

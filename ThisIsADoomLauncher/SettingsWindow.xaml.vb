@@ -18,7 +18,7 @@ Public Class SettingsWindow
             'Brutal Doom
             CheckBox_UseBrutalDoom.IsChecked = .UseBrutalDoom
             ComboBox_BrutalDoomVersions.ItemsSource = GetLocalBrutalDoomVersions() '-> Fill BD versions ComboBox
-            ComboBox_BrutalDoomVersions.SelectedItem = If(.BrutalDoomVersion, Nothing)
+            ComboBox_BrutalDoomVersions.SelectedValue = If(File_GetName(.BrutalDoomVersion), Nothing) '-> Get filename of .BrutalDoomVersion full path
 
         End With
 

@@ -1,0 +1,50 @@
+﻿<Window x:Class="HelpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ThisIsADoomLauncher"
+        mc:Ignorable="d"
+        Title="Help" Height="400" Width="400">
+    <Grid>
+        <!-- HorizontalContentAlignment="Stretch" -->
+        <RichTextBox HorizontalAlignment="Stretch"
+                     VerticalAlignment="Stretch" 
+                     HorizontalContentAlignment="Stretch"
+                     Margin="10"
+                     BorderThickness="0">
+            <FlowDocument>
+                <Section>
+                    <Paragraph>
+                        <Run Text="Iwad : Base level, official or not. Examples : Doom, Doom 2, TNT, Freedoom"/>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run Text="Level : Custom level, designed by members of the Doom community. Needs IWAD resources to be played."/>
+                    </Paragraph>
+                    <Paragraph>
+                        <Run Text="Misc. : Additional file, not mandatory."/>
+                    </Paragraph>
+                </Section>
+                <Section>
+                    
+                </Section>
+                <Section>
+                    <Paragraph>
+                        <Run Text="GZDoom &amp; Zandronum are Doom ports. These are modern engine we use to run Doom in great quality and comfort." />
+                    </Paragraph>
+                    <Paragraph>
+                        <Run Text="GZDoom &amp; Zandronum are Doom ports. These are modern engine we use to run Doom in great quality and comfort." />
+                    </Paragraph>
+                </Section>
+                <Section>
+
+                </Section>
+                <Section>
+                    <Paragraph>
+                        <Run Text="User presets (second tab) cannot be deleted yet, so you have to do that manually : Open 'TiaDL\presets.txt' and erase the lines refering to undesired presets" />
+                    </Paragraph>
+                </Section>
+            </FlowDocument>
+        </RichTextBox>
+    </Grid>
+</Window>

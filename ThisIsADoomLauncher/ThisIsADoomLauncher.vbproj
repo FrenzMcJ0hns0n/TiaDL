@@ -84,6 +84,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CLI\CliHandlingMethods.vb" />
+    <Compile Include="HelpWindow.xaml.vb">
+      <DependentUpon>HelpWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IO\IOHelper.vb" />
     <Compile Include="IO\IOMethods.vb" />
     <Compile Include="Presets\LoadPresetsMethods.vb" />
@@ -91,6 +94,10 @@
     <Compile Include="SettingsWindow.xaml.vb">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="HelpWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

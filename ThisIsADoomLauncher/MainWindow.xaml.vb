@@ -45,8 +45,8 @@ Class MainWindow
 
     Private Sub Button_Menu_Help_Click(sender As Object, e As RoutedEventArgs) Handles Button_Help.Click
 
-        'TODO : Help window with explanations about files, engines, etc.
-        '...
+        Dim helpWindow As HelpWindow = New HelpWindow()
+        helpWindow.ShowDialog()
 
     End Sub
 
@@ -754,16 +754,9 @@ Class MainWindow
 
     Private Sub Button_Preset_Wolfenstein3D_Click(sender As Object, e As RoutedEventArgs) Handles Button_Preset_Wolfenstein3D.Click
 
-        'With My.Settings
         TextBox_IwadToLaunch.Text = "Wolf3D"
         TextBox_LevelToLaunch.Text = Nothing
         TextBox_MiscToLaunch.Text = Nothing
-
-        'Dim brush As Brush = New ImageBrush With {
-        '    .ImageSource = New BitmapImage(New Uri("../../Resources/Blazkowicz_sprite.png", UriKind.Relative)),
-        '    .Stretch = Stretch.Uniform
-        '}
-        'Button_Preset_Wolfenstein3D.Background = brush
 
     End Sub
 
