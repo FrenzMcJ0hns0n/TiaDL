@@ -5,16 +5,16 @@ Class MainWindow
 
 
 
-#Region "Start up"
+#Region "Startup"
 
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 
         Try
             SetRootDirPath()
             ValidateDirectories()
-            SetEngineIni()
+            SetIniFiles()
             InitializeGUI()
-            'AutoSetResolution()
+
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'Window_Loaded()'. Exception : " & ex.ToString)
         End Try
@@ -30,13 +30,8 @@ Class MainWindow
             CheckBox_Load_DoomMetal.IsChecked = If(.SelectedMusic = Nothing, False, True)
             CheckBox_EnableTurbo.IsChecked = .UseTurbo
 
-            'User presets (2nd tab)
+            'Load user presets (2nd tab)
             DisplayLoadedPresets(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
-            'DisplayLoadedPresets(presets)
-            'LoadedPresetsButtonClick(presets)
-
-            '<=> presets = FormatPresetsData(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
-            'DisplayUserPresets(presets)
         End With
 
     End Sub
@@ -103,9 +98,11 @@ Class MainWindow
                 MessageBox.Show("Error : an IWAD must be selected")
                 Return
             Else
-                Dim bcli As String = BuildCommandLineInstructions()
-                LaunchProcess(bcli)
-                WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & bcli)
+                Dim cli As String =
+                    If(TextBox_IwadToLaunch.Text = "Wolf3D", BuildCommandLineInstructions(True), BuildCommandLineInstructions(False))
+
+                LaunchProcess(cli)
+                WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & cli)
             End If
 
         Catch ex As Exception
@@ -119,9 +116,9 @@ Class MainWindow
 
 
 
-#Region "Common presets click"
+#Region "Common presets"
 
-    'TODO : Factorize
+    'TODO : Factorize ?
 
     Private Sub Button_Preset_UltimateDoom_Click(sender As Object, e As RoutedEventArgs) Handles Button_Preset_UltimateDoom.Click
 
@@ -755,75 +752,27 @@ Class MainWindow
 
     End Sub
 
+    Private Sub Button_Preset_Wolfenstein3D_Click(sender As Object, e As RoutedEventArgs) Handles Button_Preset_Wolfenstein3D.Click
+
+        'With My.Settings
+        TextBox_IwadToLaunch.Text = "Wolf3D"
+        TextBox_LevelToLaunch.Text = Nothing
+        TextBox_MiscToLaunch.Text = Nothing
+
+        'Dim brush As Brush = New ImageBrush With {
+        '    .ImageSource = New BitmapImage(New Uri("../../Resources/Blazkowicz_sprite.png", UriKind.Relative)),
+        '    .Stretch = Stretch.Uniform
+        '}
+        'Button_Preset_Wolfenstein3D.Background = brush
+
+    End Sub
+
 #End Region
 
 
 
 
-#Region "Add new preset : GUI items"
-
-
-    Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
-
-        'IWAD
-        TextBox_IwadToLaunch.Text = NewPreset_GetSelectedIwad()
-        My.Settings.SelectedIwad = NewPreset_GetSelectedIwad()
-
-        'Level
-        TextBox_LevelToLaunch.Text = NewPreset_GetSelectedLevel()
-        My.Settings.SelectedLevel = NewPreset_GetSelectedLevel()
-
-        'Misc
-        TextBox_MiscToLaunch.Text = NewPreset_GetSelectedMisc()
-        My.Settings.SelectedMisc = NewPreset_GetSelectedMisc()
-
-    End Sub
-
-    Private Sub Button_NewPreset_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Reset.Click
-
-        Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-        Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-        Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-        Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-
-        TextBox_DropWadFile.FontStyle = FontStyles.Italic
-        TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
-        TextBox_DropWadFile.Foreground = New BrushConverter().ConvertFrom("#444")
-        TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
-
-        TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-        TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
-        TextBox_NewPreset_Name.Text = "Enter preset name ..."
-
-    End Sub
-
-    Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
-
-        Try
-            Dim nameToSave As String = TextBox_NewPreset_Name.Text
-            If nameToSave = "Enter preset name ..." Or nameToSave = Nothing Then
-                MessageBox.Show("New user preset requires a name to be saved")
-                Return
-            End If
-
-            Dim iwadToSave As String = NewPreset_GetSelectedIwad()
-            If iwadToSave = Nothing Then
-                MessageBox.Show("New user preset requires an IWAD to be saved")
-                Return
-            End If
-
-            Dim levelToSave As String = NewPreset_GetSelectedLevel()
-            Dim miscToSave As String = NewPreset_GetSelectedMisc()
-
-            WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
-            MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
-        End Try
-
-    End Sub
-
+#Region "Add new preset"
 
     Private Sub Button_NewPreset_SetDoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoomIwad.Click
 
@@ -887,14 +836,13 @@ Class MainWindow
 
     End Sub
 
-
-    Private Sub TextBox_wad_file_PreviewDragOver(sender As Object, e As DragEventArgs)
+    Private Sub TextBox_DropWadFile_PreviewDragOver(sender As Object, e As DragEventArgs)
 
         e.Handled = True
 
     End Sub
 
-    Private Sub TextBox_wad_file_Drop(sender As Object, e As DragEventArgs)
+    Private Sub TextBox_DropWadFile_Drop(sender As Object, e As DragEventArgs)
 
         Try
             Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
@@ -921,7 +869,6 @@ Class MainWindow
         End Try
 
     End Sub
-
 
     Private Sub TextBox_DropMiscFile_PreviewDragOver(sender As Object, e As DragEventArgs)
 
@@ -956,7 +903,6 @@ Class MainWindow
         End Try
 
     End Sub
-
 
     Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
 
@@ -1021,47 +967,71 @@ Class MainWindow
     End Function
 
 
+    Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
+
+        'IWAD
+        TextBox_IwadToLaunch.Text = NewPreset_GetSelectedIwad()
+        My.Settings.SelectedIwad = NewPreset_GetSelectedIwad()
+
+        'Level
+        TextBox_LevelToLaunch.Text = NewPreset_GetSelectedLevel()
+        My.Settings.SelectedLevel = NewPreset_GetSelectedLevel()
+
+        'Misc
+        TextBox_MiscToLaunch.Text = NewPreset_GetSelectedMisc()
+        My.Settings.SelectedMisc = NewPreset_GetSelectedMisc()
+
+    End Sub
+
+    Private Sub Button_NewPreset_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Reset.Click
+
+        Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
+        Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
+        Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
+        Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
+
+        TextBox_DropWadFile.FontStyle = FontStyles.Italic
+        TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
+        TextBox_DropWadFile.Foreground = New BrushConverter().ConvertFrom("#444")
+        TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
+
+        TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
+        TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
+        TextBox_NewPreset_Name.Text = "Enter preset name ..."
+
+    End Sub
+
+    Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
+
+        Try
+            Dim nameToSave As String = TextBox_NewPreset_Name.Text
+            If nameToSave = "Enter preset name ..." Or nameToSave = Nothing Then
+                MessageBox.Show("New user preset requires a name to be saved")
+                Return
+            End If
+
+            Dim iwadToSave As String = NewPreset_GetSelectedIwad()
+            If iwadToSave = Nothing Then
+                MessageBox.Show("New user preset requires an IWAD to be saved")
+                Return
+            End If
+
+            Dim levelToSave As String = NewPreset_GetSelectedLevel()
+            Dim miscToSave As String = NewPreset_GetSelectedMisc()
+
+            WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
+            MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
+        End Try
+
+    End Sub
+
 #End Region
 
 
 
-
-    Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
-
-        With My.Settings
-
-            MessageBox.Show(String.Format(
-                "ScreenWidth = {0}{1}ScreenHeight = {2}{3}FullscreenEnabled = {4}{5}SelectedIwad = {6}{7}SelectedLevel = {8}{9}UseBrutalDoom = {10}{11}BrutalDoomVersion = {12}{13}SelectedMusicMod = {14}{15}UseTurbo = {16}{17}SelectedEngine = {18}",
-                .ScreenWidth.ToString, Environment.NewLine & Environment.NewLine,
-                .ScreenHeight.ToString, Environment.NewLine & Environment.NewLine,
-                .FullscreenEnabled.ToString, Environment.NewLine & Environment.NewLine,
-                .SelectedIwad, Environment.NewLine & Environment.NewLine,
-                .SelectedLevel, Environment.NewLine & Environment.NewLine,
-                .UseBrutalDoom.ToString, Environment.NewLine & Environment.NewLine,
-                .BrutalDoomVersion, Environment.NewLine & Environment.NewLine,
-                .SelectedMusic, Environment.NewLine & Environment.NewLine,
-                .UseTurbo, Environment.NewLine & Environment.NewLine,
-                .SelectedEngine
-            ))
-            '.SelectedMisc, Environment.NewLine,
-
-        End With
-
-        'SaveNewSettings()
-
-    End Sub
-
-
-
-
-
-    'Private Sub Button_LaunchParameters_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_LaunchParameters_Reset.Click
-
-    '    TextBox_IwadToLaunch.Text = Nothing
-    '    TextBox_LevelToLaunch.Text = Nothing
-    '    TextBox_MiscToLaunch.Text = Nothing
-
-    'End Sub
 
 #Region "Extra launch parameters"
 
@@ -1110,6 +1080,39 @@ Class MainWindow
 #End Region
 
 
+
+
+#Region "Crappy tests"
+
+    Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
+
+        With My.Settings
+
+            MessageBox.Show(String.Format(
+                "ScreenWidth = {0}{1}ScreenHeight = {2}{3}FullscreenEnabled = {4}{5}SelectedIwad = {6}{7}SelectedLevel = {8}{9}UseBrutalDoom = {10}{11}BrutalDoomVersion = {12}{13}SelectedMusicMod = {14}{15}UseTurbo = {16}{17}SelectedEngine = {18}",
+                .ScreenWidth.ToString, Environment.NewLine & Environment.NewLine,
+                .ScreenHeight.ToString, Environment.NewLine & Environment.NewLine,
+                .FullscreenEnabled.ToString, Environment.NewLine & Environment.NewLine,
+                .SelectedIwad, Environment.NewLine & Environment.NewLine,
+                .SelectedLevel, Environment.NewLine & Environment.NewLine,
+                .UseBrutalDoom.ToString, Environment.NewLine & Environment.NewLine,
+                .BrutalDoomVersion, Environment.NewLine & Environment.NewLine,
+                .SelectedMusic, Environment.NewLine & Environment.NewLine,
+                .UseTurbo, Environment.NewLine & Environment.NewLine,
+                .SelectedEngine
+            ))
+            '.SelectedMisc, Environment.NewLine,
+
+        End With
+
+        'SaveNewSettings()
+
+    End Sub
+
+    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+        Test()
+    End Sub
+
     Private Sub Test()
 
         'My.Settings.ScreenHeight = 1440
@@ -1120,8 +1123,9 @@ Class MainWindow
 
     End Sub
 
-    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-        Test()
-    End Sub
+#End Region
+
+
+
 
 End Class

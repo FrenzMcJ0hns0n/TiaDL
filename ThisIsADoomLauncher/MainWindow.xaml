@@ -210,14 +210,36 @@
                                     Margin="2,2,2,2"
                                     Content="Zone 300"
                                     />
+                            <!-- Content="Wolf3D" -->
                             <Button x:Name="Button_Preset_Wolfenstein3D"
                                     Grid.Row="3"
                                     Grid.Column="3"
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
                                     Margin="2,2,2,2"
-                                    Content="???"
-                                    />
+                                    >
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="False">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        Wolf3D
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Content">
+                                                    <Setter.Value>
+                                                        <Image Source="Resources/Blazkowicz_sprite.png"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                                
+                            </Button>
                         </Grid>
                     </DockPanel>
 
@@ -410,8 +432,9 @@
                                      Text="Drop a .wad/.pk3 file here ..."
                                      Cursor="Arrow"
                                      IsReadOnly="True" 
-                                     PreviewDragOver="TextBox_wad_file_PreviewDragOver"
-                                     AllowDrop="True" Drop="TextBox_wad_file_Drop"
+                                     PreviewDragOver="TextBox_DropWadFile_PreviewDragOver"
+                                     AllowDrop="True" 
+                                     Drop="TextBox_DropWadFile_Drop"
                                      />
                             
                             <Label Grid.Row="8"

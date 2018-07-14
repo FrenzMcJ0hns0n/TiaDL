@@ -3,6 +3,10 @@ Imports System.Reflection
 
 Module IOMethods
 
+    ''' <summary>
+    ''' Get the parent directory of TiaDL executable
+    ''' </summary>
+    ''' 
     Sub SetRootDirPath()
 
         My.Settings.RootDirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
@@ -62,6 +66,12 @@ Module IOMethods
                 Else
                     errorText &= Environment.NewLine & "- music"
                 End If
+
+                If Directory.Exists(.RootDirPath & "\tc") Then
+                    .WolfDir = .RootDirPath & "\tc"
+                Else
+                    errorText &= Environment.NewLine & "- tc"
+                End If
             End With
 
             If Not errorText = Nothing Then
@@ -76,8 +86,7 @@ Module IOMethods
     End Sub
 
     ''' <summary>
-    ''' Is this filepath refer to an IWAD or a Level ? Return answer
-    ''' As string
+    ''' Is this filepath refer to an IWAD, a Level or a Misc file ? Return answer as string
     ''' </summary>
     ''' 
     Function ValidateFile(path As String) As String
@@ -87,10 +96,7 @@ Module IOMethods
                 Return "does not exist"
             End If
 
-            Dim iwadList As List(Of String) = New List(Of String) From
-            {
-                "doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"
-            }
+            Dim iwadList As List(Of String) = New List(Of String) From {"doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"}
             If iwadList.Contains(File_GetName(path).ToLowerInvariant) Then
                 Return "iwad"
             End If
@@ -136,43 +142,45 @@ Module IOMethods
 
     End Function
 
-
-
-
     ''' <summary>
     ''' Handle .ini files management
     ''' TODO (v2+) : Improve custom settings selection with .ini files
     ''' TODO : rename to SetIni() ?
     ''' </summary>
-    Sub SetEngineIni()
+    ''' 
+    Sub SetIniFiles()
 
         Try
             With My.Settings
-                Select Case .SelectedEngine.ToLowerInvariant
+                If File.Exists(.GzdoomDir & "\gzdoom-model.ini") Then
+                    File.Move(
+                        .GzdoomDir & "\gzdoom-model.ini",
+                        .GzdoomDir & "\gzdoom-" & Environment.UserName & ".ini")
+                End If
 
-                    Case "gzdoom"
-                        If File.Exists(.GzdoomDir & "\gzdoom-model.ini") Then
-                            File.Move(
-                                .GzdoomDir & "\gzdoom-model.ini",
-                                .GzdoomDir & "\gzdoom-" & Environment.UserName & ".ini")
-                        End If
+                If File.Exists(.ZandronumDir & "\zandronum-model.ini") Then
+                    File.Move(
+                        .ZandronumDir & "\zandronum-model.ini",
+                        .ZandronumDir & "\zandronum-" & Environment.UserName & ".ini")
+                End If
 
-                    Case "zandronum"
-                        If File.Exists(.ZandronumDir & "\zandronum-model.ini") Then
-                            File.Move(
-                                .ZandronumDir & "\zandronum-model.ini",
-                                .ZandronumDir & "\zandronum-" & Environment.UserName & ".ini")
-                        End If
-
-                End Select
+                If File.Exists(.WolfDir & "\gzdoom-model-wolf3D.ini") Then
+                    File.Move(
+                        .WolfDir & "\gzdoom-model-wolf3D.ini",
+                        .WolfDir & "\gzdoom-" & Environment.UserName & "-wolf3D.ini")
+                End If
             End With
+
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'SetEngineIni()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
         End Try
 
     End Sub
 
-
+    ''' <summary>
+    ''' Create file 'presets.txt' with some commented lines, if it does not exist
+    ''' </summary>
+    ''' 
     Sub WritePresetsFileHeader()
 
         Dim presetFile As String = My.Settings.RootDirPath & "\presets.txt"
@@ -189,12 +197,10 @@ Module IOMethods
 
     End Sub
 
-
-
-
     ''' <summary>
-    ''' Logging - Debug
+    ''' Log content in file 'log.txt'
     ''' </summary>
+    ''' 
     Sub WriteToLog(content As String)
 
         Using streamWriter As New StreamWriter(My.Settings.RootDirPath & "\log.txt", True)

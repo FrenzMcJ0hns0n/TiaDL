@@ -83,10 +83,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CliHandlingMethods.vb" />
-    <Compile Include="Common\IOHelper.vb" />
-    <Compile Include="GUIMethods.vb" />
-    <Compile Include="Common\IOMethods.vb" />
+    <Compile Include="CLI\CliHandlingMethods.vb" />
+    <Compile Include="IO\IOHelper.vb" />
+    <Compile Include="IO\IOMethods.vb" />
     <Compile Include="Presets\LoadPresetsMethods.vb" />
     <Compile Include="Presets\SavePresetMethods.vb" />
     <Compile Include="SettingsWindow.xaml.vb">
@@ -188,6 +187,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Blazkowicz_sprite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
