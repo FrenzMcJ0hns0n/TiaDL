@@ -6,7 +6,7 @@ Module IOHelper
     ''' Build absolute path from iwad relative filename (Common presets)
     ''' </summary>
     ''' 
-    Public Function BuildIwadPath(iwad As String) As String
+    Public Function Path_Iwad_RelativeToAbsolute(iwad As String) As String
 
         With My.Settings
             Return If(File.Exists(.IwadsDir & "\" & iwad), .IwadsDir & "\" & iwad, Nothing)
@@ -18,10 +18,22 @@ Module IOHelper
     ''' Build absolute path from level relative filename (Common presets)
     ''' </summary>
     ''' 
-    Public Function BuildLevelPath(level As String) As String
+    Public Function Path_Level_RelativeToAbsolute(level As String) As String
 
         With My.Settings
             Return If(File.Exists(.LevelsDir & "\" & level), .LevelsDir & "\" & level, Nothing)
+        End With
+
+    End Function
+
+    ''' <summary>
+    ''' Build absolute path from misc relative filename (Common presets)
+    ''' </summary>
+    ''' 
+    Public Function Path_Misc_RelativeToAbsolute(misc As String) As String
+
+        With My.Settings
+            Return If(File.Exists(.MiscDir & "\" & misc), .MiscDir & "\" & misc, Nothing)
         End With
 
     End Function

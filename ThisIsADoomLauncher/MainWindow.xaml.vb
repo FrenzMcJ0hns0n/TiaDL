@@ -121,25 +121,48 @@ Class MainWindow
 
 #Region "Common presets click"
 
+    'TODO : Factorize
+
     Private Sub Button_Preset_UltimateDoom_Click(sender As Object, e As RoutedEventArgs) Handles Button_Preset_UltimateDoom.Click
 
         With My.Settings
+
             Dim iwad = "Doom.wad"
             Dim level As String = Nothing
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
+
+
+            Dim errorText As String = ""
 
             If iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
+
         End With
 
     End Sub
@@ -149,20 +172,39 @@ Class MainWindow
         With My.Settings
             Dim iwad = "Doom2.wad"
             Dim level As String = Nothing
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
+
+
+            Dim errorText As String = ""
 
             If iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -172,20 +214,39 @@ Class MainWindow
         With My.Settings
             Dim iwad = "TNT.wad"
             Dim level As String = Nothing
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
+
+
+            Dim errorText As String = ""
 
             If iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -195,20 +256,39 @@ Class MainWindow
         With My.Settings
             Dim iwad = "Plutonia.wad"
             Dim level As String = Nothing
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
+
+
+            Dim errorText As String = ""
 
             If iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -218,30 +298,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom.wad"
             Dim level As String = "2002ad10.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -251,30 +340,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "ICARUS.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -284,30 +382,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "Requiem.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -317,30 +424,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "PL2.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -350,30 +466,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "hr.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -383,30 +508,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "hr2final.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -416,30 +550,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "DTS-T.pk3"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -448,31 +591,40 @@ Class MainWindow
 
         With My.Settings
             Dim iwad As String = "Doom2.wad"
-            Dim level As String = "RCP.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim level As String = "PRCP.wad"
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -482,30 +634,39 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "D2RELOAD.WAD"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -515,30 +676,81 @@ Class MainWindow
         With My.Settings
             Dim iwad As String = "Doom2.wad"
             Dim level As String = "D2TWID.wad"
-            Dim iwadPath As String = BuildIwadPath(iwad)
-            Dim levelPath As String = BuildLevelPath(level)
+            Dim misc As String = "D2TWID.deh"
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-            If iwadPath = Nothing And levelPath = Nothing Then
-                MessageBox.Show(
-                    "Error :" &
-                    "File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir &
-                    Environment.NewLine &
-                    "File " & level & " doesn't exist in" & Environment.NewLine & .LevelsDir
-                )
-                Return
 
-            ElseIf iwadPath = Nothing Then
-                MessageBox.Show("Error : File " & iwad & " doesn't exist in" & Environment.NewLine & .IwadsDir)
-                Return
+            Dim errorText As String = ""
 
-            Else
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .Save()
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
             End If
 
-            TextBox_IwadToLaunch.Text = .SelectedIwad
-            TextBox_LevelToLaunch.Text = .SelectedLevel
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
+        End With
+
+    End Sub
+
+    Private Sub Button_Preset_Zone300_Click(sender As Object, e As RoutedEventArgs) Handles Button_Preset_Zone300.Click
+
+        With My.Settings
+            Dim iwad As String = "Doom2.wad"
+            Dim level As String = "zone300.wad"
+            Dim misc As String = Nothing
+            Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+            Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+            Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
+
+
+            Dim errorText As String = ""
+
+            If iwadPath = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If levelPath = Nothing And Not level = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", level, Environment.NewLine, .IwadsDir, Environment.NewLine)
+            End If
+
+            If miscPath = Nothing And Not misc = Nothing Then
+                errorText &= String.Format("Error : File ""{0}"" doesn't exist in :{1}{2}{3}", misc, Environment.NewLine, .MiscDir, Environment.NewLine)
+            End If
+
+
+            If errorText = Nothing Then
+                .SelectedIwad = iwadPath
+                .SelectedLevel = levelPath
+                .SelectedMisc = miscPath
+                .Save()
+
+                TextBox_IwadToLaunch.Text = .SelectedIwad
+                TextBox_LevelToLaunch.Text = .SelectedLevel
+                TextBox_MiscToLaunch.Text = .SelectedMisc
+            Else
+                MessageBox.Show(errorText)
+            End If
         End With
 
     End Sub
@@ -560,6 +772,10 @@ Class MainWindow
         'Level
         TextBox_LevelToLaunch.Text = NewPreset_GetSelectedLevel()
         My.Settings.SelectedLevel = NewPreset_GetSelectedLevel()
+
+        'Misc
+        TextBox_MiscToLaunch.Text = NewPreset_GetSelectedMisc()
+        My.Settings.SelectedMisc = NewPreset_GetSelectedMisc()
 
     End Sub
 
@@ -583,23 +799,28 @@ Class MainWindow
 
     Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
 
-        If TextBox_NewPreset_Name.Text = "Enter preset name ..." Or TextBox_NewPreset_Name.Text = Nothing Then
-            MessageBox.Show("New user preset requires a name to be saved")
-            Return
-        End If
+        Try
+            Dim nameToSave As String = TextBox_NewPreset_Name.Text
+            If nameToSave = "Enter preset name ..." Or nameToSave = Nothing Then
+                MessageBox.Show("New user preset requires a name to be saved")
+                Return
+            End If
 
-        If NewPreset_GetSelectedIwad() = Nothing Then
-            MessageBox.Show("New user preset requires an IWAD to be saved")
-            Return
-        End If
+            Dim iwadToSave As String = NewPreset_GetSelectedIwad()
+            If iwadToSave = Nothing Then
+                MessageBox.Show("New user preset requires an IWAD to be saved")
+                Return
+            End If
 
-        'TODO : Check input validity !
+            Dim levelToSave As String = NewPreset_GetSelectedLevel()
+            Dim miscToSave As String = NewPreset_GetSelectedMisc()
 
-        Dim nameToSave As String = TextBox_NewPreset_Name.Text
-        Dim iwadToSave As String = NewPreset_GetSelectedIwad()
-        Dim levelToSave As String = NewPreset_GetSelectedLevel() 'can be Nothing -> ok for String.Format ?
-        Dim miscToSave As String = NewPreset_GetSelectedMisc() 'can be Nothing -> ok for String.Format ?
-        WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
+            WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
+            MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
+        End Try
 
     End Sub
 
@@ -666,6 +887,7 @@ Class MainWindow
 
     End Sub
 
+
     Private Sub TextBox_wad_file_PreviewDragOver(sender As Object, e As DragEventArgs)
 
         e.Handled = True
@@ -700,6 +922,7 @@ Class MainWindow
 
     End Sub
 
+
     Private Sub TextBox_DropMiscFile_PreviewDragOver(sender As Object, e As DragEventArgs)
 
         e.Handled = True
@@ -712,10 +935,10 @@ Class MainWindow
             Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
 
             If ValidateFile(file(0)) = "misc" Then
-                TextBox_DropWadFile.Background = Brushes.LightGreen
-                TextBox_DropWadFile.ClearValue(FontStyleProperty)
-                TextBox_DropWadFile.ClearValue(ForegroundProperty)
-                TextBox_DropWadFile.Text = file(0)
+                TextBox_DropMiscFile.Background = Brushes.LightGreen
+                TextBox_DropMiscFile.ClearValue(FontStyleProperty)
+                TextBox_DropMiscFile.ClearValue(ForegroundProperty)
+                TextBox_DropMiscFile.Text = file(0)
 
             ElseIf ValidateFile(file(0)) = "iwad" Then
                 MessageBox.Show("Error : this file is an IWAD")
@@ -733,6 +956,7 @@ Class MainWindow
         End Try
 
     End Sub
+
 
     Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
 
@@ -754,6 +978,7 @@ Class MainWindow
 
     End Sub
 
+
     Private Function NewPreset_GetSelectedIwad() As String
 
         'IWAD
@@ -761,22 +986,22 @@ Class MainWindow
 
         iwadButton = Button_NewPreset_SetDoomIwad.Background
         If iwadButton.Color = Colors.LightGreen Then
-            Return "Doom.wad"
+            Return My.Settings.IwadsDir & "\Doom.wad"
         End If
 
         iwadButton = Button_NewPreset_SetDoom2Iwad.Background
         If iwadButton.Color = Colors.LightGreen Then
-            Return "Doom2.wad"
+            Return My.Settings.IwadsDir & "\Doom2.wad"
         End If
 
         iwadButton = Button_NewPreset_SetFreedoomIwad.Background
         If iwadButton.Color = Colors.LightGreen Then
-            Return "freedoom1.wad"
+            Return My.Settings.IwadsDir & "\freedoom1.wad"
         End If
 
         iwadButton = Button_NewPreset_SetFreedoom2Iwad.Background
         If iwadButton.Color = Colors.LightGreen Then
-            Return "freedoom2.wad"
+            Return My.Settings.IwadsDir & "\freedoom2.wad"
         End If
 
         Return Nothing

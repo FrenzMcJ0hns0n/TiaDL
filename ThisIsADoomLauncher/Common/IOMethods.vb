@@ -45,6 +45,12 @@ Module IOMethods
                     errorText &= Environment.NewLine & "- levels"
                 End If
 
+                If Directory.Exists(.RootDirPath & "\misc") Then
+                    .MiscDir = .RootDirPath & "\misc"
+                Else
+                    errorText &= Environment.NewLine & "- misc"
+                End If
+
                 If Directory.Exists(.RootDirPath & "\mods") Then
                     .ModDir = .RootDirPath & "\mods"
                 Else
@@ -58,7 +64,7 @@ Module IOMethods
                 End If
             End With
 
-            If Not errorText = "" Then
+            If Not errorText = Nothing Then
                 MessageBox.Show("Setup error. Unable to find the following directories :" & errorText)
                 WriteToLog(DateTime.Now & " - Setup error. Directories not found :" & errorText)
             End If
@@ -165,6 +171,24 @@ Module IOMethods
         End Try
 
     End Sub
+
+
+    Sub WritePresetsFileHeader()
+
+        Dim presetFile As String = My.Settings.RootDirPath & "\presets.txt"
+
+        Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
+            writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
+            writer.WriteLine()
+            writer.WriteLine("# Preset pattern :")
+            writer.WriteLine("# Name = <value> IWAD = <path> [Level = <path> Misc. = <path>]")
+            writer.WriteLine("# 'Name' and 'IWAD' are mandatory values")
+            writer.WriteLine("# 'Misc.' refers to .deh or .bex files")
+            writer.WriteLine("")
+        End Using
+
+    End Sub
+
 
 
 
