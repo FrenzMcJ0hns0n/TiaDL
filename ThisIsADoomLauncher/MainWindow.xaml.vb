@@ -31,7 +31,7 @@ Class MainWindow
             CheckBox_EnableTurbo.IsChecked = .UseTurbo
 
             'Load user presets (2nd tab)
-            DisplayLoadedPresets(GetPresetsFromFile(.RootDirPath & "\presets.txt"))
+            DisplayLoadedPresets(FormatPresetsData_FromCsv())
         End With
 
     End Sub
@@ -1104,11 +1104,11 @@ Class MainWindow
 
     'End Sub
 
-    'Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
 
-    '    MessageBox.Show(My.Settings.FullscreenEnabled)
+        TestGetDataFromCsv()
 
-    'End Sub
+    End Sub
 
 
 #End Region

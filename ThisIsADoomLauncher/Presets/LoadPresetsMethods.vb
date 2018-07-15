@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports Microsoft.VisualBasic.FileIO
 
 Module LoadPresetsMethods
 
@@ -47,79 +48,46 @@ Module LoadPresetsMethods
     End Sub
 
     ''' <summary>
-    ''' Return parsed values, from file "presets.txt".
-    ''' As a list of list of string
+    ''' Format then return parsed values, from file "presets.txt".
+    ''' As List of List of String
     ''' 
-    ''' For instance : ("MyFirstPreset","Doom2","Level.wad"), ("MySecondPreset", "Doom2", "AnotherLevel.wad")
+    ''' For instance : ("MyPreset","path\to\doom.wad","path\to\level.wad"), ("Freedoom Phase 1", "path\to\freedoom1.wad")
     ''' </summary>
     ''' 
-    Function GetPresetsFromFile(presetFile As String) As List(Of List(Of String))
-
-        'TODO : test when 'presets.txt' does not exist ! To see the value of ReadPresetsData (see function above)
+    Function FormatPresetsData_FromCsv() As List(Of List(Of String))
 
         Dim presetLines As List(Of List(Of String)) = New List(Of List(Of String))
 
-        If Not File.Exists(My.Settings.RootDirPath & "\presets.txt") Then
-            Return Nothing 'Or 'Return presetLines' ?
-        End If
-
         Try
-            For Each line As String In File.ReadLines(My.Settings.RootDirPath & "\presets.txt")
+            Using parser As TextFieldParser = New TextFieldParser(My.Settings.RootDirPath & "\presets.csv") With {
+                .TextFieldType = FieldType.Delimited,
+                .Delimiters = New String() {","},
+                .CommentTokens = New String() {"#"}
+            }
 
-                If line.Trim.StartsWith("#") Then
-                    Continue For 'Ignore lines with "#" as first read char
-                End If
+                Do While Not parser.EndOfData
+                    Dim line As List(Of String) = New List(Of String)
 
-                If line.Contains("Name =") And line.Contains("IWAD =") Then
+                    Try
+                        Dim readValues As String() = parser.ReadFields() 'a line in file : contains preset values (Name, Iwad, Level, Misc.)
 
-                    Dim argLine As List(Of String) = New List(Of String)
-                    Dim _start As Integer
-                    Dim _end As Integer
+                        If readValues.Length < 2 Then 'line has less than 2 values (Name and Iwad are mandatory) => Continue to next line
+                            Continue Do
+                        End If
 
-                    'Name -------------------------------------------------------------------------------------
-                    _start = line.IndexOf("Name =") + 6
-                    _end = line.IndexOf("IWAD =") - 6
-                    Dim presetName As String = line.Substring(_start, _end).Trim 'need test
-                    argLine.Add(presetName)
+                        For Each value As String In readValues
+                            line.Add(value)
+                        Next
+                        presetLines.Add(line)
 
-                    'IWAD -------------------------------------------------------------------------------------
-                    Dim presetIwad As String = ""
-                    If Not line.Contains("Level =") Then
-                        _start = line.IndexOf("IWAD =") + 6
-                        presetIwad = line.Substring(_start).Trim 'need test
-                        argLine.Add(presetIwad)
-                        presetLines.Add(argLine) '=> Return preset with : Name, IWAD
-                        Continue For
-                    End If
-                    _start = line.IndexOf("IWAD =") + 6
-                    _end = line.IndexOf("Level =")
-                    presetIwad = line.Substring(_start, _end - _start).Trim 'need test
-                    argLine.Add(presetIwad)
+                    Catch ex As MalformedLineException
+                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException when parsing 'presets.csv' at line(?) => " & parser.ErrorLineNumber)
+                    End Try
+                Loop
 
-                    'Level -------------------------------------------------------------------------------------
-                    Dim presetLevel As String = ""
-                    If Not line.Contains("Misc. =") Then
-                        _start = line.IndexOf("Level =") + 7
-                        presetLevel = line.Substring(_start).Trim 'need test
-                        argLine.Add(presetLevel)
-                        presetLines.Add(argLine) '=> Return preset with : Name, IWAD, Level
-                        Continue For
-                    End If
-                    _start = line.IndexOf("Level =") + 7
-                    _end = line.IndexOf("Misc. =")
-                    presetLevel = line.Substring(_start, _end - _start).Trim 'need test
-                    argLine.Add(presetLevel)
-
-                    'Misc. -------------------------------------------------------------------------------------
-                    _start = line.IndexOf("Misc. =") + 7
-                    Dim presetMisc As String = line.Substring(_start).Trim 'need test
-                    argLine.Add(presetMisc)
-                    presetLines.Add(argLine) '=> Return preset with : Name, IWAD, Level, Misc.
-                End If
-            Next
-
+            End Using
         Catch ex As Exception
-            MessageBox.Show("Error. Exception :" & Environment.NewLine & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'FormatPresetsData_FromCsv()'. Exception : " & ex.ToString)
         End Try
 
         Return presetLines
@@ -127,19 +95,19 @@ Module LoadPresetsMethods
     End Function
 
     ''' <summary>
-    ''' Triggered when user clicks a preset in list(second tab:User presets)
-    ''' Handle files validation
+    ''' Triggered when user clicks a preset in list (second tab : User presets).
+    ''' Handle files validation : write red text if invalid file
     ''' 
     ''' Set SelectedIwad, SelectedLevel, Selected Misc. for launch
     ''' </summary>
     ''' 
     Sub HandleUserPresetClick(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
 
-        Dim str As String = String.Format(
-                "iwadPath:'{0}'{1}levelPath:'{2}'{3}miscPath:'{4}'",
-                iwadPath,
-                Environment.NewLine & Environment.NewLine, levelPath,
-                Environment.NewLine & Environment.NewLine, miscPath)
+        'Dim str As String = String.Format(
+        '    "iwadPath: '{0}'{1}levelPath:'{2}'{3}miscPath:'{4}'",
+        '    iwadPath,
+        '    Environment.NewLine & Environment.NewLine, levelPath,
+        '    Environment.NewLine & Environment.NewLine, miscPath)
         'MessageBox.Show(str)
 
         Try
@@ -172,10 +140,6 @@ Module LoadPresetsMethods
                     mainWindow.TextBox_MiscToLaunch.Foreground = New SolidColorBrush(Colors.Red)
                 End If
                 mainWindow.TextBox_MiscToLaunch.Text = miscPath
-
-                '.SelectedIwad = If(ValidateFile(iwadPath) = "iwad", iwadPath, Nothing)
-                '.SelectedLevel = If(ValidateFile(levelPath) = "level", levelPath, Nothing)
-                '.SelectedMisc = If(File.Exists(miscPath), miscPath, Nothing)mainWindow.TextBox_MiscToLaunch.Text = .SelectedMisc
 
                 WriteToLog(DateTime.Now & " - From 'HandleUserPresetClick()' : " &
                            Environment.NewLine & "Preset IWAD : " & iwadPath &
