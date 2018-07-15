@@ -127,8 +127,8 @@ Module IOMethods
         Dim versionsFound As List(Of String) = New List(Of String)
 
         Try
-            Dim files() = Directory.GetFiles(My.Settings.ModDir)
-            For Each file As String In files
+            Dim mods As String() = Directory.GetFiles(My.Settings.ModDir)
+            For Each file As String In mods
                 versionsFound.Add(File_GetName(file))
             Next
             Return versionsFound
@@ -180,16 +180,19 @@ Module IOMethods
     ''' 
     Sub WritePresetsFileHeader()
 
-        Dim presetFile As String = My.Settings.RootDirPath & "\presets.txt"
+        Dim presetFile As String = My.Settings.RootDirPath & "\presets.csv"
 
         Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
             writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
             writer.WriteLine()
             writer.WriteLine("# Preset pattern :")
-            writer.WriteLine("# Name = <value> IWAD = <path> [Level = <path> Misc. = <path>]")
-            writer.WriteLine("# 'Name' and 'IWAD' are mandatory values")
-            writer.WriteLine("# 'Misc.' refers to .deh or .bex files")
-            writer.WriteLine("")
+            writer.WriteLine("# <Preset Name>, <Iwad path> [,<Level path>] [,<Misc. path>]")
+            writer.WriteLine()
+            writer.WriteLine("# <Preset Name> and <Iwad path> are mandatory")
+            writer.WriteLine("# <Iwad path> : absolute path to .wad file")
+            writer.WriteLine("# <Level path> : absolute path to .wad/.pk3 file")
+            writer.WriteLine("# <Misc. path> : absolute path to .deh/.dex file")
+            writer.WriteLine()
         End Using
 
     End Sub

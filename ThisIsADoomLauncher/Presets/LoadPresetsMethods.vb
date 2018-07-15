@@ -11,9 +11,8 @@ Module LoadPresetsMethods
     ''' 
     Sub DisplayLoadedPresets(readPresetsData As List(Of List(Of String)))
 
-        'Nothing to read : exit
-        If readPresetsData Is Nothing Then
-            Return
+        If readPresetsData.Count = 0 Then
+            Return 'Nothing to read : exit
         End If
 
         Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)

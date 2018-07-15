@@ -4,21 +4,21 @@ Module SavePresetMethods
 
     ''' <summary>
     ''' Write attributes for New user preset.
-    ''' As line in 'presets.txt'
+    ''' As line in 'presets.csv'
     ''' </summary>
     ''' 
     Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
 
         Try
-            Dim presetFile As String = My.Settings.RootDirPath & "\presets.txt"
+            Dim presetFile As String = My.Settings.RootDirPath & "\presets.csv"
 
             If Not File.Exists(presetFile) Then
                 WritePresetsFileHeader()
             End If
 
-            Dim presetLine As String = String.Format("Name = {0} IWAD = {1}", name, iwad)
-            presetLine &= If(level = Nothing, Nothing, " Level = " & level)
-            presetLine &= If(misc = Nothing, Nothing, " Misc. = " & misc)
+            Dim presetLine As String = String.Format("{0},{1}", name, iwad)
+            presetLine &= If(level = Nothing, Nothing, "," & level)
+            presetLine &= If(misc = Nothing, Nothing, "," & misc)
 
             'Write preset
             Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
