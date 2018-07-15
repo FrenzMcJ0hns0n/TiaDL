@@ -4,13 +4,9 @@ Imports Microsoft.VisualBasic.FileIO
 Module LoadPresetsMethods
 
     ''' <summary>
-    ''' <para>Parse, sort and display loaded presets data.</para>
-    ''' <para>
-    ''' For each valid preset : create a button with a .Click function 'HandleUserPresetClick'.
-    ''' To be valid, each preset must have at least a Name and an Iwad.
-    ''' readPresetsData = presets as lines read from 'presets.txt', values = each line.
-    ''' | values(0) : Preset Name | values(1) : Preset Iwad | values(2) : Preset Level | values(3) : Preset Misc |
-    ''' </para>
+    ''' <para>Build and display loaded presets as buttons.</para>
+    ''' <para>For each preset : create a button with .Click function 'HandleUserPresetClick'.</para>
+    ''' <para>values(0) : Preset Name | values(1) : Preset Iwad | values(2) : Preset Level | values(3) : Preset Misc</para>
     ''' </summary>
     ''' 
     Sub DisplayLoadedPresets(readPresetsData As List(Of List(Of String)))
@@ -21,11 +17,9 @@ Module LoadPresetsMethods
         End If
 
         Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+        mainWindow.Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
 
         For Each values As List(Of String) In readPresetsData
-            If values.Count < 2 Then
-                Continue For 'invalid preset
-            End If
 
             Dim button As Button = New Button() With
             {
@@ -35,23 +29,19 @@ Module LoadPresetsMethods
                 .Content = values(0)
             }
 
+            'TODO v2+ : HandleUserPresetDelete() ?
             AddHandler button.Click,
                 Sub(sender, e)
                     HandleUserPresetClick(values(1), If(values.Count >= 3, values(2), Nothing), If(values.Count = 4, values(3), Nothing))
-                    'TODO v2+ : HandleUserPresetDelete() ?
                 End Sub
-
-            mainWindow.Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
             mainWindow.StackPanel_DisplayUserPresets.Children.Add(button)
         Next
 
     End Sub
 
     ''' <summary>
-    ''' Format then return parsed values, from file "presets.txt".
-    ''' As List of List of String
-    ''' 
-    ''' For instance : ("MyPreset","path\to\doom.wad","path\to\level.wad"), ("Freedoom Phase 1", "path\to\freedoom1.wad")
+    ''' <para> Format then return parsed values, from file "presets.txt". As List of List of String.</para>
+    ''' <para>For instance : ("MyPreset","path\to\doom.wad","path\to\level.wad"), ("Freedoom Phase 1", "path\to\freedoom1.wad")</para>
     ''' </summary>
     ''' 
     Function FormatPresetsData_FromCsv() As List(Of List(Of String))
@@ -95,20 +85,17 @@ Module LoadPresetsMethods
     End Function
 
     ''' <summary>
-    ''' Triggered when user clicks a preset in list (second tab : User presets).
-    ''' Handle files validation : write red text if invalid file
-    ''' 
-    ''' Set SelectedIwad, SelectedLevel, Selected Misc. for launch
+    ''' <para>Triggered when user clicks a preset-button (second tab : User presets).</para>
+    ''' <para>Set SelectedIwad, SelectedLevel, Selected Misc. for launch</para>
+    ''' <para>Display red text on filepath if does not exist</para>
     ''' </summary>
     ''' 
     Sub HandleUserPresetClick(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
 
-        'Dim str As String = String.Format(
+        'MessageBox.Show(String.Format(
         '    "iwadPath: '{0}'{1}levelPath:'{2}'{3}miscPath:'{4}'",
-        '    iwadPath,
-        '    Environment.NewLine & Environment.NewLine, levelPath,
-        '    Environment.NewLine & Environment.NewLine, miscPath)
-        'MessageBox.Show(str)
+        '    iwadPath, Environment.NewLine & Environment.NewLine, levelPath, Environment.NewLine & Environment.NewLine, miscPath
+        '))
 
         Try
             With My.Settings
@@ -141,10 +128,6 @@ Module LoadPresetsMethods
                 End If
                 mainWindow.TextBox_MiscToLaunch.Text = miscPath
 
-                WriteToLog(DateTime.Now & " - From 'HandleUserPresetClick()' : " &
-                           Environment.NewLine & "Preset IWAD : " & iwadPath &
-                           Environment.NewLine & "Preset level : " & levelPath &
-                           Environment.NewLine & "Preset Misc. :" & miscPath)
             End With
 
         Catch ex As Exception
