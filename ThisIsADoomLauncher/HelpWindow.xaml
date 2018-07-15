@@ -104,7 +104,7 @@
                             </List>
                             <Paragraph FontSize="14">
                                 GZDoom and Zandronum are supported by TiaDL.
-                                <LineBreak /> You can choose which one to use in the <Bold>Settings</Bold> :
+                                <LineBreak /> You can choose which one to use in the <Bold>Settings</Bold>.
                             </Paragraph>
                             <!--<LineBreak /><Image Source="/Resources/settings_darker.png" Width="34"></Image>-->
                             <Paragraph></Paragraph>
@@ -113,7 +113,7 @@
                         <Section>
                             <Paragraph FontWeight="DemiBold" FontSize="24">Keys</Paragraph>
                             <Paragraph FontSize="14">
-                                To use in-game :
+                                To use in-game (AZERTY keyboard layout) :
                             </Paragraph>
                             <List Margin="0,14,0,28" MarkerStyle="Box">
 

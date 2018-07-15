@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
         
-        Title="ThisIsADoomLauncher v2" 
+        Title="This is a Doom Launcher v2" 
         Width="800" Height="600" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
@@ -768,6 +768,7 @@
                 <DockPanel Grid.Row="5"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
+                           ToolTip="Play"
                            >
                     <Button x:Name="Button_Launch"
                             HorizontalAlignment="Center"
@@ -787,21 +788,22 @@
 
             </Grid>
         </Border>
-        <Button x:Name="Button_TestProperties"
+        
+        <!--<Button x:Name="Button_TestProperties"
                 Content="Properties" 
                 Grid.Column="3" 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
-                Width="75"/>
-        
-        <Button Content="test" 
+                Width="75"/>-->
+
+        <!--<Button Content="test" 
                 Grid.Row="1"
                 Grid.Column="1" 
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Width="75" 
                 Height="80"
-                Click="Button_Click"/>
-
+                Click="Button_Click"/>-->
+        
     </Grid>
 </Window>

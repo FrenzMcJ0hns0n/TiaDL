@@ -920,7 +920,6 @@ Class MainWindow
 
     Private Function NewPreset_GetSelectedIwad() As String
 
-        'IWAD
         Dim iwadButton As SolidColorBrush
 
         iwadButton = Button_NewPreset_SetDoomIwad.Background
@@ -987,6 +986,11 @@ Class MainWindow
         TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
         TextBox_DropWadFile.Foreground = New BrushConverter().ConvertFrom("#444")
         TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
+
+        TextBox_DropMiscFile.FontStyle = FontStyles.Italic
+        TextBox_DropMiscFile.Background = New SolidColorBrush(Colors.Transparent)
+        TextBox_DropMiscFile.Foreground = New BrushConverter().ConvertFrom("#444")
+        TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here ..."
 
         TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
         TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
@@ -1077,44 +1081,35 @@ Class MainWindow
 
 #Region "Crappy tests"
 
-    Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
+    'Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
 
-        With My.Settings
+    '    With My.Settings
 
-            MessageBox.Show(String.Format(
-                "ScreenWidth = {0}{1}ScreenHeight = {2}{3}FullscreenEnabled = {4}{5}SelectedIwad = {6}{7}SelectedLevel = {8}{9}UseBrutalDoom = {10}{11}BrutalDoomVersion = {12}{13}SelectedMusicMod = {14}{15}UseTurbo = {16}{17}SelectedEngine = {18}",
-                .ScreenWidth.ToString, Environment.NewLine & Environment.NewLine,
-                .ScreenHeight.ToString, Environment.NewLine & Environment.NewLine,
-                .FullscreenEnabled.ToString, Environment.NewLine & Environment.NewLine,
-                .SelectedIwad, Environment.NewLine & Environment.NewLine,
-                .SelectedLevel, Environment.NewLine & Environment.NewLine,
-                .UseBrutalDoom.ToString, Environment.NewLine & Environment.NewLine,
-                .BrutalDoomVersion, Environment.NewLine & Environment.NewLine,
-                .SelectedMusic, Environment.NewLine & Environment.NewLine,
-                .UseTurbo, Environment.NewLine & Environment.NewLine,
-                .SelectedEngine
-            ))
-            '.SelectedMisc, Environment.NewLine,
+    '        MessageBox.Show(String.Format(
+    '            "ScreenWidth = {0}{1}ScreenHeight = {2}{3}FullscreenEnabled = {4}{5}SelectedIwad = {6}{7}SelectedLevel = {8}{9}UseBrutalDoom = {10}{11}BrutalDoomVersion = {12}{13}SelectedMusicMod = {14}{15}UseTurbo = {16}{17}SelectedEngine = {18}",
+    '            .ScreenWidth.ToString, Environment.NewLine & Environment.NewLine,
+    '            .ScreenHeight.ToString, Environment.NewLine & Environment.NewLine,
+    '            .FullscreenEnabled.ToString, Environment.NewLine & Environment.NewLine,
+    '            .SelectedIwad, Environment.NewLine & Environment.NewLine,
+    '            .SelectedLevel, Environment.NewLine & Environment.NewLine,
+    '            .UseBrutalDoom.ToString, Environment.NewLine & Environment.NewLine,
+    '            .BrutalDoomVersion, Environment.NewLine & Environment.NewLine,
+    '            .SelectedMusic, Environment.NewLine & Environment.NewLine,
+    '            .UseTurbo, Environment.NewLine & Environment.NewLine,
+    '            .SelectedEngine
+    '        ))
+    '        '.SelectedMisc, Environment.NewLine,
 
-        End With
+    '    End With
 
-        'SaveNewSettings()
+    'End Sub
 
-    End Sub
+    'Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
 
-    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-        Test()
-    End Sub
+    '    MessageBox.Show(My.Settings.FullscreenEnabled)
 
-    Private Sub Test()
+    'End Sub
 
-        'My.Settings.ScreenHeight = 1440
-        'My.Settings.BrutalDoomVersion = "bd21testApr25.pk3"
-        'My.Settings.Save()
-
-        'MessageBox.Show(ValidateFile("C:\Users\Frenz\source\repos\AnotherYoutubeAudioDownloader\AnotherYoutuion Of DOOM.mp3"))
-
-    End Sub
 
 #End Region
 

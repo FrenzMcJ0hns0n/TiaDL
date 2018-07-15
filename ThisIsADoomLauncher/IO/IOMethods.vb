@@ -129,8 +129,6 @@ Module IOMethods
         Try
             Dim files() = Directory.GetFiles(My.Settings.ModDir)
             For Each file As String In files
-                'Dim name As String = New FileInfo(file).Name
-                'versionsFound.Add(name)
                 versionsFound.Add(File_GetName(file))
             Next
             Return versionsFound
@@ -143,9 +141,8 @@ Module IOMethods
     End Function
 
     ''' <summary>
-    ''' Handle .ini files management
-    ''' TODO (v2+) : Improve custom settings selection with .ini files
-    ''' TODO : rename to SetIni() ?
+    ''' Set .ini files from models, if they exist
+    ''' TODO (v2+) : .ini file selection in GUI ?
     ''' </summary>
     ''' 
     Sub SetIniFiles()
