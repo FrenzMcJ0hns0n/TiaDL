@@ -183,9 +183,9 @@
                                 <Bold>User presets</Bold> tab.
                                 <LineBreak />
                                 <LineBreak /> User presets cannot be deleted though TiaDL, so you would have to do that manually :
-                                <LineBreak /> Open file "...\TiaDL\presets.txt" and erase the lines refering to undesired presets.
-                                <LineBreak />
+                                Open file "...\TiaDL\presets.csv" and erase lines refering to undesired presets.
                             </Paragraph>
+                            <Paragraph></Paragraph>
                         </Section>
                     </FlowDocument>
 

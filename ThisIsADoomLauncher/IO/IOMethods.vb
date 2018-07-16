@@ -175,7 +175,7 @@ Module IOMethods
     End Sub
 
     ''' <summary>
-    ''' Create file 'presets.txt' with some commented lines, if it does not exist
+    ''' Create file 'presets.csv' with some commented lines, if it does not exist
     ''' </summary>
     ''' 
     Sub WritePresetsFileHeader()
