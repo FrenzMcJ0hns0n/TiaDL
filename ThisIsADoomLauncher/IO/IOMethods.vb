@@ -26,7 +26,7 @@ Module IOMethods
             With My.Settings
 
                 Dim directoriesList As List(Of String) = New List(Of String) From {
-                    "\engine\gzdoom\", "\engine\zandronum\", "\iwads", "\levels", "\misc", "\mods", "\music", "\tc"
+                    "\engine\gzdoom", "\engine\zandronum", "\iwads", "\levels", "\misc", "\mods", "\music", "\tc"
                 }
 
                 For Each dir As String In directoriesList

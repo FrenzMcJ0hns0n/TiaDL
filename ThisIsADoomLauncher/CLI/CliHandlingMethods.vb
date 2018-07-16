@@ -10,11 +10,27 @@
 
         Try
             With My.Settings
+                'Trying to implement Wolf 3D TC 2.0.2 ... not successfully yet
+                'If wolf Then
+                '    commandLine = String.Format(
+                '        "/c start """" ""{0}"" -config ""{1}"" +fullscreen {2} -width {3} -height {4} -iwad ""{5}"" -file ""{6}"" ""{7}"" ""{8}""",
+                '        .GzdoomDir & "\gzdoom.exe",
+                '        .WolfDir & "\gzdoom-" & Environment.UserName & "-wolf3D.ini",
+                '        Int(.FullscreenEnabled).ToString,
+                '        .ScreenWidth.ToString,
+                '        .ScreenHeight.ToString,
+                '        .IwadsDir & "\Doom2.wad",
+                '        .WolfDir & "\Wolf3D_Common.pk7",
+                '        .WolfDir & "\Wolf3D_Resources.pk3",
+                '        .WolfDir & "\Wolf3D_HighRes.pk7"
+                '    )
+                '    Return commandLine
+                'End If
 
                 'Wolf
                 If wolf Then
                     commandLine = String.Format(
-                        "/c start """" ""{0}"" -config {1} +fullscreen {2} -width {3} -height {4} -iwad ""{5}"" -file {6} {7}",
+                        "/c start """" ""{0}"" -config {1} +fullscreen {2} -width {3} -height {4} -iwad ""{5}"" -file ""{6}"" ""{7}""",
                         .GzdoomDir & "\gzdoom.exe",
                         .WolfDir & "\gzdoom-" & Environment.UserName & "-wolf3D.ini",
                         Int(.FullscreenEnabled).ToString,
