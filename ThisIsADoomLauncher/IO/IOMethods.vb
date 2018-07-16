@@ -20,64 +20,36 @@ Module IOMethods
     ''' 
     Sub ValidateDirectories()
 
-        Try
-            Dim errorText As String = ""
+        Dim errorText As String = ""
 
+        Try
             With My.Settings
 
-                If Directory.Exists(.RootDirPath & "\engine\gzdoom\") Then
-                    .GzdoomDir = .RootDirPath & "\engine\gzdoom\"
+                Dim directoriesList As List(Of String) = New List(Of String) From {
+                    "\engine\gzdoom\", "\engine\zandronum\", "\iwads", "\levels", "\misc", "\mods", "\music", "\tc"
+                }
+
+                For Each dir As String In directoriesList
+                    If Not Directory.Exists(.RootDirPath & dir) Then
+                        errorText &= Environment.NewLine & dir
+                    End If
+                Next
+
+                If errorText = Nothing Then
+                    .GzdoomDir = .RootDirPath & directoriesList(0)
+                    .ZandronumDir = .RootDirPath & directoriesList(1)
+                    .IwadsDir = .RootDirPath & directoriesList(2)
+                    .LevelsDir = .RootDirPath & directoriesList(3)
+                    .MiscDir = .RootDirPath & directoriesList(4)
+                    .ModDir = .RootDirPath & directoriesList(5)
+                    .MusicDir = .RootDirPath & directoriesList(6)
+                    .WolfDir = .RootDirPath & directoriesList(7)
                 Else
-                    errorText &= Environment.NewLine & "- engine/gzdoom"
+                    MessageBox.Show("Setup error. Unable to find the following directories :" & errorText)
+                    WriteToLog(DateTime.Now & " - Setup error. Directories not found :" & errorText)
                 End If
 
-                If Directory.Exists(.RootDirPath & "\engine\zandronum\") Then
-                    .ZandronumDir = .RootDirPath & "\engine\zandronum\"
-                Else
-                    errorText &= Environment.NewLine & "- engine/zandronum"
-                End If
-
-                If Directory.Exists(.RootDirPath & "\iwads") Then
-                    .IwadsDir = .RootDirPath & "\iwads"
-                Else
-                    errorText &= Environment.NewLine & "- iwads"
-                End If
-
-                If Directory.Exists(.RootDirPath & "\levels") Then
-                    .LevelsDir = .RootDirPath & "\levels"
-                Else
-                    errorText &= Environment.NewLine & "- levels"
-                End If
-
-                If Directory.Exists(.RootDirPath & "\misc") Then
-                    .MiscDir = .RootDirPath & "\misc"
-                Else
-                    errorText &= Environment.NewLine & "- misc"
-                End If
-
-                If Directory.Exists(.RootDirPath & "\mods") Then
-                    .ModDir = .RootDirPath & "\mods"
-                Else
-                    errorText &= Environment.NewLine & "- mods"
-                End If
-
-                If Directory.Exists(.RootDirPath & "\music") Then
-                    .MusicDir = .RootDirPath & "\music"
-                Else
-                    errorText &= Environment.NewLine & "- music"
-                End If
-
-                If Directory.Exists(.RootDirPath & "\tc") Then
-                    .WolfDir = .RootDirPath & "\tc"
-                Else
-                    errorText &= Environment.NewLine & "- tc"
-                End If
             End With
-
-            If Not errorText = Nothing Then
-                MessageBox.Show("Setup error. Unable to find the following directories :" & errorText)
-                WriteToLog(DateTime.Now & " - Setup error. Directories not found :" & errorText)
-            End If
 
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'CheckDirectories()'. Exception : " & ex.ToString)
