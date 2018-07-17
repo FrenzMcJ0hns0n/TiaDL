@@ -7,6 +7,7 @@ Class MainWindow
 
 #Region "Startup"
 
+    'TODO? Think about async
     Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 
         Try
@@ -29,9 +30,6 @@ Class MainWindow
             TextBox_MiscToLaunch.Text = .SelectedMisc
             CheckBox_Load_DoomMetal.IsChecked = If(.SelectedMusic = Nothing, False, True)
             CheckBox_EnableTurbo.IsChecked = .UseTurbo
-
-            'Load user presets (2nd tab)
-            DisplayLoadedPresets(FormatPresetsData_FromCsv())
         End With
 
     End Sub
@@ -112,6 +110,21 @@ Class MainWindow
     End Sub
 
 #End Region
+
+
+
+
+    Private Sub TabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+        Dim tabControl As TabControl = sender
+        Dim item As TabItem = tabControl.SelectedValue
+
+        If item.Name = "User" Then
+            StackPanel_DisplayUserPresets.Children.Clear() 'TODO : better implementation of this line through events
+            DisplayLoadedPresets(FormatPresetsData_FromCsv()) 'TODO? Think about async
+        End If
+
+    End Sub
 
 
 
@@ -1109,6 +1122,7 @@ Class MainWindow
         'FormatPresetsData_FromCsv()
 
     End Sub
+
 
 
 #End Region

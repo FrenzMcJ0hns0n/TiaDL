@@ -1,5 +1,4 @@
-﻿Imports System.IO
-Imports Microsoft.VisualBasic.FileIO
+﻿Imports Microsoft.VisualBasic.FileIO
 
 Module LoadPresetsMethods
 
@@ -17,6 +16,7 @@ Module LoadPresetsMethods
 
         Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
         mainWindow.Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
+        'mainWindow.StackPanel_DisplayUserPresets.Children.Clear()
 
         For Each values As List(Of String) In readPresetsData
 
