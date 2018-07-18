@@ -22,7 +22,7 @@ Module SavePresetMethods
 
             'Write preset
             Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
-                writer.WriteLine("")
+                writer.WriteLine("") 'to make sure to write 'presetLine' on a new line
                 writer.WriteLine(presetLine)
             End Using
 
