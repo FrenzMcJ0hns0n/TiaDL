@@ -182,8 +182,7 @@
                                 <LineBreak /> Then access them on the
                                 <Bold>User presets</Bold> tab.
                                 <LineBreak />
-                                <LineBreak /> User presets cannot be deleted though TiaDL, so you would have to do that manually :
-                                Open file "...\TiaDL\presets.csv" and erase lines refering to undesired presets.
+                                <LineBreak /> To delete a preset, just right-click on it.
                             </Paragraph>
                             <Paragraph></Paragraph>
                         </Section>
