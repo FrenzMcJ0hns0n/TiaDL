@@ -89,6 +89,8 @@
     </Compile>
     <Compile Include="IO\IOHelper.vb" />
     <Compile Include="IO\IOMethods.vb" />
+    <Compile Include="Presets\ClickHandlersMethods.vb" />
+    <Compile Include="Presets\DeletePresetsMethods.vb" />
     <Compile Include="Presets\LoadPresetsMethods.vb" />
     <Compile Include="Presets\SavePresetMethods.vb" />
     <Compile Include="SettingsWindow.xaml.vb">

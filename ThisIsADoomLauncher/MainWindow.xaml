@@ -280,10 +280,13 @@
                                    />
 
                             <ScrollViewer x:Name="ScrollViewer_DisplayUserPresets">
+                                
+                                <!-- Use ListBox instead ? -->
                                 <StackPanel x:Name="StackPanel_DisplayUserPresets"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch"
                                             />
+                                
                             </ScrollViewer>
                         </Grid>
                     </Border>
