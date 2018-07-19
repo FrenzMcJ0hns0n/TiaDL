@@ -10,13 +10,15 @@ Module LoadPresetsMethods
     ''' 
     Sub DisplayLoadedPresets(readPresetsData As List(Of List(Of String)))
 
+        Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+
         If readPresetsData.Count = 0 Then
+            mainWindow.Label_NoUserPresetsFound.Visibility = Visibility.Visible
             Return 'Nothing to read : exit
         End If
 
-        Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
         mainWindow.Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
-        'mainWindow.StackPanel_DisplayUserPresets.Children.Clear()
+        'mainWindow.StackPanel_DisplayUserPresets.Children.Clear() '-> Moved. Handled by TabControl.SelectionChanged() event
 
         For Each values As List(Of String) In readPresetsData
 
