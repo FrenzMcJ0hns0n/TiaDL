@@ -30,6 +30,7 @@
                 End If
                 mainWindow.TextBox_IwadToLaunch.Text = iwadPath
 
+                .SelectedLevel = Nothing
                 If ValidateFile(levelPath) = "level" Then
                     .SelectedLevel = levelPath
                 Else
@@ -37,6 +38,7 @@
                 End If
                 mainWindow.TextBox_LevelToLaunch.Text = levelPath
 
+                .SelectedMisc = Nothing
                 If ValidateFile(miscPath) = "misc" Then
                     .SelectedMisc = miscPath
                 Else
@@ -44,6 +46,7 @@
                 End If
                 mainWindow.TextBox_MiscToLaunch.Text = miscPath
 
+                .Save()
             End With
 
         Catch ex As Exception
