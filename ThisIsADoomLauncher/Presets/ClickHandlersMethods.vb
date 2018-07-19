@@ -8,43 +8,36 @@
     ''' 
     Sub HandleUserPresetClick(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
 
-        'MessageBox.Show(String.Format(
-        '    "iwadPath: '{0}'{1}levelPath:'{2}'{3}miscPath:'{4}'",
-        '    iwadPath, Environment.NewLine & Environment.NewLine, levelPath, Environment.NewLine & Environment.NewLine, miscPath
-        '))
-
         Try
             With My.Settings
 
-                Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
-
                 'Reset TextBox.Foreground
-                mainWindow.TextBox_IwadToLaunch.ClearValue(Control.ForegroundProperty)
-                mainWindow.TextBox_LevelToLaunch.ClearValue(Control.ForegroundProperty)
-                mainWindow.TextBox_MiscToLaunch.ClearValue(Control.ForegroundProperty)
+                MainWindow_Instance().TextBox_IwadToLaunch.ClearValue(Control.ForegroundProperty)
+                MainWindow_Instance().TextBox_LevelToLaunch.ClearValue(Control.ForegroundProperty)
+                MainWindow_Instance().TextBox_MiscToLaunch.ClearValue(Control.ForegroundProperty)
 
                 If ValidateFile(iwadPath) = "iwad" Then
                     .SelectedIwad = iwadPath
                 Else
-                    mainWindow.TextBox_IwadToLaunch.Foreground = New SolidColorBrush(Colors.Red)
+                    MainWindow_Instance().TextBox_IwadToLaunch.Foreground = New SolidColorBrush(Colors.Red)
                 End If
-                mainWindow.TextBox_IwadToLaunch.Text = iwadPath
+                MainWindow_Instance().TextBox_IwadToLaunch.Text = iwadPath
 
                 .SelectedLevel = Nothing
                 If ValidateFile(levelPath) = "level" Then
                     .SelectedLevel = levelPath
                 Else
-                    mainWindow.TextBox_LevelToLaunch.Foreground = New SolidColorBrush(Colors.Red)
+                    MainWindow_Instance().TextBox_LevelToLaunch.Foreground = New SolidColorBrush(Colors.Red)
                 End If
-                mainWindow.TextBox_LevelToLaunch.Text = levelPath
+                MainWindow_Instance().TextBox_LevelToLaunch.Text = levelPath
 
                 .SelectedMisc = Nothing
                 If ValidateFile(miscPath) = "misc" Then
                     .SelectedMisc = miscPath
                 Else
-                    mainWindow.TextBox_MiscToLaunch.Foreground = New SolidColorBrush(Colors.Red)
+                    MainWindow_Instance().TextBox_MiscToLaunch.Foreground = New SolidColorBrush(Colors.Red)
                 End If
-                mainWindow.TextBox_MiscToLaunch.Text = miscPath
+                MainWindow_Instance().TextBox_MiscToLaunch.Text = miscPath
 
                 .Save()
             End With
@@ -73,8 +66,6 @@
             DeletePreset(presetName)
 
             'Update GUI
-            Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
-            mainWindow.StackPanel_DisplayUserPresets.Children.Clear()
             DisplayLoadedPresets(FormatPresetsData_FromCsv)
         End If
 
