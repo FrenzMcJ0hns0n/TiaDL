@@ -73,7 +73,11 @@
                 End If
                 commandLine &= If(.SelectedLevel = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedLevel))
                 commandLine &= If(.SelectedMisc = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMisc))
-                commandLine &= If(.SelectedMusic = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMusic))
+
+                If .UseAltSoundtrack Then
+                    commandLine &= If(.SelectedMusic = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMusic))
+                End If
+
                 commandLine &= If(.UseTurbo = True, " -turbo 125", Nothing)
                 ' TODO (v2+) commandLine &= If(.UseTurbo = True, String.Format(" -turbo {0}", turboValue), Nothing)
 

@@ -28,7 +28,14 @@ Class MainWindow
             TextBox_IwadToLaunch.Text = .SelectedIwad
             TextBox_LevelToLaunch.Text = .SelectedLevel
             TextBox_MiscToLaunch.Text = .SelectedMisc
-            CheckBox_Load_DoomMetal.IsChecked = If(.SelectedMusic = Nothing, False, True)
+
+            CheckBox_UseAltSoundtrack.IsChecked = .UseAltSoundtrack
+            If .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad" Then
+                RadioButton_Soundtrack_DoomMetal.IsChecked = True
+            ElseIf .SelectedMusic = .MusicDir & "\IDKFAv2.wad" Then
+                RadioButton_Soundtrack_IDKFA.IsChecked = True
+            End If
+
             CheckBox_EnableTurbo.IsChecked = .UseTurbo
         End With
 
@@ -1045,25 +1052,60 @@ Class MainWindow
 
 #Region "Extra launch parameters"
 
-    Private Sub CheckBox_Load_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Load_DoomMetal.Checked
+    'Private Sub CheckBox_Load_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Load_DoomMetal.Checked
+
+    '    With My.Settings
+    '        If File.Exists(.MusicDir & "\DoomMetalVol4.wad") Then
+    '            .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
+    '            .Save()
+
+    '        Else
+    '            MessageBox.Show("Error : File ""DoomMetalVol4.wad"" not found in :" & Environment.NewLine & .MusicDir)
+    '            CheckBox_Load_DoomMetal.IsChecked = False
+    '        End If
+    '    End With
+
+    'End Sub
+
+    Private Sub CheckBox_UseAltSoundtrack_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseAltSoundtrack.Checked
 
         With My.Settings
-            If File.Exists(.MusicDir & "\DoomMetalVol4.wad") Then
-                .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
-                .Save()
+            .UseAltSoundtrack = True
+            .Save()
+        End With
+        RadioButton_Soundtrack_DoomMetal.IsEnabled = True
+        RadioButton_Soundtrack_DoomMetal.ClearValue(ForegroundProperty)
+        RadioButton_Soundtrack_IDKFA.IsEnabled = True
+        RadioButton_Soundtrack_IDKFA.ClearValue(ForegroundProperty)
 
-            Else
-                MessageBox.Show("Error : File ""DoomMetalVol4.wad"" not found in :" & Environment.NewLine & .MusicDir)
-                CheckBox_Load_DoomMetal.IsChecked = False
-            End If
+    End Sub
+
+    Private Sub CheckBox_UseAltSoundtrack_Unchecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseAltSoundtrack.Unchecked
+
+        With My.Settings
+            .UseAltSoundtrack = False
+            .Save()
+        End With
+        RadioButton_Soundtrack_DoomMetal.IsEnabled = False
+        RadioButton_Soundtrack_DoomMetal.Foreground = Brushes.LightGray
+        RadioButton_Soundtrack_IDKFA.IsEnabled = False
+        RadioButton_Soundtrack_IDKFA.Foreground = Brushes.LightGray
+
+    End Sub
+
+    Private Sub RadioButton_Soundtrack_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_DoomMetal.Checked
+
+        With My.Settings
+            .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
+            .Save()
         End With
 
     End Sub
 
-    Private Sub CheckBox_Load_DoomMetal_Unchecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Load_DoomMetal.Unchecked
+    Private Sub RadioButton_Soundtrack_IDKFA_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_IDKFA.Checked
 
         With My.Settings
-            .SelectedMusic = Nothing
+            .SelectedMusic = .MusicDir & "\IDKFAv2.wad"
             .Save()
         End With
 
@@ -1117,13 +1159,14 @@ Class MainWindow
 
     'End Sub
 
-    Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+    'Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
 
-        'FormatPresetsData_FromCsv()
+    '    With My.Settings
+    '        MessageBox.Show(.SelectedMusic)
+    '        MessageBox.Show(.UseAltSoundtrack)
+    '    End With
 
-    End Sub
-
-
+    'End Sub
 
 #End Region
 

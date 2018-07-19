@@ -619,20 +619,43 @@
                        VerticalAlignment="Center"
                        Content="Extra :" 
                        />
-                <CheckBox x:Name="CheckBox_Load_DoomMetal"
+                <CheckBox x:Name="CheckBox_UseAltSoundtrack"
                           Grid.Row="4"
                           Grid.Column="3"
                           HorizontalAlignment="Left" 
                           VerticalAlignment="Center"
-                          Content="Doom Metal v4" 
+                          VerticalContentAlignment="Center"
+                          Content="Alternative soundtrack ->" 
                           />
+                <RadioButton x:Name="RadioButton_Soundtrack_DoomMetal"
+                             Grid.Row="4"
+                             Grid.Column="3"
+                             HorizontalAlignment="Right" 
+                             VerticalAlignment="Center"
+                             Margin="0,0,-4,0"
+                             VerticalContentAlignment="Center"
+                             Foreground="LightGray"
+                             Content="Doom Metal v4"
+                             IsEnabled="False"
+                             />
+                <RadioButton x:Name="RadioButton_Soundtrack_IDKFA"
+                             Grid.Row="4"
+                             Grid.Column="4"
+                             HorizontalAlignment="Left" 
+                             VerticalAlignment="Center"
+                             Margin="12,0,0,0"
+                             VerticalContentAlignment="Center"
+                             Foreground="LightGray"
+                             Content="IDKFA v2 (Doom1)"
+                             IsEnabled="False"
+                             />
+
                 <!-- TODO : User-selectable amount of turbo -->
                 <CheckBox x:Name="CheckBox_EnableTurbo"
                           Grid.Row="4"
-                          Grid.Column="3"
+                          Grid.Column="4"
                           HorizontalAlignment="Right" 
                           VerticalAlignment="Center"
-                          Margin="0,0,36,0"
                           Content="Turbo mode" 
                           />
 
@@ -795,14 +818,14 @@
                 VerticalAlignment="Top" 
                 Width="75"/>-->
 
-        <Button Content="test" 
+        <!--<Button Content="test" 
                 Grid.Row="1"
                 Grid.Column="1" 
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Width="75" 
                 Height="80"
-                Click="Button_Click"/>
+                Click="Button_Click"/>-->
         
     </Grid>
 </Window>
