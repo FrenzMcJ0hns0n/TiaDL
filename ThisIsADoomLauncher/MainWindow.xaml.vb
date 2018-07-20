@@ -395,16 +395,22 @@ Class MainWindow
 
     Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
 
-        'When using GetSelected**** we don't care path validity yet : done later at preset display
+        'When using KnowSelected**** we don't care about path validity yet : done later at preset display
 
-        TextBox_IwadToLaunch.Text = KnowSelectedIwad_NewPreset()
-        My.Settings.SelectedIwad = KnowSelectedIwad_NewPreset()
+        Dim iwad As String = KnowSelectedIwad_NewPreset()
+        If iwad = Nothing Then
+            Return 'Not worth a try
+        End If
+        TextBox_IwadToLaunch.Text = iwad
+        My.Settings.SelectedIwad = iwad
 
-        TextBox_LevelToLaunch.Text = KnowSelectedLevel_NewPreset()
-        My.Settings.SelectedLevel = KnowSelectedLevel_NewPreset()
+        Dim level As String = KnowSelectedLevel_NewPreset()
+        TextBox_LevelToLaunch.Text = level
+        My.Settings.SelectedLevel = level
 
-        TextBox_MiscToLaunch.Text = KnowSelectedMisc_NewPreset()
-        My.Settings.SelectedMisc = KnowSelectedMisc_NewPreset()
+        Dim misc As String = KnowSelectedMisc_NewPreset()
+        TextBox_MiscToLaunch.Text = misc
+        My.Settings.SelectedMisc = misc
 
     End Sub
 
