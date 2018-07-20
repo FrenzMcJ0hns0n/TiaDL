@@ -25,6 +25,12 @@ Class MainWindow
     Private Sub InitializeGUI()
 
         With My.Settings
+            'Auto-set native resolution at first launch
+            If .ScreenWidth = 0 And .ScreenHeight = 0 Then
+                .ScreenWidth = GetResolution_Width()
+                .ScreenHeight = GetResolution_Height()
+            End If
+
             TextBox_IwadToLaunch.Text = .SelectedIwad
             TextBox_LevelToLaunch.Text = .SelectedLevel
             TextBox_MiscToLaunch.Text = .SelectedMisc

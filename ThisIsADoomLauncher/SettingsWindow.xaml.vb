@@ -119,13 +119,16 @@ Public Class SettingsWindow
 
     Private Sub Button_GetSetResolution_Click(sender As Object, e As RoutedEventArgs) Handles Button_GetSetResolution.Click
 
-        'Get Windows screen resolution
-        TextBox_Resolution_Width.Text = My.Computer.Screen.Bounds.Size.Width
-        TextBox_Resolution_Height.Text = My.Computer.Screen.Bounds.Size.Height
+        'Set Windows screen resolution
+        Dim horizontal As Integer = GetResolution_Width()
+        Dim vertical As Integer = GetResolution_Height()
+
+        TextBox_Resolution_Width.Text = horizontal
+        TextBox_Resolution_Height.Text = vertical
 
         With My.Settings
-            .ScreenWidth = My.Computer.Screen.Bounds.Size.Width
-            .ScreenHeight = My.Computer.Screen.Bounds.Size.Height
+            .ScreenWidth = horizontal
+            .ScreenHeight = vertical
             .Save()
         End With
 

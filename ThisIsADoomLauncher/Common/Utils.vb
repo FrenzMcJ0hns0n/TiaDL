@@ -11,4 +11,16 @@
 
     End Function
 
+    Function GetResolution_Width() As Integer
+
+        Return My.Computer.Screen.Bounds.Size.Width
+
+    End Function
+
+    Function GetResolution_Height() As Integer
+
+        Return My.Computer.Screen.Bounds.Size.Height
+
+    End Function
+
 End Module

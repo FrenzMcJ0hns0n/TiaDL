@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Reflection
 
 Module IOHelper
 
@@ -50,6 +51,14 @@ Module IOHelper
 
     End Function
 
+    ''' <summary>
+    ''' Get the parent directory of TiaDL executable
+    ''' </summary>
+    ''' 
+    Sub SetRootDirPath()
 
+        My.Settings.RootDirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
+
+    End Sub
 
 End Module

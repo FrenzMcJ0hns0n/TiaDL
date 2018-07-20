@@ -8,7 +8,7 @@ Module GuiHelper
 #Region "Common presets"
 
     ''' <summary>
-    ''' Build absolute path from Iwad relative filename (Common presets)
+    ''' Build absolute path from Iwad relative filename
     ''' </summary>
     ''' 
     Private Function Path_Iwad_RelativeToAbsolute(iwad As String) As String
@@ -20,7 +20,7 @@ Module GuiHelper
     End Function
 
     ''' <summary>
-    ''' Build absolute path from Level relative filename (Common presets)
+    ''' Build absolute path from Level relative filename
     ''' </summary>
     ''' 
     Private Function Path_Level_RelativeToAbsolute(level As String) As String
@@ -32,7 +32,7 @@ Module GuiHelper
     End Function
 
     ''' <summary>
-    ''' Build absolute path from Misc relative filename (Common presets)
+    ''' Build absolute path from Misc relative filename
     ''' </summary>
     ''' 
     Private Function Path_Misc_RelativeToAbsolute(misc As String) As String

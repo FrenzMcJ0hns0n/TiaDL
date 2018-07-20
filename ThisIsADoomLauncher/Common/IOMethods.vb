@@ -1,17 +1,6 @@
 ﻿Imports System.IO
-Imports System.Reflection
 
 Module IOMethods
-
-    ''' <summary>
-    ''' Get the parent directory of TiaDL executable
-    ''' </summary>
-    ''' 
-    Sub SetRootDirPath()
-
-        My.Settings.RootDirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
-
-    End Sub
 
     ''' <summary>
     ''' Check if all directories can be found
