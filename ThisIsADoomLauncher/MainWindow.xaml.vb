@@ -393,110 +393,32 @@ Class MainWindow
     End Sub
 
 
-    Private Function NewPreset_GetSelectedIwad() As String
-
-        Dim iwadButton As SolidColorBrush
-
-        iwadButton = Button_NewPreset_SetDoomIwad.Background
-        If iwadButton.Color = Colors.LightGreen Then
-            Return My.Settings.IwadsDir & "\Doom.wad"
-        End If
-
-        iwadButton = Button_NewPreset_SetDoom2Iwad.Background
-        If iwadButton.Color = Colors.LightGreen Then
-            Return My.Settings.IwadsDir & "\Doom2.wad"
-        End If
-
-        iwadButton = Button_NewPreset_SetFreedoomIwad.Background
-        If iwadButton.Color = Colors.LightGreen Then
-            Return My.Settings.IwadsDir & "\freedoom1.wad"
-        End If
-
-        iwadButton = Button_NewPreset_SetFreedoom2Iwad.Background
-        If iwadButton.Color = Colors.LightGreen Then
-            Return My.Settings.IwadsDir & "\freedoom2.wad"
-        End If
-
-        Return Nothing
-
-    End Function
-
-    Private Function NewPreset_GetSelectedLevel() As String
-
-        Return If(TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ...", Nothing, TextBox_DropWadFile.Text)
-
-    End Function
-
-    Private Function NewPreset_GetSelectedMisc() As String
-
-        Return If(TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here ...", Nothing, TextBox_DropMiscFile.Text)
-
-    End Function
 
 
     Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
 
-        'IWAD
-        TextBox_IwadToLaunch.Text = NewPreset_GetSelectedIwad()
-        My.Settings.SelectedIwad = NewPreset_GetSelectedIwad()
+        'When using GetSelected**** we don't care path validity yet : done later at preset display
 
-        'Level
-        TextBox_LevelToLaunch.Text = NewPreset_GetSelectedLevel()
-        My.Settings.SelectedLevel = NewPreset_GetSelectedLevel()
+        TextBox_IwadToLaunch.Text = KnowSelectedIwad_NewPreset()
+        My.Settings.SelectedIwad = KnowSelectedIwad_NewPreset()
 
-        'Misc
-        TextBox_MiscToLaunch.Text = NewPreset_GetSelectedMisc()
-        My.Settings.SelectedMisc = NewPreset_GetSelectedMisc()
+        TextBox_LevelToLaunch.Text = KnowSelectedLevel_NewPreset()
+        My.Settings.SelectedLevel = KnowSelectedLevel_NewPreset()
+
+        TextBox_MiscToLaunch.Text = KnowSelectedMisc_NewPreset()
+        My.Settings.SelectedMisc = KnowSelectedMisc_NewPreset()
 
     End Sub
 
     Private Sub Button_NewPreset_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Reset.Click
 
-        Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-        Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-        Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-        Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-
-        TextBox_DropWadFile.FontStyle = FontStyles.Italic
-        TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
-        TextBox_DropWadFile.Foreground = New BrushConverter().ConvertFrom("#444")
-        TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
-
-        TextBox_DropMiscFile.FontStyle = FontStyles.Italic
-        TextBox_DropMiscFile.Background = New SolidColorBrush(Colors.Transparent)
-        TextBox_DropMiscFile.Foreground = New BrushConverter().ConvertFrom("#444")
-        TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here ..."
-
-        TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-        TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
-        TextBox_NewPreset_Name.Text = "Enter preset name ..."
+        ResetFields_NewPreset()
 
     End Sub
 
     Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
 
-        Try
-            Dim nameToSave As String = TextBox_NewPreset_Name.Text
-            If nameToSave = "Enter preset name ..." Or nameToSave = Nothing Then
-                MessageBox.Show("New user preset requires a name to be saved")
-                Return
-            End If
-
-            Dim iwadToSave As String = NewPreset_GetSelectedIwad()
-            If iwadToSave = Nothing Then
-                MessageBox.Show("New user preset requires an IWAD to be saved")
-                Return
-            End If
-
-            Dim levelToSave As String = NewPreset_GetSelectedLevel()
-            Dim miscToSave As String = NewPreset_GetSelectedMisc()
-
-            WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
-            MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
-        End Try
+        Save_NewPreset()
 
     End Sub
 

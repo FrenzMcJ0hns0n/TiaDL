@@ -3,11 +3,44 @@
 Module SavePresetMethods
 
     ''' <summary>
+    ''' Handle New user preset save from GUI event
+    ''' </summary>
+    ''' 
+    Sub Save_NewPreset()
+
+        With MainWindow_Instance()
+            Try
+                Dim nameToSave As String = .TextBox_NewPreset_Name.Text
+                If nameToSave = "Enter preset name ..." Or nameToSave = Nothing Then
+                    MessageBox.Show("New user preset requires a name to be saved")
+                    Return
+                End If
+
+                Dim iwadToSave As String = KnowSelectedIwad_NewPreset()
+                If iwadToSave = Nothing Then
+                    MessageBox.Show("New user preset requires an IWAD to be saved")
+                    Return
+                End If
+
+                Dim levelToSave As String = KnowSelectedLevel_NewPreset()
+                Dim miscToSave As String = KnowSelectedMisc_NewPreset()
+
+                WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
+                MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
+            End Try
+        End With
+
+    End Sub
+
+    ''' <summary>
     ''' Write attributes for New user preset.
     ''' As line in 'presets.csv'
     ''' </summary>
     ''' 
-    Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
+    Private Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
 
         Try
             Dim presetFile As String = My.Settings.RootDirPath & "\presets.csv"

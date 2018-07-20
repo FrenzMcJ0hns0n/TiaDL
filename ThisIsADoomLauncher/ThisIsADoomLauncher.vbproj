@@ -87,6 +87,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CLI\CliHandlingMethods.vb" />
+    <Compile Include="Helpers\GuiHelper.vb" />
     <Compile Include="HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
