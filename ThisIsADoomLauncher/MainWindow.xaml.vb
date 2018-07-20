@@ -473,8 +473,13 @@ Class MainWindow
     Private Sub RadioButton_Soundtrack_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_DoomMetal.Checked
 
         With My.Settings
-            .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
-            .Save()
+            If File.Exists(.MusicDir & "\DoomMetalVol4.wad") Then
+                .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
+                .Save()
+            Else
+                MessageBox.Show("Error : File ""DoomMetalVol4.wad"" not found in :" & Environment.NewLine & .MusicDir)
+                RadioButton_Soundtrack_DoomMetal.IsChecked = False
+            End If
         End With
 
     End Sub
@@ -482,8 +487,14 @@ Class MainWindow
     Private Sub RadioButton_Soundtrack_IDKFA_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_IDKFA.Checked
 
         With My.Settings
-            .SelectedMusic = .MusicDir & "\IDKFAv2.wad"
-            .Save()
+            If File.Exists(.MusicDir & "\IDKFAv2.wad") Then
+                .SelectedMusic = .MusicDir & "\IDKFAv2.wad"
+                .Save()
+            Else
+                MessageBox.Show("Error : File ""IDKFAv2.wad"" not found in :" & Environment.NewLine & .MusicDir)
+                RadioButton_Soundtrack_DoomMetal.IsChecked = False
+            End If
+
         End With
 
     End Sub
