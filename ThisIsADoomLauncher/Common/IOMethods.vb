@@ -88,8 +88,7 @@ Module IOMethods
         Dim versionsFound As List(Of String) = New List(Of String)
 
         Try
-            Dim mods As String() = Directory.GetFiles(My.Settings.ModDir)
-            For Each file As String In mods
+            For Each file As String In Directory.GetFiles(My.Settings.ModDir)
                 versionsFound.Add(File_GetName(file))
             Next
             Return versionsFound
