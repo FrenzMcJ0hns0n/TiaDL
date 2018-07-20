@@ -280,7 +280,6 @@ Class MainWindow
                 Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
                 Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
                 Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-
             Else
                 MessageBox.Show("Error : File 'freedoom1.wad' not found in :" & Environment.NewLine & .IwadsDir)
             End If
@@ -296,7 +295,6 @@ Class MainWindow
                 Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
                 Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
                 Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-
             Else
                 MessageBox.Show("Error : File 'freedoom2.wad' not found in :" & Environment.NewLine & .IwadsDir)
             End If
@@ -326,10 +324,8 @@ Class MainWindow
 
             ElseIf ValidateFile(file(0)) = "misc" Then
                 MessageBox.Show("Error : this file refers to a 'Misc.' file")
-
             Else
                 MessageBox.Show("Error : not a .wad/.pk3 file")
-
             End If
 
         Catch ex As Exception
@@ -360,10 +356,8 @@ Class MainWindow
 
             ElseIf ValidateFile(file(0)) = "level" Then
                 MessageBox.Show("Error : this file refers to 'Level'")
-
             Else
                 MessageBox.Show("Error : not a .deh/.bex file")
-
             End If
 
         Catch ex As Exception
@@ -391,8 +385,6 @@ Class MainWindow
         End If
 
     End Sub
-
-
 
 
     Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
@@ -428,21 +420,6 @@ Class MainWindow
 
 
 #Region "Extra launch parameters"
-
-    'Private Sub CheckBox_Load_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Load_DoomMetal.Checked
-
-    '    With My.Settings
-    '        If File.Exists(.MusicDir & "\DoomMetalVol4.wad") Then
-    '            .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
-    '            .Save()
-
-    '        Else
-    '            MessageBox.Show("Error : File ""DoomMetalVol4.wad"" not found in :" & Environment.NewLine & .MusicDir)
-    '            CheckBox_Load_DoomMetal.IsChecked = False
-    '        End If
-    '    End With
-
-    'End Sub
 
     Private Sub CheckBox_UseAltSoundtrack_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseAltSoundtrack.Checked
 

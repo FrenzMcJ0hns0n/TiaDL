@@ -1,4 +1,4 @@
-﻿Module CliHandlingMethods
+﻿Module CliMethods
 
     ''' <summary>
     ''' Build then return the command line to send to cmd.exe.
