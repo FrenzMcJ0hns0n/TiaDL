@@ -392,7 +392,7 @@ Class MainWindow
         If TextBox_NewPreset_Name.Text Is Nothing Or TextBox_NewPreset_Name.Text = "" Then
             TextBox_NewPreset_Name.Text = "Enter preset name ..."
             TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-            TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
+            TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
         End If
 
     End Sub

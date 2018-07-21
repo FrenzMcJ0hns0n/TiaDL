@@ -164,16 +164,16 @@ Module GuiHelper
 
             .TextBox_DropWadFile.FontStyle = FontStyles.Italic
             .TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
-            .TextBox_DropWadFile.Foreground = New BrushConverter().ConvertFrom("#444")
+            .TextBox_DropWadFile.Foreground = Brushes.DarkGray
             .TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
 
             .TextBox_DropMiscFile.FontStyle = FontStyles.Italic
             .TextBox_DropMiscFile.Background = New SolidColorBrush(Colors.Transparent)
-            .TextBox_DropMiscFile.Foreground = New BrushConverter().ConvertFrom("#444")
+            .TextBox_DropMiscFile.Foreground = Brushes.DarkGray
             .TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here ..."
 
             .TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-            .TextBox_NewPreset_Name.Foreground = New BrushConverter().ConvertFrom("#444")
+            .TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
             .TextBox_NewPreset_Name.Text = "Enter preset name ..."
         End With
 

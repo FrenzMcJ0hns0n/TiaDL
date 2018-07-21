@@ -275,7 +275,7 @@
                                    HorizontalAlignment="Center"
                                    VerticalAlignment="Center"
                                    FontSize="24"
-                                   Foreground="#777"
+                                   Foreground="Gray"
                                    Content="No presets found ..."
                                    />
 
@@ -427,7 +427,7 @@
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      FontStyle="Italic"
-                                     Foreground="#444"
+                                     Foreground="DarkGray"
                                      Text="Drop a .wad/.pk3 file here ..."
                                      Cursor="Arrow"
                                      IsReadOnly="True" 
@@ -457,7 +457,7 @@
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      FontStyle="Italic"
-                                     Foreground="#444"
+                                     Foreground="DarkGray"
                                      Text="Drop a .deh/.bex file here ..."
                                      Cursor="Arrow"
                                      IsReadOnly="True" 
@@ -485,7 +485,7 @@
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      FontStyle="Italic"
-                                     Foreground="#444"
+                                     Foreground="DarkGray"
                                      Text="Enter preset name ..."
                                      />
 
