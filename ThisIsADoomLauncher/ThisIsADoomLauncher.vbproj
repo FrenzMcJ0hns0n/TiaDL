@@ -88,7 +88,7 @@
     </ApplicationDefinition>
     <Compile Include="CLI\CliMethods.vb" />
     <Compile Include="Helpers\GuiHelper.vb" />
-    <Compile Include="HelpWindow.xaml.vb">
+    <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IOHelper.vb" />
@@ -97,15 +97,15 @@
     <Compile Include="Presets\DeletePresetsMethods.vb" />
     <Compile Include="Presets\LoadPresetsMethods.vb" />
     <Compile Include="Presets\SavePresetMethods.vb" />
-    <Compile Include="SettingsWindow.xaml.vb">
+    <Compile Include="Views\SettingsWindow.xaml.vb">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Common\Utils.vb" />
-    <Page Include="HelpWindow.xaml">
+    <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -113,11 +113,11 @@
       <DependentUpon>Application.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.vb">
+    <Compile Include="Views\MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SettingsWindow.xaml">
+    <Page Include="Views\SettingsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -199,9 +199,7 @@
   <ItemGroup>
     <Resource Include="Resources\300x50_blackAndWhite_edit_def.gif" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\Blazkowicz_sprite.png" />
   </ItemGroup>
