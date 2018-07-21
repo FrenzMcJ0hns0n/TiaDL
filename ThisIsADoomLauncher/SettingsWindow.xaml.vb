@@ -26,7 +26,7 @@ Public Class SettingsWindow
             End With
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'SettingsWindow.Window_Loaded()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'SettingsWindow:Window_Loaded()'. Exception : " & ex.ToString)
         End Try
 
     End Sub

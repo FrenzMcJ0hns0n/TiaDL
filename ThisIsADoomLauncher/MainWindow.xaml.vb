@@ -16,8 +16,13 @@ Class MainWindow
             SetIniFiles()
             InitializeGUI()
 
+            'Performance eval
+            Dim dateTimeReady As DateTime = DateTime.Now
+            Dim timeSpan As TimeSpan = dateTimeReady.Subtract(My.Settings.DateTimeAtLaunch)
+            WriteToLog(DateTime.Now & " - Time elapsed from Launch to Ready : " & timeSpan.Milliseconds & " milliseconds")
+
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'Window_Loaded()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'MainWindow:Window_Loaded()'. Exception : " & ex.ToString)
         End Try
 
     End Sub

@@ -304,6 +304,17 @@ Partial Friend NotInheritable Class MySettings
             Me("UseAltSoundtrack") = value
         End Set
     End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+    Public Property DateTimeAtLaunch() As Date
+        Get
+            Return CType(Me("DateTimeAtLaunch"),Date)
+        End Get
+        Set
+            Me("DateTimeAtLaunch") = value
+        End Set
+    End Property
 End Class
 
 Namespace My
