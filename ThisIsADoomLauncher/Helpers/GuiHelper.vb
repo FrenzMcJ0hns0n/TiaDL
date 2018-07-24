@@ -49,7 +49,7 @@ Module GuiHelper
     '''
     Sub ValidateCommonPreset(iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
 
-        Dim errorText As String = ""
+        Dim errorText As String = String.Empty 'TODO : Use String class more often
         Dim enl As String = Environment.NewLine
 
         Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)

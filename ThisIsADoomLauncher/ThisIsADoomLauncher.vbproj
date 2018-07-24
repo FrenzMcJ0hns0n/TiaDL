@@ -67,6 +67,7 @@
   <ItemGroup>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -88,6 +89,8 @@
     </ApplicationDefinition>
     <Compile Include="CLI\CliMethods.vb" />
     <Compile Include="Helpers\GuiHelper.vb" />
+    <Compile Include="Helpers\Serialization.vb" />
+    <Compile Include="Models\Preset.vb" />
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
@@ -160,7 +163,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="My Project\Resources.resx">
-      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
     </EmbeddedResource>
@@ -168,6 +171,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <EmbeddedResource Include="Resources\common_presets.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -182,26 +186,28 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Folder.png" />
+    <Resource Include="Resources\Images\Folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\images_edit.jpg" />
+    <Resource Include="Resources\Images\images_edit.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\settings_darker.png" />
+    <Resource Include="Resources\Images\settings_darker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\play_darker.png" />
+    <Resource Include="Resources\Images\play_darker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\index.png" />
+    <Resource Include="Resources\Images\index.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\300x50_blackAndWhite_edit_def.gif" />
+    <Resource Include="Resources\Images\300x50_blackAndWhite_edit_def.gif" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Resource Include="Resources\Blazkowicz_sprite.png" />
+    <Folder Include="Resources\Config\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Blazkowicz_sprite.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

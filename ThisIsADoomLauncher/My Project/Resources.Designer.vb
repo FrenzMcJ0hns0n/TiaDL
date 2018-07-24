@@ -26,7 +26,7 @@ Namespace My.Resources
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
-    Friend Module Resources
+    Public Module Resources
         
         Private resourceMan As Global.System.Resources.ResourceManager
         
@@ -36,7 +36,7 @@ Namespace My.Resources
         '''  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
         '''</summary>
         <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
-        Friend ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
+        Public ReadOnly Property ResourceManager() As Global.System.Resources.ResourceManager
             Get
                 If Object.ReferenceEquals(resourceMan, Nothing) Then
                     Dim temp As Global.System.Resources.ResourceManager = New Global.System.Resources.ResourceManager("ThisIsADoomLauncher.Resources", GetType(Resources).Assembly)
@@ -51,13 +51,36 @@ Namespace My.Resources
         '''  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
         '''</summary>
         <Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
-        Friend Property Culture() As Global.System.Globalization.CultureInfo
+        Public Property Culture() As Global.System.Globalization.CultureInfo
             Get
                 Return resourceCulture
             End Get
             Set
                 resourceCulture = value
             End Set
+        End Property
+        
+        '''<summary>
+        '''  Recherche une chaîne localisée semblable à #COMMON PRESETS
+        '''#Name						#Iwad			#Level			#Misc.
+        '''
+        '''Ultimate Doom, 				Doom.wad
+        '''Doom II: Hell on Earth, 	Doom2.wad
+        '''TNT: Evilution, 			TNT.wad
+        '''The Plutonia Experiment,	Plutonia.wad
+        '''2002 A Doom Odyssey,		Doom.wad, 		2002ad10.wad
+        '''Icarus: Alien Vanguard,		Doom2.wad, 		ICARUS.wad
+        '''Requiem, 					Doom2.wad,		Requiem.wad
+        '''Plutonia 2,					Doom2.wad,		PL2.wad
+        '''Hell Revealed,				Doom2.wad, 		hr.wad
+        '''Hell Revealed 2,			Doom2.wad, 		hr2final.wad
+        '''DTS-T						Doom2.wad, 		DTS-T.pk3
+        '''Plutonia Revisited,			Doom2.wad [le reste de la chaîne a été tronqué]&quot;;.
+        '''</summary>
+        Public ReadOnly Property common_presets() As String
+            Get
+                Return ResourceManager.GetString("common_presets", resourceCulture)
+            End Get
         End Property
     End Module
 End Namespace

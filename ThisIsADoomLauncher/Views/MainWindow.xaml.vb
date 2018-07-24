@@ -1,4 +1,7 @@
 ﻿Imports System.IO
+Imports ThisIsADoomLauncher.Models
+Imports ThisIsADoomLauncher.Helpers
+
 Namespace Views
     Class MainWindow
 
@@ -15,6 +18,7 @@ Namespace Views
                 ValidateDirectories()
                 SetIniFiles()
                 InitializeGUI()
+                InitPresets() 'TEST
 
                 'Performance eval
                 Dim dateTimeReady As DateTime = DateTime.Now
@@ -49,6 +53,17 @@ Namespace Views
 
                 CheckBox_EnableTurbo.IsChecked = .UseTurbo
             End With
+
+        End Sub
+
+        Private Sub InitPresets()
+
+            ' TODO : finish preset handling
+
+            'Dim commonPresets As String = My.Resources.common_presets
+            'Dim daPath As String = "C:\Users\Frenz\Documents\PROJET_DOOM\TiaDL\ThisIsADoomLauncher\Resources\common_presets.csv"
+            'Dim commonPresetsPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "common_presets.csv")
+            DisplayPresets("common", FormatPresetsData_FromCsv("common"))
 
         End Sub
 
@@ -138,7 +153,7 @@ Namespace Views
             Dim item As TabItem = tabControl.SelectedValue
 
             If item.Name = "User" Then
-                DisplayLoadedPresets(FormatPresetsData_FromCsv()) 'TODO? Think about async
+                DisplayPresets("user", FormatPresetsData_FromCsv("user")) 'TODO? Think about async
             End If
 
         End Sub

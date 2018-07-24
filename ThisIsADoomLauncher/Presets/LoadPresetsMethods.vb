@@ -1,92 +1,120 @@
-﻿Imports Microsoft.VisualBasic.FileIO
+﻿Imports System.IO
+Imports Microsoft.VisualBasic.FileIO
+Imports ThisIsADoomLauncher.Models
 
 Module LoadPresetsMethods
 
     ''' <summary>
     ''' <para>Build and display loaded presets as buttons.</para>
-    ''' <para>For each preset : create a button with .Click function 'HandleUserPresetClick'.</para>
+    ''' <para>For each preset : create a button with .Click functions.</para>
     ''' <para>values(0) : Preset Name | values(1) : Preset Iwad | values(2) : Preset Level | values(3) : Preset Misc</para>
     ''' </summary>
     ''' 
-    Sub DisplayLoadedPresets(readPresetsData As List(Of List(Of String)))
+    Sub DisplayPresets(presetsType As String, presetsList As List(Of Preset))
 
-        MainWindow_Instance().StackPanel_DisplayUserPresets.Children.Clear()
+        If presetsType = "user" Then
+            MainWindow_Instance().StackPanel_DisplayUserPresets.Children.Clear()
 
-        If readPresetsData.Count = 0 Then
-            MainWindow_Instance().Label_NoUserPresetsFound.Visibility = Visibility.Visible
-            Return 'Nothing to read : exit
+            If presetsList.Count = 0 Then
+                MainWindow_Instance().Label_NoUserPresetsFound.Visibility = Visibility.Visible
+                Return 'Nothing to read : exit
+            End If
+
+            MainWindow_Instance().Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
         End If
 
-        MainWindow_Instance().Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
 
-        For Each values As List(Of String) In readPresetsData
+        For Each preset As Preset In presetsList
 
+            Dim iwad As Boolean = If(preset.Level = Nothing And preset.Misc = Nothing, True, False)
+
+            'Create a button for each preset
             Dim button As Button = New Button() With
             {
-                .Margin = New Thickness(0, 0, 0, 2),
                 .Height = 28,
+                .Margin = New Thickness(0, 0, 0, 2),
+                .Background = If(iwad And presetsType = "common", Brushes.Red, Brushes.Aqua),
+                .FontWeight = If(iwad And presetsType = "common", FontWeights.DemiBold, FontWeights.Normal),
                 .FontSize = 14,
-                .Content = values(0)
-            }
+                .Content = preset.Name
+            } '.Height = If(type = "common", 32, 28)
 
-            'TODO v2+ : HandleUserPresetDelete() ?
+            'Add anonymous functions to it, to handle clicks
             AddHandler button.Click,
                 Sub(sender, e)
-                    HandleUserPresetClick(values(1), If(values.Count >= 3, values(2), Nothing), If(values.Count = 4, values(3), Nothing))
+                    HandleUserPreset_Select(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
                 End Sub
 
             AddHandler button.MouseRightButtonDown,
                 Sub(sender, e)
-                    HandleRightClick(values(0))
+                    HandleUserPreset_Delete(preset.Name)
                 End Sub
 
-            MainWindow_Instance().StackPanel_DisplayUserPresets.Children.Add(button)
+            'Push the button into a StackPanel
+            If presetsType = "common" Then
+                'TODO ---
+            Else
+                MainWindow_Instance().StackPanel_DisplayUserPresets.Children.Add(button)
+            End If
+
         Next
 
     End Sub
 
     ''' <summary>
-    ''' <para> Format then return parsed values, from file "presets.txt". As List of List of String.</para>
-    ''' <para>For instance : ("MyPreset","path\to\doom.wad","path\to\level.wad"), ("Freedoom Phase 1", "path\to\freedoom1.wad")</para>
+    ''' Format then return parsed values, from 'csv' content. 
+    ''' As a list of Presets.
     ''' </summary>
     ''' 
-    Function FormatPresetsData_FromCsv() As List(Of List(Of String))
+    Function FormatPresetsData_FromCsv(presetsType As String) As List(Of Preset)
 
-        Dim presetLines As List(Of List(Of String)) = New List(Of List(Of String))
+        Dim presets As List(Of Preset) = New List(Of Preset)
+        Dim parser As TextFieldParser = Nothing
+
+        If presetsType = "common" Then
+            parser = New TextFieldParser(New StringReader(My.Resources.common_presets))
+        Else
+            parser = New TextFieldParser(My.Settings.RootDirPath & "\presets.csv")
+        End If
 
         Try
-            Using parser As TextFieldParser = New TextFieldParser(My.Settings.RootDirPath & "\presets.csv") With {
-                .TextFieldType = FieldType.Delimited,
-                .Delimiters = New String() {","},
+            With parser
+                .TextFieldType = FieldType.Delimited
                 .CommentTokens = New String() {"#"}
-            }
+                .Delimiters = New String() {","}
+                .TrimWhiteSpace = True
+            End With
 
+            Using parser
                 Do While Not parser.EndOfData
-                    Dim line As List(Of String) = New List(Of String)
 
                     Try
-                        Dim readValues As String() = parser.ReadFields() 'a line in file : contains preset values (Name, Iwad, Level, Misc.)
+                        Dim readValues() As String = parser.ReadFields()
 
-                        If readValues.Length < 2 Then 'line has less than 2 values (Name and Iwad are mandatory) => Continue to next line
+                        If readValues.Length < 2 Then
                             Continue Do
                         End If
 
-                        For Each value As String In readValues
-                            line.Add(value)
-                        Next
-                        presetLines.Add(line)
-
+                        presets.Add(
+                            New Preset() With {
+                                .Name = readValues(0),
+                                .Iwad = readValues(1),
+                                .Level = If(readValues.Length >= 3, readValues(2), String.Empty),
+                                .Misc = If(readValues.Length = 4, readValues(3), String.Empty)
+                            }
+                        )
                     Catch ex As MalformedLineException
-                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException when parsing 'presets.csv' at line(?) => " & parser.ErrorLineNumber)
+                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException while parsing presets") 'errorLine ?
                     End Try
-                Loop
 
+                Loop
             End Using
+
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'FormatPresetsData_FromCsv()'. Exception : " & ex.ToString)
         End Try
 
-        Return presetLines
+        Return presets
 
     End Function
 

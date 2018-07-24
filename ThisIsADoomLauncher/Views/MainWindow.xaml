@@ -231,7 +231,7 @@
                                             <Trigger Property="IsMouseOver" Value="True">
                                                 <Setter Property="Content">
                                                     <Setter.Value>
-                                                        <Image Source="pack://application:,,,/Resources/Blazkowicz_sprite.png"/>
+                                                        <Image Source="pack://application:,,,/Resources/Images/Blazkowicz_sprite.png"/>
                                                     </Setter.Value>
                                                 </Setter>
                                             </Trigger>
@@ -632,7 +632,7 @@
                              Grid.Column="3"
                              HorizontalAlignment="Right" 
                              VerticalAlignment="Center"
-                             Margin="0,0,-4,0"
+                             Margin="0,0,-8,0"
                              VerticalContentAlignment="Center"
                              Foreground="LightGray"
                              Content="Doom Metal v4"
@@ -643,7 +643,7 @@
                              Grid.Column="4"
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center"
-                             Margin="12,0,0,0"
+                             Margin="18,0,0,0"
                              VerticalContentAlignment="Center"
                              Foreground="LightGray"
                              Content="IDKFA v2 (Doom1)"
@@ -701,7 +701,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Help_Image" Source="pack://application:,,,/Resources/index.png" />
+                        <Image Name="Help_Image" Source="pack://application:,,,/Resources/Images/index.png" />
                     </Button>
                 </DockPanel>
 
@@ -721,7 +721,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="DoomWorld_Image" Source="pack://application:,,,/Resources/300x50_blackAndWhite_edit_def.gif" />
+                        <Image Name="DoomWorld_Image" Source="pack://application:,,,/Resources/Images/300x50_blackAndWhite_edit_def.gif" />
                     </Button>
                 </DockPanel>
 
@@ -742,7 +742,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="DommResources_Image" Source="pack://application:,,,/Resources/images_edit.jpg" />
+                        <Image Name="DommResources_Image" Source="pack://application:,,,/Resources/Images/images_edit.jpg" />
                     </Button>
                 </DockPanel>
 
@@ -762,7 +762,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Folder_Image" Source="pack://application:,,,/Resources/Folder.png" />
+                        <Image Name="Folder_Image" Source="pack://application:,,,/Resources/Images/Folder.png" />
                     </Button>
                 </DockPanel>
 
@@ -782,7 +782,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Settings_Image" Source="pack://application:,,,/Resources/settings_darker.png" />
+                        <Image Name="Settings_Image" Source="pack://application:,,,/Resources/Images/settings_darker.png" />
                     </Button>
 
                 </DockPanel>
@@ -804,7 +804,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Play_Image" Source="pack://application:,,,/Resources/play_darker.png" />
+                        <Image Name="Play_Image" Source="pack://application:,,,/Resources/Images/play_darker.png" />
                     </Button>
                 </DockPanel>
 

@@ -6,7 +6,7 @@
     ''' <para>Display red text on filepath if does not exist</para>
     ''' </summary>
     ''' 
-    Sub HandleUserPresetClick(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
+    Sub HandleUserPreset_Select(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
 
         Try
             With My.Settings
@@ -54,7 +54,7 @@
     ''' <para>Delete a preset by its name</para>
     ''' </summary>
     '''
-    Sub HandleRightClick(presetName As String)
+    Sub HandleUserPreset_Delete(presetName As String)
 
         Dim message As String = String.Format(
             "You are about to delete preset ""{0}"".{1}Continue ?",
@@ -66,7 +66,7 @@
             DeletePreset(presetName)
 
             'Update GUI
-            DisplayLoadedPresets(FormatPresetsData_FromCsv)
+            DisplayPresets("user", FormatPresetsData_FromCsv(My.Settings.RootDirPath & "\presets.csv"))
         End If
 
     End Sub
