@@ -28,18 +28,6 @@ Module IOHelper
     End Function
 
     ''' <summary>
-    ''' Return input's full name (full path)
-    ''' </summary>
-    ''' 
-    Function File_GetFullName(input As String) As String
-
-        With New FileInfo(input)
-            Return If(File.Exists(.FullName), .FullName, Nothing)
-        End With
-
-    End Function
-
-    ''' <summary>
     ''' Return input's filename
     ''' </summary>
     ''' 
