@@ -80,7 +80,7 @@
             DeletePreset(presetName)
 
             'Update GUI
-            DisplayPresets("user", FormatPresetsData_FromCsv(My.Settings.RootDirPath & "\presets.csv"))
+            DisplayPresets("user", FormatPresetsData_FromCsv("user"))
         End If
 
     End Sub

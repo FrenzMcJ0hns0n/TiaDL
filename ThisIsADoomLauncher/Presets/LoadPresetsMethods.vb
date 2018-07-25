@@ -71,16 +71,7 @@ Module LoadPresetsMethods
     Function FormatPresetsData_FromCsv(presetsType As String) As List(Of Preset)
 
         Dim presets As List(Of Preset) = New List(Of Preset)
-        ' Dim parser As TextFieldParser = Nothing
         Dim parser As TextFieldParser = If(presetsType = "common", New TextFieldParser(New StringReader(My.Resources.common_presets)), New TextFieldParser(My.Settings.RootDirPath & "\presets.csv"))
-
-
-
-        'If presetsType = "common" Then
-        '    parser = New TextFieldParser(New StringReader(My.Resources.common_presets))
-        'Else
-        '    parser = New TextFieldParser(My.Settings.RootDirPath & "\presets.csv")
-        'End If
 
         Try
             With parser
@@ -110,7 +101,7 @@ Module LoadPresetsMethods
                             }
                         )
                     Catch ex As MalformedLineException
-                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException while parsing presets") 'errorLine ?
+                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
                     End Try
 
                 Loop

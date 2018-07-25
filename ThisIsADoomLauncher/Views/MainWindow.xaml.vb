@@ -18,7 +18,6 @@ Namespace Views
                 ValidateDirectories()
                 SetIniFiles()
                 InitializeGUI()
-                InitPresets() 'TEST
 
                 'Performance eval
                 Dim dateTimeReady As DateTime = DateTime.Now
@@ -32,6 +31,8 @@ Namespace Views
         End Sub
 
         Private Sub InitializeGUI()
+
+            DisplayPresets("common", FormatPresetsData_FromCsv("common"))
 
             With My.Settings
                 'Auto-set native resolution at first launch
@@ -53,17 +54,6 @@ Namespace Views
 
                 CheckBox_EnableTurbo.IsChecked = .UseTurbo
             End With
-
-        End Sub
-
-        Private Sub InitPresets()
-
-            ' TODO : finish preset handling
-
-            'Dim commonPresets As String = My.Resources.common_presets
-            'Dim daPath As String = "C:\Users\Frenz\Documents\PROJET_DOOM\TiaDL\ThisIsADoomLauncher\Resources\common_presets.csv"
-            'Dim commonPresetsPath As String = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "common_presets.csv")
-            DisplayPresets("common", FormatPresetsData_FromCsv("common"))
 
         End Sub
 
