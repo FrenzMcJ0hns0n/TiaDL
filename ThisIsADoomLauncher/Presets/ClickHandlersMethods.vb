@@ -6,10 +6,24 @@
     ''' <para>Display red text on filepath if does not exist</para>
     ''' </summary>
     ''' 
-    Sub HandleUserPreset_Select(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
+    Sub HandlePreset_Select(target As String, iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
 
         Try
             With My.Settings
+
+                'weak, TODO : improve
+                If target = "common" Then
+
+                    iwadPath = .IwadsDir & "\" & iwadPath
+
+                    If Not levelPath = Nothing Then
+                        levelPath = .LevelsDir & "\" & levelPath
+                    End If
+                    If Not miscPath = Nothing Then
+                        miscPath = .MiscDir & "\" & miscPath
+                    End If
+
+                End If
 
                 'Reset TextBox.Foreground
                 MainWindow_Instance().TextBox_IwadToLaunch.ClearValue(Control.ForegroundProperty)

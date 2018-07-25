@@ -10,39 +10,42 @@ Module LoadPresetsMethods
     ''' <para>values(0) : Preset Name | values(1) : Preset Iwad | values(2) : Preset Level | values(3) : Preset Misc</para>
     ''' </summary>
     ''' 
-    Sub DisplayPresets(presetsType As String, presetsList As List(Of Preset))
+    Sub DisplayPresets(type As String, presetsList As List(Of Preset))
 
-        If presetsType = "user" Then
-            MainWindow_Instance().StackPanel_DisplayUserPresets.Children.Clear()
+        If type = "user" Then
+            With MainWindow_Instance()
 
-            If presetsList.Count = 0 Then
-                MainWindow_Instance().Label_NoUserPresetsFound.Visibility = Visibility.Visible
-                Return 'Nothing to read : exit
-            End If
+                .StackPanel_UserPresets.Children.Clear()
 
-            MainWindow_Instance().Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
+                If presetsList.Count = 0 Then
+                    .Label_NoUserPresetsFound.Visibility = Visibility.Visible
+                    Return 'Nothing to read : exit
+                End If
+
+                .Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
+
+            End With
         End If
-
 
         For Each preset As Preset In presetsList
 
             Dim iwad As Boolean = If(preset.Level = Nothing And preset.Misc = Nothing, True, False)
 
-            'Create a button for each preset
+            'Create a button for each preset -> TODO : improve style
             Dim button As Button = New Button() With
             {
                 .Height = 28,
                 .Margin = New Thickness(0, 0, 0, 2),
-                .Background = If(iwad And presetsType = "common", Brushes.Red, Brushes.Aqua),
-                .FontWeight = If(iwad And presetsType = "common", FontWeights.DemiBold, FontWeights.Normal),
+                .Background = If(iwad And type = "common", Brushes.Silver, Brushes.LightGray),
+                .FontWeight = If(iwad And type = "common", FontWeights.DemiBold, FontWeights.Normal),
                 .FontSize = 14,
                 .Content = preset.Name
-            } '.Height = If(type = "common", 32, 28)
+            }
 
             'Add anonymous functions to it, to handle clicks
             AddHandler button.Click,
                 Sub(sender, e)
-                    HandleUserPreset_Select(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
+                    HandlePreset_Select(If(type = "common", "common", "user"), preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
                 End Sub
 
             AddHandler button.MouseRightButtonDown,
@@ -50,12 +53,11 @@ Module LoadPresetsMethods
                     HandleUserPreset_Delete(preset.Name)
                 End Sub
 
-            'Push the button into a StackPanel
-            If presetsType = "common" Then
-                'TODO ---
-            Else
-                MainWindow_Instance().StackPanel_DisplayUserPresets.Children.Add(button)
-            End If
+            'Add the button into StackPanel
+            With MainWindow_Instance()
+                Dim panel As StackPanel = If(type = "common", .StackPanel_CommonPresets, .StackPanel_UserPresets)
+                panel.Children.Add(button)
+            End With
 
         Next
 
@@ -69,13 +71,16 @@ Module LoadPresetsMethods
     Function FormatPresetsData_FromCsv(presetsType As String) As List(Of Preset)
 
         Dim presets As List(Of Preset) = New List(Of Preset)
-        Dim parser As TextFieldParser = Nothing
+        ' Dim parser As TextFieldParser = Nothing
+        Dim parser As TextFieldParser = If(presetsType = "common", New TextFieldParser(New StringReader(My.Resources.common_presets)), New TextFieldParser(My.Settings.RootDirPath & "\presets.csv"))
 
-        If presetsType = "common" Then
-            parser = New TextFieldParser(New StringReader(My.Resources.common_presets))
-        Else
-            parser = New TextFieldParser(My.Settings.RootDirPath & "\presets.csv")
-        End If
+
+
+        'If presetsType = "common" Then
+        '    parser = New TextFieldParser(New StringReader(My.Resources.common_presets))
+        'Else
+        '    parser = New TextFieldParser(My.Settings.RootDirPath & "\presets.csv")
+        'End If
 
         Try
             With parser
@@ -96,7 +101,8 @@ Module LoadPresetsMethods
                         End If
 
                         presets.Add(
-                            New Preset() With {
+                            New Preset() With
+                            {
                                 .Name = readValues(0),
                                 .Iwad = readValues(1),
                                 .Level = If(readValues.Length >= 3, readValues(2), String.Empty),

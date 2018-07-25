@@ -32,6 +32,7 @@
                     BorderThickness="2"
                     Margin="2,0,2,0"
                     SelectionChanged="TabControl_SelectionChanged">
+            
             <TabItem Name="Common"  
                      Header="Common presets">
                 <Grid>
@@ -39,9 +40,6 @@
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="9*" />
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="1*" />
-                    </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="0"
                            Grid.Column="0"
@@ -52,196 +50,20 @@
                            Content="Common presets"
                            />
 
-                    <DockPanel
-                        Grid.Row="1"
-                        Grid.Column="0"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Margin="16,0,16,16">
-
-                        <Grid HorizontalAlignment="Stretch"
-                              VerticalAlignment="Stretch"
-                              >
-
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <Border Grid.RowSpan="4"
-                                    Grid.ColumnSpan="4"
-                                    BorderBrush="Silver"
-                                    BorderThickness="1"
-                                    />
-
-                            <Button x:Name="Button_Preset_UltimateDoom"
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Ultimate Doom"
-                                    />
-                            <Button x:Name="Button_Preset_Doom2"
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Doom 2"
-                                    />
-                            <Button x:Name="Button_Preset_TNT"
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="TNT"
-                                    />
-                            <Button x:Name="Button_Preset_Plutonia"
-                                    Grid.Row="0"
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Plutonia"
-                                    />
-                            <Button x:Name="Button_Preset_2002ADO"
-                                    Grid.Row="1"
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    >
-                                <TextBlock Text="2002 :&#x0d;&#x0a;A Doom Odyssey"
-                                           TextAlignment="Center"
-                                           />
-                            </Button>
-                            <Button x:Name="Button_Preset_Icarus"
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    >
-                                <TextBlock Text="Icarus :&#x0d;&#x0a;Alien Vanguard"
-                                           TextAlignment="Center"
-                                           />
-                            </Button>
-                            <Button x:Name="Button_Preset_Requiem"
-                                    Grid.Row="1"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Requiem"
-                                    />
-                            <Button x:Name="Button_Preset_Plutonia2"
-                                    Grid.Row="1"
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Plutonia 2"
-                                    />
-                            <Button x:Name="Button_Preset_HellRevealed"
-                                    Grid.Row="2"
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Hell Revealed"
-                                    />
-                            <Button x:Name="Button_Preset_HellRevealed2"
-                                    Grid.Row="2"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Hell Revealed 2"
-                                    />
-                            <Button x:Name="Button_Preset_DTST"
-                                    Grid.Row="2"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="DTS-T"
-                                    />
-                            <Button x:Name="Button_Preset_PlutoniaRevisited"
-                                    Grid.Row="2"
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Plutonia Revisited"
-                                    />
-                            <Button x:Name="Button_Preset_Doom2Reloaded"
-                                    Grid.Row="3"
-                                    Grid.Column="0"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Doom 2 Reloaded"
-                                    />
-                            <Button x:Name="Button_Preset_Doom2TheWayIdDid"
-                                    Grid.Row="3"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    >
-                                <TextBlock Text="Doom 2&#x0d;&#x0a;the Way id Did"
-                                           TextAlignment="Center"
-                                           />
-                            </Button>
-                            <Button x:Name="Button_Preset_Zone300"
-                                    Grid.Row="3"
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    Content="Zone 300"
-                                    />
-                            <Button x:Name="Button_Preset_Wolfenstein3D"
-                                    Grid.Row="3"
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    Margin="2,2,2,2"
-                                    >
-                                <Button.Style>
-                                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                                        <Style.Triggers>
-                                            <Trigger Property="IsMouseOver" Value="False">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        Wolf3D
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter Property="Content">
-                                                    <Setter.Value>
-                                                        <Image Source="pack://application:,,,/Resources/Images/Blazkowicz_sprite.png"/>
-                                                    </Setter.Value>
-                                                </Setter>
-                                            </Trigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </Button.Style>
-                            </Button>
-                            
+                    <Border Grid.Row="1"
+                            BorderBrush="Silver"
+                            BorderThickness="1"
+                            Margin="16,0,16,16">
+                        <Grid>
+                            <ScrollViewer x:Name="ScrollViewer_DisplayCommonPresets">
+                                <!-- Use ListBox instead ? -->
+                                <StackPanel x:Name="StackPanel_CommonPresets"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            />
+                            </ScrollViewer>
                         </Grid>
-                    </DockPanel>
+                    </Border>
 
                 </Grid>
             </TabItem>
@@ -254,8 +76,6 @@
                         <RowDefinition Height="2*" />
                         <RowDefinition Height="9*" />
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                    </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="0"
                            Grid.Column="0"
@@ -282,7 +102,7 @@
                             <ScrollViewer x:Name="ScrollViewer_DisplayUserPresets">
                                 
                                 <!-- Use ListBox instead ? -->
-                                <StackPanel x:Name="StackPanel_DisplayUserPresets"
+                                <StackPanel x:Name="StackPanel_UserPresets"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch"
                                             />
