@@ -143,7 +143,9 @@ Namespace Views
             Dim item As TabItem = tabControl.SelectedValue
 
             If item.Name = "User" Then
-                DisplayPresets("user", FormatPresetsData_FromCsv("user")) 'TODO? Think about async
+                If File.Exists(Path.Combine(My.Settings.RootDirPath, "presets.csv")) Then
+                    DisplayPresets("user", FormatPresetsData_FromCsv("user")) 'TODO? Think about async
+                End If
             End If
 
         End Sub

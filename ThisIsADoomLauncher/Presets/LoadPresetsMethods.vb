@@ -34,13 +34,16 @@ Module LoadPresetsMethods
             'Create a button for each preset -> TODO : improve style
             Dim button As Button = New Button() With
             {
-                .Height = 28,
-                .Margin = New Thickness(0, 0, 0, 2),
-                .Background = If(iwad And type = "common", Brushes.Silver, Brushes.LightGray),
-                .FontWeight = If(iwad And type = "common", FontWeights.DemiBold, FontWeights.Normal),
-                .FontSize = 14,
-                .Content = preset.Name
+                .Template = CType(Application.Current.Resources("ButtonTemplate"), ControlTemplate)
             }
+            'In progress ...
+            '.Content = New StackPanel() With {. }
+            '.Content = preset.Name
+            '.Height = 28,
+            '    .Margin = New Thickness(0, 0, 0, 2),
+            '    .Background = If(iwad And type = "common", Brushes.Silver, Brushes.LightGray),
+            '    .FontWeight = If(iwad And type = "common", FontWeights.DemiBold, FontWeights.Normal),
+            '    .FontSize = 14,
 
             'Add anonymous functions to it, to handle clicks
             AddHandler button.Click,
@@ -71,15 +74,9 @@ Module LoadPresetsMethods
     Function FormatPresetsData_FromCsv(presetsType As String) As List(Of Preset)
 
         Dim presets As List(Of Preset) = New List(Of Preset)
-        Dim parser As TextFieldParser = If(presetsType = "common", New TextFieldParser(New StringReader(My.Resources.common_presets)), New TextFieldParser(My.Settings.RootDirPath & "\presets.csv"))
+        Dim parser As TextFieldParser = SetTextFieldParser(presetsType)
 
         Try
-            With parser
-                .TextFieldType = FieldType.Delimited
-                .CommentTokens = New String() {"#"}
-                .Delimiters = New String() {","}
-                .TrimWhiteSpace = True
-            End With
 
             Using parser
                 Do While Not parser.EndOfData
@@ -112,6 +109,31 @@ Module LoadPresetsMethods
         End Try
 
         Return presets
+
+    End Function
+
+    ''' <summary>
+    ''' Return adequat TextFieldParser, from presetsType
+    ''' </summary>
+    ''' 
+    Function SetTextFieldParser(presetsType As String) As TextFieldParser
+
+        Dim parser As TextFieldParser = Nothing
+
+        If presetsType = "common" Then
+            parser = New TextFieldParser(New StringReader(My.Resources.common_presets))
+        Else
+            parser = New TextFieldParser(My.Settings.RootDirPath & "\presets.csv")
+        End If
+
+        With parser
+            .TextFieldType = FieldType.Delimited
+            .CommentTokens = New String() {"#"}
+            .Delimiters = New String() {","}
+            .TrimWhiteSpace = True
+        End With
+
+        Return parser
 
     End Function
 
