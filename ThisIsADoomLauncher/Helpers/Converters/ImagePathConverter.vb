@@ -6,14 +6,20 @@ Namespace Helpers.Converters
         Implements IValueConverter
 
         Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
-            If Not value = Nothing Then
+
+            If value = Nothing Then
+                Return "pack://application:,,,/Resources/Images/icon-doom-128.png"
+            Else
                 Return Path.Combine("pack://application:,,,/Resources/Images/", value)
             End If
-            Return Nothing
+
         End Function
 
         Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.ConvertBack
-            Throw New NotImplementedException()
+
+            Throw New NotImplementedException() 'Useless !?
+
         End Function
+
     End Class
 End Namespace

@@ -216,5 +216,8 @@
   <ItemGroup>
     <Resource Include="Resources\Images\doom_icon.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\doom2_icon.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
