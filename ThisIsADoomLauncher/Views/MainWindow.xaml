@@ -55,13 +55,22 @@
                             BorderThickness="1"
                             Margin="16,0,16,16">
                         <Grid>
-                            <ScrollViewer x:Name="ScrollViewer_DisplayCommonPresets">
-                                <!-- Use ListBox instead ? -->
-                                <StackPanel x:Name="StackPanel_CommonPresets"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch"
-                                            />
-                            </ScrollViewer>
+                            <ListView x:Name="ListView_CommonPresets"
+                                      SelectionChanged="ListView_CommonPresets_SelectionChanged">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <Image Source="pack://application:,,,/Resources/Images/icon-doom-128.png" Height="26" />
+                                            <TextBlock Margin="6,0,0,0"
+                                                       VerticalAlignment="Center"
+                                                       Text="{Binding Name}"/>
+
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+
+                            </ListView>
                         </Grid>
                     </Border>
 

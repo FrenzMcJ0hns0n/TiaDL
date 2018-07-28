@@ -41,16 +41,15 @@
             End Set
         End Property
 
-        Public Function Attributes_GetCount(p As Preset) As Integer
-
-            If Not p.Level = Nothing And Not p.Misc = Nothing Then
-                Return 4
-            ElseIf Not p.Level = Nothing And p.Misc = Nothing Then
-                Return 3
-            End If
-            Return 0
-
-        End Function
+        Private _imagePath As String
+        Public Property ImagePath As String
+            Get
+                Return _imagePath
+            End Get
+            Set(ByVal value As String)
+                _imagePath = value
+            End Set
+        End Property
 
     End Class
 End Namespace

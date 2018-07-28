@@ -34,21 +34,16 @@ Module LoadPresetsMethods
             'Create a button for each preset -> TODO : improve style
             Dim button As Button = New Button() With
             {
-                .Template = CType(Application.Current.Resources("ButtonTemplate"), ControlTemplate)
+                .Height = 28,
+                .Margin = New Thickness(0, 0, 0, 2),
+                .FontSize = 14,
+                .Content = preset.Name
             }
-            'In progress ...
-            '.Content = New StackPanel() With {. }
-            '.Content = preset.Name
-            '.Height = 28,
-            '    .Margin = New Thickness(0, 0, 0, 2),
-            '    .Background = If(iwad And type = "common", Brushes.Silver, Brushes.LightGray),
-            '    .FontWeight = If(iwad And type = "common", FontWeights.DemiBold, FontWeights.Normal),
-            '    .FontSize = 14,
 
             'Add anonymous functions to it, to handle clicks
             AddHandler button.Click,
                 Sub(sender, e)
-                    HandlePreset_Select(If(type = "common", "common", "user"), preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
+                    HandlePreset_Select("user", preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
                 End Sub
 
             AddHandler button.MouseRightButtonDown,
@@ -57,10 +52,7 @@ Module LoadPresetsMethods
                 End Sub
 
             'Add the button into StackPanel
-            With MainWindow_Instance()
-                Dim panel As StackPanel = If(type = "common", .StackPanel_CommonPresets, .StackPanel_UserPresets)
-                panel.Children.Add(button)
-            End With
+            MainWindow_Instance().StackPanel_UserPresets.Children.Add(button)
 
         Next
 

@@ -4,23 +4,4 @@
     xmlns:local="clr-namespace:ThisIsADoomLauncher"
     StartupUri="Views/MainWindow.xaml"
     Startup="Application_Startup">
-
-    <Application.Resources>
-        <ResourceDictionary>
-            <ControlTemplate x:Key="ButtonTemplate" TargetType="Button">
-                <Button Height="28">
-                    <Button.Content>
-                        <StackPanel Orientation="Horizontal">
-
-                            <Image Source="pack://application:,,,/Resources/Images/icon-doom-128.png" Height="26" />
-                            <TextBlock Text="DOOOOOM"/>
-
-                        </StackPanel>
-                    </Button.Content>
-                </Button>
-                
-            </ControlTemplate>
-        </ResourceDictionary>
-    </Application.Resources>
-    
 </Application>

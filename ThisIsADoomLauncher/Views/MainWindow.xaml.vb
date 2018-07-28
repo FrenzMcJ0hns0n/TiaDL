@@ -32,7 +32,8 @@ Namespace Views
 
         Private Sub InitializeGUI()
 
-            DisplayPresets("common", FormatPresetsData_FromCsv("common"))
+            'DisplayPresets("common", FormatPresetsData_FromCsv("common")) PREVIOUS
+            ListView_CommonPresets.ItemsSource = FormatPresetsData_FromCsv("common")
 
             With My.Settings
                 'Auto-set native resolution at first launch
@@ -147,6 +148,17 @@ Namespace Views
                     DisplayPresets("user", FormatPresetsData_FromCsv("user")) 'TODO? Think about async
                 End If
             End If
+
+        End Sub
+
+        Private Sub ListView_CommonPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+            Dim p As Preset = CType(sender.SelectedItem, Preset)
+
+            TextBox_IwadToLaunch.Text = p.Iwad
+            TextBox_LevelToLaunch.Text = p.Level
+            TextBox_MiscToLaunch.Text = p.Misc
+            'Image ?
 
         End Sub
 
@@ -412,6 +424,8 @@ Namespace Views
             End With
 
         End Sub
+
+
 
 #End Region
 
