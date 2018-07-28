@@ -163,24 +163,6 @@ Namespace Views
 
         End Sub
 
-        Private Sub TextBox_IwadToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_IwadToLaunch.TextChanged
-
-            TextBox_IwadToLaunch.Foreground = If(File.Exists(TextBox_IwadToLaunch.Text), Brushes.Black, Brushes.Red)
-
-        End Sub
-
-        Private Sub TextBox_LevelToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_LevelToLaunch.TextChanged
-
-            TextBox_LevelToLaunch.Foreground = If(File.Exists(TextBox_LevelToLaunch.Text), Brushes.Black, Brushes.Red)
-
-        End Sub
-
-        Private Sub TextBox_MiscToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_MiscToLaunch.TextChanged
-
-            TextBox_MiscToLaunch.Foreground = If(File.Exists(TextBox_MiscToLaunch.Text), Brushes.Black, Brushes.Red)
-
-        End Sub
-
 
 
 
@@ -361,6 +343,31 @@ Namespace Views
         Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
 
             Save_NewPreset()
+
+        End Sub
+
+#End Region
+
+
+
+
+#Region "Launch parameters"
+
+        Private Sub TextBox_IwadToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_IwadToLaunch.TextChanged
+
+            TextBox_IwadToLaunch.Foreground = If(File.Exists(TextBox_IwadToLaunch.Text), Brushes.Black, Brushes.Red)
+
+        End Sub
+
+        Private Sub TextBox_LevelToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_LevelToLaunch.TextChanged
+
+            TextBox_LevelToLaunch.Foreground = If(File.Exists(TextBox_LevelToLaunch.Text), Brushes.Black, Brushes.Red)
+
+        End Sub
+
+        Private Sub TextBox_MiscToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_MiscToLaunch.TextChanged
+
+            TextBox_MiscToLaunch.Foreground = If(File.Exists(TextBox_MiscToLaunch.Text), Brushes.Black, Brushes.Red)
 
         End Sub
 

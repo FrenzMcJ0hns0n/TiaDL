@@ -1,20 +1,20 @@
 #COMMON PRESETS
 #Name						#Iwad			#Level			#Misc.			#Image
 
-Ultimate Doom; 				Doom.wad;		;				;				pack://application:,,,/Resources/Images/doom_icon.jpg
-Doom II: Hell on Earth; 	Doom2.wad
-TNT: Evilution; 			TNT.wad
-The Plutonia Experiment;	Plutonia.wad
-Freedoom: Phase 1;			freedoom1.wad
-Freedoom: Phase 2;			freedoom2.wad
-2002 A Doom Odyssey;		Doom.wad; 		2002ad10.wad
-Icarus: Alien Vanguard;		Doom2.wad; 		ICARUS.wad
-Requiem; 					Doom2.wad;		Requiem.wad
-Plutonia 2;					Doom2.wad;		PL2.wad
-Hell Revealed;				Doom2.wad; 		hr.wad
-Hell Revealed 2;			Doom2.wad; 		hr2final.wad
-DTS-T;						Doom2.wad; 		DTS-T.pk3
-Plutonia Revisited;			Doom2.wad; 		PRCP.wad
-Doom 2 Reloaded;			Doom2.wad; 		D2RELOAD.WAD
-Doom 2 The Way id Did;		Doom2.wad; 		D2TWID.wad; 	D2TWID.deh
-Zone 300;					Doom2.wad; 		zone300.wad
+Ultimate Doom, 				Doom.wad,		,				,				doom_icon.jpg
+Doom II: Hell on Earth, 	Doom2.wad,		,				,				icon-doom-128.png
+TNT: Evilution, 			TNT.wad
+The Plutonia Experiment,	Plutonia.wad
+Freedoom: Phase 1,			freedoom1.wad
+Freedoom: Phase 2,			freedoom2.wad
+2002 A Doom Odyssey,		Doom.wad, 		2002ad10.wad
+Icarus: Alien Vanguard,		Doom2.wad, 		ICARUS.wad
+Requiem, 					Doom2.wad,		Requiem.wad
+Plutonia 2,					Doom2.wad,		PL2.wad
+Hell Revealed,				Doom2.wad, 		hr.wad
+Hell Revealed 2,			Doom2.wad, 		hr2final.wad
+DTS-T,						Doom2.wad, 		DTS-T.pk3
+Plutonia Revisited,			Doom2.wad, 		PRCP.wad
+Doom 2 Reloaded,			Doom2.wad, 		D2RELOAD.WAD
+Doom 2 The Way id Did,		Doom2.wad, 		D2TWID.wad, 	D2TWID.deh
+Zone 300,					Doom2.wad, 		zone300.wad

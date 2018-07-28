@@ -61,7 +61,7 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             
-                                            <Image Source="{Binding ImagePath}"
+                                            <Image Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
                                                    Height="64" 
                                                    /> 
                                             <!-- Source="pack://application:,,,/Resources/Images/icon-doom-128.png" -->
@@ -537,7 +537,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Help_Image" Source="pack://application:,,,/Resources/Images/index.png" />
+                        <Image Source="pack://application:,,,/Resources/Images/index.png" />
                     </Button>
                 </DockPanel>
 
@@ -557,7 +557,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="DoomWorld_Image" Source="pack://application:,,,/Resources/Images/300x50_blackAndWhite_edit_def.gif" />
+                        <Image Source="pack://application:,,,/Resources/Images/300x50_blackAndWhite_edit_def.gif" />
                     </Button>
                 </DockPanel>
 
@@ -578,7 +578,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="DommResources_Image" Source="pack://application:,,,/Resources/Images/images_edit.jpg" />
+                        <Image Source="pack://application:,,,/Resources/Images/images_edit.jpg" />
                     </Button>
                 </DockPanel>
 
@@ -598,7 +598,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Folder_Image" Source="pack://application:,,,/Resources/Images/Folder.png" />
+                        <Image Source="pack://application:,,,/Resources/Images/Folder.png" />
                     </Button>
                 </DockPanel>
 
@@ -618,7 +618,7 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Settings_Image" Source="pack://application:,,,/Resources/Images/settings_darker.png" />
+                        <Image Source="pack://application:,,,/Resources/Images/settings_darker.png" />
                     </Button>
 
                 </DockPanel>
@@ -640,7 +640,9 @@
                                 <ContentPresenter Content="{TemplateBinding Content}"/>
                             </ControlTemplate>
                         </Button.Template>
-                        <Image Name="Play_Image" Source="pack://application:,,,/Resources/Images/play_darker.png" />
+                        <Image Name="Play_Image" 
+                               Source="pack://application:,,,/Resources/Images/play_darker.png"
+                               />
                     </Button>
                 </DockPanel>
 

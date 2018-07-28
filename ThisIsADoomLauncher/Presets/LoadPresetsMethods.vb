@@ -122,7 +122,7 @@ Module LoadPresetsMethods
         With parser
             .TextFieldType = FieldType.Delimited
             .CommentTokens = New String() {"#"}
-            .Delimiters = New String() {";"}
+            .Delimiters = New String() {","}
             .TrimWhiteSpace = True
         End With
 
