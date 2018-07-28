@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
         
-        Title="This is a Doom Launcher v2" 
-        Width="800" Height="600" 
+        Title="This is a Doom Launcher v2.2" 
+        Width="920" Height="690" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
 
@@ -60,12 +60,19 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
+                                            
+                                            <Image Source="{Binding ImagePath}"
+                                                   Height="64" 
+                                                   /> 
+                                            <!-- Source="pack://application:,,,/Resources/Images/icon-doom-128.png" -->
 
-                                            <Image Source="pack://application:,,,/Resources/Images/icon-doom-128.png" Height="26" />
                                             <TextBlock Margin="6,0,0,0"
                                                        VerticalAlignment="Center"
-                                                       Text="{Binding Name}"/>
-
+                                                       FontWeight="DemiBold"
+                                                       FontSize="18"
+                                                       Text="{Binding Name}"
+                                                       />
+                                            
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -390,7 +397,7 @@
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="6*" />
+                    <ColumnDefinition Width="5*" />
                     <ColumnDefinition Width="1*" />
                     <ColumnDefinition Width="30*" />
                     <ColumnDefinition Width="30*" />
@@ -400,7 +407,7 @@
                        Grid.Column="1"
                        HorizontalAlignment="Center" 
                        VerticalAlignment="Center"
-                       Content="IWAD :"
+                       Content="Iwad :"
                        />
                 <TextBox x:Name="TextBox_IwadToLaunch"
                          Grid.Row="1"
@@ -454,14 +461,14 @@
                           HorizontalAlignment="Left" 
                           VerticalAlignment="Center"
                           VerticalContentAlignment="Center"
-                          Content="Alternative soundtrack ->" 
+                          Content="Load alternative soundtrack ->" 
                           />
                 <RadioButton x:Name="RadioButton_Soundtrack_DoomMetal"
                              Grid.Row="4"
                              Grid.Column="3"
                              HorizontalAlignment="Right" 
                              VerticalAlignment="Center"
-                             Margin="0,0,-8,0"
+                             Margin="0,0,12,0"
                              VerticalContentAlignment="Center"
                              Foreground="LightGray"
                              Content="Doom Metal v4"
@@ -472,7 +479,6 @@
                              Grid.Column="4"
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center"
-                             Margin="18,0,0,0"
                              VerticalContentAlignment="Center"
                              Foreground="LightGray"
                              Content="IDKFA v2 (Doom1)"
@@ -485,6 +491,7 @@
                           Grid.Column="4"
                           HorizontalAlignment="Right" 
                           VerticalAlignment="Center"
+                          Margin="0,0,4,0"
                           Content="Turbo mode" 
                           />
 

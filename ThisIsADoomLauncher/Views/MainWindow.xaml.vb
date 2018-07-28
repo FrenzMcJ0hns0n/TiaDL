@@ -155,10 +155,29 @@ Namespace Views
 
             Dim p As Preset = CType(sender.SelectedItem, Preset)
 
-            TextBox_IwadToLaunch.Text = p.Iwad
-            TextBox_LevelToLaunch.Text = p.Level
-            TextBox_MiscToLaunch.Text = p.Misc
-            'Image ?
+            With My.Settings
+                TextBox_IwadToLaunch.Text = Path.Combine(.IwadsDir, p.Iwad)
+                TextBox_LevelToLaunch.Text = If(p.Level = Nothing, String.Empty, Path.Combine(.LevelsDir, p.Level))
+                TextBox_MiscToLaunch.Text = If(p.Misc = Nothing, String.Empty, Path.Combine(.MiscDir, p.Misc))
+            End With
+
+        End Sub
+
+        Private Sub TextBox_IwadToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_IwadToLaunch.TextChanged
+
+            TextBox_IwadToLaunch.Foreground = If(File.Exists(TextBox_IwadToLaunch.Text), Brushes.Black, Brushes.Red)
+
+        End Sub
+
+        Private Sub TextBox_LevelToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_LevelToLaunch.TextChanged
+
+            TextBox_LevelToLaunch.Foreground = If(File.Exists(TextBox_LevelToLaunch.Text), Brushes.Black, Brushes.Red)
+
+        End Sub
+
+        Private Sub TextBox_MiscToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_MiscToLaunch.TextChanged
+
+            TextBox_MiscToLaunch.Foreground = If(File.Exists(TextBox_MiscToLaunch.Text), Brushes.Black, Brushes.Red)
 
         End Sub
 
@@ -424,8 +443,6 @@ Namespace Views
             End With
 
         End Sub
-
-
 
 #End Region
 

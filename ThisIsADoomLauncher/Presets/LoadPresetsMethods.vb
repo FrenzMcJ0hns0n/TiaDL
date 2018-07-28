@@ -86,7 +86,8 @@ Module LoadPresetsMethods
                                 .Name = readValues(0),
                                 .Iwad = readValues(1),
                                 .Level = If(readValues.Length >= 3, readValues(2), String.Empty),
-                                .Misc = If(readValues.Length = 4, readValues(3), String.Empty)
+                                .Misc = If(readValues.Length >= 4, readValues(3), String.Empty),
+                                .ImagePath = If(readValues.Length = 5, readValues(4), String.Empty)
                             }
                         )
                     Catch ex As MalformedLineException
@@ -121,7 +122,7 @@ Module LoadPresetsMethods
         With parser
             .TextFieldType = FieldType.Delimited
             .CommentTokens = New String() {"#"}
-            .Delimiters = New String() {","}
+            .Delimiters = New String() {";"}
             .TrimWhiteSpace = True
         End With
 
