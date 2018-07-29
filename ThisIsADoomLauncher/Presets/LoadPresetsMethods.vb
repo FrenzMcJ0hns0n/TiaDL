@@ -10,22 +10,20 @@ Module LoadPresetsMethods
     ''' <para>values(0) : Preset Name | values(1) : Preset Iwad | values(2) : Preset Level | values(3) : Preset Misc</para>
     ''' </summary>
     ''' 
-    Sub DisplayPresets(type As String, presetsList As List(Of Preset))
+    Sub DisplayPresets(presetsList As List(Of Preset))
 
-        If type = "user" Then
-            With MainWindow_Instance()
+        With MainWindow_Instance()
 
-                .StackPanel_UserPresets.Children.Clear()
+            .StackPanel_UserPresets.Children.Clear()
 
-                If presetsList.Count = 0 Then
-                    .Label_NoUserPresetsFound.Visibility = Visibility.Visible
-                    Return 'Nothing to read : exit
-                End If
+            If presetsList.Count = 0 Then
+                .Label_NoUserPresetsFound.Visibility = Visibility.Visible
+                Return 'Nothing to read : exit
+            End If
 
-                .Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
+            .Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
 
-            End With
-        End If
+        End With
 
         For Each preset As Preset In presetsList
 
@@ -43,7 +41,7 @@ Module LoadPresetsMethods
             'Add anonymous functions to it, to handle clicks
             AddHandler button.Click,
                 Sub(sender, e)
-                    HandlePreset_Select("user", preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
+                    HandleUserPreset_Select(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
                 End Sub
 
             AddHandler button.MouseRightButtonDown,

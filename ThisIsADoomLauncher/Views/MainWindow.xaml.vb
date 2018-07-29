@@ -145,7 +145,7 @@ Namespace Views
 
             If item.Name = "User" Then
                 If File.Exists(Path.Combine(My.Settings.RootDirPath, "presets.csv")) Then
-                    DisplayPresets("user", FormatPresetsData_FromCsv("user")) 'TODO? Think about async
+                    DisplayPresets(FormatPresetsData_FromCsv("user")) 'TODO? Think about async
                 End If
             End If
 
@@ -315,22 +315,19 @@ Namespace Views
 
         Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
 
-            'When using KnowSelected**** we don't care about path validity yet : done later at preset display
+            'KnowSelected**** don't care about path validity : that is done later on TextBox.TextChanged events
 
             Dim iwad As String = KnowSelectedIwad_NewPreset()
             If iwad = Nothing Then
                 Return 'Not worth a try
             End If
             TextBox_IwadToLaunch.Text = iwad
-            My.Settings.SelectedIwad = iwad
 
             Dim level As String = KnowSelectedLevel_NewPreset()
             TextBox_LevelToLaunch.Text = level
-            My.Settings.SelectedLevel = level
 
             Dim misc As String = KnowSelectedMisc_NewPreset()
             TextBox_MiscToLaunch.Text = misc
-            My.Settings.SelectedMisc = misc
 
         End Sub
 
@@ -355,19 +352,40 @@ Namespace Views
 
         Private Sub TextBox_IwadToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_IwadToLaunch.TextChanged
 
-            TextBox_IwadToLaunch.Foreground = If(File.Exists(TextBox_IwadToLaunch.Text), Brushes.Black, Brushes.Red)
+            If File.Exists(TextBox_IwadToLaunch.Text) Then
+                TextBox_IwadToLaunch.Foreground = Brushes.Black
+
+                My.Settings.SelectedIwad = TextBox_IwadToLaunch.Text
+                My.Settings.Save()
+            Else
+                TextBox_IwadToLaunch.Foreground = Brushes.Red
+            End If
 
         End Sub
 
         Private Sub TextBox_LevelToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_LevelToLaunch.TextChanged
 
-            TextBox_LevelToLaunch.Foreground = If(File.Exists(TextBox_LevelToLaunch.Text), Brushes.Black, Brushes.Red)
+            If File.Exists(TextBox_LevelToLaunch.Text) Then
+                TextBox_LevelToLaunch.Foreground = Brushes.Black
+
+                My.Settings.SelectedIwad = TextBox_LevelToLaunch.Text
+                My.Settings.Save()
+            Else
+                TextBox_LevelToLaunch.Foreground = Brushes.Red
+            End If
 
         End Sub
 
         Private Sub TextBox_MiscToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_MiscToLaunch.TextChanged
 
-            TextBox_MiscToLaunch.Foreground = If(File.Exists(TextBox_MiscToLaunch.Text), Brushes.Black, Brushes.Red)
+            If File.Exists(TextBox_MiscToLaunch.Text) Then
+                TextBox_MiscToLaunch.Foreground = Brushes.Black
+
+                My.Settings.SelectedIwad = TextBox_MiscToLaunch.Text
+                My.Settings.Save()
+            Else
+                TextBox_MiscToLaunch.Foreground = Brushes.Red
+            End If
 
         End Sub
 
