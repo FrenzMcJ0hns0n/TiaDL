@@ -7,83 +7,47 @@ Module GuiHelper
 
 #Region "Common presets"
 
-    ''' <summary>
-    ''' Build absolute path from Iwad relative filename
-    ''' </summary>
-    ''' 
-    Private Function Path_Iwad_RelativeToAbsolute(iwad As String) As String
+    '''' <summary>
+    '''' Handle checks on Common presets values before confirm them
+    '''' </summary>
+    ''''
+    'Sub ValidateCommonPreset(iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
 
-        With My.Settings
-            Return If(File.Exists(.IwadsDir & "\" & iwad), .IwadsDir & "\" & iwad, Nothing)
-        End With
+    '    Dim errorText As String = String.Empty 'TODO : Use String class more often
+    '    Dim enl As String = Environment.NewLine
 
-    End Function
+    '    Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
+    '    Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
+    '    Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
 
-    ''' <summary>
-    ''' Build absolute path from Level relative filename
-    ''' </summary>
-    ''' 
-    Private Function Path_Level_RelativeToAbsolute(level As String) As String
+    '    With My.Settings
+    '        If iwadPath = Nothing Then
+    '            errorText &= String.Format("File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, enl, .IwadsDir, enl)
+    '        End If
 
-        With My.Settings
-            Return If(File.Exists(.LevelsDir & "\" & level), .LevelsDir & "\" & level, Nothing)
-        End With
+    '        If levelPath = Nothing And Not level = Nothing Then
+    '            errorText &= String.Format("File ""{0}"" doesn't exist in :{1}{2}{3}", level, enl, .IwadsDir, enl)
+    '        End If
 
-    End Function
+    '        If miscPath = Nothing And Not misc = Nothing Then
+    '            errorText &= String.Format("File ""{0}"" doesn't exist in :{1}{2}{3}", misc, enl, .MiscDir, enl)
+    '        End If
 
-    ''' <summary>
-    ''' Build absolute path from Misc relative filename
-    ''' </summary>
-    ''' 
-    Private Function Path_Misc_RelativeToAbsolute(misc As String) As String
+    '        If errorText = Nothing Then
+    '            .SelectedIwad = iwadPath
+    '            .SelectedLevel = levelPath
+    '            .SelectedMisc = miscPath
+    '            .Save()
 
-        With My.Settings
-            Return If(File.Exists(.MiscDir & "\" & misc), .MiscDir & "\" & misc, Nothing)
-        End With
+    '            MainWindow_Instance().TextBox_IwadToLaunch.Text = .SelectedIwad
+    '            MainWindow_Instance().TextBox_LevelToLaunch.Text = .SelectedLevel
+    '            MainWindow_Instance().TextBox_MiscToLaunch.Text = .SelectedMisc
+    '        Else
+    '            MessageBox.Show("Error : " & enl & enl & errorText)
+    '        End If
+    '    End With
 
-    End Function
-
-    ''' <summary>
-    ''' Handle checks on Common presets values before confirm them
-    ''' </summary>
-    '''
-    Sub ValidateCommonPreset(iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
-
-        Dim errorText As String = String.Empty 'TODO : Use String class more often
-        Dim enl As String = Environment.NewLine
-
-        Dim iwadPath As String = Path_Iwad_RelativeToAbsolute(iwad)
-        Dim levelPath As String = Path_Level_RelativeToAbsolute(level)
-        Dim miscPath As String = Path_Misc_RelativeToAbsolute(misc)
-
-        With My.Settings
-            If iwadPath = Nothing Then
-                errorText &= String.Format("File ""{0}"" doesn't exist in :{1}{2}{3}", iwad, enl, .IwadsDir, enl)
-            End If
-
-            If levelPath = Nothing And Not level = Nothing Then
-                errorText &= String.Format("File ""{0}"" doesn't exist in :{1}{2}{3}", level, enl, .IwadsDir, enl)
-            End If
-
-            If miscPath = Nothing And Not misc = Nothing Then
-                errorText &= String.Format("File ""{0}"" doesn't exist in :{1}{2}{3}", misc, enl, .MiscDir, enl)
-            End If
-
-            If errorText = Nothing Then
-                .SelectedIwad = iwadPath
-                .SelectedLevel = levelPath
-                .SelectedMisc = miscPath
-                .Save()
-
-                MainWindow_Instance().TextBox_IwadToLaunch.Text = .SelectedIwad
-                MainWindow_Instance().TextBox_LevelToLaunch.Text = .SelectedLevel
-                MainWindow_Instance().TextBox_MiscToLaunch.Text = .SelectedMisc
-            Else
-                MessageBox.Show("Error : " & enl & enl & errorText)
-            End If
-        End With
-
-    End Sub
+    'End Sub
 
 #End Region
 

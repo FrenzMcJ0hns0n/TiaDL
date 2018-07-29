@@ -3,6 +3,95 @@
 Module IOMethods
 
     ''' <summary>
+    ''' Return the filename for all files found in /mods/ directory
+    ''' As list of string
+    ''' </summary>
+    ''' 
+    Function GetLocalBrutalDoomVersions() As List(Of String)
+
+        Dim versionsFound As List(Of String) = New List(Of String)
+
+        Try
+            For Each file As String In Directory.GetFiles(My.Settings.ModDir)
+                versionsFound.Add(File_GetName(file))
+            Next
+            Return versionsFound
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'GetLocalBrutalDoomVersions()'. Exception : " & ex.ToString)
+            Return Nothing
+        End Try
+
+    End Function
+
+    ''' <summary>
+    ''' Build absolute path from Iwad relative filename
+    ''' </summary>
+    ''' 
+    Function Path_Iwad_RelativeToAbsolute(iwad As String) As String
+
+        Dim builtPath = Path.Combine(My.Settings.IwadsDir, iwad)
+        Return If(File.Exists(builtPath), builtPath, String.Empty)
+
+    End Function
+
+    ''' <summary>
+    ''' Build absolute path from Level relative filename
+    ''' </summary>
+    ''' 
+    Function Path_Level_RelativeToAbsolute(level As String) As String
+
+        Dim builtPath = Path.Combine(My.Settings.LevelsDir, level)
+        Return If(File.Exists(builtPath), builtPath, String.Empty)
+
+    End Function
+
+    ''' <summary>
+    ''' Build absolute path from Misc relative filename
+    ''' </summary>
+    ''' 
+    Function Path_Misc_RelativeToAbsolute(misc As String) As String
+
+        Dim builtPath = Path.Combine(My.Settings.MiscDir, misc)
+        Return If(File.Exists(builtPath), builtPath, String.Empty)
+
+    End Function
+
+    ''' <summary>
+    ''' Set .ini files from models, if they exist
+    ''' TODO (v2+) : .ini file selection in GUI ?
+    ''' </summary>
+    ''' 
+    Sub SetIniFiles()
+
+        Try
+            With My.Settings
+                If File.Exists(.GzdoomDir & "\gzdoom-model.ini") Then
+                    File.Move(
+                        .GzdoomDir & "\gzdoom-model.ini",
+                        .GzdoomDir & "\gzdoom-" & Environment.UserName & ".ini")
+                End If
+
+                If File.Exists(.ZandronumDir & "\zandronum-model.ini") Then
+                    File.Move(
+                        .ZandronumDir & "\zandronum-model.ini",
+                        .ZandronumDir & "\zandronum-" & Environment.UserName & ".ini")
+                End If
+
+                If File.Exists(.WolfDir & "\gzdoom-model-wolf3D.ini") Then
+                    File.Move(
+                        .WolfDir & "\gzdoom-model-wolf3D.ini",
+                        .WolfDir & "\gzdoom-" & Environment.UserName & "-wolf3D.ini")
+                End If
+            End With
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
+        End Try
+
+    End Sub
+
+    ''' <summary>
     ''' Check if all directories can be found
     ''' Validate paths
     ''' </summary>
@@ -77,62 +166,6 @@ Module IOMethods
         End Try
 
     End Function
-
-    ''' <summary>
-    ''' Return the filename for all files found in /mods/ directory
-    ''' As list of string
-    ''' </summary>
-    ''' 
-    Function GetLocalBrutalDoomVersions() As List(Of String)
-
-        Dim versionsFound As List(Of String) = New List(Of String)
-
-        Try
-            For Each file As String In Directory.GetFiles(My.Settings.ModDir)
-                versionsFound.Add(File_GetName(file))
-            Next
-            Return versionsFound
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'GetLocalBrutalDoomVersions()'. Exception : " & ex.ToString)
-            Return Nothing
-        End Try
-
-    End Function
-
-    ''' <summary>
-    ''' Set .ini files from models, if they exist
-    ''' TODO (v2+) : .ini file selection in GUI ?
-    ''' </summary>
-    ''' 
-    Sub SetIniFiles()
-
-        Try
-            With My.Settings
-                If File.Exists(.GzdoomDir & "\gzdoom-model.ini") Then
-                    File.Move(
-                        .GzdoomDir & "\gzdoom-model.ini",
-                        .GzdoomDir & "\gzdoom-" & Environment.UserName & ".ini")
-                End If
-
-                If File.Exists(.ZandronumDir & "\zandronum-model.ini") Then
-                    File.Move(
-                        .ZandronumDir & "\zandronum-model.ini",
-                        .ZandronumDir & "\zandronum-" & Environment.UserName & ".ini")
-                End If
-
-                If File.Exists(.WolfDir & "\gzdoom-model-wolf3D.ini") Then
-                    File.Move(
-                        .WolfDir & "\gzdoom-model-wolf3D.ini",
-                        .WolfDir & "\gzdoom-" & Environment.UserName & "-wolf3D.ini")
-                End If
-            End With
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
-        End Try
-
-    End Sub
 
     ''' <summary>
     ''' Create file 'presets.csv' with some commented lines, if it does not exist
