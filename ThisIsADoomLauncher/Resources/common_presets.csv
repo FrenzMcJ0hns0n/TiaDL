@@ -1,12 +1,12 @@
 #COMMON PRESETS
 #Name						#Iwad			#Level			#Misc.			#Image
 
-Ultimate Doom, 				Doom.wad,		,				,				doom_icon.jpg 
-Doom II: Hell on Earth, 	Doom2.wad,		,				,				doom2_icon.jpg
-TNT: Evilution, 			TNT.wad		
-The Plutonia Experiment,	Plutonia.wad
-Freedoom: Phase 1,			freedoom1.wad
-Freedoom: Phase 2,			freedoom2.wad
+Ultimate Doom, 				Doom.wad,			,				,			doom_icon.jpg 
+Doom II: Hell on Earth, 	Doom2.wad,			,				,			doom2_icon.jpg
+TNT: Evilution, 			TNT.wad,			,				,			final_doom_icon.jpg
+The Plutonia Experiment,	Plutonia.wad,		,				,			final_doom_icon.jpg
+Freedoom: Phase 1,			freedoom1.wad,		,				,			freedoom_icon_edit.png
+Freedoom: Phase 2,			freedoom2.wad,		,				,			freedoom_icon_edit.png
 2002 A Doom Odyssey,		Doom.wad, 		2002ad10.wad
 Icarus: Alien Vanguard,		Doom2.wad, 		ICARUS.wad
 Requiem, 					Doom2.wad,		Requiem.wad
