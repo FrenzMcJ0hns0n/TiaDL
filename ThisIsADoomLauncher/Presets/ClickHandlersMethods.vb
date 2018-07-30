@@ -39,7 +39,7 @@
             DeletePreset(presetName)
 
             'Update GUI
-            DisplayPresets("user", FormatPresetsData_FromCsv("user"))
+            DisplayPresets(FormatPresetsData_FromCsv("user"))
         End If
 
     End Sub

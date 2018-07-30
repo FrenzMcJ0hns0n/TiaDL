@@ -8,9 +8,9 @@ Namespace Helpers.Converters
         Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object Implements IValueConverter.Convert
 
             If value = Nothing Then
-                Return "pack://application:,,,/Resources/Images/icon-doom-128.png"
+                Return "pack://application:,,,/Resources/Images/Presets/icon_default.png"
             Else
-                Return Path.Combine("pack://application:,,,/Resources/Images/", value)
+                Return Path.Combine("pack://application:,,,/Resources/Images/Presets/Common", value)
             End If
 
         End Function

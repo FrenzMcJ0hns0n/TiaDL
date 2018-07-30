@@ -30,6 +30,11 @@ Module IOMethods
     ''' 
     Function Path_Iwad_RelativeToAbsolute(iwad As String) As String
 
+        'weak. TODO : Improve Wolf3D integration
+        If iwad = "Wolf3D" Then
+            Return iwad
+        End If
+
         Dim builtPath = Path.Combine(My.Settings.IwadsDir, iwad)
         Return If(File.Exists(builtPath), builtPath, String.Empty)
 

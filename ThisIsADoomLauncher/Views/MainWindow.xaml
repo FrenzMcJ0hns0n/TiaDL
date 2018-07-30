@@ -37,7 +37,7 @@
                      Header="Common presets">
                 <Grid Margin="18">
                     <ListView x:Name="ListView_CommonPresets"
-                                  SelectionChanged="ListView_CommonPresets_SelectionChanged">
+                              SelectionChanged="ListView_CommonPresets_SelectionChanged">
 
                         <ListView.ItemTemplate>
                             <DataTemplate>

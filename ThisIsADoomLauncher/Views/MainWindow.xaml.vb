@@ -352,6 +352,11 @@ Namespace Views
 
         Private Sub TextBox_IwadToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_IwadToLaunch.TextChanged
 
+            'weak. TODO : Improve Wolf3D integration
+            If TextBox_IwadToLaunch.Text = "Wolf3D" Then
+                Return
+            End If
+
             If File.Exists(TextBox_IwadToLaunch.Text) Then
                 TextBox_IwadToLaunch.Foreground = Brushes.Black
 

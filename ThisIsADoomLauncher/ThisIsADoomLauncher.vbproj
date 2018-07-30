@@ -208,25 +208,25 @@
     <Folder Include="Resources\Config\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Blazkowicz_sprite.png" />
+    <Resource Include="Resources\Images\Presets\Common\Blazkowicz_sprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\icon-doom-128.png" />
+    <Resource Include="Resources\Images\Presets\icon_default.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\doom_icon.jpg" />
+    <Resource Include="Resources\Images\Presets\Common\doom_icon.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\doom2_icon.jpg" />
+    <Resource Include="Resources\Images\Presets\Common\doom2_icon.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\final_doom_icon.jpg" />
+    <Resource Include="Resources\Images\Presets\Common\final_doom_icon.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\freedoom_icon.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\freedoom_icon_edit.png" />
+    <Resource Include="Resources\Images\Presets\Common\freedoom_icon_edit.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
