@@ -14,7 +14,7 @@ Module LoadPresetsMethods
 
         With MainWindow_Instance()
 
-            .StackPanel_UserPresets.Children.Clear()
+            '.StackPanel_UserPresets.Children.Clear()
 
             If presetsList.Count = 0 Then
                 .Label_NoUserPresetsFound.Visibility = Visibility.Visible
@@ -50,7 +50,7 @@ Module LoadPresetsMethods
                 End Sub
 
             'Add the button into StackPanel
-            MainWindow_Instance().StackPanel_UserPresets.Children.Add(button)
+            'MainWindow_Instance().StackPanel_UserPresets.Children.Add(button)
 
         Next
 
