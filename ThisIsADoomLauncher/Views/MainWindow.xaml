@@ -37,7 +37,7 @@
                      Header="Common presets">
                 <Grid Margin="18">
                     <ListView x:Name="ListView_CommonPresets"
-                              SelectionChanged="ListView_CommonPresets_SelectionChanged">
+                              SelectionChanged="ListView_Presets_SelectionChanged">
 
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -76,13 +76,28 @@
                                 Content="No presets found ..."
                                 />
                         <!-- TODO : Use ListView instead -->
-                        <ScrollViewer x:Name="ScrollViewer_DisplayUserPresets">
-                            <StackPanel x:Name="StackPanel_UserPresets"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        />
+                        <ListView x:Name="ListView_UserPresets"
+                              SelectionChanged="ListView_Presets_SelectionChanged">
 
-                        </ScrollViewer>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+
+                                        <Image Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
+                                                   Height="64" 
+                                                   />
+                                        <TextBlock Margin="8,0,0,0"
+                                                       VerticalAlignment="Center"
+                                                       FontWeight="DemiBold"
+                                                       FontSize="18"
+                                                       Text="{Binding Name}"
+                                                       />
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                        </ListView>
                     </Grid>
                 </Border>
             </TabItem>

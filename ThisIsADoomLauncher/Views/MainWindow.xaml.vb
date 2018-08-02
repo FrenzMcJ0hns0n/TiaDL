@@ -151,7 +151,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub ListView_CommonPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub ListView_Presets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
             Dim p As Preset = CType(sender.SelectedItem, Preset)
 
