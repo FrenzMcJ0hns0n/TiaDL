@@ -8,6 +8,7 @@ Namespace Helpers.API
         Private Const DOOMWORLD_BASE_URL = "https://www.doomworld.com/idgames/api/api.php?out=json&action="
 
         Public Async Function GetGameInfosById(gameId As Integer) As Task(Of Models.Content)
+
             Dim game As Models.Content = Nothing
 
             Try
@@ -24,7 +25,7 @@ Namespace Helpers.API
                 End If
 
             Catch ex As Exception
-                Dim r = ex
+
                 game = Nothing
 
             End Try
