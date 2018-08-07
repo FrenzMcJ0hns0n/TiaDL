@@ -32,14 +32,19 @@ Namespace Helpers
         End Function
 
 
-        'Public Shared Function Deserialize(Of T)(resource As Byte()) As T
+        ''' <summary>
+        ''' Deserializes a JSON string to a T object.
+        ''' </summary>
+        ''' <typeparam name="T"></typeparam>
+        ''' <param name="jsonContent"></param>
+        ''' <returns></returns>
+        Public Shared Function DeserializeObject(Of T)(jsonContent As String) As T
 
-        '    Dim content = Convert.ToBase64String(resource)
-        '    Dim jss As JavaScriptSerializer = New JavaScriptSerializer()
+            Dim jss As JavaScriptSerializer = New JavaScriptSerializer()
 
-        '    Return jss.Deserialize(Of T)(content)
+            Return jss.Deserialize(Of T)(jsonContent)
 
-        'End Function
+        End Function
 
         Public Shared Function Deserialize(Of Preset)(resource As Byte()) As String
 
