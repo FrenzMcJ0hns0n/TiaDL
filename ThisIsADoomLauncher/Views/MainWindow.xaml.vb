@@ -51,9 +51,7 @@ Namespace Views
                 Label_ResolutionToLaunch.Content = "Resolution : " & My.Settings.ScreenWidth.ToString & " x " & My.Settings.ScreenHeight.ToString
                 Label_FullscreenToLaunch.Content = "Fullscreen : " & If(My.Settings.FullscreenEnabled, "Yes", "No")
 
-                If Not .BrutalDoomVersion = Nothing Then
-                    TextBox_ModToLaunch.Text = .BrutalDoomVersion
-                End If
+                TextBox_ModToLaunch.Text = If(.UseBrutalDoom = False Or .BrutalDoomVersion = Nothing, Nothing, .BrutalDoomVersion)
 
                 TextBox_IwadToLaunch.Text = .SelectedIwad
                 TextBox_LevelToLaunch.Text = .SelectedLevel
