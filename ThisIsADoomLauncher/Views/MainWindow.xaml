@@ -7,16 +7,17 @@
         mc:Ignorable="d"
         
         Title="This is a Doom Launcher v2.2" 
-        Width="920" Height="690" 
+        Width="920" Height="784" 
         ResizeMode="CanMinimize"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        >
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
             <RowDefinition Height="30*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="13*" />
+            <RowDefinition Height="20*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -340,6 +341,9 @@
                     <RowDefinition Height="10*" />
                     <RowDefinition Height="10*" />
                     <RowDefinition Height="10*" />
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="10*" />
+                    <RowDefinition Height="10*" />
                     <RowDefinition Height="1*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -350,29 +354,52 @@
                     <ColumnDefinition Width="30*" />
                     <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
+                <Grid Grid.Row="1"
+                      Grid.Column="3"
+                      Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="2*" />
+                    </Grid.ColumnDefinitions>
+                    
+                </Grid>
                 <Label Grid.Row="1"
                        Grid.Column="1"
-                       HorizontalAlignment="Center" 
+                       HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
-                       Content="Iwad :"
+                       Content="Engine :"
                        />
-                <TextBox x:Name="TextBox_IwadToLaunch"
+                <!-- Build horizontal Stack Panel-->
+                <Label x:Name="Label_EngineToLaunch"
                          Grid.Row="1"
                          Grid.Column="3"
-                         Grid.ColumnSpan="2"
-                         HorizontalAlignment="Stretch"
+                         HorizontalAlignment="Left"
                          VerticalAlignment="Center"
-                         Cursor="Arrow"
-                         IsReadOnly="True"
+                         Padding="-2 0 0 0"
                          />
-                <Label Grid.Row="2"
-                       Grid.Column="1"
-                       HorizontalAlignment="Center" 
+                <Label x:Name="Label_ResolutionToLaunch"
+                         Grid.Row="1"
+                         Grid.Column="3"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Center"
+                         Margin="0 0 0 0"
+                         Content="Resolution = "
+                         />
+                <Label x:Name="Label_FullscreenToLaunch"
+                         Grid.Row="1"
+                         Grid.Column="4"
+                         HorizontalAlignment="Left"
+                         VerticalAlignment="Center"
+                         Margin="100 0 0 0"
+                         Content="Fullscreen : "
+                         />
+                <Label Grid.Row="2" 
+                       Grid.Column="1" 
+                       HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
-                       Margin="0,0,0,0"
-                       Content="Level :"
+                       Content="Mod :" 
                        />
-                <TextBox x:Name="TextBox_LevelToLaunch"
+                <TextBox x:Name="TextBox_ModToLaunch"
                          Grid.Row="2"
                          Grid.Column="3"
                          Grid.ColumnSpan="2"
@@ -381,14 +408,24 @@
                          Cursor="Arrow"
                          IsReadOnly="True"
                          />
-                <Label Grid.Row="3" 
-                       Grid.Column="1" 
-                       HorizontalAlignment="Center" 
+                <Border Grid.Row="3"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="6" 
+                        HorizontalAlignment="Stretch" 
+                        VerticalAlignment="Center"
+                        Margin="-2 0 -3 0"
+                        Height="1"
+                        BorderThickness="2" 
+                        BorderBrush="DarkGray"
+                        Width="Auto"/>
+                <Label Grid.Row="4"
+                       Grid.Column="1"
+                       HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
-                       Content="Misc. :" 
+                       Content="Iwad :"
                        />
-                <TextBox x:Name="TextBox_MiscToLaunch"
-                         Grid.Row="3"
+                <TextBox x:Name="TextBox_IwadToLaunch"
+                         Grid.Row="4"
                          Grid.Column="3"
                          Grid.ColumnSpan="2"
                          HorizontalAlignment="Stretch"
@@ -396,33 +433,64 @@
                          Cursor="Arrow"
                          IsReadOnly="True"
                          />
-                <Label Grid.Row="4" 
+                <Label Grid.Row="5"
+                       Grid.Column="1"
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Center"
+                       Margin="0,0,0,0"
+                       Content="Level :"
+                       />
+                <TextBox x:Name="TextBox_LevelToLaunch"
+                         Grid.Row="5"
+                         Grid.Column="3"
+                         Grid.ColumnSpan="2"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Cursor="Arrow"
+                         IsReadOnly="True"
+                         />
+                <Label Grid.Row="6" 
                        Grid.Column="1" 
-                       HorizontalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       VerticalAlignment="Center"
+                       Content="Misc. :" 
+                       />
+                <TextBox x:Name="TextBox_MiscToLaunch"
+                         Grid.Row="6"
+                         Grid.Column="3"
+                         Grid.ColumnSpan="2"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Center"
+                         Cursor="Arrow"
+                         IsReadOnly="True"
+                         />
+                <Label Grid.Row="7" 
+                       Grid.Column="1" 
+                       HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
                        Content="Extra :" 
                        />
                 <CheckBox x:Name="CheckBox_UseAltSoundtrack"
-                          Grid.Row="4"
+                          Grid.Row="7"
                           Grid.Column="3"
                           HorizontalAlignment="Left" 
                           VerticalAlignment="Center"
                           VerticalContentAlignment="Center"
-                          Content="Load alternative soundtrack ->" 
+                          Content="Use alternative soundtrack ->" 
                           />
                 <RadioButton x:Name="RadioButton_Soundtrack_DoomMetal"
-                             Grid.Row="4"
+                             Grid.Row="7"
                              Grid.Column="3"
                              HorizontalAlignment="Right" 
                              VerticalAlignment="Center"
-                             Margin="0,0,12,0"
+                             Margin="0,0,14,0"
                              VerticalContentAlignment="Center"
                              Foreground="LightGray"
                              Content="Doom Metal v4"
                              IsEnabled="False"
                              />
                 <RadioButton x:Name="RadioButton_Soundtrack_IDKFA"
-                             Grid.Row="4"
+                             Grid.Row="7"
                              Grid.Column="4"
                              HorizontalAlignment="Left" 
                              VerticalAlignment="Center"
@@ -434,18 +502,17 @@
 
                 <!-- TODO : User-selectable amount of turbo -->
                 <CheckBox x:Name="CheckBox_EnableTurbo"
-                          Grid.Row="4"
+                          Grid.Row="7"
                           Grid.Column="4"
                           HorizontalAlignment="Right" 
                           VerticalAlignment="Center"
                           Margin="0,0,4,0"
-                          Content="Turbo mode" 
+                          Content="Movespeed +25%" 
                           />
 
             </Grid>
         </GroupBox>
         <Border Grid.Row="1"
-                Grid.RowSpan="3"
                 Grid.Column="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -458,8 +525,6 @@
                   VerticalAlignment="Stretch"
                   >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
                     <RowDefinition Height="1*" />
@@ -549,7 +614,7 @@
                     </Button>
                 </DockPanel>
 
-                <DockPanel Grid.Row="4"
+                <!--<DockPanel Grid.Row="5"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            ToolTip="Settings"
@@ -570,15 +635,80 @@
 
                 </DockPanel>
 
-                <DockPanel Grid.Row="5"
+                <DockPanel Grid.Row="6"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
-                           ToolTip="Play"
+                           ToolTip="Save and play"
                            >
                     <Button x:Name="Button_Launch"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Width="50" Height="50"
+                            Width="72" Height="72"
+                            Cursor="Hand"
+                            Margin="2,0,0,0"
+                            >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Name="Play_Image" 
+                               Source="pack://application:,,,/Resources/Images/play_darker.png"
+                               />
+                    </Button>
+                </DockPanel>-->
+
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="3"
+                Grid.Column="3"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Margin="16,10,0,0"
+                BorderBrush="DarkGray"
+                BorderThickness="2"
+                CornerRadius="6"
+                >
+            <Grid HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+
+                <DockPanel Grid.Row="0"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           ToolTip="Settings"
+                           >
+                    <Button x:Name="Button_Menu_Settings"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="22,34,22,22"
+                            Cursor="Hand"
+                            >
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Content="{TemplateBinding Content}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                        <Image Source="pack://application:,,,/Resources/Images/settings_darker.png" />
+                    </Button>
+
+                </DockPanel>
+
+                <DockPanel Grid.Row="1"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch"
+                           ToolTip="Save and play"
+                           >
+                    <Button x:Name="Button_Launch"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="76" Height="76"
                             Cursor="Hand"
                             Margin="2,0,0,0"
                             >
@@ -595,7 +725,7 @@
 
             </Grid>
         </Border>
-        
+
         <!--<Button x:Name="Button_TestProperties"
                 Content="Properties" 
                 Grid.Column="3" 

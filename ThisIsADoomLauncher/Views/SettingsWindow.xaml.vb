@@ -32,6 +32,15 @@ Namespace Views
 
         End Sub
 
+
+        Private Sub Window_Closing(sender As Object, e As ComponentModel.CancelEventArgs)
+
+            My.Settings.Save()
+            MainWindow_Instance.UpdateGUI()
+
+        End Sub
+
+
         Private Sub Button_OkClose_Click(sender As Object, e As RoutedEventArgs) Handles Button_OkClose.Click
 
             Close()
@@ -45,9 +54,11 @@ Namespace Views
 
         Private Sub RadioButton_Engine_GZDoom_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Engine_GZDoom.Checked
 
+            'MainWindow_Instance.Label_EngineToLaunch.Content = "GZDoom"
+
             With My.Settings
                 .SelectedEngine = "GZDoom"
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -56,7 +67,7 @@ Namespace Views
 
             With My.Settings
                 .SelectedEngine = "Zandronum"
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -86,7 +97,7 @@ Namespace Views
 
             With My.Settings
                 .ScreenWidth = If(TextBox_Resolution_Width.Text = Nothing, 0, Int(TextBox_Resolution_Width.Text))
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -95,7 +106,7 @@ Namespace Views
 
             With My.Settings
                 .ScreenHeight = If(TextBox_Resolution_Height.Text = Nothing, 0, Int(TextBox_Resolution_Height.Text))
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -104,7 +115,7 @@ Namespace Views
 
             With My.Settings
                 .FullscreenEnabled = True
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -113,7 +124,7 @@ Namespace Views
 
             With My.Settings
                 .FullscreenEnabled = False
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -130,7 +141,7 @@ Namespace Views
             With My.Settings
                 .ScreenWidth = horizontal
                 .ScreenHeight = vertical
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -148,7 +159,7 @@ Namespace Views
                 .UseBrutalDoom = True
                 ComboBox_BrutalDoomVersions.IsEnabled = True
                 ComboBox_BrutalDoomVersions.SelectedItem = If(.BrutalDoomVersion, Nothing)
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -159,7 +170,7 @@ Namespace Views
                 .UseBrutalDoom = False
                 ComboBox_BrutalDoomVersions.IsEnabled = False
                 ComboBox_BrutalDoomVersions.SelectedItem = Nothing
-                .Save()
+                '.Save()
             End With
 
         End Sub
@@ -168,10 +179,11 @@ Namespace Views
 
             With My.Settings
                 .BrutalDoomVersion = .ModDir & "\" & ComboBox_BrutalDoomVersions.SelectedValue
-                .Save()
+                '.Save()
             End With
 
         End Sub
+
 
 #End Region
 

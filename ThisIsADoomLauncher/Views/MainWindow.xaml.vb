@@ -17,7 +17,8 @@ Namespace Views
                 SetRootDirPath()
                 ValidateDirectories()
                 SetIniFiles()
-                InitializeGUI()
+                SetCommonPresets()
+                UpdateGUI()
 
                 'Performance eval
                 Dim dateTimeReady As DateTime = DateTime.Now
@@ -30,16 +31,28 @@ Namespace Views
 
         End Sub
 
-        Private Sub InitializeGUI()
+        Private Sub SetCommonPresets()
 
             'DisplayPresets("common", FormatPresetsData_FromCsv("common")) PREVIOUS
             ListView_CommonPresets.ItemsSource = FormatPresetsData_FromCsv("common")
+
+        End Sub
+
+        Sub UpdateGUI()
 
             With My.Settings
                 'Auto-set native resolution at first launch
                 If .ScreenWidth = 0 And .ScreenHeight = 0 Then
                     .ScreenWidth = GetResolution_Width()
                     .ScreenHeight = GetResolution_Height()
+                End If
+
+                Label_EngineToLaunch.Content = .SelectedEngine
+                Label_ResolutionToLaunch.Content = "Resolution : " & My.Settings.ScreenWidth.ToString & " x " & My.Settings.ScreenHeight.ToString
+                Label_FullscreenToLaunch.Content = "Fullscreen : " & If(My.Settings.FullscreenEnabled, "Yes", "No")
+
+                If Not .BrutalDoomVersion = Nothing Then
+                    TextBox_ModToLaunch.Text = .BrutalDoomVersion
                 End If
 
                 TextBox_IwadToLaunch.Text = .SelectedIwad
@@ -115,6 +128,13 @@ Namespace Views
 
         Private Sub Button_Launch_Click(sender As Object, e As RoutedEventArgs) Handles Button_Launch.Click
 
+            'Save level choices into Settings
+            With My.Settings
+                .SelectedIwad = TextBox_IwadToLaunch.Text
+                .SelectedLevel = TextBox_LevelToLaunch.Text
+                .SelectedMisc = TextBox_MiscToLaunch.Text
+            End With
+
             Try
                 If TextBox_IwadToLaunch.Text = Nothing Then
                     MessageBox.Show("Error : an IWAD must be selected")
@@ -125,6 +145,9 @@ Namespace Views
 
                     LaunchProcess(cli)
                     WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & cli)
+
+                    My.Settings.Save()
+                    WriteToLog(DateTime.Now & "Saved settings" & Environment.NewLine & cli)
                 End If
 
             Catch ex As Exception
@@ -159,6 +182,7 @@ Namespace Views
                 TextBox_IwadToLaunch.Text = Path_Iwad_RelativeToAbsolute(p.Iwad) 'Path.Combine(.IwadsDir, p.Iwad) 
                 TextBox_LevelToLaunch.Text = Path_Level_RelativeToAbsolute(p.Level) 'If(p.Level = Nothing, String.Empty, Path.Combine(.LevelsDir, p.Level))
                 TextBox_MiscToLaunch.Text = Path_Misc_RelativeToAbsolute(p.Misc) 'If(p.Misc = Nothing, String.Empty, Path.Combine(.MiscDir, p.Misc))
+                .Save()
             End With
 
         End Sub
@@ -360,8 +384,8 @@ Namespace Views
             If File.Exists(TextBox_IwadToLaunch.Text) Then
                 TextBox_IwadToLaunch.Foreground = Brushes.Black
 
-                My.Settings.SelectedIwad = TextBox_IwadToLaunch.Text
-                My.Settings.Save()
+                'My.Settings.SelectedIwad = TextBox_IwadToLaunch.Text
+                'My.Settings.Save()
             Else
                 TextBox_IwadToLaunch.Foreground = Brushes.Red
             End If
@@ -373,8 +397,8 @@ Namespace Views
             If File.Exists(TextBox_LevelToLaunch.Text) Then
                 TextBox_LevelToLaunch.Foreground = Brushes.Black
 
-                My.Settings.SelectedIwad = TextBox_LevelToLaunch.Text
-                My.Settings.Save()
+                'My.Settings.SelectedLevel = TextBox_LevelToLaunch.Text
+                'My.Settings.Save()
             Else
                 TextBox_LevelToLaunch.Foreground = Brushes.Red
             End If
@@ -386,13 +410,16 @@ Namespace Views
             If File.Exists(TextBox_MiscToLaunch.Text) Then
                 TextBox_MiscToLaunch.Foreground = Brushes.Black
 
-                My.Settings.SelectedIwad = TextBox_MiscToLaunch.Text
-                My.Settings.Save()
+                'My.Settings.SelectedMisc = TextBox_MiscToLaunch.Text
+                'My.Settings.Save()
             Else
                 TextBox_MiscToLaunch.Foreground = Brushes.Red
             End If
 
         End Sub
+
+        'Handle preset saving externally : internally items do not listen to each others
+
 
 #End Region
 

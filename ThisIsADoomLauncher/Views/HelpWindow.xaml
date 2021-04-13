@@ -163,9 +163,7 @@
                                             </Paragraph>
                                         </ListItem>
                                         <ListItem>
-                                            <Paragraph>Toggle clipping (ignore walls) :
-                                                <Bold>idclip</Bold>
-                                            </Paragraph>
+                                            <Paragraph>Toggle collisions on/off : <Bold>idclip</Bold></Paragraph>
                                         </ListItem>
                                     </List>
                                 </ListItem>
