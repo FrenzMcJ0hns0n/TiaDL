@@ -231,5 +231,8 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\Sigil_cover.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Presets\Common\DE_DOOM_Zero_edit.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
