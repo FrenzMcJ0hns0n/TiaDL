@@ -519,7 +519,7 @@
                 Margin="16,22,0,0"
                 BorderBrush="DarkGray"
                 BorderThickness="2"
-                CornerRadius="6"
+                CornerRadius="2"
                 >
             <Grid HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
@@ -665,10 +665,10 @@
                 Grid.Column="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
-                Margin="16,10,0,0"
+                Margin="16,10,0,2"
                 BorderBrush="DarkGray"
                 BorderThickness="2"
-                CornerRadius="6"
+                CornerRadius="2"
                 >
             <Grid HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
