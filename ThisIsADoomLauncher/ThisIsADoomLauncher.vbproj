@@ -228,5 +228,8 @@
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\freedoom_icon_edit.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Presets\Common\Sigil_cover.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
