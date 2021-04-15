@@ -1,6 +1,6 @@
 ﻿Imports System.IO
 Imports ThisIsADoomLauncher.Models
-Imports ThisIsADoomLauncher.Helpers
+'Imports ThisIsADoomLauncher.Helpers
 
 Namespace Views
     Class MainWindow
@@ -180,7 +180,6 @@ Namespace Views
                 TextBox_IwadToLaunch.Text = Path_Iwad_RelativeToAbsolute(p.Iwad) 'Path.Combine(.IwadsDir, p.Iwad) 
                 TextBox_LevelToLaunch.Text = Path_Level_RelativeToAbsolute(p.Level) 'If(p.Level = Nothing, String.Empty, Path.Combine(.LevelsDir, p.Level))
                 TextBox_MiscToLaunch.Text = Path_Misc_RelativeToAbsolute(p.Misc) 'If(p.Misc = Nothing, String.Empty, Path.Combine(.MiscDir, p.Misc))
-                .Save()
             End With
 
         End Sub
@@ -192,61 +191,53 @@ Namespace Views
 
         Private Sub Button_NewPreset_SetDoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoomIwad.Click
 
-            With My.Settings
-                If File.Exists(.IwadsDir & "\Doom.wad") Then
-                    Button_NewPreset_SetDoomIwad.Background = Brushes.LightGreen
-                    Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-                Else
-                    MessageBox.Show("Error : File 'Doom.wad' not found in :" & Environment.NewLine & .IwadsDir)
-                End If
-            End With
+            If File.Exists(My.Settings.IwadsDir & "\Doom.wad") Then
+                Button_NewPreset_SetDoomIwad.Background = Brushes.LightGreen
+                Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
+                Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
+                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
+            Else
+                MessageBox.Show("Error : File 'Doom.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
+            End If
 
         End Sub
 
         Private Sub Button_NewPreset_SetDoom2Iwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoom2Iwad.Click
 
-            With My.Settings
-                If File.Exists(.IwadsDir & "\Doom2.wad") Then
-                    Button_NewPreset_SetDoom2Iwad.Background = Brushes.LightGreen
-                    Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-                Else
-                    MessageBox.Show("Error : File 'Doom2.wad' not found in :" & Environment.NewLine & .IwadsDir)
-                End If
-            End With
+            If File.Exists(My.Settings.IwadsDir & "\Doom2.wad") Then
+                Button_NewPreset_SetDoom2Iwad.Background = Brushes.LightGreen
+                Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
+                Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
+                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
+            Else
+                MessageBox.Show("Error : File 'Doom2.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
+            End If
 
         End Sub
 
         Private Sub Button_NewPreset_SetFreedoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetFreedoomIwad.Click
 
-            With My.Settings
-                If File.Exists(.IwadsDir & "\freedoom1.wad") Then
-                    Button_NewPreset_SetFreedoomIwad.Background = Brushes.LightGreen
-                    Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-                Else
-                    MessageBox.Show("Error : File 'freedoom1.wad' not found in :" & Environment.NewLine & .IwadsDir)
-                End If
-            End With
+            If File.Exists(My.Settings.IwadsDir & "\freedoom1.wad") Then
+                Button_NewPreset_SetFreedoomIwad.Background = Brushes.LightGreen
+                Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
+                Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
+                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
+            Else
+                MessageBox.Show("Error : File 'freedoom1.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
+            End If
 
         End Sub
 
         Private Sub Button_NewPreset_SetFreedoom2Iwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetFreedoom2Iwad.Click
 
-            With My.Settings
-                If File.Exists(.IwadsDir & "\freedoom2.wad") Then
-                    Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.LightGreen
-                    Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-                    Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-                Else
-                    MessageBox.Show("Error : File 'freedoom2.wad' not found in :" & Environment.NewLine & .IwadsDir)
-                End If
-            End With
+            If File.Exists(My.Settings.IwadsDir & "\freedoom2.wad") Then
+                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.LightGreen
+                Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
+                Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
+                Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
+            Else
+                MessageBox.Show("Error : File 'freedoom2.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
+            End If
 
         End Sub
 
@@ -381,9 +372,6 @@ Namespace Views
 
             If File.Exists(TextBox_IwadToLaunch.Text) Then
                 TextBox_IwadToLaunch.Foreground = Brushes.Black
-
-                'My.Settings.SelectedIwad = TextBox_IwadToLaunch.Text
-                'My.Settings.Save()
             Else
                 TextBox_IwadToLaunch.Foreground = Brushes.Red
             End If
@@ -394,9 +382,6 @@ Namespace Views
 
             If File.Exists(TextBox_LevelToLaunch.Text) Then
                 TextBox_LevelToLaunch.Foreground = Brushes.Black
-
-                'My.Settings.SelectedLevel = TextBox_LevelToLaunch.Text
-                'My.Settings.Save()
             Else
                 TextBox_LevelToLaunch.Foreground = Brushes.Red
             End If
@@ -407,17 +392,11 @@ Namespace Views
 
             If File.Exists(TextBox_MiscToLaunch.Text) Then
                 TextBox_MiscToLaunch.Foreground = Brushes.Black
-
-                'My.Settings.SelectedMisc = TextBox_MiscToLaunch.Text
-                'My.Settings.Save()
             Else
                 TextBox_MiscToLaunch.Foreground = Brushes.Red
             End If
 
         End Sub
-
-        'Handle preset saving externally : internally items do not listen to each others
-
 
 #End Region
 
