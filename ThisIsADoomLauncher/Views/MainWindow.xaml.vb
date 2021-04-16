@@ -79,6 +79,7 @@ Namespace Views
         Private Sub Button_Menu_Help_Click(sender As Object, e As RoutedEventArgs) Handles Button_Help.Click
 
             Dim helpWindow As HelpWindow = New HelpWindow()
+            helpWindow.Owner = MainWindow_Instance()
             helpWindow.ShowDialog()
 
         End Sub
@@ -120,6 +121,7 @@ Namespace Views
         Private Sub Button_Menu_Settings_Click(sender As Object, e As RoutedEventArgs) Handles Button_Menu_Settings.Click
 
             Dim settingsWindow As SettingsWindow = New SettingsWindow()
+            settingsWindow.Owner = MainWindow_Instance()
             settingsWindow.ShowDialog()
 
         End Sub

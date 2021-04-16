@@ -5,10 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
+        
         Title="Help" 
-        Width="550" 
-        Height="800"
-        ResizeMode="CanMinimize">
+        Width="550" Height="740"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="CanMinimize"
+        >
+
     <Grid>
         <Border Margin="14"
                 BorderThickness="1"
