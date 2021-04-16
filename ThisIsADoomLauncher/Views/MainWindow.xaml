@@ -13,125 +13,131 @@
         >
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="30*" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="20*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="6*" />
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="20" />
-        </Grid.ColumnDefinitions>
+        
 
-        <TabControl Grid.Row="1"
+        <TabControl>
+            <TabItem Name="Normal"  
+                     Header="Normal use">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="30*" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="20*" />
+                        <RowDefinition Height="20" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="6*" />
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+
+                    <TabControl Grid.Row="1"
                     Grid.Column="1"
                     BorderThickness="2"
                     Margin="2,0,2,0"
                     SelectionChanged="TabControl_SelectionChanged">
 
-            <TabItem Name="Common"  
+                        <TabItem Name="Common"  
                      Header="Common presets">
-                <Grid Margin="18">
-                    <ListView x:Name="ListView_CommonPresets"
+                            <Grid Margin="18">
+                                <ListView x:Name="ListView_CommonPresets"
                               SelectionChanged="ListView_CommonPresets_SelectionChanged">
 
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
 
-                                    <Image Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
+                                                <Image Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
                                            Margin="-2,0,0,0"
                                            Height="64" 
                                            />
-                                    <TextBlock Margin="8,0,0,0"
+                                                <TextBlock Margin="8,0,0,0"
                                                        VerticalAlignment="Center"
                                                        FontWeight="DemiBold"
                                                        FontSize="18"
                                                        Text="{Binding Name}"
                                                        />
 
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
 
-                    </ListView>
-                </Grid>
-            </TabItem>
+                                </ListView>
+                            </Grid>
+                        </TabItem>
 
-            <TabItem Name="User" 
+                        <TabItem Name="User" 
                      Header="User presets">
-                <Border Grid.Row="1"
+                            <Border Grid.Row="1"
                         BorderBrush="Silver"
                         BorderThickness="1"
                         Margin="18">
-                    <Grid>
-                        <Label x:Name="Label_NoUserPresetsFound"
+                                <Grid>
+                                    <Label x:Name="Label_NoUserPresetsFound"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 FontSize="24"
                                 Foreground="Gray"
                                 Content="No presets found ..."
                                 />
-                        <!-- TODO : Use ListView instead -->
-                        <ScrollViewer x:Name="ScrollViewer_DisplayUserPresets">
-                            <StackPanel x:Name="StackPanel_UserPresets"
+                                    <!-- TODO : Use ListView instead -->
+                                    <ScrollViewer x:Name="ScrollViewer_DisplayUserPresets">
+                                        <StackPanel x:Name="StackPanel_UserPresets"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Stretch"
                                         />
 
-                        </ScrollViewer>
-                    </Grid>
-                </Border>
-            </TabItem>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+                        </TabItem>
 
-            <TabItem Name="New" 
+                        <TabItem Name="New" 
                      Header="Add new preset">
-                <Border Grid.Row="1"
+                            <Border Grid.Row="1"
                         BorderBrush="Silver"
                         BorderThickness="1"
                         Margin="18">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="8"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="8"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                            <RowDefinition Height="1*"/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="4"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="2*"/>
-                            <ColumnDefinition Width="20"/>
-                        </Grid.ColumnDefinitions>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="8"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                        <RowDefinition Height="1*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="4"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="2*"/>
+                                        <ColumnDefinition Width="20"/>
+                                    </Grid.ColumnDefinitions>
 
-                        <Label Grid.Row="1"
+                                    <Label Grid.Row="1"
                                Grid.RowSpan="2"
                                Grid.Column="1"
                                Grid.ColumnSpan="2"
@@ -141,7 +147,7 @@
                                FontSize="13"
                                Content="Iwad :"
                                />
-                        <Button x:Name="Button_NewPreset_SetDoomIwad"
+                                    <Button x:Name="Button_NewPreset_SetDoomIwad"
                                 Grid.Row="1"
                                 Grid.RowSpan="2"
                                 Grid.Column="3"
@@ -152,7 +158,7 @@
                                 Background="Transparent"
                                 Content="Ultimate Doom"
                                 />
-                        <Button x:Name="Button_NewPreset_SetDoom2Iwad"
+                                    <Button x:Name="Button_NewPreset_SetDoom2Iwad"
                                 Grid.Row="1"
                                 Grid.RowSpan="2"
                                 Grid.Column="5"
@@ -163,7 +169,7 @@
                                 Background="Transparent"
                                 Content="Doom 2"
                                 />
-                        <Button x:Name="Button_NewPreset_SetFreedoomIwad"
+                                    <Button x:Name="Button_NewPreset_SetFreedoomIwad"
                                 Grid.Row="1"
                                 Grid.RowSpan="2"
                                 Grid.Column="7"
@@ -174,7 +180,7 @@
                                 Background="Transparent"
                                 Content="Freedoom"
                                 />
-                        <Button x:Name="Button_NewPreset_SetFreedoom2Iwad"
+                                    <Button x:Name="Button_NewPreset_SetFreedoom2Iwad"
                                 Grid.Row="1"
                                 Grid.RowSpan="2"
                                 Grid.Column="9"
@@ -186,7 +192,7 @@
                                 Content="Freedoom 2"
                                 />
 
-                        <Label Grid.Row="4"
+                                    <Label Grid.Row="4"
                                Grid.RowSpan="3"
                                Grid.Column="1"
                                Grid.ColumnSpan="2"
@@ -196,7 +202,7 @@
                                FontSize="13"
                                Content="Level :"
                                />
-                        <TextBox x:Name="TextBox_DropWadFile"
+                                    <TextBox x:Name="TextBox_DropWadFile"
                                  Grid.Row="4"
                                  Grid.RowSpan="3"
                                  Grid.Column="3"
@@ -217,7 +223,7 @@
                                  Drop="TextBox_DropWadFile_Drop"
                                  />
 
-                        <Label Grid.Row="8"
+                                    <Label Grid.Row="8"
                                Grid.RowSpan="3"
                                Grid.Column="1"
                                Grid.ColumnSpan="2"
@@ -227,7 +233,7 @@
                                FontSize="13"
                                Content="Misc. :"
                                />
-                        <TextBox x:Name="TextBox_DropMiscFile"
+                                    <TextBox x:Name="TextBox_DropMiscFile"
                                  Grid.Row="8"
                                  Grid.RowSpan="3"
                                  Grid.Column="3"
@@ -248,7 +254,7 @@
                                  Drop="TextBox_DropMiscFile_Drop"
                                  />
 
-                        <Label Grid.Row="12"
+                                    <Label Grid.Row="12"
                                Grid.RowSpan="2"
                                Grid.Column="1"
                                Grid.ColumnSpan="2"
@@ -258,7 +264,7 @@
                                FontSize="13"
                                Content="Name :"
                                />
-                        <TextBox x:Name="TextBox_NewPreset_Name" 
+                                    <TextBox x:Name="TextBox_NewPreset_Name" 
                                  Grid.Row="12"
                                  Grid.RowSpan="2"
                                  Grid.Column="5"
@@ -272,7 +278,7 @@
                                  Text="Enter preset name ..."
                                  />
 
-                        <Label Grid.Row="15"
+                                    <Label Grid.Row="15"
                                Grid.RowSpan="2"
                                Grid.Column="1"
                                Grid.ColumnSpan="2"
@@ -282,7 +288,7 @@
                                FontSize="13"
                                Content="Options :"
                                />
-                        <Button x:Name="Button_NewPreset_Try"
+                                    <Button x:Name="Button_NewPreset_Try"
                                 Grid.Row="15"
                                 Grid.RowSpan="2"
                                 Grid.Column="4"
@@ -293,7 +299,7 @@
                                 FontSize="13"
                                 Content="Try  &#x2193;"
                                 />
-                        <Button x:Name="Button_NewPreset_Reset"
+                                    <Button x:Name="Button_NewPreset_Reset"
                                 Grid.Row="15"
                                 Grid.RowSpan="2"
                                 Grid.Column="6"
@@ -304,7 +310,7 @@
                                 FontSize="13"
                                 Content="Reset  &#x21ba;"
                                 />
-                        <Button x:Name="Button_NewPreset_Save"
+                                    <Button x:Name="Button_NewPreset_Save"
                                 Grid.Row="15"
                                 Grid.RowSpan="2"
                                 Grid.Column="8"
@@ -315,70 +321,70 @@
                                 FontSize="13"
                                 Content="Save  &#x1f5ab;"
                                 />
-                    </Grid>
-                </Border>
-            </TabItem>
+                                </Grid>
+                            </Border>
+                        </TabItem>
 
-        </TabControl>
+                    </TabControl>
 
 
-        <GroupBox Grid.Row="3"
+                    <GroupBox Grid.Row="3"
                   Grid.Column="1"
                   HorizontalAlignment="Stretch" 
                   VerticalAlignment="Stretch"
                   BorderBrush="DarkGray" 
                   BorderThickness="2"
                   >
-            <GroupBox.Header>
-                <TextBlock 
+                        <GroupBox.Header>
+                            <TextBlock 
                     Text="Launch parameters"
                     FontWeight="DemiBold"
                     />
-            </GroupBox.Header>
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="10*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="5*" />
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="30*" />
-                    <ColumnDefinition Width="30*" />
-                    <ColumnDefinition Width="2*" />
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Row="1"
+                        </GroupBox.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="10*" />
+                                <RowDefinition Height="10*" />
+                                <RowDefinition Height="10*" />
+                                <RowDefinition Height="10*" />
+                                <RowDefinition Height="10*" />
+                                <RowDefinition Height="10*" />
+                                <RowDefinition Height="10*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="5*" />
+                                <ColumnDefinition Width="1*" />
+                                <ColumnDefinition Width="30*" />
+                                <ColumnDefinition Width="30*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="1"
                       Grid.Column="3"
                       Grid.ColumnSpan="2">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*" />
-                        <ColumnDefinition Width="2*" />
-                    </Grid.ColumnDefinitions>
-                    
-                </Grid>
-                <Label Grid.Row="1"
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+
+                            </Grid>
+                            <Label Grid.Row="1"
                        Grid.Column="1"
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
                        Content="Engine :"
                        />
-                <!-- Build horizontal Stack Panel-->
-                <Label x:Name="Label_EngineToLaunch"
+                            <!-- Build horizontal Stack Panel-->
+                            <Label x:Name="Label_EngineToLaunch"
                          Grid.Row="1"
                          Grid.Column="3"
                          HorizontalAlignment="Left"
                          VerticalAlignment="Center"
                          Padding="-2 0 0 0"
                          />
-                <Label x:Name="Label_ResolutionToLaunch"
+                            <Label x:Name="Label_ResolutionToLaunch"
                          Grid.Row="1"
                          Grid.Column="3"
                          HorizontalAlignment="Right"
@@ -386,7 +392,7 @@
                          Margin="0 0 0 0"
                          Content="Resolution = "
                          />
-                <Label x:Name="Label_FullscreenToLaunch"
+                            <Label x:Name="Label_FullscreenToLaunch"
                          Grid.Row="1"
                          Grid.Column="4"
                          HorizontalAlignment="Left"
@@ -394,13 +400,13 @@
                          Margin="100 0 0 0"
                          Content="Fullscreen : "
                          />
-                <Label Grid.Row="2" 
+                            <Label Grid.Row="2" 
                        Grid.Column="1" 
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
                        Content="Mod :" 
                        />
-                <TextBox x:Name="TextBox_ModToLaunch"
+                            <TextBox x:Name="TextBox_ModToLaunch"
                          Grid.Row="2"
                          Grid.Column="3"
                          Grid.ColumnSpan="2"
@@ -409,7 +415,7 @@
                          Cursor="Arrow"
                          IsReadOnly="True"
                          />
-                <Border Grid.Row="3"
+                            <Border Grid.Row="3"
                         Grid.Column="0"
                         Grid.ColumnSpan="6" 
                         HorizontalAlignment="Stretch" 
@@ -419,13 +425,13 @@
                         BorderThickness="2" 
                         BorderBrush="DarkGray"
                         Width="Auto"/>
-                <Label Grid.Row="4"
+                            <Label Grid.Row="4"
                        Grid.Column="1"
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
                        Content="Iwad :"
                        />
-                <TextBox x:Name="TextBox_IwadToLaunch"
+                            <TextBox x:Name="TextBox_IwadToLaunch"
                          Grid.Row="4"
                          Grid.Column="3"
                          Grid.ColumnSpan="2"
@@ -434,14 +440,14 @@
                          Cursor="Arrow"
                          IsReadOnly="True"
                          />
-                <Label Grid.Row="5"
+                            <Label Grid.Row="5"
                        Grid.Column="1"
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
                        Margin="0,0,0,0"
                        Content="Level :"
                        />
-                <TextBox x:Name="TextBox_LevelToLaunch"
+                            <TextBox x:Name="TextBox_LevelToLaunch"
                          Grid.Row="5"
                          Grid.Column="3"
                          Grid.ColumnSpan="2"
@@ -450,13 +456,13 @@
                          Cursor="Arrow"
                          IsReadOnly="True"
                          />
-                <Label Grid.Row="6" 
+                            <Label Grid.Row="6" 
                        Grid.Column="1" 
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
                        Content="Misc. :" 
                        />
-                <TextBox x:Name="TextBox_MiscToLaunch"
+                            <TextBox x:Name="TextBox_MiscToLaunch"
                          Grid.Row="6"
                          Grid.Column="3"
                          Grid.ColumnSpan="2"
@@ -465,13 +471,13 @@
                          Cursor="Arrow"
                          IsReadOnly="True"
                          />
-                <Label Grid.Row="7" 
+                            <Label Grid.Row="7" 
                        Grid.Column="1" 
                        HorizontalAlignment="Left" 
                        VerticalAlignment="Center"
                        Content="Extra :" 
                        />
-                <CheckBox x:Name="CheckBox_UseAltSoundtrack"
+                            <CheckBox x:Name="CheckBox_UseAltSoundtrack"
                           Grid.Row="7"
                           Grid.Column="3"
                           HorizontalAlignment="Left" 
@@ -479,7 +485,7 @@
                           VerticalContentAlignment="Center"
                           Content="Use alternative soundtrack ->" 
                           />
-                <RadioButton x:Name="RadioButton_Soundtrack_DoomMetal"
+                            <RadioButton x:Name="RadioButton_Soundtrack_DoomMetal"
                              Grid.Row="7"
                              Grid.Column="3"
                              HorizontalAlignment="Right" 
@@ -490,7 +496,7 @@
                              Content="Doom Metal v4"
                              IsEnabled="False"
                              />
-                <RadioButton x:Name="RadioButton_Soundtrack_IDKFA"
+                            <RadioButton x:Name="RadioButton_Soundtrack_IDKFA"
                              Grid.Row="7"
                              Grid.Column="4"
                              HorizontalAlignment="Left" 
@@ -501,8 +507,8 @@
                              IsEnabled="False"
                              />
 
-                <!-- TODO : User-selectable amount of turbo -->
-                <CheckBox x:Name="CheckBox_EnableTurbo"
+                            <!-- TODO : User-selectable amount of turbo -->
+                            <CheckBox x:Name="CheckBox_EnableTurbo"
                           Grid.Row="7"
                           Grid.Column="4"
                           HorizontalAlignment="Right" 
@@ -511,9 +517,9 @@
                           Content="Movespeed +25%" 
                           />
 
-            </Grid>
-        </GroupBox>
-        <Border Grid.Row="1"
+                        </Grid>
+                    </GroupBox>
+                    <Border Grid.Row="1"
                 Grid.Column="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -522,100 +528,100 @@
                 BorderThickness="2"
                 CornerRadius="2"
                 >
-            <Grid HorizontalAlignment="Stretch"
+                        <Grid HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
 
-                <!-- Sidebar options -->
+                            <!-- Sidebar options -->
 
-                <DockPanel Grid.Row="0"
+                            <DockPanel Grid.Row="0"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            >
-                    <Button x:Name="Button_Help"
+                                <Button x:Name="Button_Help"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="14"
                             Cursor="Hand"
                             ToolTip="Help"
                             >
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Image Source="pack://application:,,,/Resources/Images/index.png" />
-                    </Button>
-                </DockPanel>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Image Source="pack://application:,,,/Resources/Images/index.png" />
+                                </Button>
+                            </DockPanel>
 
-                <DockPanel Grid.Row="1"
+                            <DockPanel Grid.Row="1"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            >
-                    <Button x:Name="Button_Levels" 
+                                <Button x:Name="Button_Levels" 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="13"
                             Cursor="Hand"
                             ToolTip="Levels"
                             >
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Image Source="pack://application:,,,/Resources/Images/300x50_blackAndWhite_edit_def.gif" />
-                    </Button>
-                </DockPanel>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Image Source="pack://application:,,,/Resources/Images/300x50_blackAndWhite_edit_def.gif" />
+                                </Button>
+                            </DockPanel>
 
-                <DockPanel Grid.Row="2"
+                            <DockPanel Grid.Row="2"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            Margin="0,2,0,0"
                            >
-                    <Button x:Name="Button_DoomResources" 
+                                <Button x:Name="Button_DoomResources" 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="15"
                             Cursor="Hand"
                             ToolTip="Engines and mods"
                             >
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Image Source="pack://application:,,,/Resources/Images/images_edit.jpg" />
-                    </Button>
-                </DockPanel>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Image Source="pack://application:,,,/Resources/Images/images_edit.jpg" />
+                                </Button>
+                            </DockPanel>
 
-                <DockPanel Grid.Row="3"
+                            <DockPanel Grid.Row="3"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            ToolTip="TiaDL root folder"
                            >
-                    <Button x:Name="Button_ExploreFolder" 
+                                <Button x:Name="Button_ExploreFolder" 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="16"
                             Cursor="Hand"
                             >
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Image Source="pack://application:,,,/Resources/Images/Folder.png" />
-                    </Button>
-                </DockPanel>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Image Source="pack://application:,,,/Resources/Images/Folder.png" />
+                                </Button>
+                            </DockPanel>
 
-                <!--<DockPanel Grid.Row="5"
+                            <!--<DockPanel Grid.Row="5"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            ToolTip="Settings"
@@ -659,10 +665,10 @@
                     </Button>
                 </DockPanel>-->
 
-            </Grid>
-        </Border>
+                        </Grid>
+                    </Border>
 
-        <Border Grid.Row="3"
+                    <Border Grid.Row="3"
                 Grid.Column="3"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -671,70 +677,70 @@
                 BorderThickness="2"
                 CornerRadius="2"
                 >
-            <Grid HorizontalAlignment="Stretch"
+                        <Grid HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   >
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="1*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
 
 
-                <DockPanel Grid.Row="0"
+                            <DockPanel Grid.Row="0"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            ToolTip="Settings"
                            >
-                    <Button x:Name="Button_Menu_Settings"
+                                <Button x:Name="Button_Menu_Settings"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Margin="22,34,22,22"
                             Cursor="Hand"
                             >
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Image Source="pack://application:,,,/Resources/Images/settings_darker.png" />
-                    </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Image Source="pack://application:,,,/Resources/Images/settings_darker.png" />
+                                </Button>
 
-                </DockPanel>
+                            </DockPanel>
 
-                <DockPanel Grid.Row="1"
+                            <DockPanel Grid.Row="1"
                            HorizontalAlignment="Stretch"
                            VerticalAlignment="Stretch"
                            ToolTip="Save and play"
                            >
-                    <Button x:Name="Button_Launch"
+                                <Button x:Name="Button_Launch"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="76" Height="76"
                             Cursor="Hand"
                             Margin="2,0,0,0"
                             >
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Image Name="Play_Image" 
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Image Name="Play_Image" 
                                Source="pack://application:,,,/Resources/Images/play_darker.png"
                                />
-                    </Button>
-                </DockPanel>
+                                </Button>
+                            </DockPanel>
 
-            </Grid>
-        </Border>
+                        </Grid>
+                    </Border>
 
-        <!--<Button x:Name="Button_TestProperties"
+                    <!--<Button x:Name="Button_TestProperties"
                 Content="Properties" 
                 Grid.Column="3" 
                 HorizontalAlignment="Left" 
                 VerticalAlignment="Top" 
                 Width="75"/>-->
 
-        <!--<Button Content="test" 
+                    <!--<Button Content="test" 
                 Grid.Row="1"
                 Grid.Column="1" 
                 HorizontalAlignment="Right"
@@ -742,6 +748,193 @@
                 Width="75" 
                 Height="80"
                 Click="Button_Click"/>-->
+
+
+                </Grid>
+            </TabItem>
+            <TabItem Name="Test"
+                     Header="Testing"
+                     >
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="20" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="6*" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+
+                    <Label Grid.Row="1"
+                           Grid.Column="1"
+                           Grid.ColumnSpan="2"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="20"
+                           FontWeight="DemiBold"
+                           Content="Test command lines"/>
+
+                    <Label Grid.Row="2"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Engine path :"
+                           />
+                    <TextBox x:Name="TextBox_TestingEngine"
+                             Grid.Row="2"
+                             Grid.Column="2"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Cursor="Arrow"
+                             Height="Auto"
+                             IsReadOnly="True"
+                             />
+
+                    <Label Grid.Row="3"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Engine params :"
+                           />
+                    <TextBox x:Name="TextBox_TestingEngineParameters"
+                             Grid.Row="3"
+                             Grid.Column="2"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Height="Auto"
+                             />
+
+                    <Label Grid.Row="4"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Iwad path :"
+                           />
+                    <TextBox x:Name="TextBox_TestingIwad"
+                             Grid.Row="4"
+                             Grid.Column="2"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Cursor="Arrow"
+                             Height="Auto"
+                             IsReadOnly="True"
+                             />
+
+                    <Label Grid.Row="5"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="File 1 path :"
+                           />
+                    <TextBox x:Name="TextBox_TestingFile1"
+                             Grid.Row="5"
+                             Grid.Column="2"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Cursor="Arrow"
+                             Height="Auto"
+                             IsReadOnly="True"
+                             />
+
+                    <Label Grid.Row="6"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="File 2 path :"/>
+
+                    <Label Grid.Row="7"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="File 3 path :"/>
+
+                    <Label Grid.Row="8"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="File 4 path :"/>
+
+                    <Label Grid.Row="9"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="File 5 path :"/>
+
+                    <Label Grid.Row="10"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Extra parameters :"
+                           />
+                    <TextBox x:Name="TextBox_TestingExtraParameters"
+                             Grid.Row="10"
+                             Grid.Column="2"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Center"
+                             Height="Auto"
+                             />
+
+                    <Label Grid.Row="13"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Command preview :"
+                           />
+                    <TextBox x:Name="TextBox_TestingPreview"
+                             Grid.Row="13"
+                             Grid.Column="2"
+                             Grid.ColumnSpan="2"
+                             HorizontalAlignment="Stretch"
+                             VerticalAlignment="Stretch"
+                             Cursor="Arrow"
+                             Height="Auto"
+                             IsReadOnly="True"
+                             TextWrapping="Wrap"
+                             />
+                    <StackPanel Grid.Row="14"
+                                Grid.Column="2"
+                                VerticalAlignment="Top"
+                                Margin="0,6,0,0"
+                                Orientation="Horizontal"
+                                >
+                        <Button x:Name="Button_TestingExecute"
+                                Margin="0,0,6,0"
+                                Padding="4"
+                                Content="Execute in CLI"
+                                />
+                        <Button x:Name="Button_TestingCopy"
+                                Margin="0,0,6,0"
+                                Padding="4"
+                                Content="Copy to clipboard"
+                                />
+                        <Button x:Name="Button_TestingExport"
+                                Margin="0,0,0,0"
+                                Padding="4"
+                                Content="Export as .bat"
+                                />
+                    </StackPanel>
+                    
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+
         
     </Grid>
 </Window>
