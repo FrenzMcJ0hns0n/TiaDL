@@ -1,7 +1,7 @@
 # TiaDL : This is a Doom Launcher
 
 ## About
-This is a Doom Launcher. It's meant to provide an easy-to-use and rather organized way to play Doom with or without mods. I know there are several other softwares like that, but I won't care or compare against such competitors until I get fully satisfied with what I do here.
+This is a Doom Launcher. A quick and easy-to-use way to play Doom on modern computers.
 
 ## Application tree
 TiaDL is designed as a portable application, which means all required elements are gathered in the same folder. You need to respect the following structure in order to use the program as intended :
