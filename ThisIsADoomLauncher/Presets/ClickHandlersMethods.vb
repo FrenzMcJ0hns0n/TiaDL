@@ -23,25 +23,20 @@
 
     ''' <summary>
     ''' 
-    ''' <para>Triggered when user right-clicks a user-preset-button.</para>
+    ''' <para>Triggered when user right-clicks a custom preset</para>
     ''' <para>Delete a preset by its name</para>
     ''' </summary>
     '''
     Sub HandleUserPreset_Delete(presetName As String)
 
-        Dim message As String = String.Format(
-            "You are about to delete preset ""{0}"".{1}Continue ?",
-            presetName,
-            Environment.NewLine & Environment.NewLine
-        )
+        Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
 
         If MessageBox.Show(message, "Delete user preset", MessageBoxButton.OKCancel) = MessageBoxResult.OK Then
             DeletePreset(presetName)
-
-            'Update GUI
-            DisplayPresets(FormatPresetsData_FromCsv("user"))
+            DisplayPresets(FormatPresetsData_FromCsv("user")) 'Update GUI
         End If
 
     End Sub
+
 
 End Module

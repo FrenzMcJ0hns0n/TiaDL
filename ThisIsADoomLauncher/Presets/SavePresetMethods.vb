@@ -43,19 +43,25 @@ Module SavePresetMethods
     Private Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
 
         Try
+            'Check if user-presets file exists
             Dim presetFile As String = My.Settings.RootDirPath & "\presets.csv"
+            If Not File.Exists(presetFile) Then WritePresetsFileHeader()
 
-            If Not File.Exists(presetFile) Then
-                WritePresetsFileHeader()
-            End If
-
+            'Format preset to be written
             Dim presetLine As String = String.Format("{0},{1}", name, iwad)
             presetLine &= If(level = Nothing, Nothing, "," & level)
             presetLine &= If(misc = Nothing, Nothing, "," & misc)
 
-            'Write preset
+            'Check if last char is CR-LF (Windows EOL)
+            Dim end_ok As Boolean = False
+            Using reader As StreamReader = New StreamReader(presetFile, Text.Encoding.UTF8)
+                reader.BaseStream.Seek(-2, SeekOrigin.End)
+                If reader.Read = 13 Then end_ok = True
+            End Using
+
+            'Write new preset at end of file
             Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
-                writer.WriteLine("") 'to make sure to write 'presetLine' on a new line
+                If end_ok = False Then writer.WriteLine() 'create new line if necessary
                 writer.WriteLine(presetLine)
             End Using
 
