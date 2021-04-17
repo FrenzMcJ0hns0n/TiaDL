@@ -484,6 +484,147 @@ Namespace Views
 
 
 
+#Region "Testing tab"
+
+        Private Sub TextBox_TestingEngine_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_TestingEngine_Drop(sender As Object, e As DragEventArgs)
+
+            Try
+                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                TextBox_TestingEngine.Text = file(0)
+                'TODO? Check if file is .exe
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingEngine_Drop()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub TextBox_TestingIwad_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_TestingIwad_Drop(sender As Object, e As DragEventArgs)
+
+            Try
+                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                If ValidateFile(file(0)) = "iwad" Then TextBox_TestingIwad.Text = file(0)
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingIwad_Drop()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub TextBox_TestingFile1_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_TestingFile1_Drop(sender As Object, e As DragEventArgs)
+
+            Try
+                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                TextBox_TestingFile1.Text = file(0)
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile1_Drop()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub TextBox_TestingFile2_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_TestingFile2_Drop(sender As Object, e As DragEventArgs)
+
+        End Sub
+
+        Private Sub TextBox_TestingFile3_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_TestingFile3_Drop(sender As Object, e As DragEventArgs)
+
+        End Sub
+
+        Private Sub TextBox_TestingFile4_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_TestingFile4_Drop(sender As Object, e As DragEventArgs)
+
+        End Sub
+
+        Private Sub TextBox_TestingFile5_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_TestingFile5_Drop(sender As Object, e As DragEventArgs)
+
+        End Sub
+
+        Private Sub TextBox_TestingEngine_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+        Private Sub TextBox_TestingEngineParameters_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+        Private Sub TextBox_TestingIwad_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+
+        Private Sub UpdateCommandPreview()
+
+            Try
+                'Build
+                Dim engine As String = String.Format("""{0}""", TextBox_TestingEngine.Text)
+                Dim engineParams As String = If(TextBox_TestingEngineParameters.Text = Nothing, Nothing, String.Format(" ""{0}""", TextBox_TestingEngineParameters.Text))
+                Dim iwad As String = If(TextBox_TestingIwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_TestingIwad.Text))
+                Dim file1 As String = If(TextBox_TestingFile1.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile1.Text))
+                Dim file2 As String = If(TextBox_TestingFile2.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile2.Text))
+                Dim file3 As String = If(TextBox_TestingFile3.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile3.Text))
+                Dim file4 As String = If(TextBox_TestingFile4.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile4.Text))
+                Dim file5 As String = If(TextBox_TestingFile5.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile5.Text))
+                'Or built list from multiples inputs (several files dropped in the same zone) and use a For each
+                Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" ""{0}""", TextBox_TestingExtraParameters.Text))
+
+                'Display
+                TextBox_TestingCommandPreview.Text = String.Format(
+                    "{0}{1}{2}{3}{4}{5}{6}{7}",
+                    engine, engineParams, iwad, file1, file2, file3, file4, file5
+                )
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'UpdateCommandPreview()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub Button_TestingExecute_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestingExecute.Click
+
+            ExecuteCommandPreview()
+
+        End Sub
+
+        Private Sub ExecuteCommandPreview()
+
+            Try
+                If Not TextBox_TestingCommandPreview.Text = "" Then LaunchProcess(String.Format("/c start """" {0}", TextBox_TestingCommandPreview.Text))
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ExecuteCommandPreview()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+#End Region
+
+
 
 #Region "Crappy tests"
 
@@ -520,7 +661,6 @@ Namespace Views
         'End Sub
 
 #End Region
-
 
 
 
