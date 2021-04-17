@@ -540,6 +540,13 @@ Namespace Views
 
         Private Sub TextBox_TestingFile2_Drop(sender As Object, e As DragEventArgs)
 
+            Try
+                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                TextBox_TestingFile2.Text = file(0)
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile2_Drop()'. Exception : " & ex.ToString)
+            End Try
+
         End Sub
 
         Private Sub TextBox_TestingFile3_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -547,6 +554,13 @@ Namespace Views
         End Sub
 
         Private Sub TextBox_TestingFile3_Drop(sender As Object, e As DragEventArgs)
+
+            Try
+                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                TextBox_TestingFile3.Text = file(0)
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile3_Drop()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
@@ -556,6 +570,13 @@ Namespace Views
 
         Private Sub TextBox_TestingFile4_Drop(sender As Object, e As DragEventArgs)
 
+            Try
+                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                TextBox_TestingFile4.Text = file(0)
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile4_Drop()'. Exception : " & ex.ToString)
+            End Try
+
         End Sub
 
         Private Sub TextBox_TestingFile5_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -563,6 +584,13 @@ Namespace Views
         End Sub
 
         Private Sub TextBox_TestingFile5_Drop(sender As Object, e As DragEventArgs)
+
+            Try
+                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                TextBox_TestingFile5.Text = file(0)
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile5_Drop()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
@@ -578,6 +606,29 @@ Namespace Views
             UpdateCommandPreview()
         End Sub
 
+        Private Sub TextBox_TestingFile1_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+        Private Sub TextBox_TestingFile2_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+        Private Sub TextBox_TestingFile3_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+        Private Sub TextBox_TestingFile4_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+        Private Sub TextBox_TestingFile5_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
+
+        Private Sub TextBox_TestingExtraParameters_TextChanged(sender As Object, e As TextChangedEventArgs)
+            UpdateCommandPreview()
+        End Sub
 
         Private Sub UpdateCommandPreview()
 
@@ -615,7 +666,7 @@ Namespace Views
         Private Sub ExecuteCommandPreview()
 
             Try
-                If Not TextBox_TestingCommandPreview.Text = "" Then LaunchProcess(String.Format("/c start """" {0}", TextBox_TestingCommandPreview.Text))
+                If Not TextBox_TestingCommandPreview.Text = Nothing Then LaunchProcess(String.Format("/c start """" {0}", TextBox_TestingCommandPreview.Text))
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ExecuteCommandPreview()'. Exception : " & ex.ToString)
             End Try

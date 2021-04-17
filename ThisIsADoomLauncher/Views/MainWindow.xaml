@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         
         Title="This is a Doom Launcher v2.2" 
-        Width="920" Height="784" 
+        Width="920" Height="811" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded"
         >
@@ -17,7 +17,7 @@
 
         <TabControl>
             <TabItem Name="Normal"  
-                     Header="Normal use">
+                     Header="Normal mode">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
@@ -754,12 +754,14 @@
             </TabItem>
             
             <TabItem Name="Test"
-                     Header="Testing"
+                     Header="Test mode"
                      >
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
                         <RowDefinition Height="2*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
@@ -776,19 +778,20 @@
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="3*" />
+                        <ColumnDefinition Width="16*" />
                         <ColumnDefinition Width="1*" />
-                        <ColumnDefinition Width="6*" />
                         <ColumnDefinition Width="20" />
                     </Grid.ColumnDefinitions>
 
                     <Label Grid.Row="1"
                            Grid.Column="1"
-                           Grid.ColumnSpan="2"
+                           Grid.ColumnSpan="3"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            FontSize="20"
                            FontWeight="DemiBold"
-                           Content="Test command lines"/>
+                           Content="Create custom command lines"/>
 
                     <Label Grid.Row="2"
                            Grid.Column="1"
@@ -815,7 +818,7 @@
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
-                           Content="Engine params :"
+                           Content="Engine parameters :"
                            />
                     <TextBox x:Name="TextBox_TestingEngineParameters"
                              Grid.Row="3"
@@ -826,14 +829,14 @@
                              TextChanged="TextBox_TestingEngineParameters_TextChanged"
                              />
 
-                    <Label Grid.Row="4"
+                    <Label Grid.Row="5"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="Iwad path :"
                            />
                     <TextBox x:Name="TextBox_TestingIwad"
-                             Grid.Row="4"
+                             Grid.Row="5"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Center"
@@ -847,14 +850,14 @@
                              TextChanged="TextBox_TestingIwad_TextChanged"
                              />
 
-                    <Label Grid.Row="5"
+                    <Label Grid.Row="6"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="File 1 path :"
                            />
                     <TextBox x:Name="TextBox_TestingFile1"
-                             Grid.Row="5"
+                             Grid.Row="6"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Center"
@@ -865,16 +868,17 @@
                              PreviewDragOver="TextBox_TestingFile1_PreviewDragOver"
                              AllowDrop="True"
                              Drop="TextBox_TestingFile1_Drop"
+                             TextChanged="TextBox_TestingFile1_TextChanged"
                              />
 
-                    <Label Grid.Row="6"
+                    <Label Grid.Row="7"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="File 2 path :"
                            />
                     <TextBox x:Name="TextBox_TestingFile2"
-                             Grid.Row="6"
+                             Grid.Row="7"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Center"
@@ -885,16 +889,17 @@
                              PreviewDragOver="TextBox_TestingFile2_PreviewDragOver"
                              AllowDrop="True"
                              Drop="TextBox_TestingFile2_Drop"
+                             TextChanged="TextBox_TestingFile2_TextChanged"
                              />
 
-                    <Label Grid.Row="7"
+                    <Label Grid.Row="8"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="File 3 path :"
                            />
                     <TextBox x:Name="TextBox_TestingFile3"
-                             Grid.Row="7"
+                             Grid.Row="8"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Center"
@@ -905,16 +910,17 @@
                              PreviewDragOver="TextBox_TestingFile3_PreviewDragOver"
                              AllowDrop="True"
                              Drop="TextBox_TestingFile3_Drop"
+                             TextChanged="TextBox_TestingFile3_TextChanged"
                              />
 
-                    <Label Grid.Row="8"
+                    <Label Grid.Row="9"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="File 4 path :"
                            />
                     <TextBox x:Name="TextBox_TestingFile4"
-                             Grid.Row="8"
+                             Grid.Row="9"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Center"
@@ -925,16 +931,17 @@
                              PreviewDragOver="TextBox_TestingFile4_PreviewDragOver"
                              AllowDrop="True"
                              Drop="TextBox_TestingFile4_Drop"
+                             TextChanged="TextBox_TestingFile4_TextChanged"
                              />
 
-                    <Label Grid.Row="9"
+                    <Label Grid.Row="10"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="File 5 path :"
                            />
                     <TextBox x:Name="TextBox_TestingFile5"
-                             Grid.Row="9"
+                             Grid.Row="10"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Center"
@@ -945,31 +952,33 @@
                              PreviewDragOver="TextBox_TestingFile5_PreviewDragOver"
                              AllowDrop="True"
                              Drop="TextBox_TestingFile5_Drop"
+                             TextChanged="TextBox_TestingFile5_TextChanged"
                              />
 
-                    <Label Grid.Row="10"
+                    <Label Grid.Row="12"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="Extra parameters :"
                            />
                     <TextBox x:Name="TextBox_TestingExtraParameters"
-                             Grid.Row="10"
+                             Grid.Row="12"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Center"
                              Height="Auto"
+                             TextChanged="TextBox_TestingExtraParameters_TextChanged"
                              />
 
                     <!-- Command preview -->
-                    <Label Grid.Row="12"
+                    <Label Grid.Row="14"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="Command preview :"
                            />
                     <TextBox x:Name="TextBox_TestingCommandPreview"
-                             Grid.Row="12"
+                             Grid.Row="14"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
@@ -978,7 +987,13 @@
                              IsReadOnly="True"
                              TextWrapping="Wrap"
                              />
-                    <StackPanel Grid.Row="13"
+                    <Label Grid.Row="15"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Options :"
+                           />
+                    <StackPanel Grid.Row="15"
                                 Grid.Column="2"
                                 VerticalAlignment="Top"
                                 Margin="0,6,0,0"
@@ -997,7 +1012,7 @@
                         <Button x:Name="Button_TestingExport"
                                 Margin="0,0,0,0"
                                 Padding="4"
-                                Content="Export as .bat"
+                                Content="Export as .bat file"
                                 />
                     </StackPanel>
                     
