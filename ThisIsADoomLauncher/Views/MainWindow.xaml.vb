@@ -147,7 +147,7 @@ Namespace Views
                     WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & cli)
 
                     My.Settings.Save()
-                    WriteToLog(DateTime.Now & "Saved settings" & Environment.NewLine & cli)
+                    WriteToLog(DateTime.Now & " - Saved settings")
                 End If
 
             Catch ex As Exception
