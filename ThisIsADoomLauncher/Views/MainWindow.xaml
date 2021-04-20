@@ -1003,16 +1003,19 @@
                                 Margin="0,0,6,0"
                                 Padding="4"
                                 Content="Execute in CLI"
+                                Click="Button_TestingExecute_Click"
                                 />
                         <Button x:Name="Button_TestingCopy"
                                 Margin="0,0,6,0"
                                 Padding="4"
                                 Content="Copy to clipboard"
+                                Click="Button_TestingCopy_Click"
                                 />
                         <Button x:Name="Button_TestingExport"
                                 Margin="0,0,0,0"
                                 Padding="4"
                                 Content="Export as .bat file"
+                                Click="Button_TestingExport_Click"
                                 />
                     </StackPanel>
                     

@@ -4,9 +4,9 @@
     ''' Build then return the command line to send to cmd.exe.
     ''' </summary>
     ''' 
-    Function BuildCommandLineInstructions(wolf As Boolean) As String
+    Function BuildCommandLine(wolf As Boolean) As String
 
-        Dim commandLine As String = ""
+        Dim commandLine As String = Nothing
 
         Try
             With My.Settings
@@ -27,10 +27,10 @@
                 '    Return commandLine
                 'End If
 
-                'Wolf
+                'Wolfenstein 3D
                 If wolf Then
                     commandLine = String.Format(
-                        "/c start """" ""{0}"" -config {1} +vid_fullscreen {2} +vid_scale_customwidth {3} +vid_scale_customheight {4} +vid_scalemode 5 -iwad ""{5}"" -file ""{6}"" ""{7}""",
+                        """{0}"" -config {1} +vid_fullscreen {2} +vid_scale_customwidth {3} +vid_scale_customheight {4} +vid_scalemode 5 -iwad ""{5}"" -file ""{6}"" ""{7}""",
                         .GzdoomDir & "\gzdoom.exe",
                         .WolfDir & "\gzdoom-" & Environment.UserName & "-wolf3D.ini",
                         Int(.FullscreenEnabled).ToString,
@@ -48,7 +48,7 @@
                 Select Case .SelectedEngine.ToLowerInvariant
                     Case "gzdoom"
                         commandLine = String.Format(
-                            "/c start """" ""{0}"" +vid_fullscreen {1} +vid_scale_customwidth {2} +vid_scale_customheight {3} +vid_scalemode 5 -iwad ""{4}""",
+                            """{0}"" +vid_fullscreen {1} +vid_scale_customwidth {2} +vid_scale_customheight {3} +vid_scalemode 5 -iwad ""{4}""",
                             .GzdoomDir & "\gzdoom.exe",
                             Int(.FullscreenEnabled).ToString,
                             .ScreenWidth.ToString,
@@ -58,7 +58,7 @@
                     Case "zandronum"
                         'IOMethods.HandleCfg()
                         commandLine = String.Format(
-                            "/c start """" ""{0}"" +fullscreen {1} +vid_defwidth {2} +vid_defheight {3} -iwad ""{4}""",
+                            """{0}"" +fullscreen {1} +vid_defwidth {2} +vid_defheight {3} -iwad ""{4}""",
                             .ZandronumDir & "\zandronum.exe",
                             Int(.FullscreenEnabled).ToString,
                             .ScreenWidth.ToString,
@@ -98,14 +98,14 @@
     ''' '/c start "" ".../engine.exe" -width -height +fullscreen iwad [level] [mod] [music]'
     ''' </summary>
     ''' 
-    Sub LaunchProcess(args As String)
+    Sub LaunchProcess(command As String)
 
         Dim cmd As ProcessStartInfo = New ProcessStartInfo("cmd.exe")
 
         With cmd
             .UseShellExecute = False
             .CreateNoWindow = True
-            .Arguments = args
+            .Arguments = "/c start """" " & command
         End With
 
         Process.Start(cmd)

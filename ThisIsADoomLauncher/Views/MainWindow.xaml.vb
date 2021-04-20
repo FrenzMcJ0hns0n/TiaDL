@@ -140,8 +140,7 @@ Namespace Views
                     MessageBox.Show("Error : an IWAD must be selected")
                     Return
                 Else
-                    Dim cli As String =
-                        If(TextBox_IwadToLaunch.Text = "Wolf3D", BuildCommandLineInstructions(True), BuildCommandLineInstructions(False))
+                    Dim cli As String = If(TextBox_IwadToLaunch.Text = "Wolf3D", BuildCommandLine(True), BuildCommandLine(False))
 
                     LaunchProcess(cli)
                     WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & cli)
@@ -635,7 +634,7 @@ Namespace Views
             Try
                 'Build
                 Dim engine As String = String.Format("""{0}""", TextBox_TestingEngine.Text)
-                Dim engineParams As String = If(TextBox_TestingEngineParameters.Text = Nothing, Nothing, String.Format(" ""{0}""", TextBox_TestingEngineParameters.Text))
+                Dim engineParams As String = If(TextBox_TestingEngineParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingEngineParameters.Text))
                 Dim iwad As String = If(TextBox_TestingIwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_TestingIwad.Text))
                 Dim file1 As String = If(TextBox_TestingFile1.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile1.Text))
                 Dim file2 As String = If(TextBox_TestingFile2.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile2.Text))
@@ -643,7 +642,7 @@ Namespace Views
                 Dim file4 As String = If(TextBox_TestingFile4.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile4.Text))
                 Dim file5 As String = If(TextBox_TestingFile5.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile5.Text))
                 'Or built list from multiples inputs (several files dropped in the same zone) and use a For each
-                Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" ""{0}""", TextBox_TestingExtraParameters.Text))
+                Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingExtraParameters.Text))
 
                 'Display
                 TextBox_TestingCommandPreview.Text = String.Format(
@@ -663,12 +662,50 @@ Namespace Views
 
         End Sub
 
+        Private Sub Button_TestingCopy_Click(sender As Object, e As RoutedEventArgs)
+
+            CopyCommandToClipboard()
+
+        End Sub
+
+        Private Sub Button_TestingExport_Click(sender As Object, e As RoutedEventArgs)
+
+            ExportCommandAsBat()
+
+        End Sub
+
         Private Sub ExecuteCommandPreview()
 
             Try
-                If Not TextBox_TestingCommandPreview.Text = Nothing Then LaunchProcess(String.Format("/c start """" {0}", TextBox_TestingCommandPreview.Text))
+                If Not TextBox_TestingCommandPreview.Text = Nothing Then LaunchProcess(TextBox_TestingCommandPreview.Text)
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ExecuteCommandPreview()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub CopyCommandToClipboard()
+
+            Try
+                Clipboard.SetText(TextBox_TestingCommandPreview.Text)
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'CopyCommandToClipboard()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub ExportCommandAsBat()
+
+            Try
+                Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
+                Dim batPath = Path.Combine(My.Settings.RootDirPath, now_formatted & "_command.bat")
+
+                Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.UTF8)
+                    writer.WriteLine("@echo off")
+                    writer.WriteLine("/c start """" " & TextBox_TestingCommandPreview.Text)
+                End Using
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ExportCommandAsBat()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
