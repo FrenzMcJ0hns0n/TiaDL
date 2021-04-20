@@ -656,7 +656,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub Button_TestingExecute_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestingExecute.Click
+        Private Sub Button_TestingExecute_Click(sender As Object, e As RoutedEventArgs)
 
             ExecuteCommandPreview()
 
@@ -677,7 +677,9 @@ Namespace Views
         Private Sub ExecuteCommandPreview()
 
             Try
-                If Not TextBox_TestingCommandPreview.Text = Nothing Then LaunchProcess(TextBox_TestingCommandPreview.Text)
+                Dim cli As String = TextBox_TestingCommandPreview.Text
+                If Not TextBox_TestingCommandPreview.Text = Nothing Then LaunchProcess(cli)
+                WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & cli)
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ExecuteCommandPreview()'. Exception : " & ex.ToString)
             End Try
@@ -698,7 +700,7 @@ Namespace Views
 
             Try
                 Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
-                Dim batPath = Path.Combine(My.Settings.RootDirPath, now_formatted & "_command.bat")
+                Dim batPath As String = Path.Combine(My.Settings.RootDirPath, now_formatted & "_command.bat")
 
                 Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.UTF8)
                     writer.WriteLine("@echo off")
