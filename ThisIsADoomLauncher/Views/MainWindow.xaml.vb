@@ -727,9 +727,10 @@ Namespace Views
         Private Sub ExecuteCommandPreview()
 
             Try
-                Dim cli As String = TextBox_TestingCommandPreview.Text
-                If Not TextBox_TestingCommandPreview.Text = Nothing Then LaunchProcess(cli)
-                WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & cli)
+                Dim commandText = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
+                If commandText = Nothing Then Return
+                LaunchProcess(commandText)
+                WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & commandText)
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ExecuteCommandPreview()'. Exception : " & ex.ToString)
             End Try
@@ -739,7 +740,8 @@ Namespace Views
         Private Sub CopyCommandToClipboard()
 
             Try
-                Clipboard.SetText(TextBox_TestingCommandPreview.Text)
+                Dim commandText = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
+                Clipboard.SetText(commandText)
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'CopyCommandToClipboard()'. Exception : " & ex.ToString)
             End Try
@@ -749,12 +751,14 @@ Namespace Views
         Private Sub ExportCommandAsBat()
 
             Try
+                Dim commandText = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
+
                 Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
                 Dim batPath As String = Path.Combine(My.Settings.RootDirPath, now_formatted & "_command.bat")
 
                 Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.UTF8)
                     writer.WriteLine("@echo off")
-                    writer.WriteLine("/c start """" " & TextBox_TestingCommandPreview.Text)
+                    writer.WriteLine("/c start """" " & commandText)
                 End Using
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ExportCommandAsBat()'. Exception : " & ex.ToString)

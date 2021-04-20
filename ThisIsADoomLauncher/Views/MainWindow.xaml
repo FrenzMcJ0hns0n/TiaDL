@@ -772,7 +772,8 @@
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
-                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
                         <RowDefinition Height="1*" />
                         <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
@@ -973,7 +974,8 @@
                              />
 
                     <!-- Command preview -->
-                    <Label Grid.Row="12"
+                    <Label Grid.Row="13"
+                           Grid.RowSpan="2"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
@@ -982,35 +984,20 @@
                     <!-- TODO: Shorten Name -->
                     <RichTextBox x:Name="RichTextBox_TestingCommandPreview" 
                                  Grid.Row="12"
-                                 Grid.RowSpan="2"
+                                 Grid.RowSpan="4"
                                  Grid.Column="2"
                                  HorizontalAlignment="Stretch"
                                  VerticalAlignment="Stretch"
                                  IsReadOnly="True"
-                        />
-                    <Label Grid.Row="14"
-                           Grid.Column="1"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center"
-                           Content="Command preview :"
-                           />
-                    
-                    <TextBox x:Name="TextBox_TestingCommandPreview"
-                             Grid.Row="14"
-                             Grid.Column="2"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             Cursor="Arrow"
-                             IsReadOnly="True"
-                             TextWrapping="Wrap"
-                             />
-                    <Label Grid.Row="15"
+                                 />
+
+                    <Label Grid.Row="16"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="Options :"
                            />
-                    <StackPanel Grid.Row="15"
+                    <StackPanel Grid.Row="16"
                                 Grid.Column="2"
                                 VerticalAlignment="Top"
                                 Margin="0,6,0,0"
