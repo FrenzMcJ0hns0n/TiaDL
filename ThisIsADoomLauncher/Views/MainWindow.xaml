@@ -960,6 +960,7 @@
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="Extra parameters :"
+                           Visibility="Hidden"
                            />
                     <TextBox x:Name="TextBox_TestingExtraParameters"
                              Grid.Row="12"
@@ -968,22 +969,38 @@
                              VerticalAlignment="Center"
                              Height="Auto"
                              TextChanged="TextBox_TestingExtraParameters_TextChanged"
+                             Visibility="Hidden"
                              />
 
                     <!-- Command preview -->
+                    <Label Grid.Row="12"
+                           Grid.Column="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           Content="Command preview :"
+                           />
+                    <!-- TODO: Shorten Name -->
+                    <RichTextBox x:Name="RichTextBox_TestingCommandPreview" 
+                                 Grid.Row="12"
+                                 Grid.RowSpan="2"
+                                 Grid.Column="2"
+                                 HorizontalAlignment="Stretch"
+                                 VerticalAlignment="Stretch"
+                                 IsReadOnly="True"
+                        />
                     <Label Grid.Row="14"
                            Grid.Column="1"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"
                            Content="Command preview :"
                            />
+                    
                     <TextBox x:Name="TextBox_TestingCommandPreview"
                              Grid.Row="14"
                              Grid.Column="2"
                              HorizontalAlignment="Stretch"
                              VerticalAlignment="Stretch"
                              Cursor="Arrow"
-                             Height="Auto"
                              IsReadOnly="True"
                              TextWrapping="Wrap"
                              />
