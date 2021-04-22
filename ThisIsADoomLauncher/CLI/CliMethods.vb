@@ -1,31 +1,17 @@
 ﻿Module CliMethods
 
     ''' <summary>
-    ''' Build then return the command line to send to cmd.exe.
+    ''' Build then return the command line to be executed with cmd.exe.
     ''' </summary>
     ''' 
     Function BuildCommandLine(wolf As Boolean) As String
 
         Dim commandLine As String = Nothing
+        'TODO 1 : Use this to access UI elements : MainWindow_Instance().element = ...
+        'TODO 2 : Use similar syntax as in UpdateCommandPreview()
 
         Try
             With My.Settings
-                'Trying to implement Wolf 3D TC 2.0.2 ... not successfully yet
-                'If wolf Then
-                '    commandLine = String.Format(
-                '        "/c start """" ""{0}"" -config ""{1}"" +fullscreen {2} -width {3} -height {4} -iwad ""{5}"" -file ""{6}"" ""{7}"" ""{8}""",
-                '        .GzdoomDir & "\gzdoom.exe",
-                '        .WolfDir & "\gzdoom-" & Environment.UserName & "-wolf3D.ini",
-                '        Int(.FullscreenEnabled).ToString,
-                '        .ScreenWidth.ToString,
-                '        .ScreenHeight.ToString,
-                '        .IwadsDir & "\Doom2.wad",
-                '        .WolfDir & "\Wolf3D_Common.pk7",
-                '        .WolfDir & "\Wolf3D_Resources.pk3",
-                '        .WolfDir & "\Wolf3D_HighRes.pk7"
-                '    )
-                '    Return commandLine
-                'End If
 
                 'Wolfenstein 3D
                 If wolf Then
