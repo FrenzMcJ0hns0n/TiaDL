@@ -178,11 +178,9 @@ Namespace Views
 
             Dim p As Preset = CType(sender.SelectedItem, Preset)
 
-            With My.Settings
-                TextBox_IwadToLaunch.Text = Path_Iwad_RelativeToAbsolute(p.Iwad) 'Path.Combine(.IwadsDir, p.Iwad) 
-                TextBox_LevelToLaunch.Text = Path_Level_RelativeToAbsolute(p.Level) 'If(p.Level = Nothing, String.Empty, Path.Combine(.LevelsDir, p.Level))
-                TextBox_MiscToLaunch.Text = Path_Misc_RelativeToAbsolute(p.Misc) 'If(p.Misc = Nothing, String.Empty, Path.Combine(.MiscDir, p.Misc))
-            End With
+            TextBox_IwadToLaunch.Text = ConvertIwadPath_RelativeToAbsolute(p.Iwad)
+            TextBox_LevelToLaunch.Text = ConvertLevelPath_RelativeToAbsolute(p.Level)
+            TextBox_MiscToLaunch.Text = ConvertMiscPath_RelativeToAbsolute(p.Misc)
 
         End Sub
 
