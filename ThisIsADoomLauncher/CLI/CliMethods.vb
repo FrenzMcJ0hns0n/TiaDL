@@ -6,9 +6,9 @@ Module CliMethods
 
         With My.Settings
             If .SelectedEngine.ToLowerInvariant = "gzdoom" Then
-                Return Path.Combine(.GzdoomDir, "gzdoom.exe")
+                Return String.Format("""{0}""", Path.Combine(.GzdoomDir, "gzdoom.exe"))
             Else
-                Return Path.Combine(.ZandronumDir, "zandronum.exe")
+                Return String.Format("""{0}""", Path.Combine(.ZandronumDir, "zandronum.exe"))
             End If
         End With
 
@@ -61,6 +61,65 @@ Module CliMethods
         End With
 
     End Function
+
+    Function ReturnIwad()
+
+        With My.Settings
+            Return String.Format(" -iwad ""{0}""", .SelectedIwad)
+        End With
+
+    End Function
+
+    Function ReturnLevel() As String
+
+        With My.Settings
+            Return If(.SelectedLevel = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedLevel))
+        End With
+
+    End Function
+
+    Function ReturnMisc() As String
+        With My.Settings
+            Return If(.SelectedMisc = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMisc))
+        End With
+    End Function
+
+    Function ReturnBdVersion() As String
+
+        With My.Settings
+            If .UseBrutalDoom = True Then
+                Return If(.BrutalDoomVersion = Nothing, Nothing, String.Format(" -file ""{0}""", .BrutalDoomVersion))
+            Else
+                Return Nothing
+            End If
+        End With
+
+    End Function
+
+    Function ReturnMusic()
+
+        With My.Settings
+            If .UseAltSoundtrack = True Then
+                Return If(.SelectedMusic = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMusic))
+            Else
+                Return Nothing
+            End If
+        End With
+
+    End Function
+
+    Function ReturnTurbo()
+
+        With My.Settings
+            If .UseTurbo = True Then
+                Return " -turbo 125"
+            Else
+                Return Nothing
+            End If
+        End With
+
+    End Function
+
 
     Function ReturnWolfData() As String
 
@@ -121,12 +180,12 @@ Module CliMethods
                     width = ReturnWidth()
                     height = ReturnHeight()
                     scalemode = ReturnScalemode()
-                    iwad = String.Format(" -iwad ""{0}""", .SelectedIwad)
-                    level = If(.SelectedLevel = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedLevel))
-                    misc = If(.SelectedMisc = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMisc))
-                    If .UseBrutalDoom Then bdVersion = If(.BrutalDoomVersion = Nothing, Nothing, String.Format(" -file ""{0}""", .BrutalDoomVersion))
-                    If .UseAltSoundtrack Then music = If(.SelectedMusic = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMusic))
-                    If .UseTurbo Then turbo = " -turbo 125"
+                    iwad = ReturnIwad()
+                    level = ReturnLevel()
+                    misc = ReturnMisc()
+                    bdVersion = ReturnBdVersion()
+                    music = ReturnMusic()
+                    turbo = ReturnTurbo()
 
                     commandLine = $"{engine}{config}{fullscreen}{width}{height}{scalemode}{iwad}{level}{misc}{bdVersion}{music}{turbo}"
                     'WriteToLog(DateTime.Now & " - CommandLine (debug) = " & Environment.NewLine & commandLine)
@@ -144,9 +203,8 @@ Module CliMethods
     End Function
 
     ''' <summary>
-    ''' Launch an instance of cmd.exe as a process, with specified args. 
-    ''' args refer to the command line, which looks like the following :
-    ''' '/c start "" ".../engine.exe" -width -height +fullscreen iwad [level] [mod] [music]'
+    ''' Launch an instance of cmd.exe as a process with the specified command as parameter. The final result looks like the following :
+    ''' /c start "" "engine_path" [+param1 value1, +param2 value2 ...] -iwad "iwad_path" [-file "level_path" | -file "misc_path" | -file "mod_path"] ...
     ''' </summary>
     ''' 
     Sub LaunchProcess(command As String)
