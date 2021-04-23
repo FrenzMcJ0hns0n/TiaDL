@@ -144,7 +144,7 @@ Namespace Views
                     Dim cli As String = If(TextBox_IwadToLaunch.Text = "Wolf3D", BuildCommandLine(True), BuildCommandLine(False))
 
                     LaunchProcess(cli)
-                    WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & cli)
+                    WriteToLog(DateTime.Now & " - CommandLine = " & cli)
 
                     My.Settings.Save()
                     WriteToLog(DateTime.Now & " - Saved settings")
