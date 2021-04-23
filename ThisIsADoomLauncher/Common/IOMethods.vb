@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Text
 
 Module IOMethods
 
@@ -123,25 +124,21 @@ Module IOMethods
         Try
             With My.Settings
 
-                Dim directoriesList As List(Of String) = New List(Of String) From {
-                    "\engine\gzdoom", "\engine\zandronum", "\iwads", "\levels", "\misc", "\mods", "\music", "\tc"
-                }
+                Dim dirList As List(Of String) = New List(Of String) From {"engine\gzdoom", "engine\zandronum", "iwads", "levels", "misc", "mods", "music", "tc"}
 
-                For Each dir As String In directoriesList
-                    If Not Directory.Exists(Path.Combine(.RootDirPath, dir)) Then
-                        errorText &= Environment.NewLine & dir
-                    End If
+                For Each dir As String In dirList
+                    If Not Directory.Exists(Path.Combine(.RootDirPath, dir)) Then errorText &= Environment.NewLine & dir
                 Next
 
                 If errorText = Nothing Then
-                    .GzdoomDir = .RootDirPath & directoriesList(0)
-                    .ZandronumDir = .RootDirPath & directoriesList(1)
-                    .IwadsDir = .RootDirPath & directoriesList(2)
-                    .LevelsDir = .RootDirPath & directoriesList(3)
-                    .MiscDir = .RootDirPath & directoriesList(4)
-                    .ModDir = .RootDirPath & directoriesList(5)
-                    .MusicDir = .RootDirPath & directoriesList(6)
-                    .WolfDir = .RootDirPath & directoriesList(7)
+                    .GzdoomDir = .RootDirPath & dirList(0)
+                    .ZandronumDir = .RootDirPath & dirList(1)
+                    .IwadsDir = .RootDirPath & dirList(2)
+                    .LevelsDir = .RootDirPath & dirList(3)
+                    .MiscDir = .RootDirPath & dirList(4)
+                    .ModDir = .RootDirPath & dirList(5)
+                    .MusicDir = .RootDirPath & dirList(6)
+                    .WolfDir = .RootDirPath & dirList(7)
                 Else
                     MessageBox.Show("Setup error. Unable to find the following directories :" & errorText)
                     WriteToLog(DateTime.Now & " - Setup error. Directories not found :" & errorText)
@@ -156,6 +153,21 @@ Module IOMethods
     End Sub
 
     ''' <summary>
+    ''' Read 4 first bytes of the file
+    ''' </summary>
+    Function RecognizeIwad(filepath As String) As Boolean
+
+        Using reader As BinaryReader = New BinaryReader(File.OpenRead(filepath))
+            Dim bytes As Byte() = reader.ReadBytes(4)
+            Dim fileh As String = Encoding.Default.GetString(bytes)
+            If fileh = "IWAD" Then Return True
+        End Using
+
+        Return False
+
+    End Function
+
+    ''' <summary>
     ''' Is this filepath refer to an IWAD, a Level or a Misc file ? Return answer as string
     ''' </summary>
     ''' 
@@ -164,15 +176,13 @@ Module IOMethods
         Try
             If Not File.Exists(path) Then Return "does not exist"
 
-            Dim iwadList As List(Of String) = New List(Of String) From {"doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"}
-            If iwadList.Contains(File_GetName(path).ToLowerInvariant) Then Return "iwad" 'Better check file headers ? TODO : investigate
+            If RecognizeIwad(path) = True Then Return "iwad"
+            'Dim iwadList As List(Of String) = New List(Of String) From {"doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"}
+            'If iwadList.Contains(File_GetName(path).ToLowerInvariant) Then Return "iwad"
 
             Dim extension As String = File_GetExtension(path).ToLowerInvariant
-            If extension = ".wad" Or extension = ".pk3" Then
-                Return "level"
-            ElseIf extension = ".bex" Or extension = ".deh" Then
-                Return "misc"
-            End If
+            If extension = ".wad" Or extension = ".pk3" Then Return "level"
+            If extension = ".bex" Or extension = ".deh" Then Return "misc"
 
             Return "unrecognized"
 
