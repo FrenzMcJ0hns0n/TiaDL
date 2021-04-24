@@ -119,7 +119,7 @@ Module IOMethods
     ''' 
     Sub ValidateDirectories()
 
-        Dim errorText As String = ""
+        Dim errorText As String = Nothing
 
         Try
             With My.Settings
