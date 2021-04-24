@@ -492,8 +492,10 @@ Namespace Views
 
             Try
                 Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                TextBox_TestingEngine.Text = file(0)
-                'TODO? Check if file is .exe
+                Dim info As FileInfo = New FileInfo(file(0))
+                Dim ext As String = info.Extension.ToLowerInvariant
+
+                If info.Extension.ToLowerInvariant = ".exe" Then TextBox_TestingEngine.Text = file(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingEngine_Drop()'. Exception : " & ex.ToString)
