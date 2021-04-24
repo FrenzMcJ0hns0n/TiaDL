@@ -6,16 +6,178 @@
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
         
-        Title="This is a Doom Launcher v2.2" 
-        Width="920" Height="811" 
+        Title="This is a Doom Launcher v3" 
+        Width="1280" Height="740" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded"
         >
 
     <Grid>
-        
-
         <TabControl>
+
+            <TabItem Name="v3" Header="TiaDL v3">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="20" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="20" />
+                        <ColumnDefinition Width="1*" />
+                        <ColumnDefinition Width="20" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Presets -->
+                    <TabControl Grid.Row="1"
+                                Grid.Column="1">
+                        <TabItem Header="Levels">
+
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="20" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="2*" />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+                                <TabControl Grid.Row="1"
+                                            Grid.Column="1">
+                                    <!-- Add Name ? -->
+                                    <TabItem Header="Base presets">
+                                        <Grid>
+                                            <ListView x:Name="ListView_BasePresets"
+                                          SelectionChanged="ListView_BasePresets_SelectionChanged"
+                                          Margin="-3">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Image Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
+                                                       Margin="-2,0,0,0"
+                                                       Height="64"/>
+                                                            <TextBlock Margin="8,0,0,0"
+                                                           VerticalAlignment="Center"
+                                                           FontWeight="DemiBold"
+                                                           FontSize="18"
+                                                           Text="{Binding Name}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="User presets">
+                                        <Grid>
+                                            <Label x:Name="Label_NoUserPresetsFound2"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontSize="24"
+                                       Foreground="Gray"
+                                       Content="No user presets found ..."/>
+                                            <ListView x:Name="ListView_UserPresets"
+                                          SelectionChanged="ListView_UserPresets_SelectionChanged"
+                                          Margin="-3"
+                                          Visibility="Collapsed">
+                                                <ListView.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ListView.ItemTemplate>
+                                            </ListView>
+                                        </Grid>
+                                    </TabItem>
+                                    <TabItem Header="Add new preset">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="10"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="1*"/>
+                                                <RowDefinition Height="10"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="10"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="2*"/>
+                                                <ColumnDefinition Width="10"/>
+                                            </Grid.ColumnDefinitions>
+                                        </Grid>
+                                    </TabItem>
+                                </TabControl>
+                                <TabControl Grid.Row="1"
+                                Grid.Column="3">
+                                    <TabItem Header="Preset info">
+                                        <StackPanel Orientation="Vertical">
+                                            <!-- Image -->
+                                            <!-- Presets attribute 1 -->
+                                            <!-- Presets attribute 2 -->
+                                            <!-- Presets attribute 3 -->
+                                        </StackPanel>
+                                    </TabItem>
+                                    <TabItem Header="Something else">
+                                        <!-- Content ? -->
+                                    </TabItem>
+                                </TabControl>
+                            </Grid>
+
+                        </TabItem>
+
+                        <TabItem Header="Settings">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="20" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+
+                    <!-- Something more specific than a TabControl ? (used if for symmetry) -->
+
+
+                    <!-- Manage engine, config, mod -->
+                    <Grid Grid.Row="3"
+                          Grid.Column="1"
+                          Grid.ColumnSpan="3">
+
+                    </Grid>
+
+                </Grid>
+            </TabItem>
+
             <TabItem Name="Normal"  
                      Header="Normal mode">
                 <Grid>
@@ -752,7 +914,7 @@
 
                 </Grid>
             </TabItem>
-            
+
             <TabItem Name="Test"
                      Header="Test mode"
                      >
@@ -1022,12 +1184,11 @@
                                 Click="Button_TestingExport_Click"
                                 />
                     </StackPanel>
-                    
+
 
                 </Grid>
             </TabItem>
-        </TabControl>
 
-        
+        </TabControl>
     </Grid>
 </Window>

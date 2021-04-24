@@ -19,6 +19,7 @@ Namespace Views
                 ValidateDirectories()
                 SetIniFiles()
                 SetCommonPresets()
+                PopulateBasePresets() 'V3
                 UpdateGUI()
 
                 'Performance eval
@@ -32,7 +33,20 @@ Namespace Views
 
         End Sub
 
+        Private Sub PopulateBasePresets()
+
+            'V3
+            Try
+                ListView_BasePresets.ItemsSource = FormatPresetsData_FromCsv("common") 'TODO V3 : Change COMMON to BASE
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
         Private Sub SetCommonPresets()
+
             Try
                 'DisplayPresets("common", FormatPresetsData_FromCsv("common")) PREVIOUS
                 ListView_CommonPresets.ItemsSource = FormatPresetsData_FromCsv("common")
@@ -784,6 +798,8 @@ Namespace Views
 
         End Sub
 
+
+
 #End Region
 
 
@@ -824,6 +840,20 @@ Namespace Views
 
 #End Region
 
+
+
+
+#Region "TiaDL v3"
+
+        Private Sub ListView_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+        End Sub
+
+        Private Sub ListView_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+        End Sub
+
+#End Region
 
 
     End Class
