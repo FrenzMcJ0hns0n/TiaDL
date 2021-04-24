@@ -6,8 +6,7 @@
     '''
     Function MainWindow_Instance() As Views.MainWindow
 
-        Dim mainWindow = Windows.Application.Current.Windows(0)
-        Return mainWindow
+        Return Windows.Application.Current.Windows(0)
 
     End Function
 
