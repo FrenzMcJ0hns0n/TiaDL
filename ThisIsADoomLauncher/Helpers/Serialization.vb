@@ -7,7 +7,7 @@ Namespace Helpers
 
         Public Function GetEmbeddedResource(assembly As Reflection.Assembly, name As String) As String
 
-            Dim buf As String = ""
+            Dim buf As String = Nothing
             Using s As Stream = assembly.GetManifestResourceStream(name)
 
                 Using sr As New StreamReader(s)
