@@ -33,40 +33,49 @@ Namespace Views
         End Sub
 
         Private Sub SetCommonPresets()
+            Try
+                'DisplayPresets("common", FormatPresetsData_FromCsv("common")) PREVIOUS
+                ListView_CommonPresets.ItemsSource = FormatPresetsData_FromCsv("common")
 
-            'DisplayPresets("common", FormatPresetsData_FromCsv("common")) PREVIOUS
-            ListView_CommonPresets.ItemsSource = FormatPresetsData_FromCsv("common")
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
         Sub UpdateGUI()
 
-            With My.Settings
-                'Auto-set native resolution at first launch
-                If .ScreenWidth = 0 And .ScreenHeight = 0 Then
-                    .ScreenWidth = GetResolution_Width()
-                    .ScreenHeight = GetResolution_Height()
-                End If
+            Try
+                With My.Settings
+                    'Auto-set native resolution at first launch
+                    If .ScreenWidth = 0 And .ScreenHeight = 0 Then
+                        .ScreenWidth = GetResolution_Width()
+                        .ScreenHeight = GetResolution_Height()
+                    End If
 
-                Label_EngineToLaunch.Content = .SelectedEngine
-                Label_ResolutionToLaunch.Content = "Resolution : " & My.Settings.ScreenWidth.ToString & " x " & My.Settings.ScreenHeight.ToString
-                Label_FullscreenToLaunch.Content = "Fullscreen : " & If(My.Settings.FullscreenEnabled, "Yes", "No")
+                    Label_EngineToLaunch.Content = .SelectedEngine
+                    Label_ResolutionToLaunch.Content = "Resolution : " & My.Settings.ScreenWidth.ToString & " x " & My.Settings.ScreenHeight.ToString
+                    Label_FullscreenToLaunch.Content = "Fullscreen : " & If(My.Settings.FullscreenEnabled, "Yes", "No")
 
-                TextBox_ModToLaunch.Text = If(.UseBrutalDoom = False Or .BrutalDoomVersion = Nothing, Nothing, .BrutalDoomVersion)
+                    TextBox_ModToLaunch.Text = If(.UseBrutalDoom = False Or .BrutalDoomVersion = Nothing, Nothing, .BrutalDoomVersion)
 
-                TextBox_IwadToLaunch.Text = .SelectedIwad
-                TextBox_LevelToLaunch.Text = .SelectedLevel
-                TextBox_MiscToLaunch.Text = .SelectedMisc
+                    TextBox_IwadToLaunch.Text = .SelectedIwad
+                    TextBox_LevelToLaunch.Text = .SelectedLevel
+                    TextBox_MiscToLaunch.Text = .SelectedMisc
 
-                CheckBox_UseAltSoundtrack.IsChecked = .UseAltSoundtrack
-                If .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad" Then
-                    RadioButton_Soundtrack_DoomMetal.IsChecked = True
-                ElseIf .SelectedMusic = .MusicDir & "\IDKFAv2.wad" Then
-                    RadioButton_Soundtrack_IDKFA.IsChecked = True
-                End If
+                    CheckBox_UseAltSoundtrack.IsChecked = .UseAltSoundtrack
+                    If .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad" Then
+                        RadioButton_Soundtrack_DoomMetal.IsChecked = True
+                    ElseIf .SelectedMusic = .MusicDir & "\IDKFAv2.wad" Then
+                        RadioButton_Soundtrack_IDKFA.IsChecked = True
+                    End If
 
-                CheckBox_EnableTurbo.IsChecked = .UseTurbo
-            End With
+                    CheckBox_EnableTurbo.IsChecked = .UseTurbo
+                End With
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'UpdateGUI()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
@@ -79,9 +88,14 @@ Namespace Views
 
         Private Sub Button_Menu_Help_Click(sender As Object, e As RoutedEventArgs) Handles Button_Help.Click
 
-            Dim helpWindow As HelpWindow = New HelpWindow()
-            helpWindow.Owner = MainWindow_Instance()
-            helpWindow.ShowDialog()
+            Try
+                Dim helpWindow As HelpWindow = New HelpWindow()
+                helpWindow.Owner = MainWindow_Instance()
+                helpWindow.ShowDialog()
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
@@ -113,6 +127,7 @@ Namespace Views
 
             Try
                 Process.Start(My.Settings.RootDirPath)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'Button_ExploreFolder_Click()'. Exception : " & ex.ToString)
             End Try
@@ -121,24 +136,29 @@ Namespace Views
 
         Private Sub Button_Menu_Settings_Click(sender As Object, e As RoutedEventArgs) Handles Button_Menu_Settings.Click
 
-            Dim settingsWindow As SettingsWindow = New SettingsWindow()
-            settingsWindow.Owner = MainWindow_Instance()
-            settingsWindow.ShowDialog()
+            Try
+                Dim settingsWindow As SettingsWindow = New SettingsWindow()
+                settingsWindow.Owner = MainWindow_Instance()
+                settingsWindow.ShowDialog()
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_Menu_Settings_Click()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
         Private Sub Button_Launch_Click(sender As Object, e As RoutedEventArgs) Handles Button_Launch.Click
 
-            'Save level choices into Settings
-            With My.Settings
-                .SelectedIwad = TextBox_IwadToLaunch.Text
-                .SelectedLevel = TextBox_LevelToLaunch.Text
-                .SelectedMisc = TextBox_MiscToLaunch.Text
-            End With
-
             Try
+                'Save level choices into Settings
+                With My.Settings
+                    .SelectedIwad = TextBox_IwadToLaunch.Text
+                    .SelectedLevel = TextBox_LevelToLaunch.Text
+                    .SelectedMisc = TextBox_MiscToLaunch.Text
+                End With
+
                 If TextBox_IwadToLaunch.Text = Nothing Then
-                    MessageBox.Show("Error : an IWAD must be selected")
+                    MessageBox.Show("Error : an IWAD must be defined in the launch parameters")
                     Return
                 Else
                     Dim cli As String = If(TextBox_IwadToLaunch.Text = "Wolf3D", BuildCommandLine(True), BuildCommandLine(False))
@@ -163,14 +183,19 @@ Namespace Views
 
         Private Sub TabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
-            Dim tabControl As TabControl = sender
-            Dim item As TabItem = tabControl.SelectedValue
+            Try
+                Dim tabControl As TabControl = sender
+                Dim item As TabItem = tabControl.SelectedValue
 
-            If item.Name = "User" Then
-                If File.Exists(Path.Combine(My.Settings.RootDirPath, "presets.csv")) Then
-                    DisplayPresets(FormatPresetsData_FromCsv("user")) 'TODO? Think about async
+                If item.Name = "User" Then
+                    If File.Exists(Path.Combine(My.Settings.RootDirPath, "presets.csv")) Then
+                        DisplayPresets(FormatPresetsData_FromCsv("user")) 'TODO? Think about async
+                    End If
                 End If
-            End If
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TabControl_SelectionChanged()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
@@ -242,9 +267,7 @@ Namespace Views
         End Sub
 
         Private Sub TextBox_DropWadFile_PreviewDragOver(sender As Object, e As DragEventArgs)
-
             e.Handled = True
-
         End Sub
 
         Private Sub TextBox_DropWadFile_Drop(sender As Object, e As DragEventArgs)
@@ -274,9 +297,7 @@ Namespace Views
         End Sub
 
         Private Sub TextBox_DropMiscFile_PreviewDragOver(sender As Object, e As DragEventArgs)
-
             e.Handled = True
-
         End Sub
 
         Private Sub TextBox_DropMiscFile_Drop(sender As Object, e As DragEventArgs)
@@ -294,7 +315,7 @@ Namespace Views
                     MessageBox.Show("Error : this file is an IWAD")
 
                 ElseIf ValidateFile(file(0)) = "level" Then
-                    MessageBox.Show("Error : this file refers to 'Level'")
+                    MessageBox.Show("Error : this file refers to a 'Level' file")
                 Else
                     MessageBox.Show("Error : not a .deh/.bex file")
                 End If
@@ -328,19 +349,11 @@ Namespace Views
 
         Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
 
-            'KnowSelected**** don't care about path validity : that is done later on TextBox.TextChanged events
+            'Note : KnowSelected**** don't care about path validity : that is done later on TextBox.TextChanged events
 
-            Dim iwad As String = KnowSelectedIwad_NewPreset()
-            If iwad = Nothing Then
-                Return 'Not worth a try
-            End If
-            TextBox_IwadToLaunch.Text = iwad
-
-            Dim level As String = KnowSelectedLevel_NewPreset()
-            TextBox_LevelToLaunch.Text = level
-
-            Dim misc As String = KnowSelectedMisc_NewPreset()
-            TextBox_MiscToLaunch.Text = misc
+            TextBox_IwadToLaunch.Text = KnowSelectedIwad_NewPreset()
+            TextBox_LevelToLaunch.Text = KnowSelectedLevel_NewPreset()
+            TextBox_MiscToLaunch.Text = KnowSelectedMisc_NewPreset()
 
         End Sub
 
@@ -528,6 +541,7 @@ Namespace Views
             Try
                 Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
                 TextBox_TestingFile1.Text = file(0)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile1_Drop()'. Exception : " & ex.ToString)
             End Try
@@ -543,6 +557,7 @@ Namespace Views
             Try
                 Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
                 TextBox_TestingFile2.Text = file(0)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile2_Drop()'. Exception : " & ex.ToString)
             End Try
@@ -558,6 +573,7 @@ Namespace Views
             Try
                 Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
                 TextBox_TestingFile3.Text = file(0)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile3_Drop()'. Exception : " & ex.ToString)
             End Try
@@ -573,6 +589,7 @@ Namespace Views
             Try
                 Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
                 TextBox_TestingFile4.Text = file(0)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile4_Drop()'. Exception : " & ex.ToString)
             End Try
@@ -588,6 +605,7 @@ Namespace Views
             Try
                 Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
                 TextBox_TestingFile5.Text = file(0)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile5_Drop()'. Exception : " & ex.ToString)
             End Try
@@ -654,16 +672,7 @@ Namespace Views
                 'Or built list from multiples inputs (several files dropped in the same zone) and use a For each
                 Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingExtraParameters.Text))
 
-                'Display (OLD)
-                'TextBox_TestingCommandPreview.Text = String.Format(
-                '    "{0}{1}{2}{3}{4}{5}{6}{7}",
-                '    engine, engineParams, iwad, file1, file2, file3, file4, file5
-                ')
-
-                Dim command As String = String.Format(
-                    "{0}{1}{2}{3}{4}{5}{6}{7}",
-                    engine, engineParams, iwad, file1, file2, file3, file4, file5
-                )
+                Dim command As String = String.Format("{0}{1}{2}{3}{4}{5}{6}{7}", engine, engineParams, iwad, file1, file2, file3, file4, file5)
                 FillRichTextBox(command)
 
             Catch ex As Exception
@@ -686,23 +695,29 @@ Namespace Views
 
         Private Sub DecorateCommandPreview()
 
-            Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
-            Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
-            Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
+            Try
+                Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
+                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
+                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
 
-            For Each m As Match In matches
-                For Each c As Capture In m.Captures
+                For Each m As Match In matches
+                    For Each c As Capture In m.Captures
 
-                    Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
-                    Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
-                    Dim rangeToEdit As TextRange = New TextRange(startIndex, endIndex)
+                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
+                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
+                        Dim rangeToEdit As TextRange = New TextRange(startIndex, endIndex)
 
-                    rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
-                    rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
+                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
+                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
 
+                    Next
+                    quotesCount += 1
                 Next
-                quotesCount += 1
-            Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
+            End Try
+
 
         End Sub
 
@@ -731,6 +746,7 @@ Namespace Views
                 If commandText = Nothing Then Return
                 LaunchProcess(commandText)
                 WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & commandText)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ExecuteCommandPreview()'. Exception : " & ex.ToString)
             End Try
@@ -742,6 +758,7 @@ Namespace Views
             Try
                 Dim commandText = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
                 Clipboard.SetText(commandText)
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'CopyCommandToClipboard()'. Exception : " & ex.ToString)
             End Try
@@ -760,6 +777,7 @@ Namespace Views
                     writer.WriteLine("@echo off")
                     writer.WriteLine("/c start """" " & commandText)
                 End Using
+
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ExportCommandAsBat()'. Exception : " & ex.ToString)
             End Try
@@ -770,7 +788,7 @@ Namespace Views
 
 
 
-#Region "Crappy tests"
+#Region "Quick tests"
 
         'Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
 
