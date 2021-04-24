@@ -124,10 +124,10 @@ Module IOMethods
         Try
             With My.Settings
 
-                Dim dirList As List(Of String) = New List(Of String) From {"engine\gzdoom", "engine\zandronum", "iwads", "levels", "misc", "mods", "music", "tc"}
+                Dim dirList As List(Of String) = New List(Of String) From {"\engine\gzdoom", "\engine\zandronum", "\iwads", "\levels", "\misc", "\mods", "\music", "\tc"}
 
                 For Each dir As String In dirList
-                    If Not Directory.Exists(Path.Combine(.RootDirPath, dir)) Then errorText &= Environment.NewLine & dir
+                    If Not Directory.Exists(.RootDirPath & dir) Then errorText &= Environment.NewLine & dir
                 Next
 
                 If errorText = Nothing Then
