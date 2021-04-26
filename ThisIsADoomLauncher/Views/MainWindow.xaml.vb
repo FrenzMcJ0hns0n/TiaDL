@@ -857,6 +857,74 @@ Namespace Views
 
         End Sub
 
+        Private Sub GroupBox_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub GroupBox_Levels_Drop(sender As Object, e As DragEventArgs)
+
+            Try
+                '1) Collect, check and order files
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                Dim confirmedFiles As List(Of String) = New List(Of String)
+
+                For i As Integer = 1 To filePaths.Length '3 times for 3 files
+                    For Each path As String In filePaths
+
+                        If confirmedFiles.Contains(path) Then Continue For
+
+                        If ValidateFile(path) = "iwad" Then
+                            confirmedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile(path) = "level" And confirmedFiles.Count > 0 Then
+                            confirmedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile(path) = "misc" And confirmedFiles.Count > 1 Then
+                            confirmedFiles.Add(path)
+                            Continue For
+                        End If
+
+                    Next
+                Next
+
+                '2) If at least one file is confirmed set focus on tab 3 "Add new preset"
+                'Index of confirmedFiles :
+                ' 1 = Iwad,
+                ' 2 = Iwad + Level,
+                ' 3 = Iwad + Level + Misc
+                Dim pretexte As Boolean = False
+
+                If confirmedFiles.Count = 0 Then pretexte = False 'Then Return in Sub()
+                TabControl_Levels.SelectedIndex = 2
+
+                If confirmedFiles.Count > 0 Then
+                    TextBox_Levels_NewIwad.Text = confirmedFiles(0)
+                    'Edit TextBox font property (color, style)
+                End If
+
+                If confirmedFiles.Count > 1 Then
+                    TextBox_Levels_NewLevel.Text = confirmedFiles(1)
+                    'Edit TextBox font property (color, style)
+                End If
+
+                If confirmedFiles.Count > 2 Then
+                    TextBox_Levels_NewMisc.Text = confirmedFiles(2)
+                    'Edit TextBox font property (color, style)
+                End If
+
+                Dim stop_man As String = Nothing
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
+            End Try
+
+
+        End Sub
+
 #End Region
 
 

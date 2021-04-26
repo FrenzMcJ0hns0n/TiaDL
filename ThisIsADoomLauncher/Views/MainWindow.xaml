@@ -33,6 +33,7 @@
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="20" />
                     </Grid.ColumnDefinitions>
+                    
                     <GroupBox Grid.Row="1"
                               Grid.Column="1"
                               Header="Port / Engine">
@@ -45,8 +46,10 @@
                                 <ColumnDefinition Width="10*" />
                                 <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
+                            
                             <TextBox x:Name="TextBox_Engine_Drop"
                                      Grid.Column="0"
+                                     Margin="0,0,0,1"
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"
                                      Foreground="Gray"
@@ -56,41 +59,36 @@
                                      IsReadOnly="True"/>
                             <Button x:Name="Button_Engine_Browse"
                                     Grid.Column="1"
+                                    Margin="0,0,0,1"
                                     Content="Browse..."/>
-                            <Border Grid.Row="1"
-                                    Margin="0,-1,0,0"
-                                    BorderThickness="1"
-                                    BorderBrush="DarkGray">
-                                <Grid>
-                                    <StackPanel x:Name="StackPanel_EngineParams"
-                                                Orientation="Horizontal"/>
-                                    <Label x:Name="Label_EngineParamsCount_Read"
-                                           Grid.Row="1"
-                                           HorizontalContentAlignment="Center"
-                                           VerticalContentAlignment="Center"
-                                           Content="+ 0 parameters"/>
-                                </Grid>
-                            </Border>
-                            <!-- Label to be collapsed -->
-                            <!--<Label x:Name="Label_EngineParamsCount_Read"
-                                   Grid.Row="1"
-                                   HorizontalContentAlignment="Center"
-                                   VerticalContentAlignment="Center"
-                                   Content="0 params"/>-->
+                            
+                            <StackPanel x:Name="StackPanel_EngineParams"
+                                        Grid.Row="1"
+                                        Orientation="Horizontal"/>
+                            <TextBox x:Name="TextBox_EngineParameters"
+                                     Grid.Row="1"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Text="+ 0 parameters"
+                                     Cursor="Arrow"
+                                     IsReadOnly="True"/>
                             <Button x:Name="Button_EngineParams_Edit"
                                     Grid.Row="1"
                                     Grid.Column="1"
-                                    Margin="0,-1,0,0"
                                     Content="Edit..."/>
                         </Grid>
                     </GroupBox>
 
                     <!-- Levels -->
-                    <GroupBox Grid.Row="3"
+                    <GroupBox x:Name="GroupBox_Levels"
+                              Grid.Row="3"
                               Grid.Column="1"
-                              Header="Levels">
+                              Header="Levels"
+                              AllowDrop="True"
+                              PreviewDragOver="GroupBox_Levels_PreviewDragOver"
+                              Drop="GroupBox_Levels_Drop">
                         <Grid>
-                            <TabControl Margin="8">
+                            <TabControl x:Name="TabControl_Levels" Margin="8">
                                 <!-- Add Name ? -->
                                 <TabItem Header="Base presets">
                                     <Grid>
@@ -145,7 +143,7 @@
                                             <RowDefinition Height="1*"/>
                                             <RowDefinition Height="3*"/>
                                             <RowDefinition Height="1*"/>
-                                            <RowDefinition Height="2*"/>
+                                            <RowDefinition Height="3*"/>
                                             <RowDefinition Height="1*"/>
                                             <RowDefinition Height="3*"/>
                                             <RowDefinition Height="20"/>
@@ -153,7 +151,7 @@
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="20"/>
                                             <ColumnDefinition Width="1*"/>
-                                            <ColumnDefinition Width="15*"/>
+                                            <ColumnDefinition Width="12*"/>
                                             <ColumnDefinition Width="1*"/>
                                             <ColumnDefinition Width="20"/>
                                         </Grid.ColumnDefinitions>
@@ -163,7 +161,8 @@
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Content="Iwad :"/>
-                                        <TextBox Grid.Row="1"
+                                        <TextBox x:Name="TextBox_Levels_NewIwad"
+                                                 Grid.Row="1"
                                                  Grid.Column="2"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
@@ -173,29 +172,28 @@
                                                  IsReadOnly="True"
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
-                                                 Text="Drop an IWAD file here ..."/>
+                                                 Text="Drop an IWAD file here..."/>
                                         <Button Grid.Row="1" 
                                                 Grid.Column="3"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center" 
-                                                Content="..."/>
-                                        <Button Grid.Row="1" 
+                                                VerticalAlignment="Top" 
+                                                Content="Browse..."/>
+                                        <!--<Button Grid.Row="1" 
                                                 Grid.Column="3"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center" 
-                                                Content="->"/>
+                                                Content="->"/>-->
                                         <Button Grid.Row="1" 
                                                 Grid.Column="3"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center" 
-                                                Content="x"/>
-                                        
+                                                VerticalAlignment="Bottom" 
+                                                Content="Clear &#x21ba;"/>
+
                                         <Label Grid.Row="3"
                                                Grid.Column="1"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Content="Level :"/>
-                                        <TextBox Grid.Row="3" 
+                                        <TextBox x:Name="TextBox_Levels_NewLevel"
+                                                 Grid.Row="3" 
                                                  Grid.Column="2"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
@@ -205,29 +203,28 @@
                                                  IsReadOnly="True"
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
-                                                 Text="Drop a .wad/.pk3 file here ..."/>
+                                                 Text="Drop a .wad/.pk3 file here..."/>
                                         <Button Grid.Row="3" 
                                                 Grid.Column="3"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center" 
-                                                Content="..."/>
-                                        <Button Grid.Row="3" 
+                                                VerticalAlignment="Top" 
+                                                Content="Browse..."/>
+                                        <!--<Button Grid.Row="3" 
                                                 Grid.Column="3"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center" 
-                                                Content="->"/>
+                                                Content="->"/>-->
                                         <Button Grid.Row="3" 
                                                 Grid.Column="3"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center" 
-                                                Content="x"/>
+                                                VerticalAlignment="Bottom" 
+                                                Content="Clear &#x21ba;"/>
                                         
                                         <Label Grid.Row="5"
                                                Grid.Column="1"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Content="Misc. :"/>
-                                        <TextBox Grid.Row="5" 
+                                        <TextBox x:Name="TextBox_Levels_NewMisc"
+                                                 Grid.Row="5" 
                                                  Grid.Column="2"
                                                  HorizontalAlignment="Stretch"
                                                  VerticalAlignment="Stretch"
@@ -237,29 +234,28 @@
                                                  IsReadOnly="True"
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
-                                                 Text="Drop a .deh/.bex file here ..."/>
+                                                 Text="Drop a .deh/.bex file here..."/>
                                         <Button Grid.Row="5" 
                                                 Grid.Column="3"
-                                                HorizontalAlignment="Left"
-                                                VerticalAlignment="Center" 
-                                                Content="..."/>
-                                        <Button Grid.Row="5" 
+                                                VerticalAlignment="Top" 
+                                                Content="Browse..."/>
+                                        <!--<Button Grid.Row="5" 
                                                 Grid.Column="3"
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center" 
-                                                Content="->"/>
+                                                Content="->"/>-->
                                         <Button Grid.Row="5" 
                                                 Grid.Column="3"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Center" 
-                                                Content="x"/>
+                                                VerticalAlignment="Bottom" 
+                                                Content="Clear &#x21ba;"/>
 
                                         <Label Grid.Row="7"
                                                Grid.Column="1"
+                                               Grid.ColumnSpan="2"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
-                                               Content="Name :"/>
-                                        <TextBox Grid.Row="7" 
+                                               Content="Image :"/>
+                                        <!--<TextBox Grid.Row="7" 
                                                  Grid.Column="2"
                                                  Margin="50,0,50,0"
                                                  HorizontalAlignment="Stretch"
@@ -268,12 +264,40 @@
                                                  VerticalContentAlignment="Center"
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
-                                                 Text="Enter preset name ..."/>
+                                                 Text="Enter preset name ..."/>-->
+                                        <TextBox Grid.Row="7" 
+                                                 Grid.Column="2"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch"
+                                                 HorizontalContentAlignment="Center"
+                                                 VerticalContentAlignment="Center"
+                                                 Cursor="Arrow"
+                                                 IsReadOnly="True"
+                                                 FontStyle="Italic"
+                                                 Foreground="Gray"
+                                                 Text="Drop a .jpg/.png file here..."/>
+                                        <Button Grid.Row="7" 
+                                                Grid.Column="3"
+                                                VerticalAlignment="Top" 
+                                                Content="Browse..."/>
+                                        <!--<Button Grid.Row="7" 
+                                                Grid.Column="3"
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center" 
+                                                Content="->"/>-->
+                                        <Button Grid.Row="7" 
+                                                Grid.Column="3"
+                                                VerticalAlignment="Bottom" 
+                                                Content="Clear &#x21ba;"/>
 
-                                        <!-- Or use Grid -->
+                                        <Label Grid.Row="9"
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Content="Options :"/>
                                         <Grid Grid.Row="9"
                                               Grid.Column="2"
-                                              Margin="100,4,100,4">
+                                              Margin="150,0,150,0">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="1*"/>
                                                 <ColumnDefinition Width="1*"/>
@@ -281,19 +305,20 @@
                                             </Grid.ColumnDefinitions>
 
                                             <Button Grid.Column="0"
-                                Margin="10,0,10,0"
+                                Margin="6,0,6,0"
                                 FontSize="13"
                                 Content="Try  &#x2193;"
                                 />
                                             <Button Grid.Column="1"
-                                Margin="10,0,10,0"
+                                                    Margin="6,0,6,0"
                                 FontSize="13"
-                                Content="Reset  &#x21ba;"
+                                Content="Save as...  &#x1f5ab;"
+                                
                                 />
                                             <Button Grid.Column="2"
-                                Margin="10,0,10,0"
+                                                    Margin="6,0,6,0"
                                 FontSize="13"
-                                Content="Save  &#x1f5ab;"
+                                Content="Clear all  &#x21ba;"
                                 />
 
                                         </Grid>
@@ -450,34 +475,38 @@
                               Grid.RowSpan="7"
                               Grid.Column="3"
                               Header="Options">
-                        <StackPanel Orientation="Vertical">
-                            <Button HorizontalAlignment="Center"
+                        <Grid Margin="8">
+                            <!-- TODO: Define grid = 4 parts ? -->
+                            <StackPanel Orientation="Vertical">
+                                <Button HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
-                                    Margin="8,26,8,8"
+                                    Margin="0,26,0,0"
                                     Cursor="Hand">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <ContentPresenter Content="{TemplateBinding Content}"/>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <Image Source="pack://application:,,,/Resources/Images/index.png" />
-                            </Button>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <Image Source="pack://application:,,,/Resources/Images/index.png" />
+                                </Button>
 
-                            <Button HorizontalAlignment="Center"
+                                <Button HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Cursor="Hand"
-                                    Margin="8,52,8,8">
-                                <Button.Template>
-                                    <ControlTemplate TargetType="Button">
-                                        <ContentPresenter Content="{TemplateBinding Content}"/>
-                                    </ControlTemplate>
-                                </Button.Template>
-                                <!-- Name="Play_Image" -->
-                                <Image 
+                                    Margin="0,52,0,0">
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="Button">
+                                            <ContentPresenter Content="{TemplateBinding Content}"/>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                    <!-- Name="Play_Image" -->
+                                    <Image 
                                Source="pack://application:,,,/Resources/Images/play_darker.png" />
-                            </Button>
+                                </Button>
 
-                        </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                        
                     </GroupBox>
                     
                     <!--<Button Grid.Row="1"
