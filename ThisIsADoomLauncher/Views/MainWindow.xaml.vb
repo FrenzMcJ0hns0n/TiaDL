@@ -853,6 +853,10 @@ Namespace Views
 
         End Sub
 
+        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+        End Sub
+
 #End Region
 
 

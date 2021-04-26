@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         
         Title="This is a Doom Launcher v3" 
-        Width="1200" Height="860" 
+        Width="1200" Height="980" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
 
@@ -17,13 +17,13 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="3*" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="12*" />
+                        <RowDefinition Height="9*" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="2*" />
+                        <RowDefinition Height="4*" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="5*" />
+                        <RowDefinition Height="4*" />
                         <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -33,11 +33,55 @@
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="20" />
                     </Grid.ColumnDefinitions>
-
                     <GroupBox Grid.Row="1"
                               Grid.Column="1"
-                              Header="Engine">
-                        <Grid>
+                              Header="Port / Engine">
+                        <Grid Margin="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="10*" />
+                                <ColumnDefinition Width="1*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="TextBox_Engine_Drop"
+                                     Grid.Column="0"
+                                     HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     Foreground="Gray"
+                                     FontStyle="Italic"
+                                     Text="Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
+                                     Cursor="Arrow"
+                                     IsReadOnly="True"/>
+                            <Button x:Name="Button_Engine_Browse"
+                                    Grid.Column="1"
+                                    Content="Browse..."/>
+                            <Border Grid.Row="1"
+                                    Margin="0,-1,0,0"
+                                    BorderThickness="1"
+                                    BorderBrush="DarkGray">
+                                <Grid>
+                                    <StackPanel x:Name="StackPanel_EngineParams"
+                                                Orientation="Horizontal"/>
+                                    <Label x:Name="Label_EngineParamsCount_Read"
+                                           Grid.Row="1"
+                                           HorizontalContentAlignment="Center"
+                                           VerticalContentAlignment="Center"
+                                           Content="+ 0 parameters"/>
+                                </Grid>
+                            </Border>
+                            <!-- Label to be collapsed -->
+                            <!--<Label x:Name="Label_EngineParamsCount_Read"
+                                   Grid.Row="1"
+                                   HorizontalContentAlignment="Center"
+                                   VerticalContentAlignment="Center"
+                                   Content="0 params"/>-->
+                            <Button x:Name="Button_EngineParams_Edit"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,-1,0,0"
+                                    Content="Edit..."/>
                         </Grid>
                     </GroupBox>
 
@@ -46,7 +90,7 @@
                               Grid.Column="1"
                               Header="Levels">
                         <Grid>
-                            <TabControl Margin="10,20,10,10">
+                            <TabControl Margin="8">
                                 <!-- Add Name ? -->
                                 <TabItem Header="Base presets">
                                     <Grid>
@@ -58,7 +102,7 @@
                                                     <StackPanel Orientation="Horizontal">
                                                         <Image Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
                                                        Margin="-3,0,0,0"
-                                                       Height="64"/>
+                                                       Height="68"/>
                                                         <TextBlock Margin="8,0,0,0"
                                                            VerticalAlignment="Center"
                                                            FontWeight="DemiBold"
@@ -72,16 +116,16 @@
                                 </TabItem>
                                 <TabItem Header="User presets">
                                     <Grid>
-                                        <Label x:Name="Label_NoUserPresetsFound2"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       FontSize="24"
-                                       Foreground="Gray"
-                                       Content="No user presets found ..."/>
+                                        <Label x:Name="Label_Levels_NoUserPresets"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="20"
+                                               Foreground="Gray"
+                                               Content="No user presets found"/>
                                         <ListView x:Name="ListView_UserPresets"
-                                          SelectionChanged="ListView_UserPresets_SelectionChanged"
-                                          Margin="-3"
-                                          Visibility="Collapsed">
+                                                  SelectionChanged="ListView_UserPresets_SelectionChanged"
+                                                  Margin="-3"
+                                                  Visibility="Collapsed">
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
@@ -123,6 +167,77 @@
                                         </Grid.ColumnDefinitions>
                                     </Grid>
                                 </TabItem>
+                                <!-- Visibility="Hidden" -->
+                                <TabItem Header="Manual drop">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="20"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="1*"/>
+                                            <RowDefinition Height="20"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="20"/>
+                                            <ColumnDefinition Width="1*"/>
+                                            <ColumnDefinition Width="15*"/>
+                                            <ColumnDefinition Width="20"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <Label Grid.Row="2"
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Content="Iwad :"/>
+                                        <TextBox Grid.Row="2" 
+                                                 Grid.Column="2"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,1,0,0"
+                                                 Cursor="Arrow"
+                                                 IsReadOnly="True"/>
+                                        <Label Grid.Row="3"
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Content="Level :"/>
+                                        <TextBox Grid.Row="3" 
+                                                 Grid.Column="2"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,1,0,0"
+                                                 Cursor="Arrow"
+                                                 IsReadOnly="True"/>
+                                        <Label Grid.Row="4"
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Content="Misc. :"/>
+                                        <TextBox Grid.Row="4" 
+                                                 Grid.Column="2"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,1,0,0"
+                                                 Cursor="Arrow"
+                                                 IsReadOnly="True"/>
+                                        <Label Grid.Row="5"
+                                               Grid.Column="1"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Center"
+                                               Content="Pouet :"/>
+                                        <TextBox Grid.Row="5" 
+                                                 Grid.Column="2"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Center"
+                                                 Margin="0,1,0,0"
+                                                 Cursor="Arrow"
+                                                 IsReadOnly="True"/>
+                                    </Grid>
+                                    
+                                </TabItem>
                             </TabControl>
 
                         </Grid>
@@ -130,8 +245,66 @@
 
                     <GroupBox Grid.Row="5"
                               Grid.Column="1"
-                              Header="Mods">
-                        <Grid>
+                              Header="Files / Mods">
+                        <Grid Margin="8">
+                            <TabControl>
+                                <TabItem Header="Base presets">
+                                    <Grid>
+                                        <ListView x:Name="ListView_Mods_BasePresets"
+                                                  SelectionChanged="ListView_Mods_BasePresets_SelectionChanged"
+                                                  Margin="-3">
+                                            <!-- Use templates to bind -->
+                                            <ListView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Margin="8,0,0,0"
+                                                                   VerticalAlignment="Center"
+                                                                   FontWeight="DemiBold"
+                                                                   FontSize="18"
+                                                                   Text="{Binding Name}"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ListView.ItemTemplate>
+                                        </ListView>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="User presets">
+                                    <Grid>
+                                        <Label x:Name="Label_Mods_NoUserPresets"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               FontSize="20"
+                                               Foreground="Gray"
+                                               Content="No user presets found"/>
+                                    </Grid>
+                                </TabItem>
+                                <TabItem Header="Add new preset">
+
+                                </TabItem>
+                            </TabControl>
+                            <!--<Grid.RowDefinitions>
+                                <RowDefinition Height="2*" />
+                                <RowDefinition Height="1*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="18*" />
+                                <ColumnDefinition Width="2*" />
+                            </Grid.ColumnDefinitions>
+                            <Border BorderThickness="1"
+                                    BorderBrush="DarkGray">
+                                <StackPanel x:Name="StackPanel_Mods"
+                                        Orientation="Horizontal">
+
+                                </StackPanel>
+                            </Border>
+                            <Button x:Name="Button_ModInfo"
+                                    Grid.Column="1"
+                                    Content="Get more info..."/>
+                            <Border Grid.Row="1"
+                                    BorderThickness="1"
+                                    BorderBrush="DarkGray">
+                                
+                            </Border>-->
                         </Grid>
                     </GroupBox>
 
@@ -142,31 +315,41 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="1*" />
-                                <RowDefinition Height="8" />
                                 <RowDefinition Height="1*" />
-                                <RowDefinition Height="8" />
                                 <RowDefinition Height="1*" />
-                                <RowDefinition Height="8" />
                                 <RowDefinition Height="1*" />
                                 <RowDefinition Height="10" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="17*" />
+                                <ColumnDefinition Width="15*" />
                                 <ColumnDefinition Width="10" />
                             </Grid.ColumnDefinitions>
-                            
+
                             <Label Grid.Row="1" 
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Content="Engine :"/>
                             <TextBox Grid.Row="1" 
-                                     Grid.Column="3"
+                                     Grid.Column="2"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center"
+                                     Margin="0,1,0,0"
+                                     Cursor="Arrow"
+                                     IsReadOnly="True"/>
+
+                            <Label Grid.Row="2" 
+                                   Grid.Column="1" 
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Content="Params :"/>
+                            <TextBox Grid.Row="2" 
+                                     Grid.Column="2"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Center"
+                                     Margin="0,1,0,0"
                                      Cursor="Arrow"
                                      IsReadOnly="True"/>
 
@@ -174,22 +357,27 @@
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
-                                   Content="Params :"/>
-                            <TextBox Grid.Row="3" Grid.Column="3" />
-
-                            <Label Grid.Row="5" 
-                                   Grid.Column="1" 
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
                                    Content="Iwad :"/>
-                            <TextBox Grid.Row="5" Grid.Column="3" />
+                            <TextBox Grid.Row="3" 
+                                     Grid.Column="2"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Center"
+                                     Margin="0,1,0,0"
+                                     Cursor="Arrow"
+                                     IsReadOnly="True"/>
 
-                            <Label Grid.Row="7" 
+                            <Label Grid.Row="4" 
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Content="File(s) :"/>
-                            <TextBox Grid.Row="7" Grid.Column="3" />
+                            <TextBox Grid.Row="4" 
+                                     Grid.Column="2"
+                                     HorizontalAlignment="Stretch"
+                                     VerticalAlignment="Center"
+                                     Margin="0,1,0,0"
+                                     Cursor="Arrow"
+                                     IsReadOnly="True"/>
                         </Grid>
                     </GroupBox>
 
