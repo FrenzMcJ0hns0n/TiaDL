@@ -21,7 +21,7 @@
                         <RowDefinition Height="20" />
                         <RowDefinition Height="9*" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="5*" />
                         <RowDefinition Height="20" />
                         <RowDefinition Height="4*" />
                         <RowDefinition Height="20" />
@@ -36,7 +36,7 @@
                     
                     <GroupBox Grid.Row="1"
                               Grid.Column="1"
-                              Header="Port / Engine">
+                              Header="Port">
                         <Grid Margin="8">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="2*" />
@@ -47,7 +47,7 @@
                                 <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
                             
-                            <TextBox x:Name="TextBox_Engine_Drop"
+                            <TextBox x:Name="TextBox_Port"
                                      Grid.Column="0"
                                      Margin="0,0,0,1"
                                      HorizontalContentAlignment="Center"
@@ -56,8 +56,11 @@
                                      FontStyle="Italic"
                                      Text="Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
                                      Cursor="Arrow"
-                                     IsReadOnly="True"/>
-                            <Button x:Name="Button_Engine_Browse"
+                                     IsReadOnly="True"
+                                     AllowDrop="True"
+                                     PreviewDragOver="TextBox_Port_PreviewDragOver"
+                                     Drop="TextBox_Port_Drop"/>
+                            <Button x:Name="Button_Port_Browse"
                                     Grid.Column="1"
                                     Margin="0,0,0,1"
                                     Content="Browse..."/>
@@ -65,7 +68,7 @@
                             <StackPanel x:Name="StackPanel_EngineParams"
                                         Grid.Row="1"
                                         Orientation="Horizontal"/>
-                            <TextBox x:Name="TextBox_EngineParameters"
+                            <TextBox x:Name="TextBox_PortParameters"
                                      Grid.Row="1"
                                      HorizontalContentAlignment="Center"
                                      VerticalContentAlignment="Center"

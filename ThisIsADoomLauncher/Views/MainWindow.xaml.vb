@@ -287,18 +287,18 @@ Namespace Views
         Private Sub TextBox_DropWadFile_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
 
-                If ValidateFile(file(0)) = "level" Then
+                If ValidateFile(filePaths(0)) = "level" Then
                     TextBox_DropWadFile.Background = Brushes.LightGreen
                     TextBox_DropWadFile.ClearValue(FontStyleProperty)
                     TextBox_DropWadFile.ClearValue(ForegroundProperty)
-                    TextBox_DropWadFile.Text = file(0)
+                    TextBox_DropWadFile.Text = filePaths(0)
 
-                ElseIf ValidateFile(file(0)) = "iwad" Then
+                ElseIf ValidateFile(filePaths(0)) = "iwad" Then
                     MessageBox.Show("Error : this file is an IWAD")
 
-                ElseIf ValidateFile(file(0)) = "misc" Then
+                ElseIf ValidateFile(filePaths(0)) = "misc" Then
                     MessageBox.Show("Error : this file refers to a 'Misc.' file")
                 Else
                     MessageBox.Show("Error : not a .wad/.pk3 file")
@@ -317,18 +317,18 @@ Namespace Views
         Private Sub TextBox_DropMiscFile_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
 
-                If ValidateFile(file(0)) = "misc" Then
+                If ValidateFile(filePaths(0)) = "misc" Then
                     TextBox_DropMiscFile.Background = Brushes.LightGreen
                     TextBox_DropMiscFile.ClearValue(FontStyleProperty)
                     TextBox_DropMiscFile.ClearValue(ForegroundProperty)
-                    TextBox_DropMiscFile.Text = file(0)
+                    TextBox_DropMiscFile.Text = filePaths(0)
 
-                ElseIf ValidateFile(file(0)) = "iwad" Then
+                ElseIf ValidateFile(filePaths(0)) = "iwad" Then
                     MessageBox.Show("Error : this file is an IWAD")
 
-                ElseIf ValidateFile(file(0)) = "level" Then
+                ElseIf ValidateFile(filePaths(0)) = "level" Then
                     MessageBox.Show("Error : this file refers to a 'Level' file")
                 Else
                     MessageBox.Show("Error : not a .deh/.bex file")
@@ -518,11 +518,11 @@ Namespace Views
         Private Sub TextBox_TestingEngine_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                Dim info As FileInfo = New FileInfo(file(0))
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                Dim info As FileInfo = New FileInfo(filePaths(0))
                 Dim ext As String = info.Extension.ToLowerInvariant
 
-                If info.Extension.ToLowerInvariant = ".exe" Then TextBox_TestingEngine.Text = file(0)
+                If info.Extension.ToLowerInvariant = ".exe" Then TextBox_TestingEngine.Text = filePaths(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingEngine_Drop()'. Exception : " & ex.ToString)
@@ -537,8 +537,8 @@ Namespace Views
         Private Sub TextBox_TestingIwad_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                If ValidateFile(file(0)) = "iwad" Then TextBox_TestingIwad.Text = file(0)
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                If ValidateFile(filePaths(0)) = "iwad" Then TextBox_TestingIwad.Text = filePaths(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingIwad_Drop()'. Exception : " & ex.ToString)
@@ -553,8 +553,8 @@ Namespace Views
         Private Sub TextBox_TestingFile1_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                TextBox_TestingFile1.Text = file(0)
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                TextBox_TestingFile1.Text = filePaths(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile1_Drop()'. Exception : " & ex.ToString)
@@ -569,8 +569,8 @@ Namespace Views
         Private Sub TextBox_TestingFile2_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                TextBox_TestingFile2.Text = file(0)
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                TextBox_TestingFile2.Text = filePaths(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile2_Drop()'. Exception : " & ex.ToString)
@@ -585,8 +585,8 @@ Namespace Views
         Private Sub TextBox_TestingFile3_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                TextBox_TestingFile3.Text = file(0)
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                TextBox_TestingFile3.Text = filePaths(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile3_Drop()'. Exception : " & ex.ToString)
@@ -601,8 +601,8 @@ Namespace Views
         Private Sub TextBox_TestingFile4_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                TextBox_TestingFile4.Text = file(0)
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                TextBox_TestingFile4.Text = filePaths(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile4_Drop()'. Exception : " & ex.ToString)
@@ -617,8 +617,8 @@ Namespace Views
         Private Sub TextBox_TestingFile5_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim file() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
-                TextBox_TestingFile5.Text = file(0)
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                TextBox_TestingFile5.Text = filePaths(0)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile5_Drop()'. Exception : " & ex.ToString)
@@ -922,6 +922,58 @@ Namespace Views
                 WriteToLog(DateTime.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
             End Try
 
+        End Sub
+
+        Private Sub TextBox_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
+
+            Try
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                Dim info As FileInfo = New FileInfo(filePaths(0))
+                Dim ext As String = info.Extension.ToLowerInvariant
+
+                If info.Extension.ToLowerInvariant = ".exe" Then FillTextBox(TextBox_Port, filePaths(0))
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_Port_Drop()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub FillTextBox(sender As Object, txt As String)
+
+            Try
+                Dim txtBx As TextBox = sender
+
+                With txtBx
+                    .Text = txt
+                    .FontStyle = FontStyles.Normal
+                    .Foreground = Brushes.Black
+                End With
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'FillTextBox()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub UnfillTextBox(sender As Object)
+
+            Try
+                Dim txtBx As TextBox = sender
+
+                With txtBx
+                    .Text = Nothing
+                    .FontStyle = FontStyles.Italic
+                    .Foreground = Brushes.Gray
+                End With
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'UnfillTextBox()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
