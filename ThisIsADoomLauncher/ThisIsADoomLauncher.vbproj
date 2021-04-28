@@ -92,7 +92,8 @@
     <Compile Include="Helpers\GuiHelper.vb" />
     <Compile Include="Helpers\Serialization.vb" />
     <Compile Include="Models\Launcher.vb" />
-    <Compile Include="Models\Preset.vb" />
+    <Compile Include="Models\LevelPreset.vb" />
+    <Compile Include="Models\ModPreset.vb" />
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
@@ -171,7 +172,8 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <EmbeddedResource Include="Resources\common_presets.csv" />
+    <EmbeddedResource Include="Resources\base_presets_Levels.csv" />
+    <None Include="Resources\base_presets_Mods.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

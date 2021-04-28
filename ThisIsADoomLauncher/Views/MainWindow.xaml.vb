@@ -19,7 +19,8 @@ Namespace Views
                 ValidateDirectories()
                 SetIniFiles()
                 SetCommonPresets()
-                PopulateBasePresets() 'V3
+                PopulateBaseLevelPresets() 'V3
+                PopulateBaseModsPresets() 'V3
                 UpdateGUI()
 
                 'Performance eval
@@ -33,11 +34,23 @@ Namespace Views
 
         End Sub
 
-        Private Sub PopulateBasePresets()
+        Private Sub PopulateBaseLevelPresets()
 
             'V3
             Try
-                ListView_BasePresets.ItemsSource = FormatPresetsData_FromCsv("common") 'TODO V3 : Change COMMON to BASE
+                ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels") 'TODO V3 : Change COMMON to BASE
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub PopulateBaseModsPresets()
+
+            'V3
+            Try
+                ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCSV("base_mods")
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
@@ -49,7 +62,7 @@ Namespace Views
 
             Try
                 'DisplayPresets("common", FormatPresetsData_FromCsv("common")) PREVIOUS
-                ListView_CommonPresets.ItemsSource = FormatPresetsData_FromCsv("common")
+                ListView_CommonPresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
@@ -203,7 +216,7 @@ Namespace Views
 
                 If item.Name = "User" Then
                     If File.Exists(Path.Combine(My.Settings.RootDirPath, "presets.csv")) Then
-                        DisplayUserPresets(FormatPresetsData_FromCsv("user")) 'TODO? Think about async
+                        DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'TODO? Think about async
                     End If
                 End If
 
@@ -215,14 +228,64 @@ Namespace Views
 
         Private Sub ListView_CommonPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
-            Dim p As Preset = CType(sender.SelectedItem, Preset)
+            Try
+                Dim p As LevelPreset = CType(sender.SelectedItem, LevelPreset)
 
-            TextBox_IwadToLaunch.Text = ConvertIwadPath_RelativeToAbsolute(p.Iwad)
-            TextBox_LevelToLaunch.Text = ConvertLevelPath_RelativeToAbsolute(p.Level)
-            TextBox_MiscToLaunch.Text = ConvertMiscPath_RelativeToAbsolute(p.Misc)
+                TextBox_IwadToLaunch.Text = ConvertIwadPath_RelativeToAbsolute(p.Iwad)
+                TextBox_LevelToLaunch.Text = ConvertLevelPath_RelativeToAbsolute(p.Level)
+                TextBox_MiscToLaunch.Text = ConvertMiscPath_RelativeToAbsolute(p.Misc)
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ListView_CommonPresets_SelectionChanged()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
+        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+            Try
+                Dim p As ModPreset = CType(sender.SelectedItem, ModPreset)
+
+                TextBlock_Mods_Desc.Text = p.Desc
+
+                'Function to convert Relative path into Absolute
+                ListView_Mods_Files.ItemsSource = ConvertModPath_RelativeToAbsolute(p.Files)
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+
+        Private Function ConvertModPath_RelativeToAbsolute(modFilesList As List(Of String)) As List(Of String)
+
+            Dim absoluteModPaths As List(Of String) = New List(Of String)
+
+            Try
+                For Each modFile As String In modFilesList
+
+                    If File.Exists(modFile) Then
+                        absoluteModPaths.Add(modFile)
+                    Else
+                        If modFile = Nothing Then
+                            absoluteModPaths.Add("-- No file --")
+                        ElseIf File.Exists(Path.Combine(My.Settings.ModDir, modFile)) Then
+                            absoluteModPaths.Add(Path.Combine(My.Settings.ModDir, modFile))
+                        Else
+                            absoluteModPaths.Add("-- File not recognized --")
+                        End If
+                    End If
+
+                Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ConvertModPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
+            End Try
+
+            Return absoluteModPaths
+
+        End Function
 
 
 
@@ -908,9 +971,9 @@ Namespace Views
 
 #Region "TiaDL v3"
 
-        Private Sub ListView_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
-            Dim p As Preset = CType(sender.SelectedItem, Preset)
+            Dim p As LevelPreset = CType(sender.SelectedItem, LevelPreset)
 
             'TODO : Handle both absolute/relative paths
             TextBox_Summary_Iwad.Text = ConvertIwadPath_RelativeToAbsolute(p.Iwad)
@@ -938,7 +1001,7 @@ Namespace Views
         '            })
         'End Sub
 
-        Private Sub Handle_FilesMods(p As Preset)
+        Private Sub Handle_FilesMods(p As LevelPreset)
             'NOT SURE IF Function is appropriate, not arg will be returned ... yet !
             Dim arg As String = Nothing
 
@@ -956,7 +1019,7 @@ Namespace Views
                     StackPanel_Summary_FilesMods.Children.Add(
                         New TextBox() With
                         {
-                            .Margin = New Thickness(0, 0, 4, 0),
+                            .Margin = New Thickness(0, 0, 6, 0),
                             .Background = Brushes.LightGray,
                             .Text = filename
                         })
@@ -996,10 +1059,6 @@ Namespace Views
         End Sub
 
         Private Sub ListView_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
-        End Sub
-
-        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
         End Sub
 

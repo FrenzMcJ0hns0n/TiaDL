@@ -13,7 +13,7 @@ Module PresetsMethods
     ''' <para>Display red text on filepath if does not exist</para>
     ''' </summary>
     ''' 
-    Sub SelectUserPreset(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
+    Sub SelectUserLevelPreset(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
 
         Try
             With MainWindow_Instance()
@@ -34,13 +34,13 @@ Module PresetsMethods
     ''' <para>Delete a preset by its name</para>
     ''' </summary>
     '''
-    Sub DeleteUserPreset(presetName As String)
+    Sub DeleteUserLevelPreset(presetName As String)
 
         Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
 
         If MessageBox.Show(message, "Delete user preset", MessageBoxButton.OKCancel) = MessageBoxResult.OK Then
             DeletePreset(presetName)
-            DisplayUserPresets(FormatPresetsData_FromCsv("user")) 'Update GUI
+            DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'Update GUI
         End If
 
     End Sub
@@ -57,7 +57,7 @@ Module PresetsMethods
     ''' values(0) : Preset Name, values(1) : Preset Iwad, values(2) : Preset Level, values(3) : Preset Misc</para>
     ''' </summary>
     ''' 
-    Sub DisplayUserPresets(presetsList As List(Of Preset))
+    Sub DisplayUserPresets(presetsList As List(Of LevelPreset))
 
         With MainWindow_Instance()
             .StackPanel_UserPresets.Children.Clear()
@@ -80,11 +80,11 @@ Module PresetsMethods
     End Sub
 
 
-    Private Function ReturnUserPresetButtons(presetsList As List(Of Preset)) As List(Of Button)
+    Private Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
 
         Dim buttonsList As List(Of Button) = New List(Of Button)
 
-        For Each preset As Preset In presetsList
+        For Each preset As LevelPreset In presetsList
             Dim button As Button = New Button() With
             {
                 .Height = 28,
@@ -96,12 +96,12 @@ Module PresetsMethods
             'Left click
             AddHandler button.Click,
                 Sub(sender, e)
-                    SelectUserPreset(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
+                    SelectUserLevelPreset(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
                 End Sub
             'Right click
             AddHandler button.MouseRightButtonDown,
                 Sub(sender, e)
-                    DeleteUserPreset(preset.Name)
+                    DeleteUserLevelPreset(preset.Name)
                 End Sub
 
             buttonsList.Add(button)
@@ -116,9 +116,9 @@ Module PresetsMethods
     ''' Use the parser object to collect data from CSV file
     ''' </summary>
     ''' 
-    Function FormatPresetsData_FromCsv(presetsType As String) As List(Of Preset)
+    Function GetLevelPresets_FromCsv(presetsType As String) As List(Of LevelPreset)
 
-        Dim presets As List(Of Preset) = New List(Of Preset)
+        Dim presets As List(Of LevelPreset) = New List(Of LevelPreset)
         Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
 
         Try
@@ -128,10 +128,10 @@ Module PresetsMethods
 
                     Try
                         Dim readValues As String() = parser.ReadFields()
-                        If readValues.Length < 2 Then Continue Do 'If a preset does not contain BOTH Name and Iwad path, it is ignored
+                        If readValues.Length < 2 Then Continue Do 'If a preset does not contain BOTH Name and Iwad path, it is ignored (useless safety ?)
 
                         presets.Add(
-                            New Preset() With
+                            New LevelPreset() With
                             {
                                 .Name = readValues(0),
                                 .Iwad = readValues(1),
@@ -140,7 +140,8 @@ Module PresetsMethods
                                 .ImagePath = If(readValues.Length = 5, readValues(4), Nothing)
                             }
                         )
-                    Catch ex As MalformedLineException
+
+                    Catch exception As MalformedLineException
                         WriteToLog(DateTime.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
                     End Try
 
@@ -155,6 +156,47 @@ Module PresetsMethods
 
     End Function
 
+    Function GetModPresets_FromCSV(presetsType As String) As List(Of ModPreset)
+
+        Dim presets As List(Of ModPreset) = New List(Of ModPreset)
+        Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
+
+        Try
+
+            Using parser
+                Do While Not parser.EndOfData
+
+                    Try
+                        Dim readValues As String() = parser.ReadFields()
+                        If readValues.Length < 4 Then Continue Do 'If a preset does not contain all info, it is ignored (useless safety ?)
+
+                        presets.Add(
+                            New ModPreset() With
+                            {
+                                .Name = readValues(0),
+                                .Desc = readValues(1),
+                                .ImagePath = readValues(2),
+                                .Files = readValues(3).Split(";").ToList
+                            }
+                        )
+
+                    Catch exception As MalformedLineException
+                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
+
+                    End Try
+
+                Loop
+            End Using
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'GetModPresets_FromCSV()'. Exception : " & ex.ToString)
+        End Try
+
+        Return presets
+
+    End Function
+
+
     ''' <summary>
     ''' Configure the parser as needed
     ''' </summary>
@@ -163,10 +205,14 @@ Module PresetsMethods
 
         Dim parser As TextFieldParser = Nothing
 
-        If presetsType = "common" Then
-            parser = New TextFieldParser(New StringReader(My.Resources.common_presets))
-        ElseIf presetsType = "user" Then
+        If presetsType = "base_levels" Then
+            parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
+        ElseIf presetsType = "base_mods" Then
+            parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
+        ElseIf presetsType = "user_levels" Then
             parser = New TextFieldParser(Path.Combine(My.Settings.RootDirPath, "presets.csv"))
+        ElseIf presetsType = "user_mods" Then
+            'TODO
         End If
 
         With parser

@@ -17,13 +17,13 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="3*" />
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="9*" />
-                        <RowDefinition Height="20" />
                         <RowDefinition Height="5*" />
                         <RowDefinition Height="20" />
-                        <RowDefinition Height="4*" />
+                        <RowDefinition Height="18*" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="10*" />
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="7*" />
                         <RowDefinition Height="20" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -39,8 +39,8 @@
                               Header="Port">
                         <Grid Margin="8">
                             <Grid.RowDefinitions>
+                                <RowDefinition Height="3*" />
                                 <RowDefinition Height="2*" />
-                                <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="10*" />
@@ -61,6 +61,7 @@
                                 AllowDrop="True"
                                 PreviewDragOver="TextBox_Port_PreviewDragOver"
                                 Drop="TextBox_Port_Drop"
+                                TextWrapping="Wrap"
                                 />
                             <Button 
                                 x:Name="Button_Port_Browse"
@@ -99,20 +100,26 @@
                                 <!-- Add Name ? -->
                                 <TabItem Header="Base presets">
                                     <Grid>
-                                        <ListView x:Name="ListView_BasePresets"
-                                          SelectionChanged="ListView_BasePresets_SelectionChanged"
-                                          Margin="-3">
+                                        <ListView 
+                                            x:Name="ListView_Levels_BasePresets"
+                                            Margin="-3"
+                                            SelectionChanged="ListView_Levels_BasePresets_SelectionChanged"
+                                            >
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <Image Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
-                                                       Margin="-3,0,0,0"
-                                                       Height="68"/>
-                                                        <TextBlock Margin="8,0,0,0"
-                                                           VerticalAlignment="Center"
-                                                           FontWeight="DemiBold"
-                                                           FontSize="18"
-                                                           Text="{Binding Name}"/>
+                                                        <Image 
+                                                            Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
+                                                            Margin="-3,0,0,0"
+                                                            Height="68"
+                                                            />
+                                                        <TextBlock
+                                                            Margin="8,0,0,0"
+                                                            VerticalAlignment="Center"
+                                                            FontWeight="DemiBold"
+                                                            FontSize="18"
+                                                            Text="{Binding Name}"
+                                                            />
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
@@ -339,24 +346,84 @@
 
                     <GroupBox Grid.Row="5"
                               Grid.Column="1"
-                              Header="Files / Mods">
+                              Header="Mods">
                         <Grid Margin="8">
                             <TabControl>
                                 <TabItem Header="Base presets">
                                     <Grid>
-                                        <ListView x:Name="ListView_Mods_BasePresets"
-                                                  SelectionChanged="ListView_Mods_BasePresets_SelectionChanged"
-                                                  Margin="-3">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="2*" />
+                                            <RowDefinition Height="7*" />
+                                            <RowDefinition Height="10" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="8*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="2*" />
+                                            <ColumnDefinition Width="14*" />
+                                            <ColumnDefinition Width="10" />
+                                        </Grid.ColumnDefinitions>
+                                        <ListView 
+                                            x:Name="ListView_Mods_BasePresets"
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Grid.RowSpan="2"
+                                            Margin="0"
+                                            SelectionChanged="ListView_Mods_BasePresets_SelectionChanged"
+                                            >
                                             <!-- Use templates to bind -->
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <TextBlock Margin="8,0,0,0"
-                                                               VerticalAlignment="Center"
-                                                               FontWeight="DemiBold"
-                                                               FontSize="18"
-                                                               Text="{Binding Name}"/>
+                                                    <!--<StackPanel
+                                                        x:Name="StackPanel_Mods"
+                                                        Orientation="Vertical"
+                                                        >-->
+                                                        <TextBlock
+                                                            VerticalAlignment="Center"
+                                                            FontWeight="DemiBold"
+                                                            FontSize="12"
+                                                            Text="{Binding Name}"
+                                                            />
+                                                    <!--</StackPanel>-->
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
+                                        </ListView>
+                                        <Label 
+                                            x:Name="Label_Mods_Desc"
+                                            Grid.Row="1"
+                                            Grid.Column="3"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Margin="0,-2,0,0"
+                                            Content="Description :"
+                                            />
+                                        <TextBlock
+                                            x:Name="TextBlock_Mods_Desc"
+                                            Grid.Row="1"
+                                            Grid.Column="4"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Center"
+                                            Margin="6,0,0,1"
+                                            FontWeight="DemiBold"
+                                            Text="(example) Brutal Doom v21 + Power Fantasy v2"
+                                            />
+
+                                        <Label 
+                                            x:Name="Label_Mods_Files"
+                                            Grid.Row="2"
+                                            Grid.Column="3"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Center"
+                                            Content="Mod files :"
+                                            />
+                                        <ListView
+                                            x:Name="ListView_Mods_Files"
+                                            Grid.Row="2"
+                                            Grid.Column="4"
+                                            FontSize="11"
+                                            >
                                         </ListView>
                                     </Grid>
                                 </TabItem>
@@ -441,13 +508,22 @@
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Content="Params :"/>
-                                <TextBox Grid.Row="2" 
+                                <StackPanel 
+                                    x:Name="StackPanel_Summary_PortParams"
+                                    Grid.Row="4" 
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center"
+                                    Margin="0,1,0,0"
+                                    Orientation="Horizontal"
+                                    />
+                                <!--<TextBox Grid.Row="2" 
                                      Grid.Column="2"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center"
                                      Margin="0,1,0,0"
                                      Cursor="Arrow"
-                                     IsReadOnly="True"/>
+                                     IsReadOnly="True"/>-->
 
                                 <Label Grid.Row="3" 
                                    Grid.Column="1" 
