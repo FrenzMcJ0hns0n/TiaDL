@@ -203,7 +203,7 @@ Namespace Views
 
                 If item.Name = "User" Then
                     If File.Exists(Path.Combine(My.Settings.RootDirPath, "presets.csv")) Then
-                        DisplayPresets(FormatPresetsData_FromCsv("user")) 'TODO? Think about async
+                        DisplayUserPresets(FormatPresetsData_FromCsv("user")) 'TODO? Think about async
                     End If
                 End If
 
@@ -342,7 +342,7 @@ Namespace Views
 
         Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
 
-            If TextBox_NewPreset_Name.Text = "Enter preset name ..." Then
+            If TextBox_NewPreset_Name.Text = "Enter preset name..." Then
                 TextBox_NewPreset_Name.Text = Nothing
                 TextBox_NewPreset_Name.ClearValue(FontStyleProperty)
                 TextBox_NewPreset_Name.ClearValue(ForegroundProperty)
@@ -353,7 +353,7 @@ Namespace Views
         Private Sub TextBox_NewPreset_Name_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.LostFocus
 
             If TextBox_NewPreset_Name.Text = Nothing Then
-                TextBox_NewPreset_Name.Text = "Enter preset name ..."
+                TextBox_NewPreset_Name.Text = "Enter preset name..."
                 TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
                 TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
             End If

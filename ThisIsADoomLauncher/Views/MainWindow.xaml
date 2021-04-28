@@ -267,7 +267,7 @@
                                                  VerticalContentAlignment="Center"
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
-                                                 Text="Enter preset name ..."/>-->
+                                                 Text="Enter preset name..."/>-->
                                         <TextBox Grid.Row="7" 
                                                  Grid.Column="2"
                                                  HorizontalAlignment="Stretch"
@@ -683,7 +683,7 @@
                                 VerticalAlignment="Center"
                                 FontSize="24"
                                 Foreground="Gray"
-                                Content="No presets found ..."
+                                Content="No presets found..."
                                 />
                                     <!-- TODO : Use ListView instead -->
                                     <ScrollViewer x:Name="ScrollViewer_DisplayUserPresets">
@@ -817,7 +817,7 @@
                                  VerticalContentAlignment="Center"
                                  FontStyle="Italic"
                                  Foreground="DarkGray"
-                                 Text="Drop a .wad/.pk3 file here ..."
+                                 Text="Drop a .wad/.pk3 file here..."
                                  Cursor="Arrow"
                                  IsReadOnly="True" 
                                  PreviewDragOver="TextBox_DropWadFile_PreviewDragOver"
@@ -848,7 +848,7 @@
                                  VerticalContentAlignment="Center"
                                  FontStyle="Italic"
                                  Foreground="DarkGray"
-                                 Text="Drop a .deh/.bex file here ..."
+                                 Text="Drop a .deh/.bex file here..."
                                  Cursor="Arrow"
                                  IsReadOnly="True" 
                                  PreviewDragOver="TextBox_DropMiscFile_PreviewDragOver"
@@ -877,7 +877,7 @@
                                  VerticalContentAlignment="Center"
                                  FontStyle="Italic"
                                  Foreground="DarkGray"
-                                 Text="Enter preset name ..."
+                                 Text="Enter preset name..."
                                  />
 
                                     <Label Grid.Row="15"

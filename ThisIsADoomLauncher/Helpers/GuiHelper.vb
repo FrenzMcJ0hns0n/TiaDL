@@ -16,25 +16,19 @@ Module GuiHelper
         With MainWindow_Instance()
             Dim iwadButton As SolidColorBrush = New SolidColorBrush()
 
+            'USE FOR EACH TO SHORTEN ?
+
             iwadButton = .Button_NewPreset_SetDoomIwad.Background
-            If iwadButton.Color = Colors.LightGreen Then
-                Return My.Settings.IwadsDir & "\Doom.wad"
-            End If
+            If iwadButton.Color = Colors.LightGreen Then Return My.Settings.IwadsDir & "\Doom.wad"
 
             iwadButton = .Button_NewPreset_SetDoom2Iwad.Background
-            If iwadButton.Color = Colors.LightGreen Then
-                Return My.Settings.IwadsDir & "\Doom2.wad"
-            End If
+            If iwadButton.Color = Colors.LightGreen Then Return My.Settings.IwadsDir & "\Doom2.wad"
 
             iwadButton = .Button_NewPreset_SetFreedoomIwad.Background
-            If iwadButton.Color = Colors.LightGreen Then
-                Return My.Settings.IwadsDir & "\freedoom1.wad"
-            End If
+            If iwadButton.Color = Colors.LightGreen Then Return My.Settings.IwadsDir & "\freedoom1.wad"
 
             iwadButton = .Button_NewPreset_SetFreedoom2Iwad.Background
-            If iwadButton.Color = Colors.LightGreen Then
-                Return My.Settings.IwadsDir & "\freedoom2.wad"
-            End If
+            If iwadButton.Color = Colors.LightGreen Then Return My.Settings.IwadsDir & "\freedoom2.wad"
 
             Return Nothing
         End With
@@ -48,7 +42,7 @@ Module GuiHelper
     Function KnowSelectedLevel_NewPreset() As String
 
         With MainWindow_Instance()
-            Return If(.TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ...", Nothing, .TextBox_DropWadFile.Text)
+            Return If(.TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here...", Nothing, .TextBox_DropWadFile.Text)
         End With
 
     End Function
@@ -60,7 +54,7 @@ Module GuiHelper
     Function KnowSelectedMisc_NewPreset() As String
 
         With MainWindow_Instance()
-            Return If(.TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here ...", Nothing, .TextBox_DropMiscFile.Text)
+            Return If(.TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here...", Nothing, .TextBox_DropMiscFile.Text)
         End With
 
     End Function
@@ -80,16 +74,16 @@ Module GuiHelper
             .TextBox_DropWadFile.FontStyle = FontStyles.Italic
             .TextBox_DropWadFile.Background = New SolidColorBrush(Colors.Transparent)
             .TextBox_DropWadFile.Foreground = Brushes.DarkGray
-            .TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here ..."
+            .TextBox_DropWadFile.Text = "Drop a .wad/.pk3 file here..."
 
             .TextBox_DropMiscFile.FontStyle = FontStyles.Italic
             .TextBox_DropMiscFile.Background = New SolidColorBrush(Colors.Transparent)
             .TextBox_DropMiscFile.Foreground = Brushes.DarkGray
-            .TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here ..."
+            .TextBox_DropMiscFile.Text = "Drop a .deh/.bex file here..."
 
             .TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
             .TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
-            .TextBox_NewPreset_Name.Text = "Enter preset name ..."
+            .TextBox_NewPreset_Name.Text = "Enter preset name..."
         End With
 
     End Sub

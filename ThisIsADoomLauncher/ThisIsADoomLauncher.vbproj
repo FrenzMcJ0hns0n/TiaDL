@@ -98,10 +98,7 @@
     </Compile>
     <Compile Include="Helpers\IOHelper.vb" />
     <Compile Include="Common\IOMethods.vb" />
-    <Compile Include="Presets\ClickHandlersMethods.vb" />
-    <Compile Include="Presets\DeletePresetsMethods.vb" />
-    <Compile Include="Presets\LoadPresetsMethods.vb" />
-    <Compile Include="Presets\SavePresetMethods.vb" />
+    <Compile Include="Presets\PresetsMethods.vb" />
     <Compile Include="Views\SettingsWindow.xaml.vb">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -168,6 +165,7 @@
       <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

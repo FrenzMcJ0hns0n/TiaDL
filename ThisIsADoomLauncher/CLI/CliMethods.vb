@@ -204,7 +204,7 @@ Module CliMethods
 
     ''' <summary>
     ''' Launch an instance of cmd.exe as a process with the specified command as parameter. The final result looks like the following :
-    ''' /c start "" "engine_path" [+param1 value1, +param2 value2 ...] -iwad "iwad_path" [-file "level_path" | -file "misc_path" | -file "mod_path"] ...
+    ''' /c start "" "engine_path" [+param1 value1, +param2 value2, etc.] -iwad "iwad_path" [-file "level_path" | -file "misc_path" | -file "mod_path"]
     ''' </summary>
     ''' 
     Sub LaunchProcess(command As String)
