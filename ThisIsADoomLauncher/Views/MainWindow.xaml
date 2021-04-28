@@ -346,13 +346,11 @@
                                             <!-- Use templates to bind -->
                                             <ListView.ItemTemplate>
                                                 <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Margin="8,0,0,0"
-                                                                   VerticalAlignment="Center"
-                                                                   FontWeight="DemiBold"
-                                                                   FontSize="18"
-                                                                   Text="{Binding Name}"/>
-                                                    </StackPanel>
+                                                    <TextBlock Margin="8,0,0,0"
+                                                               VerticalAlignment="Center"
+                                                               FontWeight="DemiBold"
+                                                               FontSize="18"
+                                                               Text="{Binding Name}"/>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
@@ -402,27 +400,28 @@
                               Grid.Column="1"
                               Header="Summary">
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="1*" />
-                                <RowDefinition Height="10" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="1*" />
-                                <ColumnDefinition Width="15*" />
-                                <ColumnDefinition Width="10" />
-                            </Grid.ColumnDefinitions>
+                            <Grid x:Name="Grid_Summary_Params" Visibility="Visible">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="10" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="10" />
+                                    <ColumnDefinition Width="1*" />
+                                    <ColumnDefinition Width="15*" />
+                                    <ColumnDefinition Width="10" />
+                                </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="1" 
+                                <Label Grid.Row="1" 
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Content="Engine :"/>
-                            <TextBox Grid.Row="1" 
+                                <TextBox Grid.Row="1" 
                                      Grid.Column="2"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center"
@@ -430,12 +429,12 @@
                                      Cursor="Arrow"
                                      IsReadOnly="True"/>
 
-                            <Label Grid.Row="2" 
+                                <Label Grid.Row="2" 
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Content="Params :"/>
-                            <TextBox Grid.Row="2" 
+                                <TextBox Grid.Row="2" 
                                      Grid.Column="2"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center"
@@ -443,12 +442,12 @@
                                      Cursor="Arrow"
                                      IsReadOnly="True"/>
 
-                            <Label Grid.Row="3" 
+                                <Label Grid.Row="3" 
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Content="Iwad :"/>
-                            <TextBox Grid.Row="3" 
+                                <TextBox Grid.Row="3" 
                                      Grid.Column="2"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center"
@@ -456,18 +455,29 @@
                                      Cursor="Arrow"
                                      IsReadOnly="True"/>
 
-                            <Label Grid.Row="4" 
+                                <Label Grid.Row="4" 
                                    Grid.Column="1" 
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Content="File(s) :"/>
-                            <TextBox Grid.Row="4" 
+                                <TextBox Grid.Row="4" 
                                      Grid.Column="2"
                                      HorizontalAlignment="Stretch"
                                      VerticalAlignment="Center"
                                      Margin="0,1,0,0"
                                      Cursor="Arrow"
                                      IsReadOnly="True"/>
+                            </Grid>
+                            <Grid x:Name="Grid_Summary_Command" Visibility="Collapsed" Margin="8">
+                                <RichTextBox x:Name="RichTextBox_CommandPreview" 
+                                         Grid.Row="1"
+                                         Grid.RowSpan="4"
+                                         Grid.Column="1"
+                                         Grid.ColumnSpan="2"       
+                                         HorizontalAlignment="Stretch"
+                                         VerticalAlignment="Stretch"
+                                         IsReadOnly="True"/>
+                            </Grid>
                         </Grid>
                     </GroupBox>
 
@@ -541,13 +551,16 @@
                                 VerticalAlignment="Center"
                                 Margin="0,12,0,0"
                                 Orientation="Vertical">-->
-                    <Button Grid.Row="7"
-                            Grid.Column="3"
-                            Margin="0,10,0,0"
-                            VerticalAlignment="Top"
-                            Height="72"
-                            FontSize="24"
-                            Content="&#x1F441;">
+                    <Button 
+                        x:Name="Button_ToggleSummaryView"
+                        Grid.Row="7"
+                        Grid.Column="3"
+                        Margin="0,10,0,0"
+                        VerticalAlignment="Top"
+                        Height="72"
+                        FontSize="24"
+                        Content="&#x1F441;"
+                        Click="Button_ToggleSummaryView_Click">
                         <!--<TextBlock TextAlignment="Center"
                                     FontSize="14">
                             Toggle view

@@ -697,20 +697,27 @@ Namespace Views
 
         Private Sub FillRichTextBox(content As String)
 
-            Dim flow As FlowDocument = New FlowDocument()
-            Dim para As Paragraph = New Paragraph()
+            Try
+                Dim flow As FlowDocument = New FlowDocument()
+                Dim para As Paragraph = New Paragraph()
 
-            para.Inlines.Add(content)
-            flow.Blocks.Add(para)
+                para.Inlines.Add(content)
+                flow.Blocks.Add(para)
 
-            RichTextBox_TestingCommandPreview.Document = flow
+                'RichTextBox_TestingCommandPreview.Document = flow
+                RichTextBox_CommandPreview.Document = flow 'Test v3
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
         Private Sub DecorateCommandPreview()
 
             Try
-                Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
+                Dim completeRange As TextRange = New TextRange(RichTextBox_CommandPreview.Document.ContentStart, RichTextBox_CommandPreview.Document.ContentEnd)
+                'Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
                 Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
                 Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
 
@@ -976,6 +983,24 @@ Namespace Views
             End Try
 
         End Sub
+
+        Private Sub Button_ToggleSummaryView_Click(sender As Object, e As RoutedEventArgs)
+
+            Try
+                If Grid_Summary_Params.Visibility = Visibility.Visible Then
+                    Grid_Summary_Params.Visibility = Visibility.Collapsed
+                    Grid_Summary_Command.Visibility = Visibility.Visible
+                Else
+                    Grid_Summary_Params.Visibility = Visibility.Visible
+                    Grid_Summary_Command.Visibility = Visibility.Collapsed
+                End If
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_ToggleSummaryView_Click()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
 
 #End Region
 
