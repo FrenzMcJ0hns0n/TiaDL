@@ -91,6 +91,7 @@
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
     <Compile Include="Helpers\GuiHelper.vb" />
     <Compile Include="Helpers\Serialization.vb" />
+    <Compile Include="Models\Launcher.vb" />
     <Compile Include="Models\Preset.vb" />
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>

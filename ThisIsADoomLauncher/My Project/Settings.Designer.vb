@@ -14,7 +14,7 @@ Option Explicit On
 
 
 <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
- Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0"),  _
+ Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0"),  _
  Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
 Partial Friend NotInheritable Class MySettings
     Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -313,6 +313,28 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("DateTimeAtLaunch") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+    Public Property PortParameters() As Global.System.Collections.Specialized.StringCollection
+        Get
+            Return CType(Me("PortParameters"),Global.System.Collections.Specialized.StringCollection)
+        End Get
+        Set
+            Me("PortParameters") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+    Public Property FilesMods() As Global.System.Collections.Specialized.StringCollection
+        Get
+            Return CType(Me("FilesMods"),Global.System.Collections.Specialized.StringCollection)
+        End Get
+        Set
+            Me("FilesMods") = value
         End Set
     End Property
 End Class
