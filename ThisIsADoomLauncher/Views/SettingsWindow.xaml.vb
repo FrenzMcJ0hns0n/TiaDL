@@ -8,8 +8,8 @@ Namespace Views
             Try
                 With My.Settings
                     'Engine
-                    RadioButton_Engine_GZDoom.IsChecked = If(.SelectedEngine.ToLowerInvariant = "gzdoom", True, False)
-                    RadioButton_Engine_Zandronum.IsChecked = If(.SelectedEngine.ToLowerInvariant = "zandronum", True, False)
+                    RadioButton_Engine_GZDoom.IsChecked = If(.SelectedPort.ToLowerInvariant = "gzdoom", True, False)
+                    RadioButton_Engine_Zandronum.IsChecked = If(.SelectedPort.ToLowerInvariant = "zandronum", True, False)
 
                     'Resolution
                     TextBox_Resolution_Width.Text = .ScreenWidth
@@ -57,7 +57,7 @@ Namespace Views
             'MainWindow_Instance.Label_EngineToLaunch.Content = "GZDoom"
 
             With My.Settings
-                .SelectedEngine = "GZDoom"
+                .SelectedPort = "GZDoom"
                 '.Save()
             End With
 
@@ -66,7 +66,7 @@ Namespace Views
         Private Sub RadioButton_Engine_Zandronum_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Engine_Zandronum.Checked
 
             With My.Settings
-                .SelectedEngine = "Zandronum"
+                .SelectedPort = "Zandronum"
                 '.Save()
             End With
 

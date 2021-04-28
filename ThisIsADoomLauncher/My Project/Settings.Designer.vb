@@ -116,12 +116,12 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("GZDoom")>  _
-    Public Property SelectedEngine() As String
+    Public Property SelectedPort() As String
         Get
-            Return CType(Me("SelectedEngine"),String)
+            Return CType(Me("SelectedPort"),String)
         End Get
         Set
-            Me("SelectedEngine") = value
+            Me("SelectedPort") = value
         End Set
     End Property
     

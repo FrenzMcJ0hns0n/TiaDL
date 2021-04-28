@@ -17,7 +17,7 @@
     <Setting Name="BrutalDoomVersion" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SelectedEngine" Type="System.String" Scope="User">
+    <Setting Name="SelectedPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">GZDoom</Value>
     </Setting>
     <Setting Name="SelectedIwad" Type="System.String" Scope="User">

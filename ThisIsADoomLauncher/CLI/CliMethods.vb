@@ -5,7 +5,7 @@ Module CliMethods
     Function ReturnEngine() As String
 
         With My.Settings
-            If .SelectedEngine.ToLowerInvariant = "gzdoom" Then
+            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
                 Return String.Format("""{0}""", Path.Combine(.GzdoomDir, "gzdoom.exe"))
             Else
                 Return String.Format("""{0}""", Path.Combine(.ZandronumDir, "zandronum.exe"))
@@ -17,7 +17,7 @@ Module CliMethods
     Function ReturnFullscreen() As String
 
         With My.Settings
-            If .SelectedEngine.ToLowerInvariant = "gzdoom" Then
+            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
                 Return String.Format(" +vid_fullscreen {0}", Int(.FullscreenEnabled).ToString)
             Else
                 Return String.Format(" +fullscreen {0}", Int(.FullscreenEnabled).ToString)
@@ -29,7 +29,7 @@ Module CliMethods
     Function ReturnWidth() As String
 
         With My.Settings
-            If .SelectedEngine.ToLowerInvariant = "gzdoom" Then
+            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
                 Return String.Format(" +vid_scale_customwidth {0}", .ScreenWidth.ToString)
             Else
                 Return String.Format(" +vid_defwidth {0}", .ScreenWidth.ToString)
@@ -41,7 +41,7 @@ Module CliMethods
     Function ReturnHeight() As String
 
         With My.Settings
-            If .SelectedEngine.ToLowerInvariant = "gzdoom" Then
+            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
                 Return String.Format(" +vid_scale_customheight {0}", .ScreenHeight.ToString)
             Else
                 Return String.Format(" +vid_defheight {0}", .ScreenHeight.ToString)
@@ -53,7 +53,7 @@ Module CliMethods
     Function ReturnScalemode() As String
 
         With My.Settings
-            If .SelectedEngine.ToLowerInvariant = "gzdoom" Then
+            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
                 Return " +vid_scalemode 5"
             Else
                 Return Nothing
