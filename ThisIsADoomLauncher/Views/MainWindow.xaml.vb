@@ -1106,22 +1106,15 @@ Namespace Views
                 ' 3 = Iwad + Level + Misc
                 Dim pretexte As Boolean = False
 
-                If confirmedFiles.Count = 0 Then pretexte = False 'Then Return in Sub()
-                TabControl_Levels.SelectedIndex = 2
-
-                If confirmedFiles.Count > 0 Then
-                    FillTextBox(TextBox_NewLevel_Iwad, confirmedFiles(0))
+                If confirmedFiles.Count = 0 Then
+                    pretexte = False 'Will be Return in future dedicated Sub()
+                Else
+                    TabControl_Levels.SelectedIndex = 2
                 End If
 
-                If confirmedFiles.Count > 1 Then
-                    FillTextBox(TextBox_NewLevel_Level, confirmedFiles(1))
-                End If
-
-                If confirmedFiles.Count > 2 Then
-                    FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
-                End If
-
-                Dim stop_man As String = Nothing
+                If confirmedFiles.Count > 0 Then FillTextBox(TextBox_NewLevel_Iwad, confirmedFiles(0))
+                If confirmedFiles.Count > 1 Then FillTextBox(TextBox_NewLevel_Level, confirmedFiles(1))
+                If confirmedFiles.Count > 2 Then FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
