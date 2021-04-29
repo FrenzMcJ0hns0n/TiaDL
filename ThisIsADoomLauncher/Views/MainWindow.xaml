@@ -405,7 +405,7 @@
                                             Grid.Column="4"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Center"
-                                            Margin="8,-1,0,0"
+                                            Margin="7,-1,0,0"
                                             FontWeight="DemiBold"
                                             />
 
