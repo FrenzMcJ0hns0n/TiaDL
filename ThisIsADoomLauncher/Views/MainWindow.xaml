@@ -63,13 +63,28 @@
                                 Drop="TextBox_Port_Drop"
                                 TextWrapping="Wrap"
                                 />
-                            <Button 
-                                x:Name="Button_Port_Browse"
-                                Grid.Column="1"
-                                Margin="0,0,0,1"
-                                Content="Browse..."
-                                />
-                            
+                            <Grid Grid.Row="0"
+                                  Grid.Column="1"
+                                  Margin="0,0,0,1"
+                                  >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                </Grid.RowDefinitions>
+                                <Button 
+                                    x:Name="Button_Port_Browse"
+                                    Grid.Row="0"
+                                    VerticalAlignment="Top"
+                                    Margin="0,0,0,-1"
+                                    Content="Browse..."
+                                    />
+                                <Button 
+                                    x:Name="Button_Port_Clear"
+                                    Grid.Row="1"
+                                    VerticalAlignment="Bottom"
+                                    Content="Clear &#x21ba;"
+                                    />
+                            </Grid>
                             <StackPanel x:Name="StackPanel_EngineParams"
                                         Grid.Row="1"
                                         Orientation="Horizontal"/>
@@ -175,7 +190,7 @@
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Content="Iwad :"/>
-                                        <TextBox x:Name="TextBox_Levels_NewIwad"
+                                        <TextBox x:Name="TextBox_NewLevel_Iwad"
                                                  Grid.Row="1"
                                                  Grid.Column="2"
                                                  HorizontalAlignment="Stretch"
@@ -196,17 +211,21 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center" 
                                                 Content="->"/>-->
-                                        <Button Grid.Row="1" 
-                                                Grid.Column="3"
-                                                VerticalAlignment="Bottom" 
-                                                Content="Clear &#x21ba;"/>
+                                        <Button 
+                                            x:Name="Button_NewLevel_Iwad_Clear"
+                                            Grid.Row="1" 
+                                            Grid.Column="3"
+                                            VerticalAlignment="Bottom" 
+                                            Content="Clear &#x21ba;"
+                                            
+                                            />
 
                                         <Label Grid.Row="3"
                                                Grid.Column="1"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Content="Level :"/>
-                                        <TextBox x:Name="TextBox_Levels_NewLevel"
+                                        <TextBox x:Name="TextBox_NewLevel_Level"
                                                  Grid.Row="3" 
                                                  Grid.Column="2"
                                                  HorizontalAlignment="Stretch"
@@ -227,17 +246,20 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center" 
                                                 Content="->"/>-->
-                                        <Button Grid.Row="3" 
-                                                Grid.Column="3"
-                                                VerticalAlignment="Bottom" 
-                                                Content="Clear &#x21ba;"/>
+                                        <Button 
+                                            x:Name="Button_NewLevel_Level_Clear"
+                                            Grid.Row="3"
+                                            Grid.Column="3"
+                                            VerticalAlignment="Bottom"
+                                            Content="Clear &#x21ba;"
+                                            />
                                         
                                         <Label Grid.Row="5"
                                                Grid.Column="1"
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Content="Misc. :"/>
-                                        <TextBox x:Name="TextBox_Levels_NewMisc"
+                                        <TextBox x:Name="TextBox_NewLevel_Misc"
                                                  Grid.Row="5" 
                                                  Grid.Column="2"
                                                  HorizontalAlignment="Stretch"
@@ -258,10 +280,13 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center" 
                                                 Content="->"/>-->
-                                        <Button Grid.Row="5" 
-                                                Grid.Column="3"
-                                                VerticalAlignment="Bottom" 
-                                                Content="Clear &#x21ba;"/>
+                                        <Button 
+                                            x:Name="Button_NewLevel_Misc_Clear"
+                                            Grid.Row="5"
+                                            Grid.Column="3"
+                                            VerticalAlignment="Bottom"
+                                            Content="Clear &#x21ba;"
+                                            />
 
                                         <Label Grid.Row="7"
                                                Grid.Column="1"
@@ -318,22 +343,30 @@
                                                 <ColumnDefinition Width="1*"/>
                                             </Grid.ColumnDefinitions>
 
-                                            <Button Grid.Column="0"
-                                Margin="6,0,6,0"
-                                FontSize="13"
-                                Content="Try  &#x2193;"
-                                />
-                                            <Button Grid.Column="1"
-                                                    Margin="6,0,6,0"
-                                FontSize="13"
-                                Content="Save as...  &#x1f5ab;"
-                                
-                                />
-                                            <Button Grid.Column="2"
-                                                    Margin="6,0,6,0"
-                                FontSize="13"
-                                Content="Clear all  &#x21ba;"
-                                />
+                                            <Button 
+                                                x:Name="Button_NewLevel_Try" 
+                                                Grid.Column="0"
+                                                Margin="6,0,6,0"
+                                                FontSize="13"
+                                                Content="Try  &#x2193;"
+                                                Click="Button_NewLevel_Try_Click"
+                                                />
+                                            <Button 
+                                                x:Name="Button_NewLevel_SaveAs"
+                                                Grid.Column="1"
+                                                Margin="6,0,6,0"
+                                                FontSize="13"
+                                                Content="Save as...  &#x1f5ab;"
+                                                Click="Button_NewLevel_SaveAs_Click"
+                                                />
+                                            <Button 
+                                                x:Name="Button_NewLevel_ClearAll"
+                                                Grid.Column="2"
+                                                Margin="6,0,6,0"
+                                                FontSize="13"
+                                                Content="Clear all  &#x21ba;"
+                                                Click="Button_NewLevel_ClearAll_Click"
+                                                />
 
                                         </Grid>
                                     </Grid>

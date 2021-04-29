@@ -1110,18 +1110,15 @@ Namespace Views
                 TabControl_Levels.SelectedIndex = 2
 
                 If confirmedFiles.Count > 0 Then
-                    TextBox_Levels_NewIwad.Text = confirmedFiles(0)
-                    'Edit TextBox font property (color, style)
+                    FillTextBox(TextBox_NewLevel_Iwad, confirmedFiles(0))
                 End If
 
                 If confirmedFiles.Count > 1 Then
-                    TextBox_Levels_NewLevel.Text = confirmedFiles(1)
-                    'Edit TextBox font property (color, style)
+                    FillTextBox(TextBox_NewLevel_Level, confirmedFiles(1))
                 End If
 
                 If confirmedFiles.Count > 2 Then
-                    TextBox_Levels_NewMisc.Text = confirmedFiles(2)
-                    'Edit TextBox font property (color, style)
+                    FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
                 End If
 
                 Dim stop_man As String = Nothing
@@ -1174,13 +1171,13 @@ Namespace Views
 
         End Sub
 
-        Private Sub UnfillTextBox(sender As Object)
+        Private Sub UnfillTextBox(sender As Object, txt As String)
 
             Try
                 Dim txtBx As TextBox = sender
 
                 With txtBx
-                    .Text = Nothing
+                    .Text = txt
                     .FontStyle = FontStyles.Italic
                     .Foreground = Brushes.Gray
                 End With
@@ -1194,7 +1191,7 @@ Namespace Views
         'Not use anymore, for now
         Private Sub UpdateSummary()
 
-            With My.Settings
+            With My.Settings 'Avoid My.settings ?
 
                 TextBox_Summary_Port.Text = .SelectedPort
                 TextBox_Summary_Iwad.Text = .SelectedIwad
@@ -1222,6 +1219,52 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'Button_ToggleSummaryView_Click()'. Exception : " & ex.ToString)
             End Try
+
+        End Sub
+
+        Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_Port_Clear.Click
+
+            UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
+            TextBox_Summary_Port.Text = Nothing
+
+        End Sub
+
+
+        Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Iwad_Clear.Click
+
+            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
+
+        End Sub
+
+        Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Level_Clear.Click
+
+            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
+
+        End Sub
+
+        Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Misc_Clear.Click
+
+            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
+
+        End Sub
+
+
+
+        'Add new level presets - low buttons (options)
+
+        Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
+
+        End Sub
+
+        Private Sub Button_NewLevel_SaveAs_Click(sender As Object, e As RoutedEventArgs)
+
+        End Sub
+
+        Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
+
+            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
+            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
+            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
 
         End Sub
 
