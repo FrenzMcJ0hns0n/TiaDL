@@ -738,9 +738,12 @@ Namespace Views
 
             Try
                 'Build
-                Dim port As String = String.Format("""{0}""", TextBox_Port.Text)
+                'Dim str As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
+                'Dim port As String = If(TextBox_Port.Text = str, Nothing, String.Format("""{0}""", TextBox_Port.Text))
+                Dim port As String = String.Format("""{0}""", TextBox_TestingEngine.Text)
                 Dim portParams As String = Nothing 'TODO
-                Dim iwad As String = If(TextBox_Summary_Iwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_Summary_Iwad.Text))
+                'Dim iwad As String = If(TextBox_Summary_Iwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_Summary_Iwad.Text))
+                Dim iwad As String = If(TextBox_TestingIwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_TestingIwad.Text))
                 Dim file1 As String = If(TextBox_TestingFile1.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile1.Text))
                 Dim file2 As String = If(TextBox_TestingFile2.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile2.Text))
                 Dim file3 As String = If(TextBox_TestingFile3.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile3.Text))
@@ -792,8 +795,8 @@ Namespace Views
                 para.Inlines.Add(content)
                 flow.Blocks.Add(para)
 
-                'RichTextBox_TestingCommandPreview.Document = flow
-                RichTextBox_CommandPreview.Document = flow 'Test v3
+                RichTextBox_TestingCommandPreview.Document = flow 'temp to test "Export as .bat"
+                'RichTextBox_CommandPreview.Document = flow 'Test v3
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
@@ -913,9 +916,9 @@ Namespace Views
                 Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
                 Dim batPath As String = Path.Combine(My.Settings.RootDirPath, now_formatted & "_command.bat")
 
-                Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.UTF8)
+                Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.Default)
                     writer.WriteLine("@echo off")
-                    writer.WriteLine("/c start """" " & commandText)
+                    writer.WriteLine("start """" " & commandText)
                 End Using
 
             Catch ex As Exception
