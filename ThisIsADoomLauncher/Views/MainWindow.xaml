@@ -245,8 +245,8 @@
                                                FontSize="20"
                                                Foreground="Gray"
                                                Content="No user presets found"/>
-                                        <ListView x:Name="ListView_UserPresets"
-                                                  SelectionChanged="ListView_UserPresets_SelectionChanged"
+                                        <ListView x:Name="ListView_Levels_UserPresets"
+                                                  SelectionChanged="ListView_Levels_UserPresets_SelectionChanged"
                                                   Margin="-3"
                                                   Visibility="Collapsed">
                                             <ListView.ItemTemplate>
@@ -439,10 +439,13 @@
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center" 
                                                 Content="->"/>-->
-                                        <Button Grid.Row="7" 
-                                                Grid.Column="3"
-                                                VerticalAlignment="Bottom" 
-                                                Content="Clear &#x21ba;"/>
+                                        <Button 
+                                            x:Name="Button_NewLevel_Image_Clear"
+                                            Grid.Row="7"
+                                            Grid.Column="3"
+                                            VerticalAlignment="Bottom"
+                                            Content="Clear &#x21ba;"
+                                            />
 
                                         <Label Grid.Row="9"
                                                Grid.Column="1"

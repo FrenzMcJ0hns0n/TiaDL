@@ -241,23 +241,6 @@ Namespace Views
 
         End Sub
 
-        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
-            Try
-                Dim p As ModPreset = CType(sender.SelectedItem, ModPreset)
-
-                TextBlock_Mods_Desc.Text = p.Desc
-
-                'Function to convert Relative path into Absolute
-                ListView_Mods_Files.ItemsSource = ConvertModPath_RelativeToAbsolute(p.Files)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-
         Private Function ConvertModPath_RelativeToAbsolute(modFilesList As List(Of String)) As List(Of String)
 
             Dim absoluteModPaths As List(Of String) = New List(Of String)
@@ -265,17 +248,12 @@ Namespace Views
             Try
                 For Each modFile As String In modFilesList
 
-                    If File.Exists(modFile) Then
-                        absoluteModPaths.Add(modFile)
-                    Else
-                        If modFile = Nothing Then
-                            absoluteModPaths.Add("-- No file --")
-                        ElseIf File.Exists(Path.Combine(My.Settings.ModDir, modFile)) Then
-                            absoluteModPaths.Add(Path.Combine(My.Settings.ModDir, modFile))
-                        Else
-                            absoluteModPaths.Add("-- File not recognized --")
-                        End If
-                    End If
+                    'Read absolute path
+                    If File.Exists(modFile) Then absoluteModPaths.Add(modFile)
+
+                    'Build absolute path with ModDir & filename 
+                    Dim probablePath As String = Path.Combine(My.Settings.ModDir, modFile)
+                    If File.Exists(probablePath) Then absoluteModPaths.Add(probablePath)
 
                 Next
 
@@ -734,32 +712,7 @@ Namespace Views
             DecorateCommandPreview()
         End Sub
 
-        Private Sub UpdateCommand()
 
-            Try
-                'Build
-                'Dim str As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
-                'Dim port As String = If(TextBox_Port.Text = str, Nothing, String.Format("""{0}""", TextBox_Port.Text))
-                Dim port As String = String.Format("""{0}""", TextBox_TestingEngine.Text)
-                Dim portParams As String = Nothing 'TODO
-                'Dim iwad As String = If(TextBox_Summary_Iwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_Summary_Iwad.Text))
-                Dim iwad As String = If(TextBox_TestingIwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_TestingIwad.Text))
-                Dim file1 As String = If(TextBox_TestingFile1.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile1.Text))
-                Dim file2 As String = If(TextBox_TestingFile2.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile2.Text))
-                Dim file3 As String = If(TextBox_TestingFile3.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile3.Text))
-                Dim file4 As String = If(TextBox_TestingFile4.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile4.Text))
-                Dim file5 As String = If(TextBox_TestingFile5.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile5.Text))
-                'Or built list from multiples inputs (several files dropped in the same zone) and use a For each
-                Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingExtraParameters.Text))
-
-                Dim command As String = String.Format("{0}{1}{2}{3}{4}{5}{6}{7}", port, portParams, iwad, file1, file2, file3, file4, file5)
-                FillRichTextBox(command)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
 
 
         Private Sub UpdateCommandPreview_Old()
@@ -786,60 +739,10 @@ Namespace Views
 
         End Sub
 
-        Private Sub FillRichTextBox(content As String)
-
-            Try
-                Dim flow As FlowDocument = New FlowDocument()
-                Dim para As Paragraph = New Paragraph()
-
-                para.Inlines.Add(content)
-                flow.Blocks.Add(para)
-
-                RichTextBox_TestingCommandPreview.Document = flow 'temp to test "Export as .bat"
-                'RichTextBox_CommandPreview.Document = flow 'Test v3
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-
-        Private Sub DecorateCommand() 'v3
-
-            Try
-                Dim completeRange As TextRange = New TextRange(RichTextBox_CommandPreview.Document.ContentStart, RichTextBox_CommandPreview.Document.ContentEnd)
-                'Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
-                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
-                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
-
-                For Each m As Match In matches
-                    For Each c As Capture In m.Captures
-
-                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
-                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
-                        Dim rangeToEdit As TextRange = New TextRange(startIndex, endIndex)
-
-                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
-                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
-
-                    Next
-                    quotesCount += 1
-                Next
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
-            End Try
-
-
-        End Sub
-
-
         Private Sub DecorateCommandPreview() 'v2
 
             Try
-                Dim completeRange As TextRange = New TextRange(RichTextBox_CommandPreview.Document.ContentStart, RichTextBox_CommandPreview.Document.ContentEnd)
-                'Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
+                Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
                 Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
                 Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
 
@@ -974,96 +877,43 @@ Namespace Views
 
 #Region "TiaDL v3"
 
-        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
-            Dim p As LevelPreset = CType(sender.SelectedItem, LevelPreset)
+        Private Sub TextBox_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
 
-            'TODO : Handle both absolute/relative paths
-            TextBox_Summary_Iwad.Text = ConvertIwadPath_RelativeToAbsolute(p.Iwad)
-            '---> My.Settings.SelectedIwad = ConvertIwadPath_RelativeToAbsolute(p.Iwad) DO NOT USE My.Settings until the very end, to save user prefs
+        Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
 
-            'Ceci est temporaire, car à terme il faudra afficher les chemins relatifs des 3/4 premiers fichiers, puis "+ N files..."
-            'Dim filesMods As String = Handle_FilesMods(p)
-            'TextBox_Summary_FilesMods.Text = filesMods
+            Try
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                Dim info As FileInfo = New FileInfo(filePaths(0))
+                Dim ext As String = info.Extension.ToLowerInvariant
 
-            Handle_FilesMods(p)
+                If info.Extension.ToLowerInvariant = ".exe" Then
+                    FillTextBox(TextBox_Port, filePaths(0))
+                    'TextBox_Summary_Port.Text = filePaths(0)
+                    'My.Settings.SelectedPort = filePaths(0)
+                    UpdateSummary()
+                    UpdateCommand()
+                End If
 
-            'UpdateSummary() 'ne pas mettre à jour tous les champs, juste celui qui a été modifié
-            UpdateCommand()
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'TextBox_Port_Drop()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
-        'Maybe later !
-        'Private Sub AddFileMod(sender As Object)
-        '    StackPanel_Summary_FilesMods.Children.Add(
-        '            New TextBox() With
-        '            {
-        '                .Margin = New Thickness(0, 0, 4, 0),
-        '                .Background = Brushes.Gray,
-        '                .Text = filename
-        '            })
-        'End Sub
+        Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_Port_Clear.Click
 
-        Private Sub Handle_FilesMods(p As LevelPreset)
-            'NOT SURE IF Function is appropriate, not arg will be returned ... yet !
-            Dim arg As String = Nothing
-
-
-            'Params list : USE/Display RELATIVE PATHS !
-            Dim fileNames As List(Of String) = New List(Of String) 'From {p.Level, p.Misc}
-
-            If Not p.Level = Nothing Then fileNames.Add(p.Level)
-            If Not p.Misc = Nothing Then fileNames.Add(p.Misc)
-
-            StackPanel_Summary_FilesMods.Children.Clear()
-
-            If fileNames.Count > 0 Then
-                For Each filename As String In fileNames
-                    StackPanel_Summary_FilesMods.Children.Add(
-                        New TextBox() With
-                        {
-                            .Margin = New Thickness(0, 0, 6, 0),
-                            .Background = Brushes.LightGray,
-                            .Text = filename
-                        })
-                Next
-            End If
-
-            'CLI : USE ABSOLUTE PATHS !
-            Dim filePaths As List(Of String) = New List(Of String)
-
-            Dim level As String = ConvertLevelPath_RelativeToAbsolute(p.Level)
-            Dim misc As String = ConvertMiscPath_RelativeToAbsolute(p.Misc)
-            If Not level = Nothing Then filePaths.Add(level)
-            If Not misc = Nothing Then filePaths.Add(misc)
-            'If My.Settings.FilesMods Is Nothing Then
-            '    My.Settings.FilesMods = New Specialized.StringCollection()
-            'End If
-            'My.Settings.FilesMods.Add(ConvertLevelPath_RelativeToAbsolute(p.Level))
-            'My.Settings.FilesMods.Add(ConvertLevelPath_RelativeToAbsolute(p.Misc))
-
-            If filePaths.Count > 0 Then
-                For i As Integer = 0 To filePaths.Count - 1
-                    If i = 0 Then
-                        arg = String.Format("{0}", filePaths(i))
-                    Else
-                        arg &= String.Format(", {0}", filePaths(i))
-                    End If
-                Next
-                'For Each path As String In fileList
-                '    arg &= String.Format(", {0}", path)
-                'Next
-            End If
-
-            'CLI param line
-
-            'Return arg
+            UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
+            TextBox_Summary_Port.Text = Nothing
 
         End Sub
 
-        Private Sub ListView_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
-        End Sub
+
+
+
 
         Private Sub GroupBox_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
@@ -1150,30 +1000,330 @@ Namespace Views
 
 
 
-        Private Sub TextBox_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
+
+
+        Private Sub TextBox_NewLevel_Iwad_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
-        Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
+        Private Sub TextBox_NewLevel_Iwad_Drop(sender As Object, e As DragEventArgs)
+
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Iwad(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Iwad_Clear.Click
+
+            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
+
+        End Sub
+
+
+
+        Private Sub TextBox_NewLevel_Level_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Level_Drop(sender As Object, e As DragEventArgs)
+
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Level(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Level_Clear.Click
+
+            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
+
+        End Sub
+
+
+
+        Private Sub TextBox_NewLevel_Misc_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Misc_Drop(sender As Object, e As DragEventArgs)
+
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Misc(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Misc_Clear.Click
+
+            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
+
+        End Sub
+
+
+
+        Private Sub TextBox_NewLevel_Image_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Image_Drop(sender As Object, e As DragEventArgs)
+
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Image(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub Button_NewLevel_Image_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Image_Clear.Click
+
+            UnfillTextBox(TextBox_NewLevel_Image, "Drop a .jpg/.png file here...")
+
+        End Sub
+
+
+
+        Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
+
+        End Sub
+
+        Private Sub Button_NewLevel_SaveAs_Click(sender As Object, e As RoutedEventArgs)
+
+        End Sub
+
+        Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
+
+            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
+            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
+            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
+
+        End Sub
+
+
+
+
+
+
+        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+            Dim p As LevelPreset = CType(sender.SelectedItem, LevelPreset)
+
+            'TODO : Handle both absolute/relative paths
+            TextBox_Summary_Iwad.Text = ConvertIwadPath_RelativeToAbsolute(p.Iwad)
+            '---> My.Settings.SelectedIwad = ConvertIwadPath_RelativeToAbsolute(p.Iwad) DO NOT USE My.Settings until the very end, to save user prefs
+
+            'Ceci est temporaire, car à terme il faudra afficher les chemins relatifs des 3/4 premiers fichiers, puis "+ N files..."
+            'Dim filesMods As String = Handle_FilesMods(p)
+            'TextBox_Summary_FilesMods.Text = filesMods
+
+            Handle_FilesLevels_Summary(p)
+
+            'UpdateSummary() 'ne pas mettre à jour tous les champs, juste celui qui a été modifié
+            UpdateCommand()
+
+        End Sub
+
+        Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+        End Sub
+
+        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
             Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                Dim info As FileInfo = New FileInfo(filePaths(0))
-                Dim ext As String = info.Extension.ToLowerInvariant
+                Dim p As ModPreset = CType(sender.SelectedItem, ModPreset)
 
-                If info.Extension.ToLowerInvariant = ".exe" Then
-                    FillTextBox(TextBox_Port, filePaths(0))
-                    TextBox_Summary_Port.Text = filePaths(0)
-                    'My.Settings.SelectedPort = filePaths(0)
-                    'UpdateSummary()
-                    UpdateCommand()
-                End If
+                TextBlock_Mods_Desc.Text = p.Desc
+
+                'Function to convert Relative path into Absolute
+                ListView_Mods_Files.ItemsSource = ConvertModPath_RelativeToAbsolute(p.Files)
+
+                UpdateSummary()
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_Port_Drop()'. Exception : " & ex.ToString)
+                WriteToLog(DateTime.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
+
+
+
+
+
+
+        Private Sub UpdateCommand()
+
+            Try
+                'Build
+                Dim str As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
+                Dim port As String = If(TextBox_Port.Text = str, Nothing, String.Format("""{0}""", TextBox_Port.Text))
+                Dim portParams As String = Nothing 'TODO
+                'Dim iwad As String = If(TextBox_Summary_Iwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_Summary_Iwad.Text))
+                Dim iwad As String = If(TextBox_TestingIwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_TestingIwad.Text))
+                Dim file1 As String = If(TextBox_TestingFile1.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile1.Text))
+                Dim file2 As String = If(TextBox_TestingFile2.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile2.Text))
+                Dim file3 As String = If(TextBox_TestingFile3.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile3.Text))
+                Dim file4 As String = If(TextBox_TestingFile4.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile4.Text))
+                Dim file5 As String = If(TextBox_TestingFile5.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile5.Text))
+                'Or built list from multiples inputs (several files dropped in the same zone) and use a For each
+                Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingExtraParameters.Text))
+
+                Dim command As String = String.Format("{0}{1}{2}{3}{4}{5}{6}{7}", port, portParams, iwad, file1, file2, file3, file4, file5)
+                FillRichTextBox(command)
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub DecorateCommand()
+
+            Try
+                Dim completeRange As TextRange = New TextRange(RichTextBox_CommandPreview.Document.ContentStart, RichTextBox_CommandPreview.Document.ContentEnd)
+                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
+                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
+
+                For Each m As Match In matches
+                    For Each c As Capture In m.Captures
+
+                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
+                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
+                        Dim rangeToEdit As TextRange = New TextRange(startIndex, endIndex)
+
+                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
+                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
+
+                    Next
+                    quotesCount += 1
+                Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Sub Handle_FilesLevels_Command(p As LevelPreset)
+
+
+            Dim arg As String = Nothing
+            'CLI : USE ABSOLUTE PATHS !
+            Dim filePaths As List(Of String) = New List(Of String)
+
+            Dim level As String = ConvertLevelPath_RelativeToAbsolute(p.Level)
+            Dim misc As String = ConvertMiscPath_RelativeToAbsolute(p.Misc)
+            If Not level = Nothing Then filePaths.Add(level)
+            If Not misc = Nothing Then filePaths.Add(misc)
+            'If My.Settings.FilesMods Is Nothing Then
+            '    My.Settings.FilesMods = New Specialized.StringCollection()
+            'End If
+            'My.Settings.FilesMods.Add(ConvertLevelPath_RelativeToAbsolute(p.Level))
+            'My.Settings.FilesMods.Add(ConvertLevelPath_RelativeToAbsolute(p.Misc))
+
+            If filePaths.Count > 0 Then
+                For i As Integer = 0 To filePaths.Count - 1
+                    If i = 0 Then
+                        arg = String.Format("{0}", filePaths(i))
+                    Else
+                        arg &= String.Format(", {0}", filePaths(i))
+                    End If
+                Next
+                'For Each path As String In fileList
+                '    arg &= String.Format(", {0}", path)
+                'Next
+            End If
+
+            'CLI param line
+
+            'Return arg
+
+        End Sub
+
+
+
+
+
+
+        Private Sub UpdateSummary()
+
+            'TextBox Port
+            If Not TextBox_Port.Text = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)" Then TextBox_Summary_Port.Text = TextBox_Port.Text
+
+            'Levels 3 TextBoxes (Iwad, Level, Misc)
+            '= Done when {Preset}.SelectionChanged ?
+
+            'Mods 1 List
+            For Each modFilePath As String In ListView_Mods_Files.Items
+
+                StackPanel_Summary_FilesMods.Children.Add(
+                        New TextBox() With
+                        {
+                            .Margin = New Thickness(0, 0, 6, 0),
+                            .Background = Brushes.LightGray,
+                            .Text = modFilePath
+                        })
+
+            Next
+
+        End Sub
+
+        Private Sub Handle_FilesLevels_Summary(p As LevelPreset)
+
+            'Params list : USE/Display RELATIVE PATHS !
+            Dim fileNames As List(Of String) = New List(Of String) 'From {p.Level, p.Misc}
+
+            If Not p.Level = Nothing Then fileNames.Add(p.Level)
+            If Not p.Misc = Nothing Then fileNames.Add(p.Misc)
+
+            StackPanel_Summary_FilesMods.Children.Clear()
+
+            If fileNames.Count > 0 Then
+                'For Each filename As String In fileNames
+                '    StackPanel_Summary_FilesMods.Children.Add(
+                '        New TextBox() With
+                '        {
+                '            .Margin = New Thickness(0, 0, 6, 0),
+                '            .Background = Brushes.LightGray,
+                '            .Text = filename
+                '        })
+                'Next
+
+                For i As Integer = 0 To fileNames.Count - 1
+                    StackPanel_Summary_FilesMods.Children.Insert(
+                        i,
+                        New TextBox() With
+                        {
+                            .Margin = New Thickness(0, 0, 6, 0),
+                            .Background = Brushes.LightGray,
+                            .Text = fileNames(i)
+                        })
+                Next
+
+            End If
+
+        End Sub
+
+
+
+
+
+
+        Private Sub Button_ToggleSummaryView_Click(sender As Object, e As RoutedEventArgs)
+
+            Try
+                If Grid_Summary_Params.Visibility = Visibility.Visible Then
+                    Grid_Summary_Params.Visibility = Visibility.Collapsed
+                    Grid_Summary_Command.Visibility = Visibility.Visible
+                Else
+                    Grid_Summary_Params.Visibility = Visibility.Visible
+                    Grid_Summary_Command.Visibility = Visibility.Collapsed
+                End If
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_ToggleSummaryView_Click()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+
+
+
+
 
         Private Sub FillTextBox(sender As Object, txt As String)
 
@@ -1209,148 +1359,39 @@ Namespace Views
 
         End Sub
 
-        'Not use anymore, for now
-        Private Sub UpdateSummary()
-
-            With My.Settings 'Avoid My.settings ?
-
-                TextBox_Summary_Port.Text = .SelectedPort
-                TextBox_Summary_Iwad.Text = .SelectedIwad
 
 
-
-
-
-            End With
-
-        End Sub
-
-
-        Private Sub Button_ToggleSummaryView_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub FillRichTextBox(content As String)
 
             Try
-                If Grid_Summary_Params.Visibility = Visibility.Visible Then
-                    Grid_Summary_Params.Visibility = Visibility.Collapsed
-                    Grid_Summary_Command.Visibility = Visibility.Visible
-                Else
-                    Grid_Summary_Params.Visibility = Visibility.Visible
-                    Grid_Summary_Command.Visibility = Visibility.Collapsed
-                End If
+                Dim flow As FlowDocument = New FlowDocument()
+                Dim para As Paragraph = New Paragraph()
+
+                para.Inlines.Add(content)
+                flow.Blocks.Add(para)
+
+                'RichTextBox_TestingCommandPreview.Document = flow 'temp to test "Export as .bat"
+                RichTextBox_CommandPreview.Document = flow 'Test v3
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_ToggleSummaryView_Click()'. Exception : " & ex.ToString)
+                WriteToLog(DateTime.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
 
-        Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_Port_Clear.Click
-
-            UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
-            TextBox_Summary_Port.Text = Nothing
-
-        End Sub
-
-
-        Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Iwad_Clear.Click
-
-            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
-
-        End Sub
-
-        Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Level_Clear.Click
-
-            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
-
-        End Sub
-
-        Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Misc_Clear.Click
-
-            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
-
-        End Sub
 
 
 
-        'Add new level presets - low buttons (options)
-
-        Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
-
-        End Sub
-
-        Private Sub Button_NewLevel_SaveAs_Click(sender As Object, e As RoutedEventArgs)
-
-        End Sub
-
-        Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
-
-            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
-            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
-            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
-
-        End Sub
-
-        Private Sub TextBox_NewLevel_Iwad_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Iwad_Drop(sender As Object, e As DragEventArgs)
-
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Iwad(droppedFile) Then FillTextBox(sender, droppedFile)
-
-        End Sub
-
-        Private Sub TextBox_NewLevel_Level_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Level_Drop(sender As Object, e As DragEventArgs)
-
-            'HandleTextBox1FileDrop(sender, e, {".wad", ".pk3"}) NOT KEPT
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Level(droppedFile) Then FillTextBox(sender, droppedFile)
-
-        End Sub
-
-        Private Sub TextBox_NewLevel_Misc_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Misc_Drop(sender As Object, e As DragEventArgs)
-
-            'HandleTextBox1FileDrop(sender, e, {".deh", ".bex"}) NOT KEPT
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Misc(droppedFile) Then FillTextBox(sender, droppedFile)
-
-        End Sub
-
-        Private Sub TextBox_NewLevel_Image_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Image_Drop(sender As Object, e As DragEventArgs)
-
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Image(droppedFile) Then FillTextBox(sender, droppedFile)
-
-        End Sub
-
-        Private Sub HandleTextBox1FileDrop(sender As Object, e As DragEventArgs, validExtensions As String())
-
-            'Get dropped files
-            Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-
-            'Get extension of the first file
-            Dim info As FileInfo = New FileInfo(filePaths(0))
-            Dim ext As String = info.Extension.ToLowerInvariant
-
-            'TODO : Rather call a Boolean function to do the check
-            'If valid_file = True Then FillTextBox(sender, filePaths(0))
-
-            'Fill the TextBox if the file is valid
-            If validExtensions.Contains(ext) Then FillTextBox(sender, filePaths(0))
-
-        End Sub
+        'Maybe later !
+        'Private Sub AddFileMod(sender As Object)
+        '    StackPanel_Summary_FilesMods.Children.Add(
+        '            New TextBox() With
+        '            {
+        '                .Margin = New Thickness(0, 0, 4, 0),
+        '                .Background = Brushes.Gray,
+        '                .Text = filename
+        '            })
+        'End Sub
 
 
 #End Region
