@@ -1109,7 +1109,6 @@ Namespace Views
 
             'Ceci est temporaire, car à terme il faudra afficher les chemins relatifs des 3/4 premiers fichiers, puis "+ N files..."
             'Dim filesMods As String = Handle_FilesMods(p)
-            'TextBox_Summary_FilesMods.Text = filesMods
 
             Handle_FilesLevels_Summary(p)
 
@@ -1174,7 +1173,7 @@ Namespace Views
         Private Sub DecorateCommand()
 
             Try
-                Dim completeRange As TextRange = New TextRange(RichTextBox_CommandPreview.Document.ContentStart, RichTextBox_CommandPreview.Document.ContentEnd)
+                Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
                 Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
                 Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
 
@@ -1306,12 +1305,12 @@ Namespace Views
         Private Sub Button_ToggleSummaryView_Click(sender As Object, e As RoutedEventArgs)
 
             Try
-                If Grid_Summary_Params.Visibility = Visibility.Visible Then
-                    Grid_Summary_Params.Visibility = Visibility.Collapsed
-                    Grid_Summary_Command.Visibility = Visibility.Visible
+                If Grid_Summary.Visibility = Visibility.Visible Then
+                    Grid_Summary.Visibility = Visibility.Collapsed
+                    Grid_Summary.Visibility = Visibility.Visible
                 Else
-                    Grid_Summary_Params.Visibility = Visibility.Visible
-                    Grid_Summary_Command.Visibility = Visibility.Collapsed
+                    Grid_Summary.Visibility = Visibility.Visible
+                    Grid_Summary.Visibility = Visibility.Collapsed
                 End If
 
             Catch ex As Exception
@@ -1371,7 +1370,7 @@ Namespace Views
                 flow.Blocks.Add(para)
 
                 'RichTextBox_TestingCommandPreview.Document = flow 'temp to test "Export as .bat"
-                RichTextBox_CommandPreview.Document = flow 'Test v3
+                RichTextBox_Command.Document = flow 'Test v3
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)

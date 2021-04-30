@@ -85,7 +85,7 @@
                                     Content="Clear &#x21ba;"
                                     />
                             </Grid>
-                            <StackPanel x:Name="StackPanel_EngineParams"
+                            <StackPanel x:Name="StackPanel_PortParams"
                                         Grid.Row="1"
                                         Orientation="Horizontal"/>
                             <TextBox x:Name="TextBox_PortParameters"
@@ -624,7 +624,7 @@
                               Grid.Column="1"
                               Header="Summary">
                         <Grid>
-                            <Grid x:Name="Grid_Summary_Params" Visibility="Visible">
+                            <Grid x:Name="Grid_Summary" Visibility="Visible">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="10" />
                                     <RowDefinition Height="1*" />
@@ -663,7 +663,7 @@
                                    VerticalAlignment="Center"
                                    Content="Params :"/>
                                 <StackPanel 
-                                    x:Name="StackPanel_Summary_PortParams"
+                                    x:Name="StackPanel_Summary_PortParameters"
                                     Grid.Row="4" 
                                     Grid.Column="2"
                                     HorizontalAlignment="Stretch"
@@ -710,21 +710,13 @@
                                     Margin="0,1,0,0"
                                     Orientation="Horizontal"
                                     />
-
-                                <TextBox 
-                                    x:Name="TextBox_Summary_FilesMods" 
-                                    Grid.Row="4" 
-                                    Grid.Column="2"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Center"
-                                    Margin="0,1,0,0"
-                                    Cursor="Arrow"
-                                    IsReadOnly="True"
-                                    Visibility="Collapsed"
-                                    />
                             </Grid>
-                            <Grid x:Name="Grid_Summary_Command" Visibility="Collapsed" Margin="8">
-                                <RichTextBox x:Name="RichTextBox_CommandPreview" 
+                            <Grid 
+                                x:Name="Grid_Command" 
+                                Visibility="Collapsed" 
+                                Margin="8"
+                                >
+                                <RichTextBox x:Name="RichTextBox_Command" 
                                          Grid.Row="1"
                                          Grid.RowSpan="4"
                                          Grid.Column="1"
