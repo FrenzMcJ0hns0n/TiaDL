@@ -114,9 +114,27 @@
                             <TabControl x:Name="TabControl_Levels" Margin="8">
                                 <!-- Add Name ? -->
                                 <TabItem Header="Base presets">
+
                                     <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="10" />
+                                            <RowDefinition Height="5*" />
+                                            <RowDefinition Height="10" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="8*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="14*" />
+                                            <ColumnDefinition Width="10" />
+                                        </Grid.ColumnDefinitions>
+
                                         <ListView 
                                             x:Name="ListView_Levels_BasePresets"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.RowSpan="3"
+                                            Grid.ColumnSpan="2"
                                             Margin="-3"
                                             SelectionChanged="ListView_Levels_BasePresets_SelectionChanged"
                                             >
@@ -126,19 +144,97 @@
                                                         <Image 
                                                             Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
                                                             Margin="-3,0,0,0"
-                                                            Height="68"
+                                                            Height="52"
                                                             />
                                                         <TextBlock
                                                             Margin="8,0,0,0"
                                                             VerticalAlignment="Center"
                                                             FontWeight="DemiBold"
-                                                            FontSize="18"
+                                                            FontSize="16"
                                                             Text="{Binding Name}"
                                                             />
                                                     </StackPanel>
                                                 </DataTemplate>
                                             </ListView.ItemTemplate>
                                         </ListView>
+
+                                        <Grid
+                                            Grid.Row="1"
+                                            Grid.Column="3">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="10" />
+                                                <RowDefinition Height="4*" />
+                                                <RowDefinition Height="1*" />
+                                                <RowDefinition Height="1*" />
+                                                <RowDefinition Height="1*" />
+                                                <RowDefinition Height="10" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="10" />
+                                                <ColumnDefinition Width="1*" />
+                                                <ColumnDefinition Width="7*" />
+                                                <ColumnDefinition Width="1*" />
+                                                <ColumnDefinition Width="10" />
+                                            </Grid.ColumnDefinitions>
+                                            <Image
+                                                x:Name="Image_Levels_BasePresets"
+                                                Grid.Row="1"
+                                                Grid.Column="3"
+                                                />
+                                            <Label 
+                                                Grid.Row="2"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Content="Iwad :"
+                                                />
+                                            <TextBox
+                                                x:Name="TextBox_Levels_BasePresets_Iwad"
+                                                Grid.Row="2"
+                                                Grid.Column="2"
+                                                Grid.ColumnSpan="2"
+                                                VerticalAlignment="Center"
+                                                Margin="0,1,0,0"
+                                                Cursor="Arrow"
+                                                IsReadOnly="True"
+                                                />
+                                            <Label 
+                                                Grid.Row="3"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Content="Level :"
+                                                />
+                                            <TextBox
+                                                x:Name="TextBox_Levels_BasePresets_Level"
+                                                Grid.Row="3"
+                                                Grid.Column="2"
+                                                Grid.ColumnSpan="2"
+                                                VerticalAlignment="Center"
+                                                Margin="0,1,0,0"
+                                                Cursor="Arrow"
+                                                IsReadOnly="True"
+                                                />
+                                            <Label 
+                                                Grid.Row="4"
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                                Content="Misc :"
+                                                />
+                                            <TextBox
+                                                x:Name="TextBox_Levels_BasePresets_Misc"
+                                                Grid.Row="4"
+                                                Grid.Column="2"
+                                                Grid.ColumnSpan="2"
+                                                VerticalAlignment="Center"
+                                                Margin="0,1,0,0"
+                                                Cursor="Arrow"
+                                                IsReadOnly="True"
+                                                />
+                                        </Grid>
+                                        
+
                                     </Grid>
                                 </TabItem>
                                 <TabItem Header="User presets">
@@ -190,18 +286,23 @@
                                                HorizontalAlignment="Left"
                                                VerticalAlignment="Center"
                                                Content="Iwad :"/>
-                                        <TextBox x:Name="TextBox_NewLevel_Iwad"
-                                                 Grid.Row="1"
-                                                 Grid.Column="2"
-                                                 HorizontalAlignment="Stretch"
-                                                 VerticalAlignment="Stretch"
-                                                 HorizontalContentAlignment="Center"
-                                                 VerticalContentAlignment="Center"
-                                                 Cursor="Arrow"
-                                                 IsReadOnly="True"
-                                                 FontStyle="Italic"
-                                                 Foreground="Gray"
-                                                 Text="Drop an IWAD file here..."/>
+                                        <TextBox 
+                                            x:Name="TextBox_NewLevel_Iwad"
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Cursor="Arrow"
+                                            IsReadOnly="True"
+                                            FontStyle="Italic"
+                                            Foreground="Gray"
+                                            Text="Drop an IWAD file here..."
+                                            AllowDrop="True"
+                                            PreviewDragOver="TextBox_NewLevel_Iwad_PreviewDragOver"
+                                            Drop="TextBox_NewLevel_Iwad_Drop"
+                                            />
                                         <Button Grid.Row="1" 
                                                 Grid.Column="3"
                                                 VerticalAlignment="Top" 
@@ -236,7 +337,11 @@
                                                  IsReadOnly="True"
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
-                                                 Text="Drop a .wad/.pk3 file here..."/>
+                                                 Text="Drop a .wad/.pk3 file here..."
+                                                 AllowDrop="True"
+                                                 PreviewDragOver="TextBox_NewLevel_Level_PreviewDragOver"
+                                                 Drop="TextBox_NewLevel_Level_Drop"
+                                                 />
                                         <Button Grid.Row="3" 
                                                 Grid.Column="3"
                                                 VerticalAlignment="Top" 
@@ -270,7 +375,11 @@
                                                  IsReadOnly="True"
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
-                                                 Text="Drop a .deh/.bex file here..."/>
+                                                 Text="Drop a .deh/.bex file here..."
+                                                 AllowDrop="True"
+                                                 PreviewDragOver="TextBox_NewLevel_Misc_PreviewDragOver"
+                                                 Drop="TextBox_NewLevel_Misc_Drop"
+                                                 />
                                         <Button Grid.Row="5" 
                                                 Grid.Column="3"
                                                 VerticalAlignment="Top" 
@@ -304,17 +413,23 @@
                                                  FontStyle="Italic"
                                                  Foreground="Gray"
                                                  Text="Enter preset name..."/>-->
-                                        <TextBox Grid.Row="7" 
-                                                 Grid.Column="2"
-                                                 HorizontalAlignment="Stretch"
-                                                 VerticalAlignment="Stretch"
-                                                 HorizontalContentAlignment="Center"
-                                                 VerticalContentAlignment="Center"
-                                                 Cursor="Arrow"
-                                                 IsReadOnly="True"
-                                                 FontStyle="Italic"
-                                                 Foreground="Gray"
-                                                 Text="Drop a .jpg/.png file here..."/>
+                                        <TextBox 
+                                            x:Name="TextBox_NewLevel_Image"
+                                            Grid.Row="7" 
+                                            Grid.Column="2"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            HorizontalContentAlignment="Center"
+                                            VerticalContentAlignment="Center"
+                                            Cursor="Arrow"
+                                            IsReadOnly="True"
+                                            FontStyle="Italic"
+                                            Foreground="Gray"
+                                            Text="Drop a .jpg/.png file here..."
+                                            AllowDrop="True"
+                                            PreviewDragOver="TextBox_NewLevel_Image_PreviewDragOver"
+                                            Drop="TextBox_NewLevel_Image_Drop"     
+                                            />
                                         <Button Grid.Row="7" 
                                                 Grid.Column="3"
                                                 VerticalAlignment="Top" 
@@ -395,15 +510,17 @@
                                             <ColumnDefinition Width="8*" />
                                             <ColumnDefinition Width="10" />
                                             <ColumnDefinition Width="2*" />
-                                            <ColumnDefinition Width="14*" />
+                                            <ColumnDefinition Width="10" />
+                                            <ColumnDefinition Width="15*" />
                                             <ColumnDefinition Width="10" />
                                         </Grid.ColumnDefinitions>
                                         <ListView 
                                             x:Name="ListView_Mods_BasePresets"
-                                            Grid.Row="1"
-                                            Grid.Column="1"
-                                            Grid.RowSpan="2"
-                                            Margin="0"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.RowSpan="4"
+                                            Grid.ColumnSpan="2"
+                                            Margin="-3"
                                             SelectionChanged="ListView_Mods_BasePresets_SelectionChanged"
                                             >
                                             <!-- Use templates to bind -->
@@ -435,7 +552,7 @@
                                         <TextBlock
                                             x:Name="TextBlock_Mods_Desc"
                                             Grid.Row="1"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Center"
                                             Margin="7,-1,0,0"
@@ -454,7 +571,7 @@
                                         <ListView
                                             x:Name="ListView_Mods_Files"
                                             Grid.Row="2"
-                                            Grid.Column="4"
+                                            Grid.Column="5"
                                             FontSize="11"
                                             >
                                         </ListView>

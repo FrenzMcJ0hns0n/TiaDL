@@ -193,6 +193,81 @@ Module IOMethods
 
     End Function
 
+
+    Function ValidateFile_Iwad(filepath As String) As Boolean
+
+        Try
+            Using reader As BinaryReader = New BinaryReader(File.OpenRead(filepath))
+                Dim bytes As Byte() = reader.ReadBytes(4)
+                Dim fileh As String = Encoding.Default.GetString(bytes)
+
+                If fileh = "IWAD" Then Return True
+            End Using
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileIwad()'. Exception : " & ex.ToString)
+        End Try
+
+        Return False
+
+    End Function
+
+
+    Function ValidateFile_Level(filepath As String) As Boolean
+
+        Try
+            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim extension As String = file_info.Extension.ToLowerInvariant
+            Dim valid_ext As String() = {".pk3", ".wad"}
+
+            If valid_ext.Contains(extension) Then Return True
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileLevel()'. Exception : " & ex.ToString)
+        End Try
+
+        Return False
+
+    End Function
+
+
+    Function ValidateFile_Misc(filepath As String) As Boolean
+
+        Try
+            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim extension As String = file_info.Extension.ToLowerInvariant
+            Dim valid_ext As String() = {".bex", ".deh"}
+
+            If valid_ext.Contains(extension) Then Return True
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileMisc()'. Exception : " & ex.ToString)
+        End Try
+
+        Return False
+
+    End Function
+
+
+    Function ValidateFile_Image(filepath As String) As Boolean
+
+        Try
+            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim extension As String = file_info.Extension.ToLowerInvariant
+            Dim valid_ext As String() = {".jpg", ".jpeg", ".png"}
+
+            If valid_ext.Contains(extension) Then Return True
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileImage()'. Exception : " & ex.ToString)
+        End Try
+
+        Return False
+
+    End Function
+
+
+
     ''' <summary>
     ''' Create file 'presets.csv' with some commented lines, if it does not exist
     ''' </summary>
@@ -202,7 +277,7 @@ Module IOMethods
         Try
             Dim presetFile As String = Path.Combine(My.Settings.RootDirPath, "presets.csv")
 
-            Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
+            Using writer As StreamWriter = New StreamWriter(presetFile, True, Encoding.Default)
                 writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
                 writer.WriteLine()
                 writer.WriteLine("# Preset pattern :")
@@ -214,6 +289,7 @@ Module IOMethods
                 writer.WriteLine("# <Misc. path> : absolute path to .deh/.dex file")
                 writer.WriteLine()
             End Using
+
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'WritePresetsFileHeader()'. Exception : " & ex.ToString)
         End Try

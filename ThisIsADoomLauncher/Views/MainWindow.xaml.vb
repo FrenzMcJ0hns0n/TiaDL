@@ -1069,58 +1069,86 @@ Namespace Views
             e.Handled = True
         End Sub
 
+        ''' <summary>
+        ''' This feature allows to drop multiples files into the GroupBox "Levels"
+        ''' </summary>
         Private Sub GroupBox_Levels_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                '1) Collect, check and order files
+                '1) Collect files
                 Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                Dim confirmedFiles As List(Of String) = New List(Of String)
 
-                For i As Integer = 1 To filePaths.Length '3 times for 3 files
-                    For Each path As String In filePaths
+                '2) Check & order files
+                Dim confirmedFiles As List(Of String) = OrderDroppedFiles_Levels(filePaths)
 
-                        If confirmedFiles.Contains(path) Then Continue For
+                '------------- Template of confirmedFiles, according to .Count :
+                '-------------  1 = Iwad
+                '-------------  2 = Iwad, Level
+                '-------------  3 = Iwad, Level, Misc
+                '-------------  4 = Iwad, Level, Misc, Image
 
-                        If ValidateFile(path) = "iwad" Then
-                            confirmedFiles.Add(path)
-                            Continue For
-                        End If
-
-                        If ValidateFile(path) = "level" And confirmedFiles.Count > 0 Then
-                            confirmedFiles.Add(path)
-                            Continue For
-                        End If
-
-                        If ValidateFile(path) = "misc" And confirmedFiles.Count > 1 Then
-                            confirmedFiles.Add(path)
-                            Continue For
-                        End If
-
-                    Next
-                Next
-
-                '2) If at least one file is confirmed set focus on tab 3 "Add new preset"
-                'Index of confirmedFiles :
-                ' 1 = Iwad,
-                ' 2 = Iwad + Level,
-                ' 3 = Iwad + Level + Misc
-                Dim pretexte As Boolean = False
-
-                If confirmedFiles.Count = 0 Then
-                    pretexte = False 'Will be Return in future dedicated Sub()
-                Else
-                    TabControl_Levels.SelectedIndex = 2
-                End If
+                '3) Feed GUI if Count > 0
+                If confirmedFiles.Count = 0 Then Return
+                TabControl_Levels.SelectedIndex = 2
 
                 If confirmedFiles.Count > 0 Then FillTextBox(TextBox_NewLevel_Iwad, confirmedFiles(0))
                 If confirmedFiles.Count > 1 Then FillTextBox(TextBox_NewLevel_Level, confirmedFiles(1))
                 If confirmedFiles.Count > 2 Then FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
+                If confirmedFiles.Count > 3 Then FillTextBox(TextBox_NewLevel_Image, confirmedFiles(3))
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
+
+        ''' <summary>
+        ''' Check and order the files dropped into the GroupBox "Levels"
+        ''' </summary>
+        Private Function OrderDroppedFiles_Levels(filePaths As String()) As List(Of String)
+
+            Dim orderedFiles As List(Of String) = New List(Of String)
+
+            Try
+                'Do as many outer loops as there are files, to obtain the correct order in the end (for instance 3 times for 3 files)
+                For i As Integer = 1 To filePaths.Length
+                    For Each path As String In filePaths
+
+                        If orderedFiles.Contains(path) Then Continue For
+
+                        If ValidateFile_Iwad(path) Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile_Level(path) And orderedFiles.Count > 0 Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile_Misc(path) And orderedFiles.Count > 1 Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile_Image(path) And orderedFiles.Count > 2 Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                    Next
+                Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'OrderDroppedFiles_Levels()'. Exception : " & ex.ToString)
+            End Try
+
+            Return orderedFiles
+
+        End Function
+
+
+
 
         Private Sub TextBox_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
@@ -1258,6 +1286,69 @@ Namespace Views
             UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
             UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
             UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
+
+        End Sub
+
+        Private Sub TextBox_NewLevel_Iwad_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Iwad_Drop(sender As Object, e As DragEventArgs)
+
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Iwad(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub TextBox_NewLevel_Level_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Level_Drop(sender As Object, e As DragEventArgs)
+
+            'HandleTextBox1FileDrop(sender, e, {".wad", ".pk3"}) NOT KEPT
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Level(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub TextBox_NewLevel_Misc_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Misc_Drop(sender As Object, e As DragEventArgs)
+
+            'HandleTextBox1FileDrop(sender, e, {".deh", ".bex"}) NOT KEPT
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Misc(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub TextBox_NewLevel_Image_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Image_Drop(sender As Object, e As DragEventArgs)
+
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If ValidateFile_Image(droppedFile) Then FillTextBox(sender, droppedFile)
+
+        End Sub
+
+        Private Sub HandleTextBox1FileDrop(sender As Object, e As DragEventArgs, validExtensions As String())
+
+            'Get dropped files
+            Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+
+            'Get extension of the first file
+            Dim info As FileInfo = New FileInfo(filePaths(0))
+            Dim ext As String = info.Extension.ToLowerInvariant
+
+            'TODO : Rather call a Boolean function to do the check
+            'If valid_file = True Then FillTextBox(sender, filePaths(0))
+
+            'Fill the TextBox if the file is valid
+            If validExtensions.Contains(ext) Then FillTextBox(sender, filePaths(0))
 
         End Sub
 
