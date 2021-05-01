@@ -53,14 +53,17 @@ Module IOMethods
     ''' 
     Function ConvertPathRelativeToAbsolute_Level(level As String) As String
 
+        Dim levelAbsolutePath As String = Nothing
+
         Try
-            Dim levelPath = Path.Combine(My.Settings.LevelsDir, level)
-            Return If(File.Exists(levelPath), levelPath, Nothing)
+            Dim probablePath As String = Path.Combine(My.Settings.LevelsDir, level)
+            If File.Exists(probablePath) Then levelAbsolutePath = probablePath
 
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Level()'. Exception : " & ex.ToString)
-            Return Nothing
         End Try
+
+        Return levelAbsolutePath
 
     End Function
 
@@ -70,14 +73,17 @@ Module IOMethods
     ''' 
     Function ConvertPathRelativeToAbsolute_Misc(misc As String) As String
 
+        Dim miscAbsolutePath As String = Nothing
+
         Try
-            Dim miscPath = Path.Combine(My.Settings.MiscDir, misc)
-            Return If(File.Exists(miscPath), miscPath, Nothing)
+            Dim probablePath As String = Path.Combine(My.Settings.MiscDir, misc)
+            If File.Exists(probablePath) Then miscAbsolutePath = probablePath
 
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Misc()'. Exception : " & ex.ToString)
-            Return Nothing
         End Try
+
+        Return miscAbsolutePath
 
     End Function
 
