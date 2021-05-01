@@ -1249,10 +1249,9 @@ Namespace Views
                 'Port Parameters
                 'TODO
 
-                'Levels
+                'Files/Mods
+                StackPanel_Summary_FilesMods.Children.Clear()
                 HandleLevels_Summary()
-
-                'Mods
                 HandleMods_Summary()
 
             Catch ex As Exception
@@ -1264,8 +1263,6 @@ Namespace Views
         Private Sub HandleLevels_Summary()
 
             Try
-                StackPanel_Summary_FilesMods.Children.Clear()
-
                 Dim lp As LevelPreset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
                 If lp Is Nothing Then Return
 
