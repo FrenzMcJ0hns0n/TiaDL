@@ -732,7 +732,7 @@ Namespace Views
                 Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingExtraParameters.Text))
 
                 Dim command As String = String.Format("{0}{1}{2}{3}{4}{5}{6}{7}", engine, engineParams, iwad, file1, file2, file3, file4, file5)
-                FillRichTextBox(command)
+                FillRichTextBox_Command(command)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'UpdateCommandPreview()'. Exception : " & ex.ToString)
@@ -1171,7 +1171,7 @@ Namespace Views
                 Next
 
                 Dim command As String = String.Format("{0}{1}{2}{3}", port, portParams, iwad, filesMods)
-                FillRichTextBox(command)
+                FillRichTextBox_Command(command)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
@@ -1376,24 +1376,6 @@ Namespace Views
         End Function
 
 
-        Private Sub Button_ToggleSummaryView_Click(sender As Object, e As RoutedEventArgs)
-
-            Try
-                If Grid_Summary.Visibility = Visibility.Visible Then
-                    Grid_Summary.Visibility = Visibility.Collapsed
-                    Grid_Command.Visibility = Visibility.Visible
-                Else
-                    Grid_Summary.Visibility = Visibility.Visible
-                    Grid_Command.Visibility = Visibility.Collapsed
-                End If
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_ToggleSummaryView_Click()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-
 
 
 
@@ -1434,17 +1416,15 @@ Namespace Views
 
 
 
-        Private Sub FillRichTextBox(content As String)
+        Private Sub FillRichTextBox_Command(content As String)
 
             Try
                 Dim flow As FlowDocument = New FlowDocument()
                 Dim para As Paragraph = New Paragraph()
-
                 para.Inlines.Add(content)
                 flow.Blocks.Add(para)
 
-                'RichTextBox_TestingCommandPreview.Document = flow 'temp to test "Export as .bat"
-                RichTextBox_Command.Document = flow 'Test v3
+                RichTextBox_Command.Document = flow
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
@@ -1454,18 +1434,43 @@ Namespace Views
 
 
 
+        Private Sub Button_Options_ToggleView_Click(sender As Object, e As RoutedEventArgs)
 
-        'Maybe later !
-        'Private Sub AddFileMod(sender As Object)
-        '    StackPanel_Summary_FilesMods.Children.Add(
-        '            New TextBox() With
-        '            {
-        '                .Margin = New Thickness(0, 0, 4, 0),
-        '                .Background = Brushes.Gray,
-        '                .Text = filename
-        '            })
-        'End Sub
+            Try
+                If Grid_Summary.Visibility = Visibility.Visible Then
+                    Grid_Summary.Visibility = Visibility.Collapsed
+                    Grid_Command.Visibility = Visibility.Visible
+                Else
+                    Grid_Summary.Visibility = Visibility.Visible
+                    Grid_Command.Visibility = Visibility.Collapsed
+                End If
 
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_Options_ToggleView_Click()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+
+
+        Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
+
+            Try
+                'Launch
+                Dim rtbText As String = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
+                Dim command As String = String.Format("/c start """" {0}", rtbText)
+                LaunchProcessV3(command)
+
+                'Save
+                'With My.Settings
+                '...
+                'End With
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
 
 #End Region
 

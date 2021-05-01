@@ -672,36 +672,65 @@
                               Grid.Column="3"
                               Margin="10,0,0,0"
                               Header="Options">
-                        <Grid Margin="8">
-                            <!-- TODO: Define grid = 4 parts ? -->
-                            <StackPanel Orientation="Vertical">
-                                <Button HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Margin="0,26,0,0"
-                                    Cursor="Hand">
-                                    <Button.Template>
-                                        <ControlTemplate TargetType="Button">
-                                            <ContentPresenter Content="{TemplateBinding Content}"/>
-                                        </ControlTemplate>
-                                    </Button.Template>
-                                    <Image Source="pack://application:,,,/Resources/Images/index.png" />
-                                </Button>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="15*" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="63*" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="44*" />
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="24*" />
+                            </Grid.RowDefinitions>
+                            <Button 
+                                x:Name="Button_Options_HelpAbout"
+                                Grid.Row="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Cursor="Hand"
+                                >
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <ContentPresenter Content="{TemplateBinding Content}"/>
+                                    </ControlTemplate>
+                                </Button.Template>
+                                <Image Source="pack://application:,,,/Resources/Images/index.png" />
+                            </Button>
 
-                                <Button HorizontalAlignment="Center"
+                            <Grid Grid.Row="6">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="1*" />
+                                    <RowDefinition Height="1*" />
+                                </Grid.RowDefinitions>
+                                <Button 
+                                    x:Name="Button_ToggleSummaryView"
+                                    Grid.Row="0"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="32"
+                                    Content="&#x1F441;"
+                                    Cursor="Hand"
+                                    Click="Button_Options_ToggleView_Click"
+                                    />
+                                <Button
+                                    x:Name="Button_Options_LaunchSave"
+                                    Grid.Row="1"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Center"
                                     Cursor="Hand"
-                                    Margin="0,52,0,0">
+                                    Click="Button_Options_LaunchSave_Click"
+                                    >
                                     <Button.Template>
                                         <ControlTemplate TargetType="Button">
                                             <ContentPresenter Content="{TemplateBinding Content}"/>
                                         </ControlTemplate>
                                     </Button.Template>
-                                    <!-- Name="Play_Image" -->
-                                    <Image 
-                               Source="pack://application:,,,/Resources/Images/play_darker.png" />
+                                    <Image Source="pack://application:,,,/Resources/Images/play_darker.png" />
                                 </Button>
+                            </Grid>
+                            
+                            
 
-                            </StackPanel>
                         </Grid>
                         
                     </GroupBox>
@@ -725,49 +754,26 @@
                         <Button Margin="0,0,0,12" Height="56" Content="5"/>
                     </StackPanel>-->
 
-                    <Button Grid.Row="5"
-                            Grid.Column="3"
-                            Margin="10,10,0,1"
-                            Content="!"/>
-
                     <!--<StackPanel Grid.Row="7"
                                 Grid.Column="3"
                                 VerticalAlignment="Center"
                                 Margin="0,12,0,0"
                                 Orientation="Vertical">-->
-                    <Button 
-                        x:Name="Button_ToggleSummaryView"
-                        Grid.Row="7"
-                        Grid.Column="3"
-                        Margin="10,10,0,0"
-                        VerticalAlignment="Top"
-                        Height="64"
-                        FontSize="24"
-                        Content="&#x1F441;"
-                        Click="Button_ToggleSummaryView_Click">
+                    
                         <!--<TextBlock TextAlignment="Center"
                                     FontSize="14">
                             Toggle view
                             <LineBreak />
                             <Bold>> _</Bold>
                         </TextBlock>-->
-                    </Button>
 
-                    <Button Grid.Row="7"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Height="64"
-                            Margin="10,0,0,0"
-                            Padding="2,0,0,6"
-                            FontSize="48"
-                            Content="&#x23F5;">
+
                         <!--<TextBlock TextAlignment="Center"
                                    FontSize="14">
                             Play
                             <LineBreak />
                             &#x23F5;
                         </TextBlock>-->
-                    </Button>
                     <!--</StackPanel>-->
 
 

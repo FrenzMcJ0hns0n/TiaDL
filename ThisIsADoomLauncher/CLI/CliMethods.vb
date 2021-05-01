@@ -221,4 +221,19 @@ Module CliMethods
 
     End Sub
 
+
+    Sub LaunchProcessV3(args As String)
+
+        Dim cmdExe As ProcessStartInfo = New ProcessStartInfo("cmd.exe") With
+        {
+            .UseShellExecute = False,
+            .CreateNoWindow = True,
+            .Arguments = args
+        }
+
+        Process.Start(cmdExe)
+
+    End Sub
+
+
 End Module
