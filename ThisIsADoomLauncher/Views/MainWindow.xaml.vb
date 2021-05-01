@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports ThisIsADoomLauncher.Models
 'Imports ThisIsADoomLauncher.Helpers
@@ -1110,9 +1111,9 @@ Namespace Views
             'Ceci est temporaire, car à terme il faudra afficher les chemins relatifs des 3/4 premiers fichiers, puis "+ N files..."
             'Dim filesMods As String = Handle_FilesMods(p)
 
-            Handle_FilesLevels_Summary(p)
+            'Handle_FilesLevels_Summary(p) 'LAST LINE USED, THEN REPLACED BY UpdateSummary()
 
-            'UpdateSummary() 'ne pas mettre à jour tous les champs, juste celui qui a été modifié
+            UpdateSummary() 'ne pas mettre à jour tous les champs, juste celui qui a été modifié
             UpdateCommand()
 
         End Sub
@@ -1127,8 +1128,6 @@ Namespace Views
                 Dim p As ModPreset = CType(sender.SelectedItem, ModPreset)
 
                 TextBlock_Mods_Desc.Text = p.Desc
-
-                'Function to convert Relative path into Absolute
                 ListView_Mods_Files.ItemsSource = ConvertModPath_RelativeToAbsolute(p.Files)
 
                 UpdateSummary()
@@ -1235,71 +1234,123 @@ Namespace Views
 
 
 
+        'TODO : Generic way to obtain Levels & Mods (with absolute paths)
+        '-> to feed Summary
+        '-> to feed Command
 
 
 
         Private Sub UpdateSummary()
 
-            'TextBox Port
-            If Not TextBox_Port.Text = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)" Then TextBox_Summary_Port.Text = TextBox_Port.Text
+            Try
+                'Port
+                If Not TextBox_Port.Text = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)" Then TextBox_Summary_Port.Text = TextBox_Port.Text
 
-            'Levels 3 TextBoxes (Iwad, Level, Misc)
-            '= Done when {Preset}.SelectionChanged ?
+                'Port Parameters
+                'TODO
 
-            'Mods 1 List
-            For Each modFilePath As String In ListView_Mods_Files.Items
+                'Levels
+                HandleLevels_Summary()
 
-                StackPanel_Summary_FilesMods.Children.Add(
-                        New TextBox() With
-                        {
-                            .Margin = New Thickness(0, 0, 6, 0),
-                            .Background = Brushes.LightGray,
-                            .Text = modFilePath
-                        })
+                'Mods
+                HandleMods_Summary()
 
-            Next
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'UpdateSummary()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
-        Private Sub Handle_FilesLevels_Summary(p As LevelPreset)
+        Private Sub HandleLevels_Summary()
 
-            'Params list : USE/Display RELATIVE PATHS !
-            Dim fileNames As List(Of String) = New List(Of String) 'From {p.Level, p.Misc}
+            Try
+                StackPanel_Summary_FilesMods.Children.Clear()
 
-            If Not p.Level = Nothing Then fileNames.Add(p.Level)
-            If Not p.Misc = Nothing Then fileNames.Add(p.Misc)
+                Dim lp As LevelPreset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
+                If lp Is Nothing Then Return
 
-            StackPanel_Summary_FilesMods.Children.Clear()
-
-            If fileNames.Count > 0 Then
-                'For Each filename As String In fileNames
+                'Method #1 : Check LevelPreset properties individually
+                'If Not lp.Level = Nothing Then
                 '    StackPanel_Summary_FilesMods.Children.Add(
                 '        New TextBox() With
                 '        {
                 '            .Margin = New Thickness(0, 0, 6, 0),
                 '            .Background = Brushes.LightGray,
-                '            .Text = filename
+                '            .Text = lp.Level
                 '        })
-                'Next
+                'End If
 
-                For i As Integer = 0 To fileNames.Count - 1
-                    StackPanel_Summary_FilesMods.Children.Insert(
-                        i,
-                        New TextBox() With
-                        {
-                            .Margin = New Thickness(0, 0, 6, 0),
-                            .Background = Brushes.LightGray,
-                            .Text = fileNames(i)
-                        })
+                'If Not lp.Misc = Nothing Then
+                '    StackPanel_Summary_FilesMods.Children.Add(
+                '        New TextBox() With
+                '        {
+                '            .Margin = New Thickness(0, 0, 6, 0),
+                '            .Background = Brushes.LightGray,
+                '            .Text = lp.Misc
+                '        })
+                'End If
+
+                'Method #2 : Check LevelPreset properties with a list to iterate through
+                'Dim fileNames As List(Of String) = New List(Of String) 'From {p.Level, p.Misc}
+
+                'If Not lp.Level = Nothing Then fileNames.Add(lp.Level)
+                'If Not lp.Misc = Nothing Then fileNames.Add(lp.Misc)
+
+                'If fileNames.Count > 0 Then
+                '    For Each filename As String In fileNames
+                '        StackPanel_Summary_FilesMods.Children.Add(
+                '            New TextBox() With
+                '            {
+                '                .Margin = New Thickness(0, 0, 6, 0),
+                '                .Background = Brushes.LightGray,
+                '                .Text = filename
+                '            })
+                '    Next
+                'End If
+
+                'Method #3 : Iterate through properties of class LevelPreset
+                For Each p As PropertyInfo In lp.GetType().GetProperties()
+                    If (p.Name = "Level" Or p.Name = "Misc") And Not p.GetValue(lp) = Nothing Then
+
+                        StackPanel_Summary_FilesMods.Children.Add(
+                            New TextBox() With
+                                {
+                                    .Margin = New Thickness(0, 0, 6, 0),
+                                    .Background = Brushes.LightGray,
+                                    .Text = p.GetValue(lp)
+                                }
+                            )
+
+                    End If
                 Next
 
-            End If
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'HandleLevels_Summary()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 
+        Private Sub HandleMods_Summary()
 
+            Try
+                If ListView_Mods_BasePresets.SelectedIndex > 0 Then
 
+                    Dim mp As ModPreset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
 
+                    StackPanel_Summary_FilesMods.Children.Add(
+                        New TextBox() With
+                        {
+                            .Margin = New Thickness(0, 0, 6, 0),
+                            .Background = Brushes.DarkGray,
+                            .Text = mp.Name 'Display filenames instead ?
+                        })
+                End If
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'HandleMods_Summary()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
 
 
         Private Sub Button_ToggleSummaryView_Click(sender As Object, e As RoutedEventArgs)
