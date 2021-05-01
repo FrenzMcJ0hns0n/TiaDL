@@ -29,18 +29,21 @@ Module IOMethods
     ''' Build absolute path from Iwad relative filename
     ''' </summary>
     ''' 
-    Function ConvertIwadPath_RelativeToAbsolute(iwad As String) As String
+    Function ConvertPathRelativeToAbsolute_Iwad(iwad As String) As String
+
+        Dim iwadAbsolutePath As String = Nothing
 
         Try
-            If iwad = "Wolf3D" Then Return iwad
+            If iwad = "Wolf3D" Then Return "Wolf3D"
 
-            Dim iwadPath As String = Path.Combine(My.Settings.IwadsDir, iwad)
-            Return If(File.Exists(iwadPath), iwadPath, Nothing)
+            Dim probablePath As String = Path.Combine(My.Settings.IwadsDir, iwad)
+            If File.Exists(probablePath) Then iwadAbsolutePath = probablePath
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertIwadPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
-            Return Nothing
+            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Iwad()'. Exception : " & ex.ToString)
         End Try
+
+        Return iwadAbsolutePath
 
     End Function
 
@@ -48,14 +51,14 @@ Module IOMethods
     ''' Build absolute path from Level relative filename
     ''' </summary>
     ''' 
-    Function ConvertLevelPath_RelativeToAbsolute(level As String) As String
+    Function ConvertPathRelativeToAbsolute_Level(level As String) As String
 
         Try
             Dim levelPath = Path.Combine(My.Settings.LevelsDir, level)
             Return If(File.Exists(levelPath), levelPath, Nothing)
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertLevelPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Level()'. Exception : " & ex.ToString)
             Return Nothing
         End Try
 
@@ -65,14 +68,14 @@ Module IOMethods
     ''' Build absolute path from Misc relative filename
     ''' </summary>
     ''' 
-    Function ConvertMiscPath_RelativeToAbsolute(misc As String) As String
+    Function ConvertPathRelativeToAbsolute_Misc(misc As String) As String
 
         Try
             Dim miscPath = Path.Combine(My.Settings.MiscDir, misc)
             Return If(File.Exists(miscPath), miscPath, Nothing)
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertMiscPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Misc()'. Exception : " & ex.ToString)
             Return Nothing
         End Try
 
