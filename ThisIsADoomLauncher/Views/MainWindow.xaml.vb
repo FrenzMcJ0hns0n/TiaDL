@@ -1246,13 +1246,23 @@ Namespace Views
                 'Port
                 If Not TextBox_Port.Text = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)" Then TextBox_Summary_Port.Text = TextBox_Port.Text
 
+
+
                 'Port Parameters
                 'TODO
 
+
+
                 'Files/Mods
                 StackPanel_Summary_FilesMods.Children.Clear()
-                HandleLevels_Summary()
-                HandleMods_Summary()
+
+                Dim levelFilePaths As List(Of String) = ReturnLevelsAbsolutePaths()
+                Dim levelFileNames As List(Of String) = ConvertFilePath_AbsoluteToRelative(levelFilePaths)
+                DisplayLevels_Summary(levelFileNames)
+
+                Dim modFilePaths As List(Of String) = ReturnModsAbsolutePaths()
+                Dim modFileNames As List(Of String) = ConvertFilePath_AbsoluteToRelative(modFilePaths)
+                DisplayMods_Summary(modFileNames)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'UpdateSummary()'. Exception : " & ex.ToString)
@@ -1260,65 +1270,48 @@ Namespace Views
 
         End Sub
 
-        Private Sub HandleLevels_Summary()
+        ''' <summary>
+        ''' Here "Levels" refers to both files "Level" (.pk3/.wad) and "Misc" (.bex/.deh)
+        ''' </summary>
+        Private Function ReturnLevelsAbsolutePaths() As List(Of String)
+
+            Dim filePaths As List(Of String) = New List(Of String)
 
             Try
                 Dim lp As LevelPreset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
-                If lp Is Nothing Then Return
 
-                'Method #1 : Check LevelPreset properties individually
-                'If Not lp.Level = Nothing Then
-                '    StackPanel_Summary_FilesMods.Children.Add(
-                '        New TextBox() With
-                '        {
-                '            .Margin = New Thickness(0, 0, 6, 0),
-                '            .Background = Brushes.LightGray,
-                '            .Text = lp.Level
-                '        })
-                'End If
+                '(Alt method)
+                'If Not lp.Level = Nothing Then filePaths.Add(lp.Level)
+                'If Not lp.Misc = Nothing Then filePaths.Add(lp.Misc)
 
-                'If Not lp.Misc = Nothing Then
-                '    StackPanel_Summary_FilesMods.Children.Add(
-                '        New TextBox() With
-                '        {
-                '            .Margin = New Thickness(0, 0, 6, 0),
-                '            .Background = Brushes.LightGray,
-                '            .Text = lp.Misc
-                '        })
-                'End If
-
-                'Method #2 : Check LevelPreset properties with a list to iterate through
-                'Dim fileNames As List(Of String) = New List(Of String) 'From {p.Level, p.Misc}
-
-                'If Not lp.Level = Nothing Then fileNames.Add(lp.Level)
-                'If Not lp.Misc = Nothing Then fileNames.Add(lp.Misc)
-
-                'If fileNames.Count > 0 Then
-                '    For Each filename As String In fileNames
-                '        StackPanel_Summary_FilesMods.Children.Add(
-                '            New TextBox() With
-                '            {
-                '                .Margin = New Thickness(0, 0, 6, 0),
-                '                .Background = Brushes.LightGray,
-                '                .Text = filename
-                '            })
-                '    Next
-                'End If
-
-                'Method #3 : Iterate through properties of class LevelPreset
                 For Each p As PropertyInfo In lp.GetType().GetProperties()
                     If (p.Name = "Level" Or p.Name = "Misc") And Not p.GetValue(lp) = Nothing Then
-
-                        StackPanel_Summary_FilesMods.Children.Add(
-                            New TextBox() With
-                                {
-                                    .Margin = New Thickness(0, 0, 6, 0),
-                                    .Background = Brushes.LightGray,
-                                    .Text = p.GetValue(lp)
-                                }
-                            )
-
+                        filePaths.Add(p.GetValue(lp))
                     End If
+                Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ReturnLevelsAbsolutePaths()'. Exception : " & ex.ToString)
+            End Try
+
+            Return filePaths
+
+        End Function
+
+        Private Sub DisplayLevels_Summary(fileNames As List(Of String))
+
+            Try
+                If fileNames.Count = 0 Then Return
+
+                For Each name As String In fileNames
+                    StackPanel_Summary_FilesMods.Children.Add(
+                        New TextBox() With
+                            {
+                                .Margin = New Thickness(0, 0, 6, 0),
+                                .Background = Brushes.LightGray,
+                                .Text = name
+                            }
+                        )
                 Next
 
             Catch ex As Exception
@@ -1327,27 +1320,66 @@ Namespace Views
 
         End Sub
 
-        Private Sub HandleMods_Summary()
+
+        Private Function ReturnModsAbsolutePaths() As List(Of String)
+
+            Dim filePaths As List(Of String) = New List(Of String)
 
             Try
-                If ListView_Mods_BasePresets.SelectedIndex > 0 Then
-
-                    Dim mp As ModPreset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
-
-                    StackPanel_Summary_FilesMods.Children.Add(
-                        New TextBox() With
-                        {
-                            .Margin = New Thickness(0, 0, 6, 0),
-                            .Background = Brushes.DarkGray,
-                            .Text = mp.Name 'Display filenames instead ?
-                        })
-                End If
+                Dim mp As ModPreset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
+                If Not mp Is Nothing Then filePaths = mp.Files
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'HandleMods_Summary()'. Exception : " & ex.ToString)
+                WriteToLog(DateTime.Now & " - Error in 'ReturnModsAbsolutePaths()'. Exception : " & ex.ToString)
+            End Try
+
+            Return filePaths
+
+        End Function
+
+        Private Sub DisplayMods_Summary(fileNames As List(Of String))
+
+            Try
+                If fileNames.Count = 0 Then Return
+
+                For Each name As String In fileNames
+                    StackPanel_Summary_FilesMods.Children.Add(
+                        New TextBox() With
+                            {
+                                .Margin = New Thickness(0, 0, 6, 0),
+                                .Background = Brushes.DarkGray,
+                                .Text = name
+                            }
+                        )
+                Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
+
+
+        ''' <summary>
+        ''' Note 1 : Generic/Common function -> to be moved to Helpers files
+        ''' Note 2 : Really useful to have it separated from the Display Subs ?
+        ''' </summary>
+        Private Function ConvertFilePath_AbsoluteToRelative(filePaths As List(Of String)) As List(Of String)
+
+            Dim fileNames As List(Of String) = New List(Of String)
+
+            Try
+                For Each path As String In filePaths
+                    fileNames.Add(New FileInfo(path).Name)
+                Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ConvertFilePath_AbsoluteToRelative()'. Exception : " & ex.ToString)
+            End Try
+
+            Return fileNames
+
+        End Function
 
 
         Private Sub Button_ToggleSummaryView_Click(sender As Object, e As RoutedEventArgs)
