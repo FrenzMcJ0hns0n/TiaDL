@@ -1145,6 +1145,8 @@ Namespace Views
 
         Private Sub UpdateCommand()
 
+            'HERE NEXT !
+
             Try
                 'Build
                 Dim str As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
@@ -1284,11 +1286,13 @@ Namespace Views
                 'If Not lp.Level = Nothing Then filePaths.Add(lp.Level)
                 'If Not lp.Misc = Nothing Then filePaths.Add(lp.Misc)
 
-                For Each p As PropertyInfo In lp.GetType().GetProperties()
-                    If (p.Name = "Level" Or p.Name = "Misc") And Not p.GetValue(lp) = Nothing Then
-                        filePaths.Add(p.GetValue(lp))
-                    End If
-                Next
+                If Not lp Is Nothing Then
+                    For Each p As PropertyInfo In lp.GetType().GetProperties()
+                        If (p.Name = "Level" Or p.Name = "Misc") And Not p.GetValue(lp) = Nothing Then
+                            filePaths.Add(p.GetValue(lp))
+                        End If
+                    Next
+                End If
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'ReturnLevelsAbsolutePaths()'. Exception : " & ex.ToString)
@@ -1387,10 +1391,10 @@ Namespace Views
             Try
                 If Grid_Summary.Visibility = Visibility.Visible Then
                     Grid_Summary.Visibility = Visibility.Collapsed
-                    Grid_Summary.Visibility = Visibility.Visible
+                    Grid_Command.Visibility = Visibility.Visible
                 Else
                     Grid_Summary.Visibility = Visibility.Visible
-                    Grid_Summary.Visibility = Visibility.Collapsed
+                    Grid_Command.Visibility = Visibility.Collapsed
                 End If
 
             Catch ex As Exception
