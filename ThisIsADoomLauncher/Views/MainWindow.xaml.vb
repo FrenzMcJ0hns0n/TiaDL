@@ -1266,24 +1266,6 @@ Namespace Views
 
         End Sub
 
-
-        Private Function ReturnSelectedMods(sender As Object) As List(Of String)
-
-            Dim listVw As ListView = sender
-            Dim filePaths As List(Of String) = New List(Of String)
-
-            Try
-                Dim mp As ModPreset = CType(listVw.SelectedItem, ModPreset)
-                If Not mp Is Nothing Then filePaths = mp.Files
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ReturnModsAbsolutePaths()'. Exception : " & ex.ToString)
-            End Try
-
-            Return filePaths
-
-        End Function
-
         Private Sub DisplayMods_Summary(fileNames As List(Of String))
 
             Try
@@ -1409,18 +1391,48 @@ Namespace Views
         Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
 
             Try
-                'TODO? Checklist before launch
+                If ReadyToLaunch() Then
+                    'LaunchGame()
+                    SaveSettings()
+                End If
 
-                'Launch
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+        Private Function ReadyToLaunch() As Boolean
+
+            Try
+                If GetValueFromTextBox_Port() = Nothing Then
+                    MessageBox.Show("Error : you need to define a Port")
+                    Return False
+                End If
+
+                If ReturnSelectedLevels() Is Nothing Then
+                    MessageBox.Show("Error : you need to choose Levels")
+                    Return False
+                End If
+
+                Return True
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ReadyToLaunch()'. Exception : " & ex.ToString)
+                Return False
+            End Try
+
+        End Function
+
+        Private Sub LaunchGame()
+
+            Try
                 Dim rtbText As String = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
                 Dim command As String = String.Format("/c start """" {0}", rtbText)
                 LaunchProcessV3(command)
 
-                'Save
-                'SaveSettings()
-
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
+                WriteToLog(DateTime.Now & " - Error in 'LaunchGame()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -1429,7 +1441,18 @@ Namespace Views
 
             Try
                 With My.Settings
+                    'TODO? Convert to absolute path ?
+
                     .SelectedPort = GetValueFromTextBox_Port()
+                    .SelectedIwad = ReturnSelectedLevels().Iwad
+                    .SelectedLevel = If(ReturnSelectedLevels().Level = Nothing, Nothing, ReturnSelectedLevels().Level)
+                    .SelectedMisc = If(ReturnSelectedLevels().Misc = Nothing, Nothing, ReturnSelectedLevels().Misc)
+
+                    If ReturnSelectedMods() IsNot Nothing Then
+                        .FilesMods = New Specialized.StringCollection
+                        .FilesMods.AddRange(ReturnSelectedMods().Files.ToArray)
+                    End If
+
                 End With
 
 
