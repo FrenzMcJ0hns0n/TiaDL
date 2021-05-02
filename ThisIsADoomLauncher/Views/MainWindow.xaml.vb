@@ -848,10 +848,9 @@ Namespace Views
 
             Try
                 Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                Dim info As FileInfo = New FileInfo(filePaths(0))
-                Dim ext As String = info.Extension.ToLowerInvariant
+                Dim fileExtension As String = New FileInfo(filePaths(0)).Extension.ToLowerInvariant
 
-                If info.Extension.ToLowerInvariant = ".exe" Then
+                If fileExtension = ".exe" Then
                     FillTextBox(TextBox_Port, filePaths(0))
                     UpdateSummary()
                     UpdateCommand()
@@ -869,6 +868,7 @@ Namespace Views
             UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
             UpdateCommand()
             UpdateSummary()
+            DecorateCommand()
 
         End Sub
 
