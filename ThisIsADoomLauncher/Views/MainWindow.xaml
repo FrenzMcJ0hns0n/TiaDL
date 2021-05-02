@@ -424,7 +424,7 @@
                               Grid.Column="1"
                               Header="Mods">
                         <Grid Margin="8">
-                            <TabControl>
+                            <TabControl x:Name="TabControl_Mods">
                                 <TabItem Header="Base presets">
                                     <Grid>
                                         <Grid.RowDefinitions>

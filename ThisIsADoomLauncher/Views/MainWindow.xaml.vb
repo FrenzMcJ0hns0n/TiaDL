@@ -1093,45 +1093,89 @@ Namespace Views
 
 
 
+        Private Function ReturnSelectedLevels() As LevelPreset
 
+            Dim preset As LevelPreset = Nothing
+
+            Try
+                Select Case TabControl_Levels.SelectedIndex
+                    Case 0
+                        preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
+                    Case 1
+                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset)
+                    Case 2
+                        preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .ImagePath = ""} 'TODO
+                End Select
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
+            End Try
+
+            Return preset
+
+        End Function
+
+
+        Private Function ReturnSelectedMods() As ModPreset
+
+            Dim preset As ModPreset = Nothing
+
+            Try
+                Select Case TabControl_Mods.SelectedIndex
+                    Case 0
+                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
+                    Case 1
+                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset) 'TODO
+                    Case 2
+                        preset = New ModPreset() With {.Files = New List(Of String)} 'TODO
+                End Select
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
+            End Try
+
+            Return preset
+
+        End Function
 
 
         Private Sub UpdateCommand()
 
-            'Determine here what ListView has been used ?
-            'Maybe with currently active tab ?
-
             Try
+                Dim port As String = Nothing
+                Dim portParams As String = Nothing
+                Dim iwad As String = Nothing
+                Dim filesList As List(Of String) = New List(Of String) 'will contain Level + Misc + Mod files, as List
+                Dim files As String = Nothing 'will contain Level + Misc + Mod files, as single String
+
                 'Port
-                Dim port As String = GetValueFromTextBox_Port()
-                Dim portParams As String = Nothing 'TODO
+                port = If(GetValueFromTextBox_Port() = Nothing, Nothing, String.Format("""{0}""", GetValueFromTextBox_Port()))
+                portParams = Nothing 'TODO
 
-                'Iwad
-                Dim iwadFileName = ReturnSelectedIwad(ListView_Levels_BasePresets)
-                Dim iwadAbsolutePath = ConvertPathRelativeToAbsolute_Iwad(iwadFileName)
-                Dim iwad As String = If(iwadAbsolutePath = Nothing, Nothing, String.Format(" -iwad ""{0}""", iwadAbsolutePath))
+                Dim lp As LevelPreset = ReturnSelectedLevels()
+                If Not lp Is Nothing Then
+                    'Iwad
+                    Dim iwadAbsolutePath As String = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
+                    iwad = String.Format(" -iwad ""{0}""", iwadAbsolutePath)
+                    'Level & Misc
+                    If Not lp.Level = Nothing Then filesList.Add(ConvertPathRelativeToAbsolute_Level(lp.Level))
+                    If Not lp.Misc = Nothing Then filesList.Add(ConvertPathRelativeToAbsolute_Misc(lp.Misc))
+                End If
 
-                'Files (Levels & Mods)
-                Dim files As List(Of String) = New List(Of String)
-                '(Levels)
-                Dim levelsFileNames As List(Of String) = ReturnSelectedLevelMisc(ListView_Levels_BasePresets)
-                If levelsFileNames.Count > 0 Then files.Add(ConvertPathRelativeToAbsolute_Level(levelsFileNames(0)))
-                If levelsFileNames.Count > 1 Then files.Add(ConvertPathRelativeToAbsolute_Misc(levelsFileNames(1)))
-                '(Mods)
-                Dim modFileNames As List(Of String) = ReturnSelectedMods(ListView_Mods_BasePresets)
-                Dim modFilePaths As List(Of String) = ConvertModPath_RelativeToAbsolute(modFileNames)
+                'Mods
+                Dim mp As ModPreset = ReturnSelectedMods()
+                If Not mp Is Nothing Then
+                    Dim modFilePaths As List(Of String) = ConvertModPath_RelativeToAbsolute(mp.Files)
+                    For Each modFile As String In modFilePaths
+                        filesList.Add(modFile)
+                    Next
+                End If
 
-                For Each modFile As String In modFilePaths
-                    files.Add(modFile)
+                For Each file As String In filesList
+                    files &= String.Format(" -file ""{0}""", file)
                 Next
 
-                Dim filesMods As String = Nothing
-
-                For Each file As String In files
-                    filesMods &= String.Format(" -file ""{0}""", file)
-                Next
-
-                Dim command As String = String.Format("{0}{1}{2}{3}", port, portParams, iwad, filesMods)
+                Dim command As String = String.Format("{0}{1}{2}{3}", port, portParams, iwad, files)
                 FillRichTextBox_Command(command)
 
             Catch ex As Exception
@@ -1168,13 +1212,6 @@ Namespace Views
         End Sub
 
 
-
-        'TODO : Generic way to obtain Levels & Mods (with absolute paths)
-        '-> to feed Summary
-        '-> to feed Command
-
-
-
         Private Sub UpdateSummary()
 
             Try
@@ -1184,20 +1221,21 @@ Namespace Views
                 'Port Parameters
                 'TODO
 
-
-                'Iwad
-                Dim iwadFileName = ReturnSelectedIwad(ListView_Levels_BasePresets)
-                TextBox_Summary_Iwad.Text = ConvertPathRelativeToAbsolute_Iwad(iwadFileName)
-
-                'Files/Mods
                 StackPanel_Summary_FilesMods.Children.Clear()
-                Dim levelFileNames As List(Of String) = ReturnSelectedLevelMisc(ListView_Levels_BasePresets)
-                'Dim levelFileNames As List(Of String) = ConvertFilePath_AbsoluteToRelative(levelFilePaths)
-                DisplayLevels_Summary(levelFileNames)
 
-                Dim modFileNames As List(Of String) = ReturnSelectedMods(ListView_Mods_BasePresets)
-                Dim modFilePaths As List(Of String) = ConvertModPath_RelativeToAbsolute(modFileNames)
-                DisplayMods_Summary(modFileNames)
+                Dim lp As LevelPreset = ReturnSelectedLevels()
+                If Not lp Is Nothing Then
+                    'Iwad
+                    TextBox_Summary_Iwad.Text = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
+                    'Level & Misc
+                    Dim levelFileNames As List(Of String) = New List(Of String)
+                    If Not lp.Level = Nothing Then levelFileNames.Add(lp.Level)
+                    If Not lp.Misc = Nothing Then levelFileNames.Add(lp.Misc)
+                    DisplayLevels_Summary(levelFileNames)
+                End If
+
+                Dim mp As ModPreset = ReturnSelectedMods()
+                If Not mp Is Nothing Then DisplayMods_Summary(mp.Files)
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'UpdateSummary()'. Exception : " & ex.ToString)
@@ -1205,52 +1243,6 @@ Namespace Views
 
         End Sub
 
-
-        Private Function ReturnSelectedIwad(sender As Object) As String
-
-            Dim listVw As ListView = sender
-            Dim iwadPath As String = Nothing
-
-            Try
-                Dim lp As LevelPreset = CType(listVw.SelectedItem, LevelPreset)
-                If Not lp Is Nothing Then iwadPath = lp.Iwad
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ReturnIwadAbsolutePath()'. Exception : " & ex.ToString)
-            End Try
-
-            Return iwadPath
-
-        End Function
-
-        Private Function ReturnSelectedLevelMisc(sender As Object) As List(Of String)
-
-            Dim listVw As ListView = sender
-            Dim filePaths As List(Of String) = New List(Of String)
-
-            Try
-                'TODO : pass GUI item as sender in Function param
-                Dim lp As LevelPreset = CType(listVw.SelectedItem, LevelPreset)
-
-                '(Alt method)
-                'If Not lp.Level = Nothing Then filePaths.Add(lp.Level)
-                'If Not lp.Misc = Nothing Then filePaths.Add(lp.Misc)
-
-                If Not lp Is Nothing Then
-                    For Each p As PropertyInfo In lp.GetType().GetProperties()
-                        If (p.Name = "Level" Or p.Name = "Misc") And Not p.GetValue(lp) = Nothing Then
-                            filePaths.Add(p.GetValue(lp))
-                        End If
-                    Next
-                End If
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ReturnLevelsAbsolutePaths()'. Exception : " & ex.ToString)
-            End Try
-
-            Return filePaths
-
-        End Function
 
         Private Sub DisplayLevels_Summary(fileNames As List(Of String))
 
