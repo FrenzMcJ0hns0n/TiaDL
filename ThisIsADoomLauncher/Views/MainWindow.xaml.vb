@@ -837,45 +837,6 @@ Namespace Views
 
 
 
-#Region "Quick tests"
-
-        'Private Sub Button_TestProperties_Click(sender As Object, e As RoutedEventArgs) Handles Button_TestProperties.Click
-
-        '    With My.Settings
-
-        '        MessageBox.Show(String.Format(
-        '            "ScreenWidth = {0}{1}ScreenHeight = {2}{3}FullscreenEnabled = {4}{5}SelectedIwad = {6}{7}SelectedLevel = {8}{9}UseBrutalDoom = {10}{11}BrutalDoomVersion = {12}{13}SelectedMusicMod = {14}{15}UseTurbo = {16}{17}SelectedEngine = {18}",
-        '            .ScreenWidth.ToString, Environment.NewLine & Environment.NewLine,
-        '            .ScreenHeight.ToString, Environment.NewLine & Environment.NewLine,
-        '            .FullscreenEnabled.ToString, Environment.NewLine & Environment.NewLine,
-        '            .SelectedIwad, Environment.NewLine & Environment.NewLine,
-        '            .SelectedLevel, Environment.NewLine & Environment.NewLine,
-        '            .UseBrutalDoom.ToString, Environment.NewLine & Environment.NewLine,
-        '            .BrutalDoomVersion, Environment.NewLine & Environment.NewLine,
-        '            .SelectedMusic, Environment.NewLine & Environment.NewLine,
-        '            .UseTurbo, Environment.NewLine & Environment.NewLine,
-        '            .SelectedEngine
-        '        ))
-        '        '.SelectedMisc, Environment.NewLine,
-
-        '    End With
-
-        'End Sub
-
-        'Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-
-        '    With My.Settings
-        '        MessageBox.Show(.SelectedMusic)
-        '        MessageBox.Show(.UseAltSoundtrack)
-        '    End With
-
-        'End Sub
-
-#End Region
-
-
-
-
 #Region "TiaDL v3"
 
 
@@ -906,7 +867,8 @@ Namespace Views
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_Port_Clear.Click
 
             UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
-            TextBox_Summary_Port.Text = Nothing
+            UpdateCommand()
+            UpdateSummary()
 
         End Sub
 
@@ -1141,8 +1103,7 @@ Namespace Views
 
             Try
                 'Port
-                Dim txtBxStr As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
-                Dim port As String = If(TextBox_Port.Text = txtBxStr, Nothing, String.Format("""{0}""", TextBox_Port.Text))
+                Dim port As String = GetValueFromTextBox_Port()
                 Dim portParams As String = Nothing 'TODO
 
                 'Iwad
@@ -1218,7 +1179,7 @@ Namespace Views
 
             Try
                 'Port
-                If Not TextBox_Port.Text = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)" Then TextBox_Summary_Port.Text = TextBox_Port.Text
+                TextBox_Summary_Port.Text = GetValueFromTextBox_Port()
 
                 'Port Parameters
                 'TODO
@@ -1456,19 +1417,96 @@ Namespace Views
         Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
 
             Try
+                'TODO? Checklist before launch
+
                 'Launch
                 Dim rtbText As String = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
                 Dim command As String = String.Format("/c start """" {0}", rtbText)
                 LaunchProcessV3(command)
 
                 'Save
-                'With My.Settings
-                '...
-                'End With
+                'SaveSettings()
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
             End Try
+
+        End Sub
+
+        Private Sub SaveSettings()
+
+            Try
+                With My.Settings
+                    .SelectedPort = GetValueFromTextBox_Port()
+                End With
+
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'SaveSettings()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
+
+
+        Private Function GetValueFromTextBox_Port() As String
+
+            Dim defaultText As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
+            Return If(TextBox_Port.Text = defaultText, Nothing, TextBox_Port.Text)
+
+        End Function
+
+
+        Private Sub Button_TestMySettings_Check_Click(sender As Object, e As RoutedEventArgs)
+
+            With My.Settings
+
+                MessageBox.Show(String.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}",
+                    $".RootDirPath :{Environment.NewLine}{ .RootDirPath}" & Environment.NewLine & Environment.NewLine,
+                    $".GzdoomDir :{Environment.NewLine}{ .GzdoomDir}" & Environment.NewLine & Environment.NewLine,
+                    $".ZandronumDir :{Environment.NewLine}{ .ZandronumDir}" & Environment.NewLine & Environment.NewLine,
+                    $".IwadsDir :{Environment.NewLine}{ .IwadsDir}" & Environment.NewLine & Environment.NewLine,
+                    $".LevelsDir :{Environment.NewLine}{ .LevelsDir}" & Environment.NewLine & Environment.NewLine,
+                    $".MiscDir :{Environment.NewLine}{ .MiscDir}" & Environment.NewLine & Environment.NewLine,
+                    $".ModDir :{Environment.NewLine}{ .ModDir}" & Environment.NewLine & Environment.NewLine,
+                    $".MusicDir :{Environment.NewLine}{ .MusicDir}" & Environment.NewLine & Environment.NewLine,
+                    $".WolfDir :{Environment.NewLine}{ .WolfDir}" & Environment.NewLine & Environment.NewLine,
+                    $".SelectedPort :{Environment.NewLine}{ .SelectedPort}" & Environment.NewLine & Environment.NewLine,
+                    $".SelectedIwad :{Environment.NewLine}{ .SelectedIwad}" & Environment.NewLine & Environment.NewLine,
+                    $".SelectedLevel :{Environment.NewLine}{ .SelectedLevel}" & Environment.NewLine & Environment.NewLine,
+                    $".SelectedMisc :{Environment.NewLine}{ .SelectedMisc}" & Environment.NewLine & Environment.NewLine,
+                    $".UseBrutalDoom :{Environment.NewLine}{ .UseBrutalDoom}" & Environment.NewLine & Environment.NewLine,
+                    $".BrutalDoomVersion :{Environment.NewLine}{ .BrutalDoomVersion}" & Environment.NewLine & Environment.NewLine,
+                    $".UseAltSoundtrack :{Environment.NewLine}{ .UseAltSoundtrack}" & Environment.NewLine & Environment.NewLine,
+                    $".SelectedMusic :{Environment.NewLine}{ .SelectedMusic}" & Environment.NewLine & Environment.NewLine,
+                    $".UseTurbo :{Environment.NewLine}{ .UseTurbo}" & Environment.NewLine & Environment.NewLine,
+                    $".ScreenWidth :{Environment.NewLine}{ .ScreenWidth}" & Environment.NewLine & Environment.NewLine,
+                    $".ScreenHeight :{Environment.NewLine}{ .ScreenHeight}" & Environment.NewLine & Environment.NewLine,
+                    $".FullscreenEnabled :{Environment.NewLine}{ .FullscreenEnabled}" & Environment.NewLine & Environment.NewLine
+                ))
+
+                'Dim portParamsList As String = "Port params list :"
+                'For Each param As String In .PortParameters
+                '    portParamsList &= Environment.NewLine & param
+                'Next
+
+                'MessageBox.Show(portParamsList)
+
+                If .FilesMods Is Nothing Then Return
+
+                Dim strModFileList As String = "Mod files list :"
+                For Each file As String In .FilesMods
+                    strModFileList &= Environment.NewLine & file
+                Next
+
+                MessageBox.Show(strModFileList)
+
+            End With
+
+        End Sub
+
+        Private Sub Button_TestMySettings_Reset_Click(sender As Object, e As RoutedEventArgs)
+
+            My.Settings.Reset()
 
         End Sub
 

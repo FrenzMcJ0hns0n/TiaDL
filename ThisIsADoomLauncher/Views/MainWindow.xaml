@@ -697,6 +697,27 @@
                                 <Image Source="pack://application:,,,/Resources/Images/index.png" />
                             </Button>
 
+                            <Button
+                                x:Name="Button_TestMySettings_Check"
+                                Grid.Row="2"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                Height="50"
+                                Content="Settings"
+                                Click="Button_TestMySettings_Check_Click"
+                                />
+
+                            <Button
+                                x:Name="Button_TestMySettings_Reset"
+                                Grid.Row="2"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Bottom"
+                                Margin="0,0,0,80"
+                                Height="50"
+                                Content="-> Reset"
+                                Click="Button_TestMySettings_Reset_Click"
+                                />
+
                             <Grid Grid.Row="6">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="1*" />
