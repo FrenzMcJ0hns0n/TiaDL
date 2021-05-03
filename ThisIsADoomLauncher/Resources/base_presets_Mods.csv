@@ -1,11 +1,11 @@
 #BASE PRESETS - MODS
 #Name										#Desc																		#Image						#Files
 
-No mod,										Play Vanilla Doom,															,							
-Brutal Doom v20b,							Older version of Brutal Doom,												,							brutalv20b_R.pk3
-Brutal Doom v21,							Last version of Brutal Doom,												,							brutalv21.pk3
-Brutal Doom v21 + Power Fantasy v2,			Last version of Brutal Doom + Addon Power Fantasy v2,						,							brutalv21.pk3;BrutalDoom PowerFantasy v2.pk3
-Brutal Doom Power Fantasy Final Beta,		Last version of Power Fantasy standalone,									,							Brutal Doom Power Fantasy Final Beta.pk3
-Embers of Armageddon,						Partial conversion into Doom 2016 gameplay,									,							EOA Assets.pk3;EOA Code.pk3
-Embers of Armageddon with monsters,			Partial conversion into Doom 2016 gameplay (including monsters),			,							EOA Assets.pk3;EOA Code.pk3;STR_EOA_D4_MonstersFixed.pk3
-Test of a very very very long preset name,	This description is quite long what do you think ? Not long enough well...,	,							brutalv20b_R.pk3;brutalv20b_R.pk3;brutalv20b_R.pk3;brutalv20b_R.pk3;brutalv20b_R.pk3
+No mod;										Play Vanilla Doom;															;							
+Brutal Doom v20b;							Older version of Brutal Doom;												;							brutalv20b_R.pk3
+Brutal Doom v21;							Last version of Brutal Doom;												;							brutalv21.pk3
+Brutal Doom v21 + Power Fantasy v2;			Last version of Brutal Doom + Addon Power Fantasy v2;						;							brutalv21.pk3,BrutalDoom PowerFantasy v2.pk3
+Brutal Doom Power Fantasy Final Beta;		Last version of Power Fantasy standalone;									;							Brutal Doom Power Fantasy Final Beta.pk3
+Embers of Armageddon;						Partial conversion into Doom 2016 gameplay;									;							EOA Assets.pk3,EOA Code.pk3
+Embers of Armageddon with monsters;			Partial conversion into Doom 2016 gameplay (including monsters);			;							EOA Assets.pk3,EOA Code.pk3,STR_EOA_D4_MonstersFixed.pk3
+Test of a very very very long preset name;	This description is quite long what do you think ? Not long enough well...;	;							brutalv20b_R.pk3,brutalv20b_R.pk3,brutalv20b_R.pk3,brutalv20b_R.pk3,brutalv20b_R.pk3

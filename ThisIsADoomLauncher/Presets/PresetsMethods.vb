@@ -176,7 +176,7 @@ Module PresetsMethods
                                 .Name = readValues(0),
                                 .Desc = readValues(1),
                                 .ImagePath = readValues(2),
-                                .Files = readValues(3).Split(";").ToList 'TODO v3 : Change to ","
+                                .Files = readValues(3).Split(",").ToList
                             }
                         )
 
@@ -218,7 +218,7 @@ Module PresetsMethods
         With parser
             .TextFieldType = FieldType.Delimited
             .CommentTokens = New String() {"#"}
-            .Delimiters = New String() {","} 'TODO v3 : Change to ";"
+            .Delimiters = New String() {";"}
             .TrimWhiteSpace = True
         End With
 
