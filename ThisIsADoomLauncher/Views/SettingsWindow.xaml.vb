@@ -12,17 +12,17 @@ Namespace Views
                     RadioButton_Engine_Zandronum.IsChecked = If(.SelectedPort.ToLowerInvariant = "zandronum", True, False)
 
                     'Resolution
-                    TextBox_Resolution_Width.Text = .ScreenWidth
-                    TextBox_Resolution_Height.Text = .ScreenHeight
-                    CheckBox_Fullscreen.IsChecked = .FullscreenEnabled
+                    'TextBox_Resolution_Width.Text = .ScreenWidth
+                    'TextBox_Resolution_Height.Text = .ScreenHeight
+                    'CheckBox_Fullscreen.IsChecked = .FullscreenEnabled
 
                     'Brutal Doom
-                    CheckBox_UseBrutalDoom.IsChecked = .UseBrutalDoom
+                    'CheckBox_UseBrutalDoom.IsChecked = .UseBrutalDoom
                     ComboBox_BrutalDoomVersions.ItemsSource = GetLocalBrutalDoomVersions() '-> Fill BD versions ComboBox
-                    If .BrutalDoomVersion = Nothing Then
-                        Return 'Quick fix : program crash if .BrutalDoomVersion = Nothing
-                    End If
-                    ComboBox_BrutalDoomVersions.SelectedValue = If(File_GetName(.BrutalDoomVersion), Nothing) '-> Get filename of .BrutalDoomVersion from full path
+                    'If .BrutalDoomVersion = Nothing Then
+                    '    Return 'Quick fix : program crash if .BrutalDoomVersion = Nothing
+                    'End If
+                    'ComboBox_BrutalDoomVersions.SelectedValue = If(File_GetName(.BrutalDoomVersion), Nothing) '-> Get filename of .BrutalDoomVersion from full path
 
                 End With
 
@@ -96,7 +96,7 @@ Namespace Views
         Private Sub TextBox_Resolution_Width_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_Resolution_Width.LostFocus
 
             With My.Settings
-                .ScreenWidth = If(TextBox_Resolution_Width.Text = Nothing, 0, Int(TextBox_Resolution_Width.Text))
+                '.ScreenWidth = If(TextBox_Resolution_Width.Text = Nothing, 0, Int(TextBox_Resolution_Width.Text))
                 '.Save()
             End With
 
@@ -105,7 +105,7 @@ Namespace Views
         Private Sub TextBox_Resolution_Height_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_Resolution_Height.LostFocus
 
             With My.Settings
-                .ScreenHeight = If(TextBox_Resolution_Height.Text = Nothing, 0, Int(TextBox_Resolution_Height.Text))
+                '.ScreenHeight = If(TextBox_Resolution_Height.Text = Nothing, 0, Int(TextBox_Resolution_Height.Text))
                 '.Save()
             End With
 
@@ -114,7 +114,7 @@ Namespace Views
         Private Sub CheckBox_Fullscreen_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Fullscreen.Checked
 
             With My.Settings
-                .FullscreenEnabled = True
+                '.FullscreenEnabled = True
                 '.Save()
             End With
 
@@ -123,7 +123,7 @@ Namespace Views
         Private Sub CheckBox_Fullscreen_UnChecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_Fullscreen.Unchecked
 
             With My.Settings
-                .FullscreenEnabled = False
+                '.FullscreenEnabled = False
                 '.Save()
             End With
 
@@ -139,8 +139,8 @@ Namespace Views
             TextBox_Resolution_Height.Text = vertical
 
             With My.Settings
-                .ScreenWidth = horizontal
-                .ScreenHeight = vertical
+                '.ScreenWidth = horizontal
+                '.ScreenHeight = vertical
                 '.Save()
             End With
 
@@ -156,9 +156,9 @@ Namespace Views
         Private Sub CheckBox_UseBrutalDoom_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseBrutalDoom.Checked
 
             With My.Settings
-                .UseBrutalDoom = True
+                '.UseBrutalDoom = True
                 ComboBox_BrutalDoomVersions.IsEnabled = True
-                ComboBox_BrutalDoomVersions.SelectedItem = If(.BrutalDoomVersion, Nothing)
+                'ComboBox_BrutalDoomVersions.SelectedItem = If(.BrutalDoomVersion, Nothing)
                 '.Save()
             End With
 
@@ -167,7 +167,7 @@ Namespace Views
         Private Sub CheckBox_UseBrutalDoom_UnChecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseBrutalDoom.Unchecked
 
             With My.Settings
-                .UseBrutalDoom = False
+                '.UseBrutalDoom = False
                 ComboBox_BrutalDoomVersions.IsEnabled = False
                 ComboBox_BrutalDoomVersions.SelectedItem = Nothing
                 '.Save()
@@ -178,7 +178,7 @@ Namespace Views
         Private Sub ComboBox_BrutalDoomVersions_DropDownClosed(sender As Object, e As EventArgs) Handles ComboBox_BrutalDoomVersions.DropDownClosed
 
             With My.Settings
-                .BrutalDoomVersion = .ModDir & "\" & ComboBox_BrutalDoomVersions.SelectedValue
+                '.BrutalDoomVersion = .ModDir & "\" & ComboBox_BrutalDoomVersions.SelectedValue
                 '.Save()
             End With
 

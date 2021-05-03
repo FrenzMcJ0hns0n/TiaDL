@@ -2,21 +2,6 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="" GeneratedClassName="MySettings" UseMySettingsClassName="true">
   <Profiles />
   <Settings>
-    <Setting Name="ScreenWidth" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="ScreenHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">0</Value>
-    </Setting>
-    <Setting Name="FullscreenEnabled" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="UseBrutalDoom" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
-    <Setting Name="BrutalDoomVersion" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="SelectedPort" Type="System.String" Scope="User">
       <Value Profile="(Default)">GZDoom</Value>
     </Setting>
@@ -47,12 +32,6 @@
     <Setting Name="MusicDir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="SelectedMusic" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="UseTurbo" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
-    </Setting>
     <Setting Name="SelectedMisc" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -61,9 +40,6 @@
     </Setting>
     <Setting Name="WolfDir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="UseAltSoundtrack" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="DateTimeAtLaunch" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />

@@ -55,66 +55,6 @@ Partial Friend NotInheritable Class MySettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-    Public Property ScreenWidth() As Integer
-        Get
-            Return CType(Me("ScreenWidth"),Integer)
-        End Get
-        Set
-            Me("ScreenWidth") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-    Public Property ScreenHeight() As Integer
-        Get
-            Return CType(Me("ScreenHeight"),Integer)
-        End Get
-        Set
-            Me("ScreenHeight") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property FullscreenEnabled() As Boolean
-        Get
-            Return CType(Me("FullscreenEnabled"),Boolean)
-        End Get
-        Set
-            Me("FullscreenEnabled") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property UseBrutalDoom() As Boolean
-        Get
-            Return CType(Me("UseBrutalDoom"),Boolean)
-        End Get
-        Set
-            Me("UseBrutalDoom") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property BrutalDoomVersion() As String
-        Get
-            Return CType(Me("BrutalDoomVersion"),String)
-        End Get
-        Set
-            Me("BrutalDoomVersion") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("GZDoom")>  _
     Public Property SelectedPort() As String
         Get
@@ -236,30 +176,6 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property SelectedMusic() As String
-        Get
-            Return CType(Me("SelectedMusic"),String)
-        End Get
-        Set
-            Me("SelectedMusic") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property UseTurbo() As Boolean
-        Get
-            Return CType(Me("UseTurbo"),Boolean)
-        End Get
-        Set
-            Me("UseTurbo") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
     Public Property SelectedMisc() As String
         Get
             Return CType(Me("SelectedMisc"),String)
@@ -290,18 +206,6 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("WolfDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property UseAltSoundtrack() As Boolean
-        Get
-            Return CType(Me("UseAltSoundtrack"),Boolean)
-        End Get
-        Set
-            Me("UseAltSoundtrack") = value
         End Set
     End Property
     

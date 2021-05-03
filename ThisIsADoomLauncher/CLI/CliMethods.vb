@@ -14,42 +14,6 @@ Module CliMethods
 
     End Function
 
-    Function ReturnFullscreen() As String
-
-        With My.Settings
-            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
-                Return String.Format(" +vid_fullscreen {0}", Int(.FullscreenEnabled).ToString)
-            Else
-                Return String.Format(" +fullscreen {0}", Int(.FullscreenEnabled).ToString)
-            End If
-        End With
-
-    End Function
-
-    Function ReturnWidth() As String
-
-        With My.Settings
-            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
-                Return String.Format(" +vid_scale_customwidth {0}", .ScreenWidth.ToString)
-            Else
-                Return String.Format(" +vid_defwidth {0}", .ScreenWidth.ToString)
-            End If
-        End With
-
-    End Function
-
-    Function ReturnHeight() As String
-
-        With My.Settings
-            If .SelectedPort.ToLowerInvariant = "gzdoom" Then
-                Return String.Format(" +vid_scale_customheight {0}", .ScreenHeight.ToString)
-            Else
-                Return String.Format(" +vid_defheight {0}", .ScreenHeight.ToString)
-            End If
-        End With
-
-    End Function
-
     Function ReturnScalemode() As String
 
         With My.Settings
@@ -83,43 +47,6 @@ Module CliMethods
             Return If(.SelectedMisc = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMisc))
         End With
     End Function
-
-    Function ReturnBdVersion() As String
-
-        With My.Settings
-            If .UseBrutalDoom = True Then
-                Return If(.BrutalDoomVersion = Nothing, Nothing, String.Format(" -file ""{0}""", .BrutalDoomVersion))
-            Else
-                Return Nothing
-            End If
-        End With
-
-    End Function
-
-    Function ReturnMusic()
-
-        With My.Settings
-            If .UseAltSoundtrack = True Then
-                Return If(.SelectedMusic = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMusic))
-            Else
-                Return Nothing
-            End If
-        End With
-
-    End Function
-
-    Function ReturnTurbo()
-
-        With My.Settings
-            If .UseTurbo = True Then
-                Return " -turbo 125"
-            Else
-                Return Nothing
-            End If
-        End With
-
-    End Function
-
 
     Function ReturnWolfData() As String
 
@@ -164,9 +91,9 @@ Module CliMethods
 
                     engine = String.Format("""{0}""", Path.Combine(.GzdoomDir, "gzdoom.exe"))
                     config = String.Format(" -config ""{0}""", Path.Combine(.WolfDir, "gzdoom-" & Environment.UserName & "-wolf3D.ini"))
-                    fullscreen = String.Format(" +vid_fullscreen {0}", Int(.FullscreenEnabled).ToString)
-                    width = String.Format(" +vid_scale_customwidth {0}", .ScreenWidth.ToString)
-                    height = String.Format(" +vid_scale_customheight {0}", .ScreenWidth.ToString)
+                    'fullscreen = String.Format(" +vid_fullscreen {0}", Int(.FullscreenEnabled).ToString)
+                    'width = String.Format(" +vid_scale_customwidth {0}", .ScreenWidth.ToString)
+                    'height = String.Format(" +vid_scale_customheight {0}", .ScreenWidth.ToString)
                     scalemode = " +vid_scalemode 5"
                     iwad = ReturnWolfData()
 
@@ -176,16 +103,16 @@ Module CliMethods
 
                 Else
                     engine = ReturnEngine()
-                    fullscreen = ReturnFullscreen()
-                    width = ReturnWidth()
-                    height = ReturnHeight()
+                    'fullscreen = ReturnFullscreen()
+                    'width = ReturnWidth()
+                    'height = ReturnHeight()
                     scalemode = ReturnScalemode()
                     iwad = ReturnIwad()
                     level = ReturnLevel()
                     misc = ReturnMisc()
-                    bdVersion = ReturnBdVersion()
-                    music = ReturnMusic()
-                    turbo = ReturnTurbo()
+                    'bdVersion = ReturnBdVersion()
+                    'music = ReturnMusic()
+                    'turbo = ReturnTurbo()
 
                     commandLine = $"{engine}{config}{fullscreen}{width}{height}{scalemode}{iwad}{level}{misc}{bdVersion}{music}{turbo}"
                     'WriteToLog(DateTime.Now & " - CommandLine (debug) = " & Environment.NewLine & commandLine)

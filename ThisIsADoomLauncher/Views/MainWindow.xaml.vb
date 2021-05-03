@@ -76,29 +76,29 @@ Namespace Views
             Try
                 With My.Settings
                     'Auto-set native resolution at first launch
-                    If .ScreenWidth = 0 And .ScreenHeight = 0 Then
-                        .ScreenWidth = GetResolution_Width()
-                        .ScreenHeight = GetResolution_Height()
-                    End If
+                    'If .ScreenWidth = 0 And .ScreenHeight = 0 Then
+                    '    .ScreenWidth = GetResolution_Width()
+                    '    .ScreenHeight = GetResolution_Height()
+                    'End If
 
                     Label_EngineToLaunch.Content = .SelectedPort
-                    Label_ResolutionToLaunch.Content = "Resolution : " & My.Settings.ScreenWidth.ToString & " x " & My.Settings.ScreenHeight.ToString
-                    Label_FullscreenToLaunch.Content = "Fullscreen : " & If(My.Settings.FullscreenEnabled, "Yes", "No")
+                    'Label_ResolutionToLaunch.Content = "Resolution : " & My.Settings.ScreenWidth.ToString & " x " & My.Settings.ScreenHeight.ToString
+                    'Label_FullscreenToLaunch.Content = "Fullscreen : " & If(My.Settings.FullscreenEnabled, "Yes", "No")
 
-                    TextBox_ModToLaunch.Text = If(.UseBrutalDoom = False Or .BrutalDoomVersion = Nothing, Nothing, .BrutalDoomVersion)
+                    'TextBox_ModToLaunch.Text = If(.UseBrutalDoom = False Or .BrutalDoomVersion = Nothing, Nothing, .BrutalDoomVersion)
 
                     TextBox_IwadToLaunch.Text = .SelectedIwad
                     TextBox_LevelToLaunch.Text = .SelectedLevel
                     TextBox_MiscToLaunch.Text = .SelectedMisc
 
-                    CheckBox_UseAltSoundtrack.IsChecked = .UseAltSoundtrack
-                    If .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad" Then
-                        RadioButton_Soundtrack_DoomMetal.IsChecked = True
-                    ElseIf .SelectedMusic = .MusicDir & "\IDKFAv2.wad" Then
-                        RadioButton_Soundtrack_IDKFA.IsChecked = True
-                    End If
+                    'CheckBox_UseAltSoundtrack.IsChecked = .UseAltSoundtrack
+                    'If .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad" Then
+                    '    RadioButton_Soundtrack_DoomMetal.IsChecked = True
+                    'ElseIf .SelectedMusic = .MusicDir & "\IDKFAv2.wad" Then
+                    '    RadioButton_Soundtrack_IDKFA.IsChecked = True
+                    'End If
 
-                    CheckBox_EnableTurbo.IsChecked = .UseTurbo
+                    'CheckBox_EnableTurbo.IsChecked = .UseTurbo
                 End With
 
             Catch ex As Exception
@@ -477,7 +477,7 @@ Namespace Views
         Private Sub CheckBox_UseAltSoundtrack_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseAltSoundtrack.Checked
 
             With My.Settings
-                .UseAltSoundtrack = True
+                '.UseAltSoundtrack = True
                 .Save()
             End With
             RadioButton_Soundtrack_DoomMetal.IsEnabled = True
@@ -490,7 +490,7 @@ Namespace Views
         Private Sub CheckBox_UseAltSoundtrack_Unchecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseAltSoundtrack.Unchecked
 
             With My.Settings
-                .UseAltSoundtrack = False
+                '.UseAltSoundtrack = False
                 .Save()
             End With
             RadioButton_Soundtrack_DoomMetal.IsEnabled = False
@@ -504,7 +504,7 @@ Namespace Views
 
             With My.Settings
                 If File.Exists(.MusicDir & "\DoomMetalVol4.wad") Then
-                    .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
+                    '.SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
                     .Save()
                 Else
                     MessageBox.Show("Error : File ""DoomMetalVol4.wad"" not found in :" & Environment.NewLine & .MusicDir)
@@ -518,7 +518,7 @@ Namespace Views
 
             With My.Settings
                 If File.Exists(.MusicDir & "\IDKFAv2.wad") Then
-                    .SelectedMusic = .MusicDir & "\IDKFAv2.wad"
+                    '.SelectedMusic = .MusicDir & "\IDKFAv2.wad"
                     .Save()
                 Else
                     MessageBox.Show("Error : File ""IDKFAv2.wad"" not found in :" & Environment.NewLine & .MusicDir)
@@ -532,7 +532,7 @@ Namespace Views
         Private Sub CheckBox_EnableTurbo_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_EnableTurbo.Checked
 
             With My.Settings
-                .UseTurbo = True
+                '.UseTurbo = True
                 .Save()
             End With
 
@@ -541,7 +541,7 @@ Namespace Views
         Private Sub CheckBox_EnableTurbo_Unchecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_EnableTurbo.Unchecked
 
             With My.Settings
-                .UseTurbo = False
+                '.UseTurbo = False
                 .Save()
             End With
 
@@ -1392,7 +1392,7 @@ Namespace Views
 
             Try
                 If ReadyToLaunch() Then
-                    'LaunchGame()
+                    LaunchGame()
                     SaveSettings()
                 End If
 
@@ -1475,7 +1475,7 @@ Namespace Views
 
             With My.Settings
 
-                MessageBox.Show(String.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}{13}",
+                MessageBox.Show(String.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}",
                     $".RootDirPath :{Environment.NewLine}{ .RootDirPath}" & Environment.NewLine & Environment.NewLine,
                     $".GzdoomDir :{Environment.NewLine}{ .GzdoomDir}" & Environment.NewLine & Environment.NewLine,
                     $".ZandronumDir :{Environment.NewLine}{ .ZandronumDir}" & Environment.NewLine & Environment.NewLine,
@@ -1488,15 +1488,7 @@ Namespace Views
                     $".SelectedPort :{Environment.NewLine}{ .SelectedPort}" & Environment.NewLine & Environment.NewLine,
                     $".SelectedIwad :{Environment.NewLine}{ .SelectedIwad}" & Environment.NewLine & Environment.NewLine,
                     $".SelectedLevel :{Environment.NewLine}{ .SelectedLevel}" & Environment.NewLine & Environment.NewLine,
-                    $".SelectedMisc :{Environment.NewLine}{ .SelectedMisc}" & Environment.NewLine & Environment.NewLine,
-                    $".UseBrutalDoom :{Environment.NewLine}{ .UseBrutalDoom}" & Environment.NewLine & Environment.NewLine,
-                    $".BrutalDoomVersion :{Environment.NewLine}{ .BrutalDoomVersion}" & Environment.NewLine & Environment.NewLine,
-                    $".UseAltSoundtrack :{Environment.NewLine}{ .UseAltSoundtrack}" & Environment.NewLine & Environment.NewLine,
-                    $".SelectedMusic :{Environment.NewLine}{ .SelectedMusic}" & Environment.NewLine & Environment.NewLine,
-                    $".UseTurbo :{Environment.NewLine}{ .UseTurbo}" & Environment.NewLine & Environment.NewLine,
-                    $".ScreenWidth :{Environment.NewLine}{ .ScreenWidth}" & Environment.NewLine & Environment.NewLine,
-                    $".ScreenHeight :{Environment.NewLine}{ .ScreenHeight}" & Environment.NewLine & Environment.NewLine,
-                    $".FullscreenEnabled :{Environment.NewLine}{ .FullscreenEnabled}" & Environment.NewLine & Environment.NewLine
+                    $".SelectedMisc :{Environment.NewLine}{ .SelectedMisc}" & Environment.NewLine & Environment.NewLine
                 ))
 
                 'Dim portParamsList As String = "Port params list :"
