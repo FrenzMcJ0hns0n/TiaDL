@@ -322,66 +322,6 @@ Namespace Views
 
         End Sub
 
-        Private Sub TextBox_DropWadFile_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_DropWadFile_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-
-                If ValidateFile(filePaths(0)) = "level" Then
-                    TextBox_DropWadFile.Background = Brushes.LightGreen
-                    TextBox_DropWadFile.ClearValue(FontStyleProperty)
-                    TextBox_DropWadFile.ClearValue(ForegroundProperty)
-                    TextBox_DropWadFile.Text = filePaths(0)
-
-                ElseIf ValidateFile(filePaths(0)) = "iwad" Then
-                    MessageBox.Show("Error : this file is an IWAD")
-
-                ElseIf ValidateFile(filePaths(0)) = "misc" Then
-                    MessageBox.Show("Error : this file refers to a 'Misc.' file")
-                Else
-                    MessageBox.Show("Error : not a .wad/.pk3 file")
-                End If
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_wad_file_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_DropMiscFile_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_DropMiscFile_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-
-                If ValidateFile(filePaths(0)) = "misc" Then
-                    TextBox_DropMiscFile.Background = Brushes.LightGreen
-                    TextBox_DropMiscFile.ClearValue(FontStyleProperty)
-                    TextBox_DropMiscFile.ClearValue(ForegroundProperty)
-                    TextBox_DropMiscFile.Text = filePaths(0)
-
-                ElseIf ValidateFile(filePaths(0)) = "iwad" Then
-                    MessageBox.Show("Error : this file is an IWAD")
-
-                ElseIf ValidateFile(filePaths(0)) = "level" Then
-                    MessageBox.Show("Error : this file refers to a 'Level' file")
-                Else
-                    MessageBox.Show("Error : not a .deh/.bex file")
-                End If
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_wad_file_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
         Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
 
             If TextBox_NewPreset_Name.Text = "Enter preset name..." Then
@@ -568,22 +508,6 @@ Namespace Views
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingEngine_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_TestingIwad_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_TestingIwad_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                If ValidateFile(filePaths(0)) = "iwad" Then TextBox_TestingIwad.Text = filePaths(0)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingIwad_Drop()'. Exception : " & ex.ToString)
             End Try
 
         End Sub

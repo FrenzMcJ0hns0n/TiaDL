@@ -4,28 +4,6 @@ Imports System.Text
 Module IOMethods
 
     ''' <summary>
-    ''' Return the filename for all files found in /mods/ directory
-    ''' As list of string
-    ''' </summary>
-    ''' 
-    Function GetLocalBrutalDoomVersions() As List(Of String)
-
-        Try
-            Dim versionsFound As List(Of String) = New List(Of String)
-
-            For Each file As String In Directory.GetFiles(My.Settings.ModDir)
-                versionsFound.Add(File_GetName(file))
-            Next
-            Return versionsFound
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'GetLocalBrutalDoomVersions()'. Exception : " & ex.ToString)
-            Return Nothing
-        End Try
-
-    End Function
-
-    ''' <summary>
     ''' Build absolute path from Iwad relative filename
     ''' </summary>
     ''' 
@@ -34,7 +12,7 @@ Module IOMethods
         Dim iwadAbsolutePath As String = Nothing
 
         Try
-            If iwad = "Wolf3D" Then Return "Wolf3D"
+            If iwad = "Wolf3D" Then Return "Wolf3D" 'TODO : Remove and affect appropriate files from ReturnSelectedLevels()
 
             Dim probablePath As String = Path.Combine(My.Settings.IwadsDir, iwad)
             If File.Exists(probablePath) Then iwadAbsolutePath = probablePath
@@ -133,21 +111,22 @@ Module IOMethods
         Try
             With My.Settings
 
-                Dim dirList As New List(Of String) From {"\engine\gzdoom", "\engine\zandronum", "\iwads", "\levels", "\misc", "\mods", "\music", "\tc"}
+                Dim dirList As New List(Of String) From {"iwads", "levels", "misc", "mods", "tc"} ' Removed "\engine\Gzdoom", "\engine\Zandronum", "\music"
 
                 For Each dir As String In dirList
-                    If Not Directory.Exists(.RootDirPath & dir) Then errorText &= Environment.NewLine & dir
+                    Dim dirPath As String = Path.Combine(.RootDirPath, dir)
+                    If Not Directory.Exists(dirPath) Then errorText &= Environment.NewLine & dir
                 Next
 
                 If errorText = Nothing Then
-                    .GzdoomDir = .RootDirPath & dirList(0)
-                    .ZandronumDir = .RootDirPath & dirList(1)
-                    .IwadsDir = .RootDirPath & dirList(2)
-                    .LevelsDir = .RootDirPath & dirList(3)
-                    .MiscDir = .RootDirPath & dirList(4)
-                    .ModDir = .RootDirPath & dirList(5)
-                    .MusicDir = .RootDirPath & dirList(6)
-                    .WolfDir = .RootDirPath & dirList(7)
+                    '.GzdoomDir = .RootDirPath & dirList(0)
+                    '.ZandronumDir = .RootDirPath & dirList(1)
+                    .IwadsDir = Path.Combine(.RootDirPath, dirList(0))
+                    .LevelsDir = Path.Combine(.RootDirPath, dirList(1))
+                    .MiscDir = Path.Combine(.RootDirPath, dirList(2))
+                    .ModDir = Path.Combine(.RootDirPath, dirList(3))
+                    '.MusicDir = .RootDirPath & dirList(6) 'TODO 1) Create music sub directory in \mods 2) Implement recursive file search 3) Find custom music files there
+                    .WolfDir = Path.Combine(.RootDirPath, dirList(4)) 'TODO : 1) Move Wolf3D files under IwadDir 2) Implement recursive file search 3) Find Wolf3D files there
                 Else
                     MessageBox.Show("Setup error. Unable to find the following directories :" & errorText)
                     WriteToLog(DateTime.Now & " - Setup error. Directories not found :" & errorText)
@@ -156,52 +135,10 @@ Module IOMethods
             End With
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'CheckDirectories()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'ValidateDirectories()'. Exception : " & ex.ToString)
         End Try
 
     End Sub
-
-    ''' <summary>
-    ''' Read 4 first bytes of the file
-    ''' </summary>
-    Function RecognizeIwad(filepath As String) As Boolean
-
-        Using reader As BinaryReader = New BinaryReader(File.OpenRead(filepath))
-            Dim bytes As Byte() = reader.ReadBytes(4)
-            Dim fileh As String = Encoding.Default.GetString(bytes)
-            If fileh = "IWAD" Then Return True
-        End Using
-
-        Return False
-
-    End Function
-
-    ''' <summary>
-    ''' Is this filepath refer to an IWAD, a Level or a Misc file ? Return answer as string
-    ''' </summary>
-    ''' 
-    Function ValidateFile(path As String) As String
-
-        Try
-            If Not File.Exists(path) Then Return "does not exist"
-
-            If RecognizeIwad(path) = True Then Return "iwad"
-            'Dim iwadList As List(Of String) = New List(Of String) From {"doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"}
-            'If iwadList.Contains(File_GetName(path).ToLowerInvariant) Then Return "iwad"
-
-            Dim extension As String = File_GetExtension(path).ToLowerInvariant
-            If extension = ".wad" Or extension = ".pk3" Then Return "level"
-            If extension = ".bex" Or extension = ".deh" Then Return "misc"
-
-            Return "unrecognized"
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ValidateFile()'. Exception : " & ex.ToString)
-            Return "invalid"
-        End Try
-
-    End Function
-
 
     Function ValidateFile_Iwad(filepath As String) As Boolean
 
@@ -239,7 +176,6 @@ Module IOMethods
 
     End Function
 
-
     Function ValidateFile_Misc(filepath As String) As Boolean
 
         Try
@@ -257,7 +193,6 @@ Module IOMethods
 
     End Function
 
-
     Function ValidateFile_Image(filepath As String) As Boolean
 
         Try
@@ -274,8 +209,6 @@ Module IOMethods
         Return False
 
     End Function
-
-
 
     ''' <summary>
     ''' Create file 'presets.csv' with some commented lines, if it does not exist
@@ -302,7 +235,6 @@ Module IOMethods
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'WritePresetsFileHeader()'. Exception : " & ex.ToString)
         End Try
-
 
     End Sub
 

@@ -18,7 +18,7 @@ Namespace Views
 
                     'Brutal Doom
                     'CheckBox_UseBrutalDoom.IsChecked = .UseBrutalDoom
-                    ComboBox_BrutalDoomVersions.ItemsSource = GetLocalBrutalDoomVersions() '-> Fill BD versions ComboBox
+                    'ComboBox_BrutalDoomVersions.ItemsSource = GetLocalBrutalDoomVersions() '-> Fill BD versions ComboBox
                     'If .BrutalDoomVersion = Nothing Then
                     '    Return 'Quick fix : program crash if .BrutalDoomVersion = Nothing
                     'End If

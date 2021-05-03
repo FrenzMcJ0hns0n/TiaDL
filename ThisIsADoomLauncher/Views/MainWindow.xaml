@@ -1031,10 +1031,8 @@
                                  Foreground="DarkGray"
                                  Text="Drop a .wad/.pk3 file here..."
                                  Cursor="Arrow"
-                                 IsReadOnly="True" 
-                                 PreviewDragOver="TextBox_DropWadFile_PreviewDragOver"
-                                 AllowDrop="True" 
-                                 Drop="TextBox_DropWadFile_Drop"
+                                 IsReadOnly="True"
+                                 AllowDrop="True"
                                  />
 
                                     <Label Grid.Row="8"
@@ -1062,10 +1060,8 @@
                                  Foreground="DarkGray"
                                  Text="Drop a .deh/.bex file here..."
                                  Cursor="Arrow"
-                                 IsReadOnly="True" 
-                                 PreviewDragOver="TextBox_DropMiscFile_PreviewDragOver"
-                                 AllowDrop="True" 
-                                 Drop="TextBox_DropMiscFile_Drop"
+                                 IsReadOnly="True"
+                                 AllowDrop="True"
                                  />
 
                                     <Label Grid.Row="12"
@@ -1659,9 +1655,7 @@
                              Height="Auto"
                              IsReadOnly="True"
                              TextWrapping="Wrap"
-                             PreviewDragOver="TextBox_TestingIwad_PreviewDragOver"
                              AllowDrop="True"
-                             Drop="TextBox_TestingIwad_Drop"
                              TextChanged="TextBox_TestingIwad_TextChanged"
                              />
 
