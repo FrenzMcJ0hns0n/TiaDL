@@ -430,8 +430,8 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="10" />
-                                <RowDefinition Height="2*" />
-                                <RowDefinition Height="6*" />
+                                <RowDefinition Height="4*" />
+                                <RowDefinition Height="18*" />
                                 <RowDefinition Height="10" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -471,20 +471,23 @@
                             </ListView>
                             <Label 
                                 x:Name="Label_Mods_Desc"
-                                Grid.Row="1"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
                                 Grid.Column="3"
-                                HorizontalAlignment="Center"
+                                HorizontalAlignment="Right"
                                 VerticalAlignment="Center"
-                                Margin="0,-4,0,0"
+                                Margin="0,-2,0,0"
                                 Content="Description :"
                                 />
                             <TextBlock
                                 x:Name="TextBlock_Mods_Desc"
-                                Grid.Row="1"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
                                 Grid.Column="5"
+                                Grid.ColumnSpan="2"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Center"
-                                Margin="7,-1,0,0"
+                                Margin="6,-1,0,0"
                                 FontWeight="DemiBold"
                                 />
 
@@ -492,7 +495,7 @@
                                 x:Name="Label_Mods_Files"
                                 Grid.Row="2"
                                 Grid.Column="3"
-                                HorizontalAlignment="Center"
+                                HorizontalAlignment="Right"
                                 VerticalAlignment="Top"
                                 Margin="0,-2,0,0"
                                 Content="Mod files :"
@@ -500,7 +503,11 @@
                             <ListView
                                 x:Name="ListView_Mods_Files"
                                 Grid.Row="2"
+                                Grid.RowSpan="2"
                                 Grid.Column="5"
+                                Grid.ColumnSpan="2"
+                                Margin="0,0,0,0"
+                                BorderBrush="LightGray"
                                 FontSize="11"
                                 IsManipulationEnabled="False"
                                 >
