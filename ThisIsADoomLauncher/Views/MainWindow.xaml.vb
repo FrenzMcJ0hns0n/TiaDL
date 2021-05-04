@@ -1,13 +1,9 @@
 ﻿Imports System.IO
-Imports System.Reflection
 Imports System.Text.RegularExpressions
 Imports ThisIsADoomLauncher.Models
-'Imports ThisIsADoomLauncher.Helpers
 
 Namespace Views
     Class MainWindow
-
-
 
 
 #Region "Startup"
@@ -58,7 +54,6 @@ Namespace Views
         End Sub
 
 #End Region
-
 
 
 
@@ -132,7 +127,7 @@ Namespace Views
 
 
 
-
+#Region "...Selection changed"
         Private Sub TabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
             Try
@@ -166,6 +161,7 @@ Namespace Views
 
         End Sub
 
+#End Region
 
 
 
@@ -253,7 +249,6 @@ Namespace Views
 
 
 
-
 #Region "Launch parameters"
 
         Private Sub TextBox_IwadToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_IwadToLaunch.TextChanged
@@ -292,7 +287,6 @@ Namespace Views
         End Sub
 
 #End Region
-
 
 
 
@@ -655,11 +649,11 @@ Namespace Views
         Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
 
             Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                Dim fileExtension As String = New FileInfo(filePaths(0)).Extension.ToLowerInvariant
+                Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+                Dim fileExtension As String = New FileInfo(droppedFile).Extension.ToLowerInvariant
 
                 If fileExtension = ".exe" Then
-                    FillTextBox(TextBox_Port, filePaths(0))
+                    FillTextBox(TextBox_Port, droppedFile)
                     UpdateSummary()
                     UpdateCommand()
                     DecorateCommand()
@@ -674,8 +668,8 @@ Namespace Views
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_Port_Clear.Click
 
             UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
-            UpdateCommand()
             UpdateSummary()
+            UpdateCommand()
             DecorateCommand()
 
         End Sub
