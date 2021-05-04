@@ -83,6 +83,7 @@
                                     Grid.Row="1"
                                     VerticalAlignment="Bottom"
                                     Content="Clear &#x21ba;"
+                                    Click="Button_Port_Clear_Click"
                                     />
                             </Grid>
                             <StackPanel x:Name="StackPanel_PortParams"
@@ -243,7 +244,7 @@
                                             Grid.Column="3"
                                             VerticalAlignment="Bottom" 
                                             Content="Clear &#x21ba;"
-                                            
+                                            Click="Button_NewLevel_Iwad_Clear_Click"
                                             />
 
                                         <Label Grid.Row="3"
@@ -282,6 +283,7 @@
                                             Grid.Column="3"
                                             VerticalAlignment="Bottom"
                                             Content="Clear &#x21ba;"
+                                            Click="Button_NewLevel_Level_Clear_Click"
                                             />
                                         
                                         <Label Grid.Row="5"
@@ -320,6 +322,7 @@
                                             Grid.Column="3"
                                             VerticalAlignment="Bottom"
                                             Content="Clear &#x21ba;"
+                                            Click="Button_NewLevel_Misc_Clear_Click"
                                             />
 
                                         <Label Grid.Row="7"
@@ -370,6 +373,7 @@
                                             Grid.Column="3"
                                             VerticalAlignment="Bottom"
                                             Content="Clear &#x21ba;"
+                                            Click="Button_NewLevel_Image_Clear_Click"
                                             />
 
                                         <Label Grid.Row="9"

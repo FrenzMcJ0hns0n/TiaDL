@@ -665,7 +665,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_Port_Clear.Click
+        Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
 
             UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
             UpdateSummary()
@@ -777,7 +777,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Iwad_Clear.Click
+        Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs)
 
             UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
 
@@ -796,7 +796,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Level_Clear.Click
+        Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs)
 
             UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
 
@@ -815,7 +815,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Misc_Clear.Click
+        Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs)
 
             UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
 
@@ -834,7 +834,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub Button_NewLevel_Image_Clear_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewLevel_Image_Clear.Click
+        Private Sub Button_NewLevel_Image_Clear_Click(sender As Object, e As RoutedEventArgs)
 
             UnfillTextBox(TextBox_NewLevel_Image, "Drop a .jpg/.png file here...")
 
