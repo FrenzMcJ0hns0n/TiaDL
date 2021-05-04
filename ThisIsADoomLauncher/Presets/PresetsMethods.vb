@@ -13,84 +13,50 @@ Module PresetsMethods
     ''' <para>Delete a preset by its name</para>
     ''' </summary>
     '''
-    Sub DeleteUserLevelPreset(presetName As String)
+    'Sub DeleteUserLevelPreset(presetName As String)
 
-        Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
+    '    Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
 
-        If MessageBox.Show(message, "Delete user preset", MessageBoxButton.OKCancel) = MessageBoxResult.OK Then
-            DeletePreset(presetName)
-            DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'Update GUI
-        End If
+    '    If MessageBox.Show(message, "Delete user preset", MessageBoxButton.OKCancel) = MessageBoxResult.OK Then
+    '        DeletePreset(presetName)
+    '        DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'Update GUI
+    '    End If
 
-    End Sub
-
-#End Region
-
-
-#Region "Create and display User presets"
+    'End Sub
 
 #End Region
 
-    ''' <summary>
-    ''' <para>Build and display loaded presets as buttons = create a button with .Click functions for each preset
-    ''' values(0) : Preset Name, values(1) : Preset Iwad, values(2) : Preset Level, values(3) : Preset Misc</para>
-    ''' </summary>
-    ''' 
-    Sub DisplayUserPresets(presetsList As List(Of LevelPreset))
 
-        Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+    'Private Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
 
-        With mainWindow
-            .StackPanel_UserPresets.Children.Clear()
+    '    Dim buttonsList As List(Of Button) = New List(Of Button)
 
-            If presetsList.Count = 0 Then
-                .Label_NoUserPresetsFound.Visibility = Visibility.Visible
-                Return 'Nothing to read : exit
-            Else
-                .Label_NoUserPresetsFound.Visibility = Visibility.Collapsed
-            End If
+    '    For Each preset As LevelPreset In presetsList
+    '        Dim button As Button = New Button() With
+    '        {
+    '            .Height = 28,
+    '            .Margin = New Thickness(0, 0, 0, 2),
+    '            .FontSize = 14,
+    '            .Content = preset.Name
+    '        }
 
+    '        'Left click
+    '        AddHandler button.Click,
+    '            Sub(sender, e)
+    '                'SelectUserLevelPreset(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
+    '            End Sub
+    '        'Right click
+    '        AddHandler button.MouseRightButtonDown,
+    '            Sub(sender, e)
+    '                DeleteUserLevelPreset(preset.Name)
+    '            End Sub
 
-            Dim buttons As List(Of Button) = ReturnUserPresetButtons(presetsList)
+    '        buttonsList.Add(button)
+    '    Next
 
-            For Each btn As Button In buttons
-                .StackPanel_UserPresets.Children.Add(btn)
-            Next
-        End With
+    '    Return buttonsList
 
-    End Sub
-
-
-    Private Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
-
-        Dim buttonsList As List(Of Button) = New List(Of Button)
-
-        For Each preset As LevelPreset In presetsList
-            Dim button As Button = New Button() With
-            {
-                .Height = 28,
-                .Margin = New Thickness(0, 0, 0, 2),
-                .FontSize = 14,
-                .Content = preset.Name
-            }
-
-            'Left click
-            AddHandler button.Click,
-                Sub(sender, e)
-                    'SelectUserLevelPreset(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
-                End Sub
-            'Right click
-            AddHandler button.MouseRightButtonDown,
-                Sub(sender, e)
-                    DeleteUserLevelPreset(preset.Name)
-                End Sub
-
-            buttonsList.Add(button)
-        Next
-
-        Return buttonsList
-
-    End Function
+    'End Function
 
 
     ''' <summary>
@@ -213,36 +179,36 @@ Module PresetsMethods
     ''' Handle New user preset save from GUI event
     ''' </summary>
     ''' 
-    Sub Save_NewPreset()
+    'Sub Save_NewPreset()
 
-        Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+    '    Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
 
-        With mainWindow
-            Try
-                Dim nameToSave As String = .TextBox_NewPreset_Name.Text
-                If nameToSave = "Enter preset name..." Or nameToSave = Nothing Then
-                    MessageBox.Show("New user preset requires a name to be saved")
-                    Return
-                End If
+    '    With mainWindow
+    '        Try
+    '            Dim nameToSave As String = .TextBox_NewPreset_Name.Text
+    '            If nameToSave = "Enter preset name..." Or nameToSave = Nothing Then
+    '                MessageBox.Show("New user preset requires a name to be saved")
+    '                Return
+    '            End If
 
-                Dim iwadToSave As String = Nothing 'KnowSelectedIwad_NewPreset()
-                If iwadToSave = Nothing Then
-                    MessageBox.Show("New user preset requires an IWAD to be saved")
-                    Return
-                End If
+    '            Dim iwadToSave As String = Nothing 'KnowSelectedIwad_NewPreset()
+    '            If iwadToSave = Nothing Then
+    '                MessageBox.Show("New user preset requires an IWAD to be saved")
+    '                Return
+    '            End If
 
-                Dim levelToSave As String = Nothing 'KnowSelectedLevel_NewPreset()
-                Dim miscToSave As String = Nothing 'KnowSelectedMisc_NewPreset()
+    '            Dim levelToSave As String = Nothing 'KnowSelectedLevel_NewPreset()
+    '            Dim miscToSave As String = Nothing 'KnowSelectedMisc_NewPreset()
 
-                WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
-                MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
+    '            WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
+    '            MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
 
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
-            End Try
-        End With
+    '        Catch ex As Exception
+    '            WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
+    '        End Try
+    '    End With
 
-    End Sub
+    'End Sub
 
     ''' <summary>
     ''' Write attributes for New user preset.

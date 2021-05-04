@@ -57,268 +57,39 @@ Namespace Views
 
 
 
-#Region "Sidebar buttons"
-
-        Private Sub Button_Levels_Click(sender As Object, e As RoutedEventArgs) Handles Button_Levels.Click
-
-            Try
-                Process.Start("https://www.doomworld.com/idgames/levels/")
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Levels_Click()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub Button_DoomResources_Click(sender As Object, e As RoutedEventArgs) Handles Button_DoomResources.Click
-
-            Try
-                Process.Start("https://zdoom.org/index")
-                Process.Start("https://zandronum.com/")
-                Process.Start("https://www.moddb.com/mods/brutal-doom")
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_DoomResources_Click()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub Button_ExploreFolder_Click(sender As Object, e As RoutedEventArgs) Handles Button_ExploreFolder.Click
-
-            'Try
-            '    Process.Start(My.Settings.RootDirPath)
-
-            'Catch ex As Exception
-            '    WriteToLog(DateTime.Now & " - Error in 'Button_ExploreFolder_Click()'. Exception : " & ex.ToString)
-            'End Try
-
-        End Sub
-
-        Private Sub Button_Launch_Click(sender As Object, e As RoutedEventArgs) Handles Button_Launch.Click
-
-            Try
-                'Save level choices into Settings
-                With My.Settings
-                    .SelectedIwad = TextBox_IwadToLaunch.Text
-                    .SelectedLevel = TextBox_LevelToLaunch.Text
-                    .SelectedMisc = TextBox_MiscToLaunch.Text
-                End With
-
-                If TextBox_IwadToLaunch.Text = Nothing Then
-                    MessageBox.Show("Error : an IWAD must be defined in the launch parameters")
-                    Return
-                Else
-                    Dim cli As String = If(TextBox_IwadToLaunch.Text = "Wolf3D", BuildCommandLine(True), BuildCommandLine(False))
-
-                    LaunchProcess(cli)
-                    WriteToLog(DateTime.Now & " - CommandLine = " & cli)
-
-                    My.Settings.Save()
-                    WriteToLog(DateTime.Now & " - Saved settings")
-                End If
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Launch_Click()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-#End Region
-
-
-
-#Region "...Selection changed"
-        Private Sub TabControl_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
-            Try
-                Dim tabControl As TabControl = sender
-                Dim item As TabItem = tabControl.SelectedValue
-
-                If item.Name = "User" Then
-                    If File.Exists(Path.Combine(GetSubdirectoryPath(""), "presets.csv")) Then 'TODO : Change/Add RootDirPath variable
-                        DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'TODO? Think about async
-                    End If
-                End If
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TabControl_SelectionChanged()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub ListView_CommonPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
-            Try
-                Dim p As LevelPreset = CType(sender.SelectedItem, LevelPreset)
-
-                TextBox_IwadToLaunch.Text = ConvertPathRelativeToAbsolute_Iwad(p.Iwad)
-                TextBox_LevelToLaunch.Text = ConvertPathRelativeToAbsolute_Level(p.Level)
-                TextBox_MiscToLaunch.Text = ConvertPathRelativeToAbsolute_Misc(p.Misc)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ListView_CommonPresets_SelectionChanged()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-#End Region
-
-
-
 #Region "Add new preset"
 
-        Private Sub Button_NewPreset_SetDoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoomIwad.Click
+        'Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
 
-        End Sub
+        '    If TextBox_NewPreset_Name.Text = "Enter preset name..." Then
+        '        TextBox_NewPreset_Name.Text = Nothing
+        '        TextBox_NewPreset_Name.ClearValue(FontStyleProperty)
+        '        TextBox_NewPreset_Name.ClearValue(ForegroundProperty)
+        '    End If
 
-        Private Sub Button_NewPreset_SetDoom2Iwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoom2Iwad.Click
+        'End Sub
 
-        End Sub
+        'Private Sub TextBox_NewPreset_Name_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.LostFocus
 
-        Private Sub Button_NewPreset_SetFreedoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetFreedoomIwad.Click
+        '    If TextBox_NewPreset_Name.Text = Nothing Then
+        '        TextBox_NewPreset_Name.Text = "Enter preset name..."
+        '        TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
+        '        TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
+        '    End If
 
-        End Sub
-
-        Private Sub Button_NewPreset_SetFreedoom2Iwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetFreedoom2Iwad.Click
-
-        End Sub
-
-        Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
-
-            If TextBox_NewPreset_Name.Text = "Enter preset name..." Then
-                TextBox_NewPreset_Name.Text = Nothing
-                TextBox_NewPreset_Name.ClearValue(FontStyleProperty)
-                TextBox_NewPreset_Name.ClearValue(ForegroundProperty)
-            End If
-
-        End Sub
-
-        Private Sub TextBox_NewPreset_Name_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.LostFocus
-
-            If TextBox_NewPreset_Name.Text = Nothing Then
-                TextBox_NewPreset_Name.Text = "Enter preset name..."
-                TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-                TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
-            End If
-
-        End Sub
-
-        Private Sub Button_NewPreset_Save_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Save.Click
-
-            Save_NewPreset()
-
-        End Sub
+        'End Sub
 
 #End Region
 
 
 
-#Region "Launch parameters"
-
-        Private Sub TextBox_IwadToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_IwadToLaunch.TextChanged
-
-            'weak. TODO : Improve Wolf3D integration
-            If TextBox_IwadToLaunch.Text = "Wolf3D" Then
-                Return
-            End If
-
-            If File.Exists(TextBox_IwadToLaunch.Text) Then
-                TextBox_IwadToLaunch.Foreground = Brushes.Black
-            Else
-                TextBox_IwadToLaunch.Foreground = Brushes.Red
-            End If
-
-        End Sub
-
-        Private Sub TextBox_LevelToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_LevelToLaunch.TextChanged
-
-            If File.Exists(TextBox_LevelToLaunch.Text) Then
-                TextBox_LevelToLaunch.Foreground = Brushes.Black
-            Else
-                TextBox_LevelToLaunch.Foreground = Brushes.Red
-            End If
-
-        End Sub
-
-        Private Sub TextBox_MiscToLaunch_TextChanged(sender As Object, e As TextChangedEventArgs) Handles TextBox_MiscToLaunch.TextChanged
-
-            If File.Exists(TextBox_MiscToLaunch.Text) Then
-                TextBox_MiscToLaunch.Foreground = Brushes.Black
-            Else
-                TextBox_MiscToLaunch.Foreground = Brushes.Red
-            End If
-
-        End Sub
-
-#End Region
-
-
-
-#Region "Extra launch parameters"
-
-        Private Sub CheckBox_UseAltSoundtrack_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseAltSoundtrack.Checked
-
-            With My.Settings
-                '.UseAltSoundtrack = True
-                .Save()
-            End With
-            RadioButton_Soundtrack_DoomMetal.IsEnabled = True
-            RadioButton_Soundtrack_DoomMetal.ClearValue(ForegroundProperty)
-            RadioButton_Soundtrack_IDKFA.IsEnabled = True
-            RadioButton_Soundtrack_IDKFA.ClearValue(ForegroundProperty)
-
-        End Sub
-
-        Private Sub CheckBox_UseAltSoundtrack_Unchecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_UseAltSoundtrack.Unchecked
-
-            With My.Settings
-                '.UseAltSoundtrack = False
-                .Save()
-            End With
-            RadioButton_Soundtrack_DoomMetal.IsEnabled = False
-            RadioButton_Soundtrack_DoomMetal.Foreground = Brushes.LightGray
-            RadioButton_Soundtrack_IDKFA.IsEnabled = False
-            RadioButton_Soundtrack_IDKFA.Foreground = Brushes.LightGray
-
-        End Sub
-
-        Private Sub RadioButton_Soundtrack_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_DoomMetal.Checked
-
-        End Sub
-
-        Private Sub RadioButton_Soundtrack_IDKFA_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_IDKFA.Checked
-
-        End Sub
-
-        Private Sub CheckBox_EnableTurbo_Checked(sender As Object, e As RoutedEventArgs) Handles CheckBox_EnableTurbo.Checked
-
-            With My.Settings
-                '.UseTurbo = True
-                .Save()
-            End With
-
-        End Sub
-
-        Private Sub CheckBox_EnableTurbo_Unchecked(sender As Object, e As RoutedEventArgs) Handles CheckBox_EnableTurbo.Unchecked
-
-            With My.Settings
-                '.UseTurbo = False
-                .Save()
-            End With
-
-        End Sub
-
-#End Region
-
-
-
-#Region "Testing tab"
+#Region "v2.3 stuff"
 
 
         Private Sub CopyCommandToClipboard()
 
             Try
-                Dim commandText = Nothing 'New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
+                Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
                 Clipboard.SetText(commandText)
 
             Catch ex As Exception
@@ -330,7 +101,7 @@ Namespace Views
         Private Sub ExportCommandAsBat()
 
             Try
-                Dim commandText = Nothing 'New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
+                Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
 
                 Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
                 Dim batPath As String = Path.Combine(GetSubdirectoryPath(""), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
