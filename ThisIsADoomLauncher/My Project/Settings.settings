@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="SelectedPort" Type="System.String" Scope="User">
-      <Value Profile="(Default)">GZDoom</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="SelectedIwad" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
@@ -11,34 +11,10 @@
     <Setting Name="SelectedLevel" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="RootDirPath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="GzdoomDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="ZandronumDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="IwadsDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="LevelsDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="ModDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="MusicDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="SelectedMisc" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="MiscDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="WolfDir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="DateTimeAtLaunch" Type="System.DateTime" Scope="User">

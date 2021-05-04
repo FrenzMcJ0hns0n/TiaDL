@@ -55,7 +55,7 @@ Partial Friend NotInheritable Class MySettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("GZDoom")>  _
+     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
     Public Property SelectedPort() As String
         Get
             Return CType(Me("SelectedPort"),String)
@@ -92,90 +92,6 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property RootDirPath() As String
-        Get
-            Return CType(Me("RootDirPath"),String)
-        End Get
-        Set
-            Me("RootDirPath") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property GzdoomDir() As String
-        Get
-            Return CType(Me("GzdoomDir"),String)
-        End Get
-        Set
-            Me("GzdoomDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property ZandronumDir() As String
-        Get
-            Return CType(Me("ZandronumDir"),String)
-        End Get
-        Set
-            Me("ZandronumDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property IwadsDir() As String
-        Get
-            Return CType(Me("IwadsDir"),String)
-        End Get
-        Set
-            Me("IwadsDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property LevelsDir() As String
-        Get
-            Return CType(Me("LevelsDir"),String)
-        End Get
-        Set
-            Me("LevelsDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property ModDir() As String
-        Get
-            Return CType(Me("ModDir"),String)
-        End Get
-        Set
-            Me("ModDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property MusicDir() As String
-        Get
-            Return CType(Me("MusicDir"),String)
-        End Get
-        Set
-            Me("MusicDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
     Public Property SelectedMisc() As String
         Get
             Return CType(Me("SelectedMisc"),String)
@@ -194,18 +110,6 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("MiscDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property WolfDir() As String
-        Get
-            Return CType(Me("WolfDir"),String)
-        End Get
-        Set
-            Me("WolfDir") = value
         End Set
     End Property
     

@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Text
 
 Module IOMethods
@@ -14,7 +15,7 @@ Module IOMethods
         Try
             If iwad = "Wolf3D" Then Return "Wolf3D" 'TODO : Remove and affect appropriate files from ReturnSelectedLevels()
 
-            Dim probablePath As String = Path.Combine(My.Settings.IwadsDir, iwad)
+            Dim probablePath As String = Path.Combine(GetSubdirectoryPath("iwads"), iwad)
             If File.Exists(probablePath) Then iwadAbsolutePath = probablePath
 
         Catch ex As Exception
@@ -34,7 +35,7 @@ Module IOMethods
         Dim levelAbsolutePath As String = Nothing
 
         Try
-            Dim probablePath As String = Path.Combine(My.Settings.LevelsDir, level)
+            Dim probablePath As String = Path.Combine(GetSubdirectoryPath("levels"), level)
             If File.Exists(probablePath) Then levelAbsolutePath = probablePath
 
         Catch ex As Exception
@@ -54,7 +55,7 @@ Module IOMethods
         Dim miscAbsolutePath As String = Nothing
 
         Try
-            Dim probablePath As String = Path.Combine(My.Settings.MiscDir, misc)
+            Dim probablePath As String = Path.Combine(GetSubdirectoryPath("misc"), misc)
             If File.Exists(probablePath) Then miscAbsolutePath = probablePath
 
         Catch ex As Exception
@@ -73,25 +74,27 @@ Module IOMethods
     Sub SetIniFiles()
 
         Try
-            With My.Settings
-                If File.Exists(Path.Combine(.GzdoomDir, "gzdoom-model.ini")) Then
-                    File.Move(
-                        Path.Combine(.GzdoomDir, "gzdoom-model.ini"),
-                        Path.Combine(.GzdoomDir, "gzdoom-" & Environment.UserName & ".ini"))
-                End If
+            'TODO : Write v3 equivalent
 
-                If File.Exists(Path.Combine(.ZandronumDir, "zandronum-model.ini")) Then
-                    File.Move(
-                        Path.Combine(.ZandronumDir, "zandronum-model.ini"),
-                        Path.Combine(.ZandronumDir, "zandronum-" & Environment.UserName & ".ini"))
-                End If
+            'With My.Settings
+            '    If File.Exists(Path.Combine(.GzdoomDir, "gzdoom-model.ini")) Then
+            '        File.Move(
+            '            Path.Combine(.GzdoomDir, "gzdoom-model.ini"),
+            '            Path.Combine(.GzdoomDir, "gzdoom-" & Environment.UserName & ".ini"))
+            '    End If
 
-                If File.Exists(Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini")) Then
-                    File.Move(
-                        Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini"),
-                        Path.Combine(.WolfDir, "gzdoom-model-" & Environment.UserName & "-wolf3D.ini"))
-                End If
-            End With
+            '    If File.Exists(Path.Combine(.ZandronumDir, "zandronum-model.ini")) Then
+            '        File.Move(
+            '            Path.Combine(.ZandronumDir, "zandronum-model.ini"),
+            '            Path.Combine(.ZandronumDir, "zandronum-" & Environment.UserName & ".ini"))
+            '    End If
+
+            '    If File.Exists(Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini")) Then
+            '        File.Move(
+            '            Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini"),
+            '            Path.Combine(.WolfDir, "gzdoom-model-" & Environment.UserName & "-wolf3D.ini"))
+            '    End If
+            'End With
 
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
@@ -104,38 +107,22 @@ Module IOMethods
     ''' Validate paths
     ''' </summary>
     ''' 
-    Sub ValidateDirectories()
+    Sub CheckProjectSubdirectories()
 
         Dim errorText As String = Nothing
 
         Try
-            With My.Settings
+            For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods", "tc"} 'Removed "\engine\Gzdoom", "\engine\Zandronum", "\music"
+                If GetSubdirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir
+            Next
 
-                Dim dirList As New List(Of String) From {"iwads", "levels", "misc", "mods", "tc"} ' Removed "\engine\Gzdoom", "\engine\Zandronum", "\music"
-
-                For Each dir As String In dirList
-                    Dim dirPath As String = Path.Combine(.RootDirPath, dir)
-                    If Not Directory.Exists(dirPath) Then errorText &= Environment.NewLine & dir
-                Next
-
-                If errorText = Nothing Then
-                    '.GzdoomDir = .RootDirPath & dirList(0)
-                    '.ZandronumDir = .RootDirPath & dirList(1)
-                    .IwadsDir = Path.Combine(.RootDirPath, dirList(0))
-                    .LevelsDir = Path.Combine(.RootDirPath, dirList(1))
-                    .MiscDir = Path.Combine(.RootDirPath, dirList(2))
-                    .ModDir = Path.Combine(.RootDirPath, dirList(3))
-                    '.MusicDir = .RootDirPath & dirList(6) 'TODO 1) Create music sub directory in \mods 2) Implement recursive file search 3) Find custom music files there
-                    .WolfDir = Path.Combine(.RootDirPath, dirList(4)) 'TODO : 1) Move Wolf3D files under IwadDir 2) Implement recursive file search 3) Find Wolf3D files there
-                Else
-                    MessageBox.Show("Setup error. Unable to find the following directories :" & errorText)
-                    WriteToLog(DateTime.Now & " - Setup error. Directories not found :" & errorText)
-                End If
-
-            End With
+            If Not errorText = Nothing Then
+                MessageBox.Show("Startup error. Unable to find the following subdirectories :" & errorText)
+                WriteToLog(DateTime.Now & " - Startup error. Subdirectories not found :" & errorText)
+            End If
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ValidateDirectories()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'CheckProjectSubdirectories()'. Exception : " & ex.ToString)
         End Try
 
     End Sub
@@ -217,7 +204,8 @@ Module IOMethods
     Sub WritePresetsFileHeader()
 
         Try
-            Dim presetFile As String = Path.Combine(My.Settings.RootDirPath, "presets.csv")
+            Dim rootDirPath = GetSubdirectoryPath("")
+            Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
 
             Using writer As StreamWriter = New StreamWriter(presetFile, True, Encoding.Default)
                 writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
@@ -244,7 +232,8 @@ Module IOMethods
     ''' 
     Sub WriteToLog(content As String)
 
-        Dim logfilePath = Path.Combine(My.Settings.RootDirPath, "log.txt")
+        Dim rootDirPath = GetSubdirectoryPath("")
+        Dim logfilePath = Path.Combine(rootDirPath, "log.txt")
 
         Using streamWriter As New StreamWriter(logfilePath, True)
             streamWriter.WriteLine(content)

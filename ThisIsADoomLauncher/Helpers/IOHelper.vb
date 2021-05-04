@@ -43,10 +43,22 @@ Module IOHelper
     ''' Get the parent directory of TiaDL executable
     ''' </summary>
     ''' 
-    Sub SetRootDirPath()
+    Function GetSubdirectoryPath(subDirName As String) As String
 
-        My.Settings.RootDirPath = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
+        Dim subDirPath As String = Nothing
 
-    End Sub
+        Try
+            Dim rootDirPath As String = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
+            Dim combinedPath As String = Path.Combine(rootDirPath, subDirName) 'Use subDirName.ToLowerInvariant ?
+
+            If Directory.Exists(combinedPath) Then subDirPath = combinedPath
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'GetSubdirectoryPath()'. Exception : " & ex.ToString)
+        End Try
+
+        Return subDirPath
+
+    End Function
 
 End Module

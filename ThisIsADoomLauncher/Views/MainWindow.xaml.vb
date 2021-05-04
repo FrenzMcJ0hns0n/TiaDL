@@ -12,8 +12,7 @@ Namespace Views
         Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 
             Try
-                SetRootDirPath()
-                ValidateDirectories()
+                CheckProjectSubdirectories() 'V3
                 SetIniFiles()
                 PopulateBaseLevelPresets() 'V3
                 PopulateBaseModsPresets() 'V3
@@ -85,12 +84,12 @@ Namespace Views
 
         Private Sub Button_ExploreFolder_Click(sender As Object, e As RoutedEventArgs) Handles Button_ExploreFolder.Click
 
-            Try
-                Process.Start(My.Settings.RootDirPath)
+            'Try
+            '    Process.Start(My.Settings.RootDirPath)
 
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_ExploreFolder_Click()'. Exception : " & ex.ToString)
-            End Try
+            'Catch ex As Exception
+            '    WriteToLog(DateTime.Now & " - Error in 'Button_ExploreFolder_Click()'. Exception : " & ex.ToString)
+            'End Try
 
         End Sub
 
@@ -135,7 +134,7 @@ Namespace Views
                 Dim item As TabItem = tabControl.SelectedValue
 
                 If item.Name = "User" Then
-                    If File.Exists(Path.Combine(My.Settings.RootDirPath, "presets.csv")) Then
+                    If File.Exists(Path.Combine(GetSubdirectoryPath(""), "presets.csv")) Then 'TODO : Change/Add RootDirPath variable
                         DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'TODO? Think about async
                     End If
                 End If
@@ -169,53 +168,17 @@ Namespace Views
 
         Private Sub Button_NewPreset_SetDoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoomIwad.Click
 
-            If File.Exists(My.Settings.IwadsDir & "\Doom.wad") Then
-                Button_NewPreset_SetDoomIwad.Background = Brushes.LightGreen
-                Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-                Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-            Else
-                MessageBox.Show("Error : File 'Doom.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
-            End If
-
         End Sub
 
         Private Sub Button_NewPreset_SetDoom2Iwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetDoom2Iwad.Click
-
-            If File.Exists(My.Settings.IwadsDir & "\Doom2.wad") Then
-                Button_NewPreset_SetDoom2Iwad.Background = Brushes.LightGreen
-                Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-                Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-            Else
-                MessageBox.Show("Error : File 'Doom2.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
-            End If
 
         End Sub
 
         Private Sub Button_NewPreset_SetFreedoomIwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetFreedoomIwad.Click
 
-            If File.Exists(My.Settings.IwadsDir & "\freedoom1.wad") Then
-                Button_NewPreset_SetFreedoomIwad.Background = Brushes.LightGreen
-                Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-                Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.Transparent
-            Else
-                MessageBox.Show("Error : File 'freedoom1.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
-            End If
-
         End Sub
 
         Private Sub Button_NewPreset_SetFreedoom2Iwad_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_SetFreedoom2Iwad.Click
-
-            If File.Exists(My.Settings.IwadsDir & "\freedoom2.wad") Then
-                Button_NewPreset_SetFreedoom2Iwad.Background = Brushes.LightGreen
-                Button_NewPreset_SetDoomIwad.Background = Brushes.Transparent
-                Button_NewPreset_SetDoom2Iwad.Background = Brushes.Transparent
-                Button_NewPreset_SetFreedoomIwad.Background = Brushes.Transparent
-            Else
-                MessageBox.Show("Error : File 'freedoom2.wad' not found in :" & Environment.NewLine & My.Settings.IwadsDir)
-            End If
 
         End Sub
 
@@ -320,30 +283,9 @@ Namespace Views
 
         Private Sub RadioButton_Soundtrack_DoomMetal_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_DoomMetal.Checked
 
-            With My.Settings
-                If File.Exists(.MusicDir & "\DoomMetalVol4.wad") Then
-                    '.SelectedMusic = .MusicDir & "\DoomMetalVol4.wad"
-                    .Save()
-                Else
-                    MessageBox.Show("Error : File ""DoomMetalVol4.wad"" not found in :" & Environment.NewLine & .MusicDir)
-                    RadioButton_Soundtrack_DoomMetal.IsChecked = False
-                End If
-            End With
-
         End Sub
 
         Private Sub RadioButton_Soundtrack_IDKFA_Checked(sender As Object, e As RoutedEventArgs) Handles RadioButton_Soundtrack_IDKFA.Checked
-
-            With My.Settings
-                If File.Exists(.MusicDir & "\IDKFAv2.wad") Then
-                    '.SelectedMusic = .MusicDir & "\IDKFAv2.wad"
-                    .Save()
-                Else
-                    MessageBox.Show("Error : File ""IDKFAv2.wad"" not found in :" & Environment.NewLine & .MusicDir)
-                    RadioButton_Soundtrack_DoomMetal.IsChecked = False
-                End If
-
-            End With
 
         End Sub
 
@@ -390,7 +332,7 @@ Namespace Views
                 Dim commandText = Nothing 'New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
 
                 Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
-                Dim batPath As String = Path.Combine(My.Settings.RootDirPath, now_formatted & "_command.bat")
+                Dim batPath As String = Path.Combine(GetSubdirectoryPath(""), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
 
                 Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.Default)
                     writer.WriteLine("@echo off")
@@ -892,8 +834,8 @@ Namespace Views
                     'Read absolute path
                     If File.Exists(modFile) Then absoluteModPaths.Add(modFile)
 
-                    'Build absolute path with ModDir & filename 
-                    Dim probablePath As String = Path.Combine(My.Settings.ModDir, modFile)
+                    'Build absolute path with modsSubDir & filename 
+                    Dim probablePath As String = Path.Combine(GetSubdirectoryPath("mods"), modFile)
                     If File.Exists(probablePath) Then absoluteModPaths.Add(probablePath)
 
                 Next
@@ -1067,16 +1009,13 @@ Namespace Views
 
             With My.Settings
 
-                MessageBox.Show(String.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}{10}{11}{12}",
-                    $".RootDirPath :{Environment.NewLine}{ .RootDirPath}" & Environment.NewLine & Environment.NewLine,
-                    $".GzdoomDir :{Environment.NewLine}{ .GzdoomDir}" & Environment.NewLine & Environment.NewLine,
-                    $".ZandronumDir :{Environment.NewLine}{ .ZandronumDir}" & Environment.NewLine & Environment.NewLine,
-                    $".IwadsDir :{Environment.NewLine}{ .IwadsDir}" & Environment.NewLine & Environment.NewLine,
-                    $".LevelsDir :{Environment.NewLine}{ .LevelsDir}" & Environment.NewLine & Environment.NewLine,
-                    $".MiscDir :{Environment.NewLine}{ .MiscDir}" & Environment.NewLine & Environment.NewLine,
-                    $".ModDir :{Environment.NewLine}{ .ModDir}" & Environment.NewLine & Environment.NewLine,
-                    $".MusicDir :{Environment.NewLine}{ .MusicDir}" & Environment.NewLine & Environment.NewLine,
-                    $".WolfDir :{Environment.NewLine}{ .WolfDir}" & Environment.NewLine & Environment.NewLine,
+                MessageBox.Show(String.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}",
+                    $"RootDir :{Environment.NewLine}{ GetSubdirectoryPath("")}" & Environment.NewLine & Environment.NewLine,
+                    $"Iwads subdir :{Environment.NewLine}{ GetSubdirectoryPath("iwads")}" & Environment.NewLine & Environment.NewLine,
+                    $"Levels subdir :{Environment.NewLine}{ GetSubdirectoryPath("levels")}" & Environment.NewLine & Environment.NewLine,
+                    $"Misc subdir :{Environment.NewLine}{ GetSubdirectoryPath("misc")}" & Environment.NewLine & Environment.NewLine,
+                    $"Mods subdir :{Environment.NewLine}{ GetSubdirectoryPath("mods")}" & Environment.NewLine & Environment.NewLine,
+                    Environment.NewLine,
                     $".SelectedPort :{Environment.NewLine}{ .SelectedPort}" & Environment.NewLine & Environment.NewLine,
                     $".SelectedIwad :{Environment.NewLine}{ .SelectedIwad}" & Environment.NewLine & Environment.NewLine,
                     $".SelectedLevel :{Environment.NewLine}{ .SelectedLevel}" & Environment.NewLine & Environment.NewLine,
