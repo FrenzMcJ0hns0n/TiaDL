@@ -14,9 +14,6 @@
     <Setting Name="SelectedMisc" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="MiscDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
     <Setting Name="DateTimeAtLaunch" Type="System.DateTime" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
