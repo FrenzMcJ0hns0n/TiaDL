@@ -22,7 +22,7 @@ Namespace My.Resources
     '''<summary>
     '''  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
     '''</summary>
-    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0"),  _
+    <Global.System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0"),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
      Global.Microsoft.VisualBasic.HideModuleNameAttribute()>  _
@@ -61,25 +61,36 @@ Namespace My.Resources
         End Property
         
         '''<summary>
-        '''  Recherche une chaîne localisée semblable à #COMMON PRESETS
-        '''#Name						#Iwad			#Level			#Misc.
+        '''  Recherche une chaîne localisée semblable à #BASE PRESETS - LEVELS
+        '''#Name						#Iwad			#Level			#Misc.			#Image
         '''
-        '''Ultimate Doom, 				Doom.wad
-        '''Doom II: Hell on Earth, 	Doom2.wad
-        '''TNT: Evilution, 			TNT.wad
-        '''The Plutonia Experiment,	Plutonia.wad
-        '''2002 A Doom Odyssey,		Doom.wad, 		2002ad10.wad
-        '''Icarus: Alien Vanguard,		Doom2.wad, 		ICARUS.wad
-        '''Requiem, 					Doom2.wad,		Requiem.wad
-        '''Plutonia 2,					Doom2.wad,		PL2.wad
-        '''Hell Revealed,				Doom2.wad, 		hr.wad
-        '''Hell Revealed 2,			Doom2.wad, 		hr2final.wad
-        '''DTS-T						Doom2.wad, 		DTS-T.pk3
-        '''Plutonia Revisited,			Doom2.wad [le reste de la chaîne a été tronqué]&quot;;.
+        '''Ultimate Doom, 				Doom.wad,		,				,				doom_icon.jpg
+        '''Ultimate Doom + Sigil,		Doom.wad, 		SIGIL_v1_21.wad,,				Sigil_cover.jpg
+        '''Doom II: Hell on Earth, 	Doom2.wad,		,				,				doom2_icon.jpg
+        '''TNT: Evilution, 			TNT.wad,		,				,				final_doom_icon.jpg
+        '''The Plutonia Experiment,	Plutonia.wad,	,				,				final_doom_icon.jpg
+        '''Doom Zero,					Doom2.wad, 		DoomZero.wad,	DOOMZERO.DEH,	DE_DOOM_Zero_edit.jpg
+        '''Freedoom: Phase 1,			freedoom1.wad,	,			 [le reste de la chaîne a été tronqué]&quot;;.
         '''</summary>
-        Public ReadOnly Property common_presets() As String
+        Public ReadOnly Property base_presets_Levels() As String
             Get
-                Return ResourceManager.GetString("common_presets", resourceCulture)
+                Return ResourceManager.GetString("base_presets_Levels", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Recherche une chaîne localisée semblable à #BASE PRESETS - MODS
+        '''#Name								#Desc															#Image						#Files
+        '''
+        '''Brutal Doom v20b					Older version of Brutal Doom
+        '''Brutal Doom v21						Last version of Brutal Doom
+        '''Brutal Doom v21 + Power Fantasy v2	Last version of Brutal Doom + Addon Power Fantasy v2
+        '''Embers of Armageddon				Partial conversion into Doom 2016 gameplay
+        '''Embers of Armageddon with monsters	Partial conversion into Doom 2016 gameplay, including monsters.
+        '''</summary>
+        Public ReadOnly Property base_presets_Mods() As String
+            Get
+                Return ResourceManager.GetString("base_presets_Mods", resourceCulture)
             End Get
         End Property
     End Module

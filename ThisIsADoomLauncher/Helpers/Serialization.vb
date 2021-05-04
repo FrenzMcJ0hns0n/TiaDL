@@ -23,7 +23,7 @@ Namespace Helpers
 
             Dim ger As Serialization = New Serialization()
             ' ICI ----------------------------------------------------- > TODO : Obtenir le chemin (String) vers le fichier ressource
-            Dim s As String = ger.GetEmbeddedResource(Reflection.Assembly.GetExecutingAssembly(), My.Resources.common_presets.ToString)
+            Dim s As String = ger.GetEmbeddedResource(Reflection.Assembly.GetExecutingAssembly(), My.Resources.base_presets_Levels.ToString)
 
             'Dim a As String = GetEmbeddedResource(Reflection.Assembly.GetExecutingAssembly(), My.Resources.common_presets.ToString)
             'Return GetEmbeddedResource(Reflection.Assembly.GetExecutingAssembly(), My.Resources.common_presets.ToString)

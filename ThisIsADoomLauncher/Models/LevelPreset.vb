@@ -1,12 +1,12 @@
 ﻿Namespace Models
-    Public Class Preset
+    Public Class LevelPreset
 
         Private _name As String
         Public Property Name As String
             Get
                 Return _name
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 _name = value
             End Set
         End Property
@@ -16,7 +16,7 @@
             Get
                 Return _iwad
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 _iwad = value
             End Set
         End Property
@@ -26,7 +26,7 @@
             Get
                 Return _level
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 _level = value
             End Set
         End Property
@@ -36,7 +36,7 @@
             Get
                 Return _misc
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 _misc = value
             End Set
         End Property
@@ -46,7 +46,7 @@
             Get
                 Return _imagePath
             End Get
-            Set(ByVal value As String)
+            Set(value As String)
                 _imagePath = value
             End Set
         End Property

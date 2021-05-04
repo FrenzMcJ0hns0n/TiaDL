@@ -1,46 +1,36 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Text
 
 Module IOMethods
 
     ''' <summary>
-    ''' Return the filename for all files found in /mods/ directory
-    ''' As list of string
-    ''' </summary>
-    ''' 
-    Function GetLocalBrutalDoomVersions() As List(Of String)
-
-        Try
-            Dim versionsFound As List(Of String) = New List(Of String)
-
-            For Each file As String In Directory.GetFiles(My.Settings.ModDir)
-                versionsFound.Add(File_GetName(file))
-            Next
-            Return versionsFound
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'GetLocalBrutalDoomVersions()'. Exception : " & ex.ToString)
-            Return Nothing
-        End Try
-
-    End Function
-
-    ''' <summary>
     ''' Build absolute path from Iwad relative filename
     ''' </summary>
     ''' 
-    Function ConvertIwadPath_RelativeToAbsolute(iwad As String) As String
+    Function ConvertPathRelativeToAbsolute_Iwad(iwadFilename As String) As String
+
+        Dim iwadAbsolutePath As String = Nothing
 
         Try
-            If iwad = "Wolf3D" Then Return iwad
+            Dim iwadsDir As String = GetDirectoryPath("iwads")
 
-            Dim iwadPath As String = Path.Combine(My.Settings.IwadsDir, iwad)
-            Return If(File.Exists(iwadPath), iwadPath, Nothing)
+            'Try files directly in iwadsDir
+            Dim probablePath As String = Path.Combine(iwadsDir, iwadFilename)
+            If File.Exists(probablePath) Then Return probablePath
+
+            'Search recursively in subdirs
+            For Each dir As String In Directory.GetDirectories(iwadsDir)
+                For Each fi As FileInfo In New DirectoryInfo(dir).GetFiles
+                    If fi.Name = iwadFilename Then Return fi.FullName
+                Next
+            Next
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertIwadPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
-            Return Nothing
+            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Iwad()'. Exception : " & ex.ToString)
         End Try
+
+        Return iwadAbsolutePath
 
     End Function
 
@@ -48,16 +38,39 @@ Module IOMethods
     ''' Build absolute path from Level relative filename
     ''' </summary>
     ''' 
-    Function ConvertLevelPath_RelativeToAbsolute(level As String) As String
+    Function ConvertPathRelativeToAbsolute_Level(levelFilename As String) As String
+
+        Dim levelAbsolutePath As String = Nothing
 
         Try
-            Dim levelPath = Path.Combine(My.Settings.LevelsDir, level)
-            Return If(File.Exists(levelPath), levelPath, Nothing)
+            Dim levelsDir As String = GetDirectoryPath("levels")
+
+            'Try files directly in levelsDir
+            Dim probablePath As String = Path.Combine(levelsDir, levelFilename)
+            If File.Exists(probablePath) Then Return probablePath
+
+            'Search recursively in subdirs
+            For Each dir As String In Directory.GetDirectories(levelsDir)
+                For Each fi As FileInfo In New DirectoryInfo(dir).GetFiles
+
+                    'Handle wildcard for "Wolf3D_*.pk3"
+                    If levelFilename.Contains("*") Then
+                        Dim wildcardIndex As Integer = levelFilename.IndexOf("*")
+                        Dim cutFilename As String = levelFilename.Substring(0, wildcardIndex)
+                        If fi.Name.Contains(cutFilename) Then Return Path.Combine(fi.DirectoryName, levelFilename)
+                    End If
+
+                    'Normal processing
+                    If fi.Name = levelFilename Then Return fi.FullName
+
+                Next
+            Next
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertLevelPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
-            Return Nothing
+            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Level()'. Exception : " & ex.ToString)
         End Try
+
+        Return levelAbsolutePath
 
     End Function
 
@@ -65,16 +78,29 @@ Module IOMethods
     ''' Build absolute path from Misc relative filename
     ''' </summary>
     ''' 
-    Function ConvertMiscPath_RelativeToAbsolute(misc As String) As String
+    Function ConvertPathRelativeToAbsolute_Misc(miscFilename As String) As String
+
+        Dim miscAbsolutePath As String = Nothing
 
         Try
-            Dim miscPath = Path.Combine(My.Settings.MiscDir, misc)
-            Return If(File.Exists(miscPath), miscPath, Nothing)
+            Dim miscDir As String = GetDirectoryPath("misc")
+
+            'Try files directly in miscDir
+            Dim probablePath As String = Path.Combine(miscDir, miscFilename)
+            If File.Exists(probablePath) Then Return probablePath
+
+            'Search recursively in subdirs
+            For Each dir As String In Directory.GetDirectories(miscDir)
+                For Each fi As FileInfo In New DirectoryInfo(dir).GetFiles
+                    If fi.Name = miscFilename Then Return fi.FullName
+                Next
+            Next
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertMiscPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
-            Return Nothing
+            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Misc()'. Exception : " & ex.ToString)
         End Try
+
+        Return miscAbsolutePath
 
     End Function
 
@@ -86,25 +112,27 @@ Module IOMethods
     Sub SetIniFiles()
 
         Try
-            With My.Settings
-                If File.Exists(Path.Combine(.GzdoomDir, "gzdoom-model.ini")) Then
-                    File.Move(
-                        Path.Combine(.GzdoomDir, "gzdoom-model.ini"),
-                        Path.Combine(.GzdoomDir, "gzdoom-" & Environment.UserName & ".ini"))
-                End If
+            'TODO : Write v3 equivalent
 
-                If File.Exists(Path.Combine(.ZandronumDir, "zandronum-model.ini")) Then
-                    File.Move(
-                        Path.Combine(.ZandronumDir, "zandronum-model.ini"),
-                        Path.Combine(.ZandronumDir, "zandronum-" & Environment.UserName & ".ini"))
-                End If
+            'With My.Settings
+            '    If File.Exists(Path.Combine(.GzdoomDir, "gzdoom-model.ini")) Then
+            '        File.Move(
+            '            Path.Combine(.GzdoomDir, "gzdoom-model.ini"),
+            '            Path.Combine(.GzdoomDir, "gzdoom-" & Environment.UserName & ".ini"))
+            '    End If
 
-                If File.Exists(Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini")) Then
-                    File.Move(
-                        Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini"),
-                        Path.Combine(.WolfDir, "gzdoom-model-" & Environment.UserName & "-wolf3D.ini"))
-                End If
-            End With
+            '    If File.Exists(Path.Combine(.ZandronumDir, "zandronum-model.ini")) Then
+            '        File.Move(
+            '            Path.Combine(.ZandronumDir, "zandronum-model.ini"),
+            '            Path.Combine(.ZandronumDir, "zandronum-" & Environment.UserName & ".ini"))
+            '    End If
+
+            '    If File.Exists(Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini")) Then
+            '        File.Move(
+            '            Path.Combine(.WolfDir, "gzdoom-model-wolf3D.ini"),
+            '            Path.Combine(.WolfDir, "gzdoom-model-" & Environment.UserName & "-wolf3D.ini"))
+            '    End If
+            'End With
 
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
@@ -117,79 +145,93 @@ Module IOMethods
     ''' Validate paths
     ''' </summary>
     ''' 
-    Sub ValidateDirectories()
+    Sub CheckProjectSubdirectories()
 
         Dim errorText As String = Nothing
 
         Try
-            With My.Settings
+            For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods"}
+                If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir
+            Next
 
-                Dim dirList As New List(Of String) From {"\engine\gzdoom", "\engine\zandronum", "\iwads", "\levels", "\misc", "\mods", "\music", "\tc"}
-
-                For Each dir As String In dirList
-                    If Not Directory.Exists(.RootDirPath & dir) Then errorText &= Environment.NewLine & dir
-                Next
-
-                If errorText = Nothing Then
-                    .GzdoomDir = .RootDirPath & dirList(0)
-                    .ZandronumDir = .RootDirPath & dirList(1)
-                    .IwadsDir = .RootDirPath & dirList(2)
-                    .LevelsDir = .RootDirPath & dirList(3)
-                    .MiscDir = .RootDirPath & dirList(4)
-                    .ModDir = .RootDirPath & dirList(5)
-                    .MusicDir = .RootDirPath & dirList(6)
-                    .WolfDir = .RootDirPath & dirList(7)
-                Else
-                    MessageBox.Show("Setup error. Unable to find the following directories :" & errorText)
-                    WriteToLog(DateTime.Now & " - Setup error. Directories not found :" & errorText)
-                End If
-
-            End With
+            If Not errorText = Nothing Then
+                MessageBox.Show("Startup error. Unable to find the following subdirectories :" & errorText)
+                WriteToLog(DateTime.Now & " - Startup error. Subdirectories not found :" & errorText)
+            End If
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'CheckDirectories()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'CheckProjectSubdirectories()'. Exception : " & ex.ToString)
         End Try
 
     End Sub
 
-    ''' <summary>
-    ''' Read 4 first bytes of the file
-    ''' </summary>
-    Function RecognizeIwad(filepath As String) As Boolean
+    Function ValidateFile_Iwad(filepath As String) As Boolean
 
-        Using reader As BinaryReader = New BinaryReader(File.OpenRead(filepath))
-            Dim bytes As Byte() = reader.ReadBytes(4)
-            Dim fileh As String = Encoding.Default.GetString(bytes)
-            If fileh = "IWAD" Then Return True
-        End Using
+        Try
+            Using reader As BinaryReader = New BinaryReader(File.OpenRead(filepath))
+                Dim bytes As Byte() = reader.ReadBytes(4)
+                Dim fileh As String = Encoding.Default.GetString(bytes)
+
+                If fileh = "IWAD" Then Return True
+            End Using
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileIwad()'. Exception : " & ex.ToString)
+        End Try
 
         Return False
 
     End Function
 
-    ''' <summary>
-    ''' Is this filepath refer to an IWAD, a Level or a Misc file ? Return answer as string
-    ''' </summary>
-    ''' 
-    Function ValidateFile(path As String) As String
+
+    Function ValidateFile_Level(filepath As String) As Boolean
 
         Try
-            If Not File.Exists(path) Then Return "does not exist"
+            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim extension As String = file_info.Extension.ToLowerInvariant
+            Dim valid_ext As String() = {".pk3", ".wad"}
 
-            If RecognizeIwad(path) = True Then Return "iwad"
-            'Dim iwadList As List(Of String) = New List(Of String) From {"doom.wad", "doom2.wad", "tnt.wad", "plutonia.wad", "freedoom1.wad", "freedoom2.wad"}
-            'If iwadList.Contains(File_GetName(path).ToLowerInvariant) Then Return "iwad"
-
-            Dim extension As String = File_GetExtension(path).ToLowerInvariant
-            If extension = ".wad" Or extension = ".pk3" Then Return "level"
-            If extension = ".bex" Or extension = ".deh" Then Return "misc"
-
-            Return "unrecognized"
+            If valid_ext.Contains(extension) Then Return True
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ValidateFile()'. Exception : " & ex.ToString)
-            Return "invalid"
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileLevel()'. Exception : " & ex.ToString)
         End Try
+
+        Return False
+
+    End Function
+
+    Function ValidateFile_Misc(filepath As String) As Boolean
+
+        Try
+            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim extension As String = file_info.Extension.ToLowerInvariant
+            Dim valid_ext As String() = {".bex", ".deh"}
+
+            If valid_ext.Contains(extension) Then Return True
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileMisc()'. Exception : " & ex.ToString)
+        End Try
+
+        Return False
+
+    End Function
+
+    Function ValidateFile_Image(filepath As String) As Boolean
+
+        Try
+            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim extension As String = file_info.Extension.ToLowerInvariant
+            Dim valid_ext As String() = {".jpg", ".jpeg", ".png"}
+
+            If valid_ext.Contains(extension) Then Return True
+
+        Catch ex As Exception
+            WriteToLog(DateTime.Now & " - Error in 'ValidateFileImage()'. Exception : " & ex.ToString)
+        End Try
+
+        Return False
 
     End Function
 
@@ -200,9 +242,10 @@ Module IOMethods
     Sub WritePresetsFileHeader()
 
         Try
-            Dim presetFile As String = Path.Combine(My.Settings.RootDirPath, "presets.csv")
+            Dim rootDirPath = GetDirectoryPath("")
+            Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
 
-            Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
+            Using writer As StreamWriter = New StreamWriter(presetFile, True, Encoding.Default)
                 writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
                 writer.WriteLine()
                 writer.WriteLine("# Preset pattern :")
@@ -214,10 +257,10 @@ Module IOMethods
                 writer.WriteLine("# <Misc. path> : absolute path to .deh/.dex file")
                 writer.WriteLine()
             End Using
+
         Catch ex As Exception
             WriteToLog(DateTime.Now & " - Error in 'WritePresetsFileHeader()'. Exception : " & ex.ToString)
         End Try
-
 
     End Sub
 
@@ -227,7 +270,8 @@ Module IOMethods
     ''' 
     Sub WriteToLog(content As String)
 
-        Dim logfilePath = Path.Combine(My.Settings.RootDirPath, "log.txt")
+        Dim rootDirPath = GetDirectoryPath("")
+        Dim logfilePath = Path.Combine(rootDirPath, "log.txt")
 
         Using streamWriter As New StreamWriter(logfilePath, True)
             streamWriter.WriteLine(content)

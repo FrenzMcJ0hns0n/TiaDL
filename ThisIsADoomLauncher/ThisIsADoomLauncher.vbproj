@@ -89,21 +89,15 @@
     </ApplicationDefinition>
     <Compile Include="CLI\CliMethods.vb" />
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
-    <Compile Include="Helpers\GuiHelper.vb" />
     <Compile Include="Helpers\Serialization.vb" />
-    <Compile Include="Models\Preset.vb" />
+    <Compile Include="Models\LevelPreset.vb" />
+    <Compile Include="Models\ModPreset.vb" />
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IOHelper.vb" />
     <Compile Include="Common\IOMethods.vb" />
-    <Compile Include="Presets\ClickHandlersMethods.vb" />
-    <Compile Include="Presets\DeletePresetsMethods.vb" />
-    <Compile Include="Presets\LoadPresetsMethods.vb" />
-    <Compile Include="Presets\SavePresetMethods.vb" />
-    <Compile Include="Views\SettingsWindow.xaml.vb">
-      <DependentUpon>SettingsWindow.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Presets\PresetsMethods.vb" />
     <Compile Include="Common\Utils.vb" />
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
@@ -121,10 +115,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\SettingsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />
@@ -167,12 +157,14 @@
       <Generator>PublicVbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
-    <EmbeddedResource Include="Resources\common_presets.csv" />
+    <EmbeddedResource Include="Resources\base_presets_Levels.csv" />
+    <None Include="Resources\base_presets_Mods.csv" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

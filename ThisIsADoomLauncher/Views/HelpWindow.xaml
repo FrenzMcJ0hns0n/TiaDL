@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         
         Title="Help" 
-        Width="550" Height="740"
+        Width="550" Height="840"
         WindowStartupLocation="CenterOwner"
         ResizeMode="CanMinimize"
         >
@@ -27,6 +27,9 @@
                     <FlowDocument>
                         <Section>
                             <Paragraph FontWeight="DemiBold" FontSize="24">Files</Paragraph>
+                            <Paragraph FontSize="14">
+                                The main types of file you need to play Doom.
+                            </Paragraph>
                             <List>
 
                                 <ListItem>
@@ -87,29 +90,31 @@
                         </Section>
 
                         <Section>
-                            <Paragraph FontWeight="DemiBold" FontSize="24">Engines</Paragraph>
+                            <Paragraph FontWeight="DemiBold" FontSize="24">Ports</Paragraph>
                             <Paragraph FontSize="14">
-                                Modern ports of Doom, designed to run on nowadays computers.
+                                Softwares designed to run Doom on nowadays computers.
                                 <LineBreak />
                                 <LineBreak /> Extend/Improve features of the original game, such as : graphics, framerate, mod support, multiplayer, etc.
                                 <LineBreak /> Examples of Doom ports :
                             </Paragraph>
                             <List Margin="0,14,0,28" Foreground="Gray" MarkerStyle="Box">
                                 <ListItem>
+                                    <Paragraph>Chocolate Doom</Paragraph>
+                                </ListItem>
+                                <ListItem>
                                     <Paragraph FontWeight="DemiBold">GZDoom</Paragraph>
                                 </ListItem>
                                 <ListItem>
-                                    <Paragraph FontWeight="DemiBold">Zandronum</Paragraph>
+                                    <Paragraph>PrBoom+</Paragraph>
                                 </ListItem>
                                 <ListItem>
-                                    <Paragraph>Chocolate Doom</Paragraph>
+                                    <Paragraph>Zandronum</Paragraph>
                                 </ListItem>
+                                
                             </List>
                             <Paragraph FontSize="14">
-                                GZDoom and Zandronum are supported by TiaDL.
-                                <LineBreak /> You can choose which one to use in the <Bold>Settings</Bold>.
+                                GZDoom is the recommended port to use with TiaDL.
                             </Paragraph>
-                            <!--<LineBreak /><Image Source="/Resources/settings_darker.png" Width="34"></Image>-->
                             <Paragraph></Paragraph>
                         </Section>
 

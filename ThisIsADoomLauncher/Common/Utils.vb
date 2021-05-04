@@ -1,14 +1,10 @@
 ﻿Module Utils
 
-    ''' <summary>
-    ''' Provide a shortcut to interact with MainWindow GUI items
-    ''' </summary>
-    '''
-    Function MainWindow_Instance() As Views.MainWindow
+    'Function MainWindow_Instance() As Views.MainWindow
 
-        Return Windows.Application.Current.Windows(0)
+    '    Return Windows.Application.Current.Windows(0)
 
-    End Function
+    'End Function
 
     Function GetResolution_Width() As Integer
 

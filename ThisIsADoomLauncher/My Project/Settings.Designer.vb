@@ -14,7 +14,7 @@ Option Explicit On
 
 
 <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
- Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0"),  _
+ Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0"),  _
  Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
 Partial Friend NotInheritable Class MySettings
     Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -55,73 +55,13 @@ Partial Friend NotInheritable Class MySettings
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-    Public Property ScreenWidth() As Integer
-        Get
-            Return CType(Me("ScreenWidth"),Integer)
-        End Get
-        Set
-            Me("ScreenWidth") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
-    Public Property ScreenHeight() As Integer
-        Get
-            Return CType(Me("ScreenHeight"),Integer)
-        End Get
-        Set
-            Me("ScreenHeight") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property FullscreenEnabled() As Boolean
-        Get
-            Return CType(Me("FullscreenEnabled"),Boolean)
-        End Get
-        Set
-            Me("FullscreenEnabled") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property UseBrutalDoom() As Boolean
-        Get
-            Return CType(Me("UseBrutalDoom"),Boolean)
-        End Get
-        Set
-            Me("UseBrutalDoom") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property BrutalDoomVersion() As String
+    Public Property SelectedPort() As String
         Get
-            Return CType(Me("BrutalDoomVersion"),String)
+            Return CType(Me("SelectedPort"),String)
         End Get
         Set
-            Me("BrutalDoomVersion") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("GZDoom")>  _
-    Public Property SelectedEngine() As String
-        Get
-            Return CType(Me("SelectedEngine"),String)
-        End Get
-        Set
-            Me("SelectedEngine") = value
+            Me("SelectedPort") = value
         End Set
     End Property
     
@@ -152,156 +92,12 @@ Partial Friend NotInheritable Class MySettings
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
      Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property RootDirPath() As String
-        Get
-            Return CType(Me("RootDirPath"),String)
-        End Get
-        Set
-            Me("RootDirPath") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property GzdoomDir() As String
-        Get
-            Return CType(Me("GzdoomDir"),String)
-        End Get
-        Set
-            Me("GzdoomDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property ZandronumDir() As String
-        Get
-            Return CType(Me("ZandronumDir"),String)
-        End Get
-        Set
-            Me("ZandronumDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property IwadsDir() As String
-        Get
-            Return CType(Me("IwadsDir"),String)
-        End Get
-        Set
-            Me("IwadsDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property LevelsDir() As String
-        Get
-            Return CType(Me("LevelsDir"),String)
-        End Get
-        Set
-            Me("LevelsDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property ModDir() As String
-        Get
-            Return CType(Me("ModDir"),String)
-        End Get
-        Set
-            Me("ModDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property MusicDir() As String
-        Get
-            Return CType(Me("MusicDir"),String)
-        End Get
-        Set
-            Me("MusicDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property SelectedMusic() As String
-        Get
-            Return CType(Me("SelectedMusic"),String)
-        End Get
-        Set
-            Me("SelectedMusic") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property UseTurbo() As Boolean
-        Get
-            Return CType(Me("UseTurbo"),Boolean)
-        End Get
-        Set
-            Me("UseTurbo") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
     Public Property SelectedMisc() As String
         Get
             Return CType(Me("SelectedMisc"),String)
         End Get
         Set
             Me("SelectedMisc") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property MiscDir() As String
-        Get
-            Return CType(Me("MiscDir"),String)
-        End Get
-        Set
-            Me("MiscDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property WolfDir() As String
-        Get
-            Return CType(Me("WolfDir"),String)
-        End Get
-        Set
-            Me("WolfDir") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
-    Public Property UseAltSoundtrack() As Boolean
-        Get
-            Return CType(Me("UseAltSoundtrack"),Boolean)
-        End Get
-        Set
-            Me("UseAltSoundtrack") = value
         End Set
     End Property
     
@@ -313,6 +109,28 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("DateTimeAtLaunch") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+    Public Property PortParameters() As Global.System.Collections.Specialized.StringCollection
+        Get
+            Return CType(Me("PortParameters"),Global.System.Collections.Specialized.StringCollection)
+        End Get
+        Set
+            Me("PortParameters") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
+    Public Property FilesMods() As Global.System.Collections.Specialized.StringCollection
+        Get
+            Return CType(Me("FilesMods"),Global.System.Collections.Specialized.StringCollection)
+        End Get
+        Set
+            Me("FilesMods") = value
         End Set
     End Property
 End Class
