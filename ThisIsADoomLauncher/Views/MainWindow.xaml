@@ -7,20 +7,20 @@
         mc:Ignorable="d"
         
         Title="This is a Doom Launcher v3" 
-        Width="1200" Height="980" 
+        Width="1200" Height="884" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
 
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
-            <RowDefinition Height="5*" />
+            <RowDefinition Height="19*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="17*" />
+            <RowDefinition Height="63*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="12*" />
+            <RowDefinition Height="32*" />
             <RowDefinition Height="20" />
-            <RowDefinition Height="7*" />
+            <RowDefinition Height="25*" />
             <RowDefinition Height="20" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -431,7 +431,7 @@
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="10" />
                                 <RowDefinition Height="2*" />
-                                <RowDefinition Height="7*" />
+                                <RowDefinition Height="6*" />
                                 <RowDefinition Height="10" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
@@ -462,7 +462,7 @@
                                         <TextBlock
                                                 VerticalAlignment="Center"
                                                 FontWeight="DemiBold"
-                                                FontSize="12"
+                                                FontSize="13"
                                                 Text="{Binding Name}"
                                                 />
                                         <!--</StackPanel>-->
@@ -502,6 +502,7 @@
                                 Grid.Row="2"
                                 Grid.Column="5"
                                 FontSize="11"
+                                IsManipulationEnabled="False"
                                 >
                             </ListView>
                         </Grid>
