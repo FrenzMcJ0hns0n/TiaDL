@@ -150,7 +150,7 @@ Module IOMethods
         Dim errorText As String = Nothing
 
         Try
-            For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods", "tc"} 'Removed "\engine\Gzdoom", "\engine\Zandronum", "\music"
+            For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods"}
                 If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir
             Next
 
