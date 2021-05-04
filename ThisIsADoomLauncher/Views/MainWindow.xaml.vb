@@ -691,7 +691,7 @@ Namespace Views
                 Dim files As String = Nothing 'will contain Level + Misc + Mod files, as single String
 
                 'Port
-                port = If(GetValueFromTextBox_Port() = Nothing, Nothing, String.Format("""{0}""", GetValueFromTextBox_Port()))
+                port = If(ReturnSelectedPort() = Nothing, Nothing, String.Format("""{0}""", ReturnSelectedPort()))
                 portParams = Nothing 'TODO
 
                 Dim lp As LevelPreset = ReturnSelectedLevels(fromSettings)
@@ -758,7 +758,7 @@ Namespace Views
 
             Try
                 'Port
-                TextBox_Summary_Port.Text = GetValueFromTextBox_Port()
+                TextBox_Summary_Port.Text = ReturnSelectedPort()
 
                 'Port Parameters
                 'TODO
@@ -968,7 +968,7 @@ Namespace Views
         Private Function ReadyToLaunch() As Boolean
 
             Try
-                If GetValueFromTextBox_Port() = Nothing Then
+                If ReturnSelectedPort() = Nothing Then
                     MessageBox.Show("Error : you need to define a Port")
                     Return False
                 End If
@@ -1006,10 +1006,10 @@ Namespace Views
                 With My.Settings
                     'TODO? Convert to absolute path ?
 
-                    .SelectedPort = GetValueFromTextBox_Port()
+                    .SelectedPort = ReturnSelectedPort()
                     .SelectedIwad = ReturnSelectedLevels().Iwad
-                    .SelectedLevel = If(ReturnSelectedLevels().Level = Nothing, Nothing, ReturnSelectedLevels().Level)
-                    .SelectedMisc = If(ReturnSelectedLevels().Misc = Nothing, Nothing, ReturnSelectedLevels().Misc)
+                    .SelectedLevel = ReturnSelectedLevels().Level
+                    .SelectedMisc = ReturnSelectedLevels().Misc
 
                     If ReturnSelectedMods() IsNot Nothing Then
                         .FilesMods = New Specialized.StringCollection
@@ -1028,6 +1028,7 @@ Namespace Views
         Private Sub LoadSettings()
 
             Try
+                FillTextBox(TextBox_Port, My.Settings.SelectedPort)
                 UpdateSummary(True)
                 UpdateCommand(True)
                 DecorateCommand()
@@ -1038,10 +1039,19 @@ Namespace Views
 
         End Sub
 
-        Private Function GetValueFromTextBox_Port() As String
+        Private Function ReturnSelectedPort() As String
 
-            Dim defaultText As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
-            Return If(TextBox_Port.Text = defaultText, Nothing, TextBox_Port.Text)
+            Dim portPath As String = Nothing
+
+            Try
+                Dim placeholder As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
+                If Not TextBox_Port.Text = placeholder Then portPath = TextBox_Port.Text
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ReturnSelectedPort()'. Exception : " & ex.ToString)
+            End Try
+
+            Return portPath
 
         End Function
 
