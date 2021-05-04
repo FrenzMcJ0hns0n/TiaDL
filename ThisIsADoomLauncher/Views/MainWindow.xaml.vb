@@ -371,241 +371,11 @@ Namespace Views
 
 #Region "Testing tab"
 
-        Private Sub TextBox_TestingEngine_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_TestingEngine_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                Dim info As FileInfo = New FileInfo(filePaths(0))
-                Dim ext As String = info.Extension.ToLowerInvariant
-
-                If info.Extension.ToLowerInvariant = ".exe" Then TextBox_TestingEngine.Text = filePaths(0)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingEngine_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_TestingFile1_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_TestingFile1_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                TextBox_TestingFile1.Text = filePaths(0)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile1_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_TestingFile2_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_TestingFile2_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                TextBox_TestingFile2.Text = filePaths(0)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile2_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_TestingFile3_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_TestingFile3_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                TextBox_TestingFile3.Text = filePaths(0)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile3_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_TestingFile4_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_TestingFile4_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                TextBox_TestingFile4.Text = filePaths(0)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile4_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_TestingFile5_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_TestingFile5_Drop(sender As Object, e As DragEventArgs)
-
-            Try
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                TextBox_TestingFile5.Text = filePaths(0)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_TestingFile5_Drop()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub TextBox_TestingEngine_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingEngineParameters_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingIwad_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingFile1_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingFile2_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingFile3_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingFile4_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingFile5_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-        Private Sub TextBox_TestingExtraParameters_TextChanged(sender As Object, e As TextChangedEventArgs)
-            UpdateCommand()
-            DecorateCommandPreview()
-        End Sub
-
-
-
-
-        Private Sub UpdateCommandPreview_Old()
-
-            Try
-                'Build
-                Dim engine As String = String.Format("""{0}""", TextBox_TestingEngine.Text)
-                Dim engineParams As String = If(TextBox_TestingEngineParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingEngineParameters.Text))
-                Dim iwad As String = If(TextBox_TestingIwad.Text = Nothing, Nothing, String.Format(" -iwad ""{0}""", TextBox_TestingIwad.Text))
-                Dim file1 As String = If(TextBox_TestingFile1.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile1.Text))
-                Dim file2 As String = If(TextBox_TestingFile2.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile2.Text))
-                Dim file3 As String = If(TextBox_TestingFile3.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile3.Text))
-                Dim file4 As String = If(TextBox_TestingFile4.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile4.Text))
-                Dim file5 As String = If(TextBox_TestingFile5.Text = Nothing, Nothing, String.Format(" -file ""{0}""", TextBox_TestingFile5.Text))
-                'Or built list from multiples inputs (several files dropped in the same zone) and use a For each
-                Dim extraParams As String = If(TextBox_TestingExtraParameters.Text = Nothing, Nothing, String.Format(" {0}", TextBox_TestingExtraParameters.Text))
-
-                Dim command As String = String.Format("{0}{1}{2}{3}{4}{5}{6}{7}", engine, engineParams, iwad, file1, file2, file3, file4, file5)
-                FillRichTextBox_Command(command)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'UpdateCommandPreview()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub DecorateCommandPreview() 'v2
-
-            Try
-                Dim completeRange As TextRange = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd)
-                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
-                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
-
-                For Each m As Match In matches
-                    For Each c As Capture In m.Captures
-
-                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
-                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
-                        Dim rangeToEdit As TextRange = New TextRange(startIndex, endIndex)
-
-                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
-                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
-
-                    Next
-                    quotesCount += 1
-                Next
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
-            End Try
-
-
-        End Sub
-
-        Private Sub Button_TestingExecute_Click(sender As Object, e As RoutedEventArgs)
-
-            ExecuteCommandPreview()
-
-        End Sub
-
-        Private Sub Button_TestingCopy_Click(sender As Object, e As RoutedEventArgs)
-
-            CopyCommandToClipboard()
-
-        End Sub
-
-        Private Sub Button_TestingExport_Click(sender As Object, e As RoutedEventArgs)
-
-            ExportCommandAsBat()
-
-        End Sub
-
-        Private Sub ExecuteCommandPreview()
-
-            Try
-                Dim commandText = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
-                If commandText = Nothing Then Return
-                LaunchProcess(commandText)
-                WriteToLog(DateTime.Now & " - CommandLine :" & Environment.NewLine & commandText)
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ExecuteCommandPreview()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
 
         Private Sub CopyCommandToClipboard()
 
             Try
-                Dim commandText = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
+                Dim commandText = Nothing 'New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
                 Clipboard.SetText(commandText)
 
             Catch ex As Exception
@@ -617,7 +387,7 @@ Namespace Views
         Private Sub ExportCommandAsBat()
 
             Try
-                Dim commandText = New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
+                Dim commandText = Nothing 'New TextRange(RichTextBox_TestingCommandPreview.Document.ContentStart, RichTextBox_TestingCommandPreview.Document.ContentEnd).Text
 
                 Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
                 Dim batPath As String = Path.Combine(My.Settings.RootDirPath, now_formatted & "_command.bat")
@@ -632,7 +402,6 @@ Namespace Views
             End Try
 
         End Sub
-
 
 
 #End Region
