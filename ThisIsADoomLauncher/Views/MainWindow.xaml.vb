@@ -13,7 +13,8 @@ Namespace Views
 
             Try
                 CheckProjectSubdirectories() 'V3
-                SetIniFiles()
+                'SetIniFiles() 'TODO V3
+                LoadSettings()
                 PopulateBaseLevelPresets() 'V3
                 PopulateBaseModsPresets() 'V3
 
@@ -606,11 +607,24 @@ Namespace Views
 
 
 
-        Private Function ReturnSelectedLevels() As LevelPreset
+        Private Function ReturnSelectedLevels(Optional fromSettings As Boolean = False) As LevelPreset
 
             Dim preset As LevelPreset = Nothing
 
             Try
+                If fromSettings Then
+                    If Not My.Settings.SelectedIwad = Nothing Then
+
+                        Return New LevelPreset() With
+                        {
+                            .Iwad = My.Settings.SelectedIwad,
+                            .Level = My.Settings.SelectedLevel,
+                            .Misc = My.Settings.SelectedMisc
+                        }
+
+                    End If
+                End If
+
                 Select Case TabControl_Levels.SelectedIndex
                     Case 0
                         preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
@@ -629,11 +643,24 @@ Namespace Views
         End Function
 
 
-        Private Function ReturnSelectedMods() As ModPreset
+        Private Function ReturnSelectedMods(Optional fromSettings As Boolean = False) As ModPreset
 
             Dim preset As ModPreset = Nothing
 
             Try
+                If fromSettings Then
+                    If Not My.Settings.FilesMods Is Nothing Then
+
+                        Dim filesList As List(Of String) = New List(Of String)
+                        For Each modFile In My.Settings.FilesMods
+                            filesList.Add(modFile)
+                        Next
+
+                        Return New ModPreset() With {.Files = filesList}
+
+                    End If
+                End If
+
                 Select Case TabControl_Mods.SelectedIndex
                     Case 0
                         preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
@@ -641,6 +668,8 @@ Namespace Views
                         preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset) 'TODO
                     Case 2
                         preset = New ModPreset() With {.Files = New List(Of String)} 'TODO
+                    Case Else
+
                 End Select
 
             Catch ex As Exception
@@ -652,7 +681,7 @@ Namespace Views
         End Function
 
 
-        Private Sub UpdateCommand()
+        Private Sub UpdateCommand(Optional fromSettings As Boolean = False)
 
             Try
                 Dim port As String = Nothing
@@ -665,7 +694,7 @@ Namespace Views
                 port = If(GetValueFromTextBox_Port() = Nothing, Nothing, String.Format("""{0}""", GetValueFromTextBox_Port()))
                 portParams = Nothing 'TODO
 
-                Dim lp As LevelPreset = ReturnSelectedLevels()
+                Dim lp As LevelPreset = ReturnSelectedLevels(fromSettings)
                 If Not lp Is Nothing Then
                     'Iwad
                     Dim iwadAbsolutePath As String = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
@@ -676,7 +705,7 @@ Namespace Views
                 End If
 
                 'Mods
-                Dim mp As ModPreset = ReturnSelectedMods()
+                Dim mp As ModPreset = ReturnSelectedMods(fromSettings)
                 If Not mp Is Nothing Then
                     Dim modFilePaths As List(Of String) = ConvertModPath_RelativeToAbsolute(mp.Files)
                     For Each modFile As String In modFilePaths
@@ -725,7 +754,7 @@ Namespace Views
         End Sub
 
 
-        Private Sub UpdateSummary()
+        Private Sub UpdateSummary(Optional fromSettings As Boolean = False)
 
             Try
                 'Port
@@ -736,7 +765,7 @@ Namespace Views
 
                 StackPanel_Summary_FilesMods.Children.Clear()
 
-                Dim lp As LevelPreset = ReturnSelectedLevels()
+                Dim lp As LevelPreset = ReturnSelectedLevels(fromSettings)
                 If Not lp Is Nothing Then
                     'Iwad
                     TextBox_Summary_Iwad.Text = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
@@ -747,7 +776,7 @@ Namespace Views
                     DisplayLevels_Summary(levelFileNames)
                 End If
 
-                Dim mp As ModPreset = ReturnSelectedMods()
+                Dim mp As ModPreset = ReturnSelectedMods(fromSettings)
                 If Not mp Is Nothing Then DisplayMods_Summary(mp.Files)
 
             Catch ex As Exception
@@ -926,8 +955,8 @@ Namespace Views
 
             Try
                 If ReadyToLaunch() Then
-                    LaunchGame()
-                    'SaveSettings()
+                    'LaunchGame()
+                    SaveSettings()
                 End If
 
             Catch ex As Exception
@@ -987,8 +1016,8 @@ Namespace Views
                         .FilesMods.AddRange(ReturnSelectedMods().Files.ToArray)
                     End If
 
+                    .Save()
                 End With
-
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'SaveSettings()'. Exception : " & ex.ToString)
@@ -996,6 +1025,18 @@ Namespace Views
 
         End Sub
 
+        Private Sub LoadSettings()
+
+            Try
+                UpdateSummary(True)
+                UpdateCommand(True)
+                DecorateCommand()
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'LoadSettings()'. Exception : " & ex.ToString)
+            End Try
+
+        End Sub
 
         Private Function GetValueFromTextBox_Port() As String
 
