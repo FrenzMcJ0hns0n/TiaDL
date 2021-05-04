@@ -104,7 +104,7 @@ Namespace Views
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
 
                 Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
-                Dim batPath As String = Path.Combine(GetSubdirectoryPath(""), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
+                Dim batPath As String = Path.Combine(GetDirectoryPath(""), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
 
                 Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.Default)
                     writer.WriteLine("@echo off")
@@ -635,7 +635,7 @@ Namespace Views
                     If File.Exists(modFile) Then absoluteModPaths.Add(modFile)
 
                     'Build absolute path with modsSubDir & filename 
-                    Dim probablePath As String = Path.Combine(GetSubdirectoryPath("mods"), modFile)
+                    Dim probablePath As String = Path.Combine(GetDirectoryPath("mods"), modFile)
                     If File.Exists(probablePath) Then absoluteModPaths.Add(probablePath)
 
                 Next
@@ -726,7 +726,7 @@ Namespace Views
 
             Try
                 If ReadyToLaunch() Then
-                    'LaunchGame()
+                    LaunchGame()
                     SaveSettings()
                 End If
 
@@ -799,7 +799,7 @@ Namespace Views
         Private Sub LoadSettings()
 
             Try
-                FillTextBox(TextBox_Port, My.Settings.SelectedPort)
+                If Not My.Settings.SelectedPort = Nothing Then FillTextBox(TextBox_Port, My.Settings.SelectedPort)
                 UpdateSummary(True)
                 UpdateCommand(True)
                 DecorateCommand()
@@ -832,11 +832,11 @@ Namespace Views
             With My.Settings
 
                 MessageBox.Show(String.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}",
-                    $"RootDir :{Environment.NewLine}{ GetSubdirectoryPath("")}" & Environment.NewLine & Environment.NewLine,
-                    $"Iwads subdir :{Environment.NewLine}{ GetSubdirectoryPath("iwads")}" & Environment.NewLine & Environment.NewLine,
-                    $"Levels subdir :{Environment.NewLine}{ GetSubdirectoryPath("levels")}" & Environment.NewLine & Environment.NewLine,
-                    $"Misc subdir :{Environment.NewLine}{ GetSubdirectoryPath("misc")}" & Environment.NewLine & Environment.NewLine,
-                    $"Mods subdir :{Environment.NewLine}{ GetSubdirectoryPath("mods")}" & Environment.NewLine & Environment.NewLine,
+                    $"RootDir :{Environment.NewLine}{ GetDirectoryPath("")}" & Environment.NewLine & Environment.NewLine,
+                    $"Iwads subdir :{Environment.NewLine}{ GetDirectoryPath("iwads")}" & Environment.NewLine & Environment.NewLine,
+                    $"Levels subdir :{Environment.NewLine}{ GetDirectoryPath("levels")}" & Environment.NewLine & Environment.NewLine,
+                    $"Misc subdir :{Environment.NewLine}{ GetDirectoryPath("misc")}" & Environment.NewLine & Environment.NewLine,
+                    $"Mods subdir :{Environment.NewLine}{ GetDirectoryPath("mods")}" & Environment.NewLine & Environment.NewLine,
                     Environment.NewLine,
                     $".SelectedPort :{Environment.NewLine}{ .SelectedPort}" & Environment.NewLine & Environment.NewLine,
                     $".SelectedIwad :{Environment.NewLine}{ .SelectedIwad}" & Environment.NewLine & Environment.NewLine,

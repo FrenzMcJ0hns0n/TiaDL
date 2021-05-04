@@ -157,7 +157,7 @@ Module PresetsMethods
         ElseIf presetsType = "base_mods" Then
             parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
         ElseIf presetsType = "user_levels" Then
-            parser = New TextFieldParser(Path.Combine(GetSubdirectoryPath(""), "presets.csv")) 'TODO : Change/Add RootDirPath variable
+            parser = New TextFieldParser(Path.Combine(GetDirectoryPath(""), "presets.csv")) 'TODO : Change/Add RootDirPath variable
         ElseIf presetsType = "user_mods" Then
             'TODO
         End If
@@ -219,7 +219,7 @@ Module PresetsMethods
 
         Try
             'Check if user-presets file exists
-            Dim rootDirPath = GetSubdirectoryPath("")
+            Dim rootDirPath = GetDirectoryPath("")
             Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
             If Not File.Exists(presetFile) Then WritePresetsFileHeader()
 
@@ -250,7 +250,7 @@ Module PresetsMethods
 
     Sub DeletePreset(name As String)
 
-        Dim rootDirPath = GetSubdirectoryPath("")
+        Dim rootDirPath = GetDirectoryPath("")
         Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
 
         Dim lines As List(Of String) = File.ReadAllLines(presetFile).ToList

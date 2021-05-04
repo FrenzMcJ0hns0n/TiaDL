@@ -40,10 +40,11 @@ Module IOHelper
     End Function
 
     ''' <summary>
-    ''' Get the parent directory of TiaDL executable
+    ''' Get the path of a TiaDL directory. 
+    ''' Leave subDirName = Nothing to get RootDirPath
     ''' </summary>
     ''' 
-    Function GetSubdirectoryPath(subDirName As String) As String
+    Function GetDirectoryPath(subDirName As String) As String
 
         Dim subDirPath As String = Nothing
 
@@ -54,7 +55,7 @@ Module IOHelper
             If Directory.Exists(combinedPath) Then subDirPath = combinedPath
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'GetSubdirectoryPath()'. Exception : " & ex.ToString)
+            WriteToLog(DateTime.Now & " - Error in 'GetDirectoryPath()'. Exception : " & ex.ToString)
         End Try
 
         Return subDirPath
