@@ -19,10 +19,8 @@ Namespace Views
                 SetRootDirPath()
                 ValidateDirectories()
                 SetIniFiles()
-                SetCommonPresets()
                 PopulateBaseLevelPresets() 'V3
                 PopulateBaseModsPresets() 'V3
-                UpdateGUI()
 
                 'Performance eval
                 Dim dateTimeReady As DateTime = DateTime.Now
@@ -59,73 +57,12 @@ Namespace Views
 
         End Sub
 
-        Private Sub SetCommonPresets()
-
-            Try
-                'DisplayPresets("common", FormatPresetsData_FromCsv("common")) PREVIOUS
-                ListView_CommonPresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Sub UpdateGUI()
-
-            Try
-                With My.Settings
-                    'Auto-set native resolution at first launch
-                    'If .ScreenWidth = 0 And .ScreenHeight = 0 Then
-                    '    .ScreenWidth = GetResolution_Width()
-                    '    .ScreenHeight = GetResolution_Height()
-                    'End If
-
-                    Label_EngineToLaunch.Content = .SelectedPort
-                    'Label_ResolutionToLaunch.Content = "Resolution : " & My.Settings.ScreenWidth.ToString & " x " & My.Settings.ScreenHeight.ToString
-                    'Label_FullscreenToLaunch.Content = "Fullscreen : " & If(My.Settings.FullscreenEnabled, "Yes", "No")
-
-                    'TextBox_ModToLaunch.Text = If(.UseBrutalDoom = False Or .BrutalDoomVersion = Nothing, Nothing, .BrutalDoomVersion)
-
-                    TextBox_IwadToLaunch.Text = .SelectedIwad
-                    TextBox_LevelToLaunch.Text = .SelectedLevel
-                    TextBox_MiscToLaunch.Text = .SelectedMisc
-
-                    'CheckBox_UseAltSoundtrack.IsChecked = .UseAltSoundtrack
-                    'If .SelectedMusic = .MusicDir & "\DoomMetalVol4.wad" Then
-                    '    RadioButton_Soundtrack_DoomMetal.IsChecked = True
-                    'ElseIf .SelectedMusic = .MusicDir & "\IDKFAv2.wad" Then
-                    '    RadioButton_Soundtrack_IDKFA.IsChecked = True
-                    'End If
-
-                    'CheckBox_EnableTurbo.IsChecked = .UseTurbo
-                End With
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'UpdateGUI()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
 #End Region
 
 
 
 
 #Region "Sidebar buttons"
-
-        Private Sub Button_Menu_Help_Click(sender As Object, e As RoutedEventArgs) Handles Button_Help.Click
-
-            Try
-                Dim helpWindow As HelpWindow = New HelpWindow()
-                helpWindow.Owner = MainWindow_Instance()
-                helpWindow.ShowDialog()
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
 
         Private Sub Button_Levels_Click(sender As Object, e As RoutedEventArgs) Handles Button_Levels.Click
 
@@ -158,19 +95,6 @@ Namespace Views
 
             Catch ex As Exception
                 WriteToLog(DateTime.Now & " - Error in 'Button_ExploreFolder_Click()'. Exception : " & ex.ToString)
-            End Try
-
-        End Sub
-
-        Private Sub Button_Menu_Settings_Click(sender As Object, e As RoutedEventArgs) Handles Button_Menu_Settings.Click
-
-            Try
-                Dim settingsWindow As SettingsWindow = New SettingsWindow()
-                settingsWindow.Owner = MainWindow_Instance()
-                settingsWindow.ShowDialog()
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Menu_Settings_Click()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -242,29 +166,6 @@ Namespace Views
 
         End Sub
 
-        Private Function ConvertModPath_RelativeToAbsolute(modFilesList As List(Of String)) As List(Of String)
-
-            Dim absoluteModPaths As List(Of String) = New List(Of String)
-
-            Try
-                For Each modFile As String In modFilesList
-
-                    'Read absolute path
-                    If File.Exists(modFile) Then absoluteModPaths.Add(modFile)
-
-                    'Build absolute path with ModDir & filename 
-                    Dim probablePath As String = Path.Combine(My.Settings.ModDir, modFile)
-                    If File.Exists(probablePath) Then absoluteModPaths.Add(probablePath)
-
-                Next
-
-            Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ConvertModPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
-            End Try
-
-            Return absoluteModPaths
-
-        End Function
 
 
 
@@ -339,23 +240,6 @@ Namespace Views
                 TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
                 TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
             End If
-
-        End Sub
-
-
-        Private Sub Button_NewPreset_Try_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Try.Click
-
-            'Note : KnowSelected**** don't care about path validity : that is done later on TextBox.TextChanged events
-
-            TextBox_IwadToLaunch.Text = KnowSelectedIwad_NewPreset()
-            TextBox_LevelToLaunch.Text = KnowSelectedLevel_NewPreset()
-            TextBox_MiscToLaunch.Text = KnowSelectedMisc_NewPreset()
-
-        End Sub
-
-        Private Sub Button_NewPreset_Reset_Click(sender As Object, e As RoutedEventArgs) Handles Button_NewPreset_Reset.Click
-
-            ResetFields_NewPreset()
 
         End Sub
 
@@ -1235,8 +1119,29 @@ Namespace Views
         End Function
 
 
+        Private Function ConvertModPath_RelativeToAbsolute(modFilesList As List(Of String)) As List(Of String)
 
+            Dim absoluteModPaths As List(Of String) = New List(Of String)
 
+            Try
+                For Each modFile As String In modFilesList
+
+                    'Read absolute path
+                    If File.Exists(modFile) Then absoluteModPaths.Add(modFile)
+
+                    'Build absolute path with ModDir & filename 
+                    Dim probablePath As String = Path.Combine(My.Settings.ModDir, modFile)
+                    If File.Exists(probablePath) Then absoluteModPaths.Add(probablePath)
+
+                Next
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'ConvertModPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
+            End Try
+
+            Return absoluteModPaths
+
+        End Function
 
 
         Private Sub FillTextBox(sender As Object, txt As String)
@@ -1317,7 +1222,7 @@ Namespace Views
             Try
                 If ReadyToLaunch() Then
                     LaunchGame()
-                    SaveSettings()
+                    'SaveSettings()
                 End If
 
             Catch ex As Exception
@@ -1438,6 +1343,19 @@ Namespace Views
         Private Sub Button_TestMySettings_Reset_Click(sender As Object, e As RoutedEventArgs)
 
             My.Settings.Reset()
+
+        End Sub
+
+        Private Sub Button_Options_HelpAbout_Click(sender As Object, e As RoutedEventArgs)
+
+            Try
+                Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+                Dim helpWindow As HelpWindow = New HelpWindow() With {.Owner = mainWindow}
+                helpWindow.ShowDialog()
+
+            Catch ex As Exception
+                WriteToLog(DateTime.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
+            End Try
 
         End Sub
 

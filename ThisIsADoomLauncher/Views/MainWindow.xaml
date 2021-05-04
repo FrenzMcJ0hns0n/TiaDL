@@ -688,6 +688,7 @@
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
                                 Cursor="Hand"
+                                Click="Button_Options_HelpAbout_Click"
                                 >
                                 <Button.Template>
                                     <ControlTemplate TargetType="Button">

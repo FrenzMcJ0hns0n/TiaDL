@@ -36,7 +36,7 @@ Namespace Views
         Private Sub Window_Closing(sender As Object, e As ComponentModel.CancelEventArgs)
 
             My.Settings.Save()
-            MainWindow_Instance.UpdateGUI()
+            'MainWindow_Instance.UpdateGUI()
 
         End Sub
 

@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports Microsoft.VisualBasic.FileIO
 Imports ThisIsADoomLauncher.Models
+Imports ThisIsADoomLauncher.Views
 
 Module PresetsMethods
 
@@ -8,28 +9,6 @@ Module PresetsMethods
 #Region "Click on user preset"
 
     ''' <summary>
-    ''' <para>Triggered when user clicks a user-preset-button.</para>
-    ''' <para>Set SelectedIwad, SelectedLevel, Selected Misc. for launch</para>
-    ''' <para>Display red text on filepath if does not exist</para>
-    ''' </summary>
-    ''' 
-    Sub SelectUserLevelPreset(iwadPath As String, Optional levelPath As String = Nothing, Optional miscPath As String = Nothing)
-
-        Try
-            With MainWindow_Instance()
-                .TextBox_IwadToLaunch.Text = iwadPath
-                .TextBox_LevelToLaunch.Text = levelPath
-                .TextBox_MiscToLaunch.Text = miscPath
-            End With
-
-        Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'HandleUserPresetClick()'. Exception : " & ex.ToString)
-        End Try
-
-    End Sub
-
-    ''' <summary>
-    ''' 
     ''' <para>Triggered when user right-clicks a custom preset</para>
     ''' <para>Delete a preset by its name</para>
     ''' </summary>
@@ -59,7 +38,9 @@ Module PresetsMethods
     ''' 
     Sub DisplayUserPresets(presetsList As List(Of LevelPreset))
 
-        With MainWindow_Instance()
+        Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+
+        With mainWindow
             .StackPanel_UserPresets.Children.Clear()
 
             If presetsList.Count = 0 Then
@@ -96,7 +77,7 @@ Module PresetsMethods
             'Left click
             AddHandler button.Click,
                 Sub(sender, e)
-                    SelectUserLevelPreset(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
+                    'SelectUserLevelPreset(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
                 End Sub
             'Right click
             AddHandler button.MouseRightButtonDown,
@@ -234,7 +215,9 @@ Module PresetsMethods
     ''' 
     Sub Save_NewPreset()
 
-        With MainWindow_Instance()
+        Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+
+        With mainWindow
             Try
                 Dim nameToSave As String = .TextBox_NewPreset_Name.Text
                 If nameToSave = "Enter preset name..." Or nameToSave = Nothing Then
@@ -242,14 +225,14 @@ Module PresetsMethods
                     Return
                 End If
 
-                Dim iwadToSave As String = KnowSelectedIwad_NewPreset()
+                Dim iwadToSave As String = Nothing 'KnowSelectedIwad_NewPreset()
                 If iwadToSave = Nothing Then
                     MessageBox.Show("New user preset requires an IWAD to be saved")
                     Return
                 End If
 
-                Dim levelToSave As String = KnowSelectedLevel_NewPreset()
-                Dim miscToSave As String = KnowSelectedMisc_NewPreset()
+                Dim levelToSave As String = Nothing 'KnowSelectedLevel_NewPreset()
+                Dim miscToSave As String = Nothing 'KnowSelectedMisc_NewPreset()
 
                 WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
                 MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
