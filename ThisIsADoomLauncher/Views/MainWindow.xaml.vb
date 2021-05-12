@@ -744,7 +744,8 @@ Namespace Views
                     Return False
                 End If
 
-                If ReturnSelectedLevels() Is Nothing Then
+                'If ReturnSelectedLevels() Is Nothing Then
+                If TextBox_Summary_Iwad.Text = Nothing Then
                     MessageBox.Show("Error : you need to choose Levels")
                     Return False
                 End If
