@@ -583,6 +583,7 @@ Namespace Views
 
             Try
                 If fileNames.Count = 0 Then Return
+                If fileNames(0) = Nothing Then Return 'Fix for "Play Vanilla" preset
 
                 For Each name As String In fileNames
                     StackPanel_Summary_FilesMods.Children.Add(
