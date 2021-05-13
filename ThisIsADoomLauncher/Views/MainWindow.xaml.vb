@@ -583,9 +583,12 @@ Namespace Views
 
             Try
                 If fileNames.Count = 0 Then Return
-                If fileNames(0) = Nothing Then Return 'Fix for "Play Vanilla" preset
 
                 For Each name As String In fileNames
+
+                    'Ignore file not found or not specified
+                    If name = Nothing Then Continue For
+
                     StackPanel_Summary_FilesMods.Children.Add(
                         New TextBox() With
                             {
