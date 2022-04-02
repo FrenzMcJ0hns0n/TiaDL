@@ -27,7 +27,7 @@ Module IOMethods
             Next
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Iwad()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ConvertPathRelativeToAbsolute_Iwad()'. Exception : " & ex.ToString)
         End Try
 
         Return iwadAbsolutePath
@@ -67,7 +67,7 @@ Module IOMethods
             Next
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Level()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ConvertPathRelativeToAbsolute_Level()'. Exception : " & ex.ToString)
         End Try
 
         Return levelAbsolutePath
@@ -97,7 +97,7 @@ Module IOMethods
             Next
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ConvertPathRelativeToAbsolute_Misc()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ConvertPathRelativeToAbsolute_Misc()'. Exception : " & ex.ToString)
         End Try
 
         Return miscAbsolutePath
@@ -135,7 +135,7 @@ Module IOMethods
             'End With
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
         End Try
 
     End Sub
@@ -156,11 +156,11 @@ Module IOMethods
 
             If Not errorText = Nothing Then
                 MessageBox.Show("Startup error. Unable to find the following subdirectories :" & errorText)
-                WriteToLog(DateTime.Now & " - Startup error. Subdirectories not found :" & errorText)
+                WriteToLog(Date.Now & " - Startup error. Subdirectories not found :" & errorText)
             End If
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'CheckProjectSubdirectories()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'CheckProjectSubdirectories()'. Exception : " & ex.ToString)
         End Try
 
     End Sub
@@ -168,7 +168,7 @@ Module IOMethods
     Function ValidateFile_Iwad(filepath As String) As Boolean
 
         Try
-            Using reader As BinaryReader = New BinaryReader(File.OpenRead(filepath))
+            Using reader As New BinaryReader(File.OpenRead(filepath))
                 Dim bytes As Byte() = reader.ReadBytes(4)
                 Dim fileh As String = Encoding.Default.GetString(bytes)
 
@@ -176,25 +176,24 @@ Module IOMethods
             End Using
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ValidateFileIwad()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ValidateFileIwad()'. Exception : " & ex.ToString)
         End Try
 
         Return False
 
     End Function
 
-
     Function ValidateFile_Level(filepath As String) As Boolean
 
         Try
-            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim file_info As New FileInfo(filepath)
             Dim extension As String = file_info.Extension.ToLowerInvariant
             Dim valid_ext As String() = {".pk3", ".wad"}
 
             If valid_ext.Contains(extension) Then Return True
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ValidateFileLevel()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ValidateFileLevel()'. Exception : " & ex.ToString)
         End Try
 
         Return False
@@ -204,14 +203,14 @@ Module IOMethods
     Function ValidateFile_Misc(filepath As String) As Boolean
 
         Try
-            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim file_info As New FileInfo(filepath)
             Dim extension As String = file_info.Extension.ToLowerInvariant
             Dim valid_ext As String() = {".bex", ".deh"}
 
             If valid_ext.Contains(extension) Then Return True
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ValidateFileMisc()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ValidateFileMisc()'. Exception : " & ex.ToString)
         End Try
 
         Return False
@@ -221,14 +220,14 @@ Module IOMethods
     Function ValidateFile_Image(filepath As String) As Boolean
 
         Try
-            Dim file_info As FileInfo = New FileInfo(filepath)
+            Dim file_info As New FileInfo(filepath)
             Dim extension As String = file_info.Extension.ToLowerInvariant
             Dim valid_ext As String() = {".jpg", ".jpeg", ".png"}
 
             If valid_ext.Contains(extension) Then Return True
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'ValidateFileImage()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ValidateFileImage()'. Exception : " & ex.ToString)
         End Try
 
         Return False
@@ -245,7 +244,7 @@ Module IOMethods
             Dim rootDirPath = GetDirectoryPath("")
             Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
 
-            Using writer As StreamWriter = New StreamWriter(presetFile, True, Encoding.Default)
+            Using writer As New StreamWriter(presetFile, True, Encoding.Default)
                 writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
                 writer.WriteLine()
                 writer.WriteLine("# Preset pattern :")
@@ -259,7 +258,7 @@ Module IOMethods
             End Using
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'WritePresetsFileHeader()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'WritePresetsFileHeader()'. Exception : " & ex.ToString)
         End Try
 
     End Sub

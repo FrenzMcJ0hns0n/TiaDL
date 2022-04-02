@@ -55,7 +55,7 @@ Module IOHelper
             If Directory.Exists(combinedPath) Then subDirPath = combinedPath
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'GetDirectoryPath()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'GetDirectoryPath()'. Exception : " & ex.ToString)
         End Try
 
         Return subDirPath

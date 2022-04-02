@@ -104,7 +104,7 @@ Namespace Views
             Try
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
 
-                Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
+                Dim now_formatted As String = Date.Now.ToString("yyyy-MM-dd_HH-mm-ss")
                 Dim batPath As String = Path.Combine(GetDirectoryPath(""), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
 
                 Using writer As New StreamWriter(batPath, False, Encoding.Default)
@@ -503,7 +503,7 @@ Namespace Views
             Try
                 Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
                 Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
-                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
+                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped = 4 for each path as in ""complete_path""
 
                 For Each m As Match In matches
                     For Each c As Capture In m.Captures
@@ -586,7 +586,6 @@ Namespace Views
                 If fileNames.Count = 0 Then Return
 
                 For Each name As String In fileNames
-
                     'Ignore file not found or not specified
                     If name = Nothing Then Continue For
 
@@ -654,13 +653,11 @@ Namespace Views
         End Function
 
 
-        Private Sub FillTextBox(sender As Object, txt As String)
+        Private Sub FillTextBox(tbx As TextBox, content As String)
 
             Try
-                Dim txtBx As TextBox = sender
-
-                With txtBx
-                    .Text = txt
+                With tbx
+                    .Text = content
                     .FontStyle = FontStyles.Normal
                     .Foreground = Brushes.Black
                 End With
@@ -671,13 +668,11 @@ Namespace Views
 
         End Sub
 
-        Private Sub UnfillTextBox(sender As Object, txt As String)
+        Private Sub UnfillTextBox(tbx As TextBox, content As String)
 
             Try
-                Dim txtBx As TextBox = sender
-
-                With txtBx
-                    .Text = txt
+                With tbx
+                    .Text = content 'TODO? Use constants
                     .FontStyle = FontStyles.Italic
                     .Foreground = Brushes.Gray
                 End With

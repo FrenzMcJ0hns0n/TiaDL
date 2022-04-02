@@ -5,6 +5,7 @@ Imports ThisIsADoomLauncher.Views
 
 Module PresetsMethods
 
+    'TODO! v3+ Use JSON instead of CSV
 
 #Region "Click on user preset"
 
@@ -65,11 +66,10 @@ Module PresetsMethods
     ''' 
     Function GetLevelPresets_FromCsv(presetsType As String) As List(Of LevelPreset)
 
-        Dim presets As List(Of LevelPreset) = New List(Of LevelPreset)
+        Dim presets As New List(Of LevelPreset)
         Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
 
         Try
-
             Using parser
                 Do While Not parser.EndOfData
 
@@ -89,14 +89,14 @@ Module PresetsMethods
                         )
 
                     Catch exception As MalformedLineException
-                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
+                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
                     End Try
 
                 Loop
             End Using
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'FormatPresetsData_FromCsv()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'FormatPresetsData_FromCsv()'. Exception : " & ex.ToString)
         End Try
 
         Return presets
@@ -105,11 +105,10 @@ Module PresetsMethods
 
     Function GetModPresets_FromCSV(presetsType As String) As List(Of ModPreset)
 
-        Dim presets As List(Of ModPreset) = New List(Of ModPreset)
+        Dim presets As New List(Of ModPreset)
         Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
 
         Try
-
             Using parser
                 Do While Not parser.EndOfData
 
@@ -128,7 +127,7 @@ Module PresetsMethods
                         )
 
                     Catch exception As MalformedLineException
-                        WriteToLog(DateTime.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
+                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
 
                     End Try
 
@@ -136,7 +135,7 @@ Module PresetsMethods
             End Using
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'GetModPresets_FromCSV()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'GetModPresets_FromCSV()'. Exception : " & ex.ToString)
         End Try
 
         Return presets
@@ -152,6 +151,7 @@ Module PresetsMethods
 
         Dim parser As TextFieldParser = Nothing
 
+        'TODO: Use Select Case
         If presetsType = "base_levels" Then
             parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
         ElseIf presetsType = "base_mods" Then
@@ -228,21 +228,21 @@ Module PresetsMethods
             presetLine &= If(level = Nothing, Nothing, "," & level)
             presetLine &= If(misc = Nothing, Nothing, "," & misc)
 
-            'Check if last char is CR-LF (Windows EOL)
+            'Check if last char is CR-LF (Windows EOL) 'TODO! Remove that and do clean things
             Dim end_ok As Boolean = False
-            Using reader As StreamReader = New StreamReader(presetFile, Text.Encoding.UTF8)
+            Using reader As New StreamReader(presetFile, Text.Encoding.UTF8)
                 reader.BaseStream.Seek(-2, SeekOrigin.End)
                 If reader.Read = 13 Then end_ok = True
             End Using
 
             'Write new preset at end of file
-            Using writer As StreamWriter = New StreamWriter(presetFile, True, Text.Encoding.UTF8)
+            Using writer As New StreamWriter(presetFile, True, Text.Encoding.UTF8)
                 If end_ok = False Then writer.WriteLine() 'create new line if necessary
                 writer.WriteLine(presetLine)
             End Using
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'WritePresetToFile()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'WritePresetToFile()'. Exception : " & ex.ToString)
         End Try
 
     End Sub

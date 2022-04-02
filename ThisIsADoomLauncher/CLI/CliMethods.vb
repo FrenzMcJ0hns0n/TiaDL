@@ -123,7 +123,7 @@ Module CliMethods
             'End With
 
         Catch ex As Exception
-            WriteToLog(DateTime.Now & " - Error in 'BuildCommandLineInstructions()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'BuildCommandLineInstructions()'. Exception : " & ex.ToString)
             Return Nothing
         End Try
 
@@ -136,7 +136,7 @@ Module CliMethods
     ''' 
     Sub LaunchProcess(command As String)
 
-        Dim cmd As ProcessStartInfo = New ProcessStartInfo("cmd.exe")
+        Dim cmd As New ProcessStartInfo("cmd.exe")
 
         With cmd
             .UseShellExecute = False
@@ -151,7 +151,7 @@ Module CliMethods
 
     Sub LaunchProcessV3(args As String)
 
-        Dim cmdExe As ProcessStartInfo = New ProcessStartInfo("cmd.exe") With
+        Dim cmdExe As New ProcessStartInfo("cmd.exe") With
         {
             .UseShellExecute = False,
             .CreateNoWindow = True,
