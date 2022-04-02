@@ -713,7 +713,7 @@
                     Height="46"
                     Content="Settings"
                     Click="Button_TestMySettings_Check_Click"
-                    Visibility="Hidden"
+                    Visibility="Visible"
                     />
 
                 <Button
@@ -725,7 +725,7 @@
                     Height="46"
                     Content="-> Reset"
                     Click="Button_TestMySettings_Reset_Click"
-                    Visibility="Hidden"
+                    Visibility="Visible"
                     />
 
                 <Grid Grid.Row="6">

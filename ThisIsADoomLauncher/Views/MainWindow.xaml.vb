@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Text
 Imports System.Text.RegularExpressions
 Imports ThisIsADoomLauncher.Models
 
@@ -18,13 +19,13 @@ Namespace Views
                 PopulateBaseLevelPresets() 'V3
                 PopulateBaseModsPresets() 'V3
 
-                'Performance eval
-                Dim dateTimeReady As DateTime = DateTime.Now
+                'Performance eval : reliable? TODO? Improve
+                Dim dateTimeReady As Date = Date.Now
                 Dim timeSpan As TimeSpan = dateTimeReady.Subtract(My.Settings.DateTimeAtLaunch)
-                WriteToLog(DateTime.Now & " - Time elapsed from Launch to Ready : " & timeSpan.Milliseconds & " milliseconds")
+                WriteToLog(Date.Now & " - Time elapsed from Launch to Ready : " & timeSpan.Milliseconds & " milliseconds")
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'MainWindow:Window_Loaded()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'MainWindow:Window_Loaded()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -36,7 +37,7 @@ Namespace Views
                 ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels") 'TODO V3 : Change COMMON to BASE
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -48,7 +49,7 @@ Namespace Views
                 ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCSV("base_mods")
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -93,7 +94,7 @@ Namespace Views
                 Clipboard.SetText(commandText)
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'CopyCommandToClipboard()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'CopyCommandToClipboard()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -103,16 +104,16 @@ Namespace Views
             Try
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
 
-                Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd-HH-mm-ss")
+                Dim now_formatted As String = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss")
                 Dim batPath As String = Path.Combine(GetDirectoryPath(""), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
 
-                Using writer As StreamWriter = New StreamWriter(batPath, False, Text.Encoding.Default)
+                Using writer As New StreamWriter(batPath, False, Encoding.Default)
                     writer.WriteLine("@echo off")
                     writer.WriteLine("start """" " & commandText)
                 End Using
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ExportCommandAsBat()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ExportCommandAsBat()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -143,7 +144,7 @@ Namespace Views
                 End If
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'TextBox_Port_Drop()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'TextBox_Port_Drop()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -194,7 +195,7 @@ Namespace Views
                 If confirmedFiles.Count > 3 Then FillTextBox(TextBox_NewLevel_Image, confirmedFiles(3))
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -204,7 +205,7 @@ Namespace Views
         ''' </summary>
         Private Function OrderDroppedFiles_Levels(filePaths As String()) As List(Of String)
 
-            Dim orderedFiles As List(Of String) = New List(Of String)
+            Dim orderedFiles As New List(Of String)
 
             Try
                 'Do as many outer loops as there are files, to obtain the correct order in the end (for instance 3 times for 3 files)
@@ -237,7 +238,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'OrderDroppedFiles_Levels()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'OrderDroppedFiles_Levels()'. Exception : " & ex.ToString)
             End Try
 
             Return orderedFiles
@@ -371,7 +372,7 @@ Namespace Views
                 DecorateCommand()
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -406,7 +407,7 @@ Namespace Views
                 End Select
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
             End Try
 
             Return preset
@@ -422,7 +423,7 @@ Namespace Views
                 If fromSettings Then
                     If Not My.Settings.FilesMods Is Nothing Then
 
-                        Dim filesList As List(Of String) = New List(Of String)
+                        Dim filesList As New List(Of String)
                         For Each modFile In My.Settings.FilesMods
                             filesList.Add(modFile)
                         Next
@@ -444,7 +445,7 @@ Namespace Views
                 End Select
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
             End Try
 
             Return preset
@@ -458,7 +459,7 @@ Namespace Views
                 Dim port As String = Nothing
                 Dim portParams As String = Nothing
                 Dim iwad As String = Nothing
-                Dim filesList As List(Of String) = New List(Of String) 'will contain Level + Misc + Mod files, as List
+                Dim filesList As New List(Of String) 'will contain Level + Misc + Mod files, as List
                 Dim files As String = Nothing 'will contain Level + Misc + Mod files, as single String
 
                 'Port
@@ -466,7 +467,7 @@ Namespace Views
                 portParams = Nothing 'TODO
 
                 Dim lp As LevelPreset = ReturnSelectedLevels(fromSettings)
-                If Not lp Is Nothing Then
+                If lp IsNot Nothing Then
                     'Iwad
                     Dim iwadAbsolutePath As String = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
                     iwad = String.Format(" -iwad ""{0}""", iwadAbsolutePath)
@@ -477,7 +478,7 @@ Namespace Views
 
                 'Mods
                 Dim mp As ModPreset = ReturnSelectedMods(fromSettings)
-                If Not mp Is Nothing Then
+                If mp IsNot Nothing Then
                     Dim modFilePaths As List(Of String) = ConvertModPath_RelativeToAbsolute(mp.Files)
                     For Each modFile As String In modFilePaths
                         filesList.Add(modFile)
@@ -492,7 +493,7 @@ Namespace Views
                 FillRichTextBox_Command(command)
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -500,7 +501,7 @@ Namespace Views
         Private Sub DecorateCommand()
 
             Try
-                Dim completeRange As TextRange = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
+                Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
                 Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
                 Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped (4 for each path : ""complete_path"")
 
@@ -509,7 +510,7 @@ Namespace Views
 
                         Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
                         Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
-                        Dim rangeToEdit As TextRange = New TextRange(startIndex, endIndex)
+                        Dim rangeToEdit As New TextRange(startIndex, endIndex)
 
                         rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
                         rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
@@ -519,7 +520,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -537,21 +538,21 @@ Namespace Views
                 StackPanel_Summary_FilesMods.Children.Clear()
 
                 Dim lp As LevelPreset = ReturnSelectedLevels(fromSettings)
-                If Not lp Is Nothing Then
+                If lp IsNot Nothing Then
                     'Iwad
                     TextBox_Summary_Iwad.Text = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
                     'Level & Misc
-                    Dim levelFileNames As List(Of String) = New List(Of String)
+                    Dim levelFileNames As New List(Of String)
                     If Not lp.Level = Nothing Then levelFileNames.Add(lp.Level)
                     If Not lp.Misc = Nothing Then levelFileNames.Add(lp.Misc)
                     DisplayLevels_Summary(levelFileNames)
                 End If
 
                 Dim mp As ModPreset = ReturnSelectedMods(fromSettings)
-                If Not mp Is Nothing Then DisplayMods_Summary(mp.Files)
+                If mp IsNot Nothing Then DisplayMods_Summary(mp.Files)
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'UpdateSummary()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'UpdateSummary()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -574,7 +575,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'HandleLevels_Summary()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'HandleLevels_Summary()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -600,7 +601,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -612,7 +613,7 @@ Namespace Views
         ''' </summary>
         Private Function ConvertFilePath_AbsoluteToRelative(filePaths As List(Of String)) As List(Of String)
 
-            Dim fileNames As List(Of String) = New List(Of String)
+            Dim fileNames As New List(Of String)
 
             Try
                 For Each path As String In filePaths
@@ -620,7 +621,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ConvertFilePath_AbsoluteToRelative()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ConvertFilePath_AbsoluteToRelative()'. Exception : " & ex.ToString)
             End Try
 
             Return fileNames
@@ -645,7 +646,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ConvertModPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ConvertModPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
             End Try
 
             Return absoluteModPaths
@@ -665,7 +666,7 @@ Namespace Views
                 End With
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'FillTextBox()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'FillTextBox()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -682,7 +683,7 @@ Namespace Views
                 End With
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'UnfillTextBox()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'UnfillTextBox()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -692,15 +693,15 @@ Namespace Views
         Private Sub FillRichTextBox_Command(content As String)
 
             Try
-                Dim flow As FlowDocument = New FlowDocument()
-                Dim para As Paragraph = New Paragraph()
+                Dim flow As New FlowDocument()
+                Dim para As New Paragraph()
                 para.Inlines.Add(content)
                 flow.Blocks.Add(para)
 
                 RichTextBox_Command.Document = flow
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -719,7 +720,7 @@ Namespace Views
                 End If
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Options_ToggleView_Click()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'Button_Options_ToggleView_Click()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -735,7 +736,7 @@ Namespace Views
                 End If
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -757,7 +758,7 @@ Namespace Views
                 Return True
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ReadyToLaunch()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ReadyToLaunch()'. Exception : " & ex.ToString)
                 Return False
             End Try
 
@@ -771,7 +772,7 @@ Namespace Views
                 LaunchProcessV3(command)
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'LaunchGame()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'LaunchGame()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -796,7 +797,7 @@ Namespace Views
                 End With
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'SaveSettings()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'SaveSettings()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -810,7 +811,7 @@ Namespace Views
                 DecorateCommand()
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'LoadSettings()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'LoadSettings()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
@@ -824,7 +825,7 @@ Namespace Views
                 If Not TextBox_Port.Text = placeholder Then portPath = TextBox_Port.Text
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'ReturnSelectedPort()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ReturnSelectedPort()'. Exception : " & ex.ToString)
             End Try
 
             Return portPath
@@ -836,34 +837,42 @@ Namespace Views
 
             With My.Settings
 
-                MessageBox.Show(String.Format("{0}{1}{2}{3}{4}{5}{6}{7}{8}{9}",
-                    $"RootDir :{Environment.NewLine}{ GetDirectoryPath("")}" & Environment.NewLine & Environment.NewLine,
-                    $"Iwads subdir :{Environment.NewLine}{ GetDirectoryPath("iwads")}" & Environment.NewLine & Environment.NewLine,
-                    $"Levels subdir :{Environment.NewLine}{ GetDirectoryPath("levels")}" & Environment.NewLine & Environment.NewLine,
-                    $"Misc subdir :{Environment.NewLine}{ GetDirectoryPath("misc")}" & Environment.NewLine & Environment.NewLine,
-                    $"Mods subdir :{Environment.NewLine}{ GetDirectoryPath("mods")}" & Environment.NewLine & Environment.NewLine,
-                    Environment.NewLine,
-                    $".SelectedPort :{Environment.NewLine}{ .SelectedPort}" & Environment.NewLine & Environment.NewLine,
-                    $".SelectedIwad :{Environment.NewLine}{ .SelectedIwad}" & Environment.NewLine & Environment.NewLine,
-                    $".SelectedLevel :{Environment.NewLine}{ .SelectedLevel}" & Environment.NewLine & Environment.NewLine,
-                    $".SelectedMisc :{Environment.NewLine}{ .SelectedMisc}" & Environment.NewLine & Environment.NewLine
-                ))
+                Dim sb As New StringBuilder()
 
-                'Dim portParamsList As String = "Port params list :"
-                'For Each param As String In .PortParameters
-                '    portParamsList &= Environment.NewLine & param
-                'Next
-
-                'MessageBox.Show(portParamsList)
-
-                If .FilesMods Is Nothing Then Return
-
-                Dim strModFileList As String = "Mod files list :"
+                sb.AppendLine("RootDir :")
+                sb.AppendLine($"{GetDirectoryPath("")}") 'Empty string as param ?
+                sb.AppendLine()
+                sb.AppendLine("Iwads subdir :")
+                sb.AppendLine($"{GetDirectoryPath("iwads")}")
+                sb.AppendLine()
+                sb.AppendLine("Levels subdir :")
+                sb.AppendLine($"{GetDirectoryPath("levels")}")
+                sb.AppendLine()
+                sb.AppendLine("Misc subdir :")
+                sb.AppendLine($"{GetDirectoryPath("misc")}")
+                sb.AppendLine()
+                sb.AppendLine("Mods subdir :")
+                sb.AppendLine($"{GetDirectoryPath("mods")}")
+                sb.AppendLine()
+                sb.AppendLine()
+                sb.AppendLine(".SelectedPort :")
+                sb.AppendLine($"{ .SelectedPort}")
+                sb.AppendLine()
+                sb.AppendLine(".SelectedIwad:")
+                sb.AppendLine($"{ .SelectedIwad}")
+                sb.AppendLine()
+                sb.AppendLine(".SelectedLevel :")
+                sb.AppendLine($"{ .SelectedLevel}")
+                sb.AppendLine()
+                sb.AppendLine(".SelectedMisc :")
+                sb.AppendLine($"{ .SelectedMisc}")
+                sb.AppendLine()
+                sb.AppendLine(".FilesMods :")
                 For Each file As String In .FilesMods
-                    strModFileList &= Environment.NewLine & file
+                    sb.AppendLine($"{file}")
                 Next
 
-                MessageBox.Show(strModFileList)
+                MessageBox.Show(sb.ToString)
 
             End With
 
@@ -879,11 +888,11 @@ Namespace Views
 
             Try
                 Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
-                Dim helpWindow As HelpWindow = New HelpWindow() With {.Owner = mainWindow}
+                Dim helpWindow As New HelpWindow() With {.Owner = mainWindow}
                 helpWindow.ShowDialog()
 
             Catch ex As Exception
-                WriteToLog(DateTime.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
             End Try
 
         End Sub
