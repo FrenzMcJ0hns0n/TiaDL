@@ -87,7 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CLI\CliMethods.vb" />
+    <Compile Include="Helpers\CliMethods.vb" />
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
     <Compile Include="Helpers\Serialization.vb" />
     <Compile Include="Models\LevelPreset.vb" />
@@ -95,10 +95,8 @@
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\IOHelper.vb" />
-    <Compile Include="Common\IOMethods.vb" />
-    <Compile Include="Presets\PresetsMethods.vb" />
-    <Compile Include="Common\Utils.vb" />
+    <Compile Include="Helpers\IOMethods.vb" />
+    <Compile Include="Helpers\PresetsMethods.vb" />
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
