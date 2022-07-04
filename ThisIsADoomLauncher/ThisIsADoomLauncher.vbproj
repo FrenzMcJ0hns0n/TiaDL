@@ -89,6 +89,7 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\CliMethods.vb" />
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
+    <Compile Include="Helpers\General.vb" />
     <Compile Include="Helpers\Serialization.vb" />
     <Compile Include="Models\LevelPreset.vb" />
     <Compile Include="Models\ModPreset.vb" />

@@ -12,6 +12,8 @@ Namespace Views
         'TODO? Think about async
         Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
 
+            Title = GetFormattedAppVersion()
+
             Try
                 CheckProjectSubdirectories() 'V3
                 'SetIniFiles() 'TODO V3
