@@ -25,9 +25,9 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="12*" />
+            <ColumnDefinition Width="18*" />
             <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
@@ -678,12 +678,61 @@
 
         <!-- Sidebar options -->
         <GroupBox Grid.Row="1"
-                    Grid.RowSpan="7"
-                    Grid.Column="3"
-                    Margin="10,0,0,0"
-                    Header="Options">
+                  Grid.RowSpan="7"
+                  Grid.Column="3"
+                  Header="Options">
             <Grid>
-                <Grid.RowDefinitions>
+                <StackPanel Orientation="Vertical">
+                    <Button x:Name="Button_Options_HelpAbout"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0 28 0 0"
+                            Cursor="Hand"
+                            Padding="6"
+                            Content="Help / About"
+                            Click="Button_Options_HelpAbout_Click"
+                            />
+                    
+                    <Button x:Name="Button_Options_OpenRootDir"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0 200 0 0"
+                            Cursor="Hand"
+                            Padding="6"
+                            Content="Open root dir"
+                            IsEnabled="False"
+                            />
+                    <Button x:Name="Button_Options_MoreContents"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0 10 0 0"
+                            Cursor="Hand"
+                            Padding="6"
+                            Content="DoomWorld"
+                            IsEnabled="False"
+                            />
+
+                    <Button x:Name="Button_Options_ToogleSummary"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0 370 0 0"
+                            Cursor="Hand"
+                            Padding="6"
+                            Content="Toogle views"
+                            Click="Button_Options_ToggleView_Click"
+                            />
+                    <Button x:Name="Button_Options_Play"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="0 10 0 20"
+                            Cursor="Hand"
+                            Padding="6"
+                            Background="#c6ecc6"
+                            Content="Save &amp; Play"
+                            Click="Button_Options_LaunchSave_Click"
+                            />
+                </StackPanel>
+                <!--<Grid.RowDefinitions>
                     <RowDefinition Height="15*" />
                     <RowDefinition Height="30" />
                     <RowDefinition Height="63*" />
@@ -763,7 +812,7 @@
                         </Button.Template>
                         <Image Source="pack://application:,,,/Resources/Images/play_darker.png" />
                     </Button>
-                </Grid>
+                </Grid>-->
             </Grid>
         </GroupBox>
 
