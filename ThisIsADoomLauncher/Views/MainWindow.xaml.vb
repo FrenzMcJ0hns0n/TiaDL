@@ -14,10 +14,30 @@ Namespace Views
 
             Title = GetFormattedAppTitle()
 
+
+
+
             Try
                 CheckProjectSubdirectories() 'V3
+
+                '---------------------------------------------------------------------------------
+                ' LOAD JSON DATA
+                '---------------------------------------------------------------------------------
+                'TODO: Make it solid, robust, resilient
+
+                Dim savedSettings As Setting = LoadFromJsonData()
+
+                With savedSettings
+
+                    If File.Exists(.Port) Then TextBox_Summary_Port.Text = .Port
+                    If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
+
+                End With
+
+                '---------------------------------------------------------------------------------
+
                 'SetIniFiles() 'TODO V3
-                LoadSettings()
+                'LoadSettings()
                 PopulateBaseLevelPresets() 'V3
                 PopulateBaseModsPresets() 'V3
 
