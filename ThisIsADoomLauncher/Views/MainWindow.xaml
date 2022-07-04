@@ -74,6 +74,7 @@
                         VerticalAlignment="Top"
                         Margin="0,0,0,-1"
                         Content="Browse..."
+                        IsEnabled="False"
                         />
                     <Button 
                         x:Name="Button_Port_Clear"
@@ -96,7 +97,9 @@
                 <Button x:Name="Button_EngineParams_Edit"
                         Grid.Row="1"
                         Grid.Column="1"
-                        Content="Edit..."/>
+                        Content="Edit..."
+                        IsEnabled="False"
+                        />
             </Grid>
         </GroupBox>
 
@@ -160,7 +163,7 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="User presets">
+                    <TabItem Header="User presets" IsEnabled="False">
                         <Grid>
                             <Label x:Name="Label_Levels_NoUserPresets"
                                     HorizontalAlignment="Center"
@@ -181,7 +184,7 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Add new preset">
+                    <TabItem Header="Add new preset" IsEnabled="False">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20"/>
@@ -514,7 +517,7 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="User presets">
+                    <TabItem Header="User presets" IsEnabled="False">
                         <Grid>
                             <Label x:Name="Label_Mods_NoUserPresets"
                                     HorizontalAlignment="Center"
@@ -524,7 +527,7 @@
                                     Content="No user presets found"/>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Add new preset">
+                    <TabItem Header="Add new preset" IsEnabled="False">
 
                     </TabItem>
                 </TabControl>
