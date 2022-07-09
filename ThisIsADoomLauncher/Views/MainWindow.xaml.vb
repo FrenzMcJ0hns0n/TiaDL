@@ -26,12 +26,13 @@ Namespace Views
                 'TODO: Make it solid, robust, resilient
 
                 Dim savedSettings As Setting = LoadFromJsonData()
+                'savedSettings.Level
 
                 With savedSettings
-
                     If File.Exists(.Port) Then TextBox_Summary_Port.Text = .Port
-                    If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
-
+                    If File.Exists(Path.Combine(GetDirectoryPath("iwads"), .Iwad)) Then TextBox_Summary_Iwad.Text = .Iwad
+                    If Not .Level = Nothing Then DisplayLevels_Summary(New List(Of String) From { .Level})
+                    If Not .FilesMods.Count = 0 Then DisplayMods_Summary(.FilesMods)
                 End With
 
                 '---------------------------------------------------------------------------------
@@ -748,7 +749,7 @@ Namespace Views
 
             Try
                 If ReadyToLaunch() Then
-                    LaunchGame()
+                    'LaunchGame()
                     SaveSettings()
                 End If
 
@@ -797,22 +798,16 @@ Namespace Views
         Private Sub SaveSettings()
 
             Try
-                With My.Settings
-                    'TODO? Convert to absolute path ?
-
-                    .SelectedPort = ReturnSelectedPort()
-                    .SelectedIwad = ReturnSelectedLevels().Iwad
-                    .SelectedLevel = ReturnSelectedLevels().Level
-                    .SelectedMisc = ReturnSelectedLevels().Misc
-
-                    If ReturnSelectedMods() IsNot Nothing Then
-                        .FilesMods = New Specialized.StringCollection
-                        .FilesMods.AddRange(ReturnSelectedMods().Files.ToArray)
-                    End If
-
-                    .Save()
-                End With
-
+                Dim lastLaunched As New Setting With
+                {
+                    .Port = ReturnSelectedPort(),
+                    .Iwad = ReturnSelectedLevels().Iwad,
+                    .Level = ReturnSelectedLevels().Level,
+                    .Misc = ReturnSelectedLevels().Misc,
+                    .FilesMods = ReturnSelectedMods().Files,
+                    .PortParameters = New List(Of String)
+                }
+                SaveToJsonData(lastLaunched)
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'SaveSettings()'. Exception : " & ex.ToString)
             End Try
