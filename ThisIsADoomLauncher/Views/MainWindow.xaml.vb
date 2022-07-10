@@ -7,6 +7,11 @@ Namespace Views
     Class MainWindow
 
 
+#Region "Constants"
+        Private Const TBX_SELECT_PORT As String = "Drop port executable here... (GZDoom, Zandronum, etc.)"
+#End Region
+
+
 #Region "Startup"
 
         'TODO? Think about async
