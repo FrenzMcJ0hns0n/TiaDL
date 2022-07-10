@@ -69,7 +69,7 @@ Module IOMethods
     ''' Build absolute path from Iwad relative filename
     ''' </summary>
     ''' 
-    Function ConvertPathRelativeToAbsolute_Iwad(iwadFilename As String) As String
+    Function GetAbsolutePath_Iwad(iwadFilename As String) As String
 
         Dim iwadAbsolutePath As String = Nothing
 

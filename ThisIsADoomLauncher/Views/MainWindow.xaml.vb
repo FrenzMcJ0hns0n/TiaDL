@@ -359,45 +359,25 @@ Namespace Views
 
 
         Private Sub UpdateCommand()
-            'TODO: Rewrite (update Command line based on Summary values)
-
             Try
-                Dim port As String = Nothing
-                Dim portParams As String = Nothing
-                Dim iwad As String = Nothing
-                Dim filesList As New List(Of String) 'will contain Level + Misc + Mod files, as List
-                Dim files As String = Nothing 'will contain Level + Misc + Mod files, as single String
+                Dim port As String = TextBox_Summary_Port.Text
+                Dim iwad As String = TextBox_Summary_Iwad.Text
 
-                'Port
-                port = If(ReturnSelectedPort() = Nothing, Nothing, String.Format("""{0}""", ReturnSelectedPort()))
-                portParams = Nothing 'TODO
-
-                Dim lp As LevelPreset = ReturnSelectedLevels()
-                If lp IsNot Nothing Then
-                    'Iwad
-                    Dim iwadAbsolutePath As String = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
-                    iwad = String.Format(" -iwad ""{0}""", iwadAbsolutePath)
-                    'Level & Misc
-                    If Not lp.Level = Nothing Then filesList.Add(ConvertPathRelativeToAbsolute_Level(lp.Level))
-                    If Not lp.Misc = Nothing Then filesList.Add(ConvertPathRelativeToAbsolute_Misc(lp.Misc))
+                If String.IsNullOrWhiteSpace(port) OrElse String.IsNullOrWhiteSpace(iwad) Then
+                    RichTextBox_Command.Document.Blocks.Clear()
+                    Return
                 End If
 
-                'Mods
-                Dim mp As ModPreset = ReturnSelectedMods()
-                If mp IsNot Nothing Then
-                    Dim modFilePaths As List(Of String) = ConvertModPath_RelativeToAbsolute(mp.Files)
-                    For Each modFile As String In modFilePaths
-                        filesList.Add(modFile)
-                    Next
-                End If
+                Dim command As String = $"""{port}"" -iwad ""{GetAbsolutePath_Iwad(iwad)}"""
+                'TODO: Add port parameters before -iwad
 
-                For Each file As String In filesList
-                    files &= String.Format(" -file ""{0}""", file)
+                'Handle Levels/Misc/Mods
+                Dim tbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                For Each tbx As TextBox In tbxs
+                    command &= $" -file ""{tbx.Text}"""
                 Next
 
-                Dim command As String = String.Format("{0}{1}{2}{3}", port, portParams, iwad, files)
                 FillRichTextBox_Command(command)
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
             End Try
@@ -442,7 +422,7 @@ Namespace Views
                 Dim lp As LevelPreset = ReturnSelectedLevels()
                 If lp IsNot Nothing Then
                     'Iwad
-                    TextBox_Summary_Iwad.Text = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
+                    TextBox_Summary_Iwad.Text = GetAbsolutePath_Iwad(lp.Iwad)
                     'Level & Misc
                     Dim levelFileNames As New List(Of String)
                     If Not lp.Level = Nothing Then levelFileNames.Add(lp.Level)
