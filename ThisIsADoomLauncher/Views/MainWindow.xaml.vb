@@ -162,7 +162,7 @@ Namespace Views
 
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
 
-            UnfillTextBox(TextBox_Port, "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)")
+            UnfillTextBox(TextBox_Port, TBX_SELECT_PORT)
             UpdateSummary()
             UpdateCommand()
             DecorateCommand()
@@ -784,8 +784,8 @@ Namespace Views
 
                 With savedSettings
                     If File.Exists(.Port) Then
-                        TextBox_Port.Text = .Port
-                        TextBox_Summary_Port.Text = .Port
+                        FillTextBox(TextBox_Port, .Port)
+                        FillTextBox(TextBox_Summary_Port, .Port)
                     End If
                     If File.Exists(Path.Combine(GetDirectoryPath("iwads"), .Iwad)) Then TextBox_Summary_Iwad.Text = .Iwad
                     If Not .Level = Nothing Then DisplayLevels_Summary(New List(Of String) From { .Level})
@@ -807,9 +807,7 @@ Namespace Views
             Dim portPath As String = Nothing
 
             Try
-                Dim placeholder As String = "Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
-                If Not TextBox_Port.Text = placeholder Then portPath = TextBox_Port.Text
-
+                If Not TextBox_Port.Text = TBX_SELECT_PORT Then portPath = TextBox_Port.Text
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ReturnSelectedPort()'. Exception : " & ex.ToString)
             End Try
