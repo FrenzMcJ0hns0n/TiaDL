@@ -19,26 +19,9 @@ Namespace Views
 
             Try
                 CheckProjectSubdirectories() 'V3
+                LoadSettings()
 
-                '---------------------------------------------------------------------------------
-                ' LOAD JSON DATA
-                '---------------------------------------------------------------------------------
-                'TODO: Make it solid, robust, resilient
-
-                Dim savedSettings As Setting = LoadFromJsonData()
-                'savedSettings.Level
-
-                With savedSettings
-                    If File.Exists(.Port) Then TextBox_Summary_Port.Text = .Port
-                    If File.Exists(Path.Combine(GetDirectoryPath("iwads"), .Iwad)) Then TextBox_Summary_Iwad.Text = .Iwad
-                    If Not .Level = Nothing Then DisplayLevels_Summary(New List(Of String) From { .Level})
-                    If Not .FilesMods.Count = 0 Then DisplayMods_Summary(.FilesMods)
-                End With
-
-                '---------------------------------------------------------------------------------
-
-                'SetIniFiles() 'TODO V3
-                'LoadSettings()
+                'SetIniFiles() 'TODO? V3
                 PopulateBaseLevelPresets() 'V3
                 PopulateBaseModsPresets() 'V3
 
@@ -402,24 +385,10 @@ Namespace Views
 
 
 
-        Private Function ReturnSelectedLevels(Optional fromSettings As Boolean = False) As LevelPreset
-
+        Private Function ReturnSelectedLevels() As LevelPreset
             Dim preset As LevelPreset = Nothing
 
             Try
-                If fromSettings Then
-                    If Not My.Settings.SelectedIwad = Nothing Then
-
-                        Return New LevelPreset() With
-                        {
-                            .Iwad = My.Settings.SelectedIwad,
-                            .Level = My.Settings.SelectedLevel,
-                            .Misc = My.Settings.SelectedMisc
-                        }
-
-                    End If
-                End If
-
                 Select Case TabControl_Levels.SelectedIndex
                     Case 0
                         preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
@@ -438,24 +407,10 @@ Namespace Views
         End Function
 
 
-        Private Function ReturnSelectedMods(Optional fromSettings As Boolean = False) As ModPreset
-
+        Private Function ReturnSelectedMods() As ModPreset
             Dim preset As ModPreset = Nothing
 
             Try
-                If fromSettings Then
-                    If Not My.Settings.FilesMods Is Nothing Then
-
-                        Dim filesList As New List(Of String)
-                        For Each modFile In My.Settings.FilesMods
-                            filesList.Add(modFile)
-                        Next
-
-                        Return New ModPreset() With {.Files = filesList}
-
-                    End If
-                End If
-
                 Select Case TabControl_Mods.SelectedIndex
                     Case 0
                         preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
@@ -476,7 +431,9 @@ Namespace Views
         End Function
 
 
-        Private Sub UpdateCommand(Optional fromSettings As Boolean = False)
+        Private Sub UpdateCommand()
+
+            'TODO: Rewrite (update Command line based on Summary values)
 
             Try
                 Dim port As String = Nothing
@@ -489,7 +446,7 @@ Namespace Views
                 port = If(ReturnSelectedPort() = Nothing, Nothing, String.Format("""{0}""", ReturnSelectedPort()))
                 portParams = Nothing 'TODO
 
-                Dim lp As LevelPreset = ReturnSelectedLevels(fromSettings)
+                Dim lp As LevelPreset = ReturnSelectedLevels()
                 If lp IsNot Nothing Then
                     'Iwad
                     Dim iwadAbsolutePath As String = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
@@ -500,7 +457,7 @@ Namespace Views
                 End If
 
                 'Mods
-                Dim mp As ModPreset = ReturnSelectedMods(fromSettings)
+                Dim mp As ModPreset = ReturnSelectedMods()
                 If mp IsNot Nothing Then
                     Dim modFilePaths As List(Of String) = ConvertModPath_RelativeToAbsolute(mp.Files)
                     For Each modFile As String In modFilePaths
@@ -549,7 +506,7 @@ Namespace Views
         End Sub
 
 
-        Private Sub UpdateSummary(Optional fromSettings As Boolean = False)
+        Private Sub UpdateSummary()
 
             Try
                 'Port
@@ -560,7 +517,7 @@ Namespace Views
 
                 StackPanel_Summary_FilesMods.Children.Clear()
 
-                Dim lp As LevelPreset = ReturnSelectedLevels(fromSettings)
+                Dim lp As LevelPreset = ReturnSelectedLevels()
                 If lp IsNot Nothing Then
                     'Iwad
                     TextBox_Summary_Iwad.Text = ConvertPathRelativeToAbsolute_Iwad(lp.Iwad)
@@ -571,7 +528,7 @@ Namespace Views
                     DisplayLevels_Summary(levelFileNames)
                 End If
 
-                Dim mp As ModPreset = ReturnSelectedMods(fromSettings)
+                Dim mp As ModPreset = ReturnSelectedMods()
                 If mp IsNot Nothing Then DisplayMods_Summary(mp.Files)
 
             Catch ex As Exception
@@ -817,9 +774,21 @@ Namespace Views
         Private Sub LoadSettings()
 
             Try
-                If Not My.Settings.SelectedPort = Nothing Then FillTextBox(TextBox_Port, My.Settings.SelectedPort)
-                UpdateSummary(True)
-                UpdateCommand(True)
+                Dim savedSettings As Setting = LoadFromJsonData()
+                'savedSettings.Level
+
+                With savedSettings
+                    If File.Exists(.Port) Then
+                        TextBox_Port.Text = .Port
+                        TextBox_Summary_Port.Text = .Port
+                    End If
+                    If File.Exists(Path.Combine(GetDirectoryPath("iwads"), .Iwad)) Then TextBox_Summary_Iwad.Text = .Iwad
+                    If Not .Level = Nothing Then DisplayLevels_Summary(New List(Of String) From { .Level})
+                    If Not .FilesMods.Count = 0 Then DisplayMods_Summary(.FilesMods)
+                End With
+
+                UpdateSummary()
+                UpdateCommand()
                 DecorateCommand()
 
             Catch ex As Exception
