@@ -18,27 +18,21 @@ Namespace Views
 
 #Region "Startup"
 
-        'TODO? Think about async
         Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
-
             Title = GetFormattedAppTitle()
 
-
-
-
             Try
-                CheckProjectSubdirectories() 'V3
+                CheckProjectSubdirectories()
                 LoadSettings()
 
                 'SetIniFiles() 'TODO? V3
-                PopulateBaseLevelPresets() 'V3
-                PopulateBaseModsPresets() 'V3
+                PopulateBaseLevelPresets()
+                PopulateBaseModsPresets()
 
-                'Performance eval : reliable? TODO? Improve
+                'Performance eval
                 Dim dateTimeReady As Date = Date.Now
                 Dim timeSpan As TimeSpan = dateTimeReady.Subtract(My.Settings.DateTimeAtLaunch)
                 WriteToLog(Date.Now & " - Time elapsed from Launch to Ready : " & timeSpan.Milliseconds & " milliseconds")
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'MainWindow:Window_Loaded()'. Exception : " & ex.ToString)
             End Try
@@ -46,27 +40,19 @@ Namespace Views
         End Sub
 
         Private Sub PopulateBaseLevelPresets()
-
-            'V3
             Try
-                ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels") 'TODO V3 : Change COMMON to BASE
-
+                ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub PopulateBaseModsPresets()
-
-            'V3
             Try
                 ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCSV("base_mods")
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 #End Region
@@ -101,21 +87,16 @@ Namespace Views
 
 #Region "v2.3 stuff"
 
-
         Private Sub CopyCommandToClipboard()
-
             Try
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
                 Clipboard.SetText(commandText)
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'CopyCommandToClipboard()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub ExportCommandAsBat()
-
             Try
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
 
@@ -126,11 +107,9 @@ Namespace Views
                     writer.WriteLine("@echo off")
                     writer.WriteLine("start """" " & commandText)
                 End Using
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ExportCommandAsBat()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 
@@ -140,13 +119,11 @@ Namespace Views
 
 #Region "TiaDL v3"
 
-
         Private Sub TextBox_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
         Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
-
             Try
                 Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
                 Dim fileExtension As String = New FileInfo(droppedFile).Extension.ToLowerInvariant
@@ -157,25 +134,17 @@ Namespace Views
                     UpdateCommand()
                     DecorateCommand()
                 End If
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'TextBox_Port_Drop()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
-
             UnfillTextBox(TextBox_Port, TBX_SELECT_PORT)
             UpdateSummary()
             UpdateCommand()
             DecorateCommand()
-
         End Sub
-
-
-
-
 
 
         Private Sub GroupBox_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -186,7 +155,6 @@ Namespace Views
         ''' This feature allows to drop multiples files into the GroupBox "Levels"
         ''' </summary>
         Private Sub GroupBox_Levels_Drop(sender As Object, e As DragEventArgs)
-
             Try
                 '1) Collect files
                 Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
@@ -208,18 +176,15 @@ Namespace Views
                 If confirmedFiles.Count > 1 Then FillTextBox(TextBox_NewLevel_Level, confirmedFiles(1))
                 If confirmedFiles.Count > 2 Then FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
                 If confirmedFiles.Count > 3 Then FillTextBox(TextBox_NewLevel_Image, confirmedFiles(3))
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         ''' <summary>
         ''' Check and order the files dropped into the GroupBox "Levels"
         ''' </summary>
         Private Function OrderDroppedFiles_Levels(filePaths As String()) As List(Of String)
-
             Dim orderedFiles As New List(Of String)
 
             Try
@@ -251,131 +216,90 @@ Namespace Views
 
                     Next
                 Next
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'OrderDroppedFiles_Levels()'. Exception : " & ex.ToString)
             End Try
 
             Return orderedFiles
-
         End Function
-
-
-
-
-
 
         Private Sub TextBox_NewLevel_Iwad_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
         Private Sub TextBox_NewLevel_Iwad_Drop(sender As Object, e As DragEventArgs)
-
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
             If ValidateFile_Iwad(droppedFile) Then FillTextBox(sender, droppedFile)
-
         End Sub
 
         Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs)
-
             UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
-
         End Sub
-
-
 
         Private Sub TextBox_NewLevel_Level_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
         Private Sub TextBox_NewLevel_Level_Drop(sender As Object, e As DragEventArgs)
-
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
             If ValidateFile_Level(droppedFile) Then FillTextBox(sender, droppedFile)
-
         End Sub
 
         Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs)
-
             UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
-
         End Sub
-
-
 
         Private Sub TextBox_NewLevel_Misc_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
         Private Sub TextBox_NewLevel_Misc_Drop(sender As Object, e As DragEventArgs)
-
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
             If ValidateFile_Misc(droppedFile) Then FillTextBox(sender, droppedFile)
-
         End Sub
 
         Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs)
-
             UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
-
         End Sub
-
-
 
         Private Sub TextBox_NewLevel_Image_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
         Private Sub TextBox_NewLevel_Image_Drop(sender As Object, e As DragEventArgs)
-
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
             If ValidateFile_Image(droppedFile) Then FillTextBox(sender, droppedFile)
-
         End Sub
 
         Private Sub Button_NewLevel_Image_Clear_Click(sender As Object, e As RoutedEventArgs)
-
             UnfillTextBox(TextBox_NewLevel_Image, "Drop a .jpg/.png file here...")
-
         End Sub
 
-
-
         Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
-
+            'TODO
         End Sub
 
         Private Sub Button_NewLevel_SaveAs_Click(sender As Object, e As RoutedEventArgs)
-
+            'TODO
         End Sub
 
         Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
-
             UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
             UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
             UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
-
         End Sub
 
-
-
-
-
-
         Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
             UpdateSummary()
             UpdateCommand()
             DecorateCommand()
-
         End Sub
 
         Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
+            'TODO
         End Sub
 
         Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-
             Try
                 Dim p As ModPreset = CType(sender.SelectedItem, ModPreset)
 
@@ -385,11 +309,9 @@ Namespace Views
                 UpdateSummary()
                 UpdateCommand()
                 DecorateCommand()
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 
@@ -406,13 +328,11 @@ Namespace Views
                     Case 2
                         preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .ImagePath = ""} 'TODO
                 End Select
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
             End Try
 
             Return preset
-
         End Function
 
 
@@ -428,20 +348,17 @@ Namespace Views
                     Case 2
                         preset = New ModPreset() With {.Files = New List(Of String)} 'TODO
                     Case Else
-
+                        'TODO?
                 End Select
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
             End Try
 
             Return preset
-
         End Function
 
 
         Private Sub UpdateCommand()
-
             'TODO: Rewrite (update Command line based on Summary values)
 
             Try
@@ -484,11 +401,9 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub DecorateCommand()
-
             Try
                 Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
                 Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
@@ -511,12 +426,10 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 
         Private Sub UpdateSummary()
-
             Try
                 'Port
                 TextBox_Summary_Port.Text = ReturnSelectedPort()
@@ -543,12 +456,10 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'UpdateSummary()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 
         Private Sub DisplayLevels_Summary(fileNames As List(Of String))
-
             Try
                 If fileNames.Count = 0 Then Return
 
@@ -562,15 +473,12 @@ Namespace Views
                             }
                         )
                 Next
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'HandleLevels_Summary()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub DisplayMods_Summary(fileNames As List(Of String))
-
             Try
                 If fileNames.Count = 0 Then Return
 
@@ -587,11 +495,9 @@ Namespace Views
                             }
                         )
                 Next
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 
@@ -600,26 +506,22 @@ Namespace Views
         ''' Note 2 : Really useful to have it separated from the Display Subs ?
         ''' </summary>
         Private Function ConvertFilePath_AbsoluteToRelative(filePaths As List(Of String)) As List(Of String)
-
             Dim fileNames As New List(Of String)
 
             Try
                 For Each path As String In filePaths
                     fileNames.Add(New FileInfo(path).Name)
                 Next
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ConvertFilePath_AbsoluteToRelative()'. Exception : " & ex.ToString)
             End Try
 
             Return fileNames
-
         End Function
 
 
         Private Function ConvertModPath_RelativeToAbsolute(modFilesList As List(Of String)) As List(Of String)
-
-            Dim absoluteModPaths As List(Of String) = New List(Of String)
+            Dim absoluteModPaths As New List(Of String)
 
             Try
                 For Each modFile As String In modFilesList
@@ -632,18 +534,15 @@ Namespace Views
                     If File.Exists(probablePath) Then absoluteModPaths.Add(probablePath)
 
                 Next
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ConvertModPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
             End Try
 
             Return absoluteModPaths
-
         End Function
 
 
         Private Sub FillTextBox(tbx As TextBox, content As String)
-
             Try
                 With tbx
                     .Text = content
@@ -654,11 +553,9 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'FillTextBox()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub UnfillTextBox(tbx As TextBox, content As String)
-
             Try
                 With tbx
                     .Text = content 'TODO? Use constants
@@ -669,13 +566,9 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'UnfillTextBox()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
-
-
         Private Sub FillRichTextBox_Command(content As String)
-
             Try
                 Dim flow As New FlowDocument()
                 Dim para As New Paragraph()
@@ -683,17 +576,12 @@ Namespace Views
                 flow.Blocks.Add(para)
 
                 RichTextBox_Command.Document = flow
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
-
-
         Private Sub Button_Options_ToggleView_Click(sender As Object, e As RoutedEventArgs)
-
             Try
                 If Grid_Summary.Visibility = Visibility.Visible Then
                     Grid_Summary.Visibility = Visibility.Collapsed
@@ -702,55 +590,44 @@ Namespace Views
                     Grid_Summary.Visibility = Visibility.Visible
                     Grid_Command.Visibility = Visibility.Collapsed
                 End If
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'Button_Options_ToggleView_Click()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 
 
         Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
-
             Try
                 If ReadyToLaunch() Then
                     'LaunchGame()
                     SaveSettings()
                 End If
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Function ReadyToLaunch() As Boolean
-
             Try
                 If ReturnSelectedPort() = Nothing Then
                     MessageBox.Show(ERR_MISSING_PORT, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     Return False
                 End If
 
-                'If ReturnSelectedLevels() Is Nothing Then
                 If TextBox_Summary_Iwad.Text = Nothing Then
                     MessageBox.Show(ERR_MISSING_IWAD, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
-
                     Return False
                 End If
 
                 Return True
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ReadyToLaunch()'. Exception : " & ex.ToString)
                 Return False
             End Try
-
         End Function
 
         Private Sub LaunchGame()
-
             Try
                 Dim rtbText As String = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
                 Dim command As String = String.Format("/c start """" {0}", rtbText)
@@ -759,11 +636,9 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'LaunchGame()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub SaveSettings()
-
             Try
                 Dim lastLaunched As New Setting With
                 {
@@ -778,14 +653,11 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'SaveSettings()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Sub LoadSettings()
-
             Try
                 Dim savedSettings As Setting = LoadFromJsonData()
-                'savedSettings.Level
 
                 With savedSettings
                     If File.Exists(.Port) Then
@@ -800,15 +672,12 @@ Namespace Views
                 UpdateSummary()
                 UpdateCommand()
                 DecorateCommand()
-
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'LoadSettings()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
         Private Function ReturnSelectedPort() As String
-
             Dim portPath As String = Nothing
 
             Try
@@ -818,63 +687,9 @@ Namespace Views
             End Try
 
             Return portPath
-
         End Function
 
-
-        Private Sub Button_TestMySettings_Check_Click(sender As Object, e As RoutedEventArgs)
-
-            With My.Settings
-
-                Dim sb As New StringBuilder()
-
-                sb.AppendLine("RootDir :")
-                sb.AppendLine($"{GetDirectoryPath("")}") 'Empty string as param ?
-                sb.AppendLine()
-                sb.AppendLine("Iwads subdir :")
-                sb.AppendLine($"{GetDirectoryPath("iwads")}")
-                sb.AppendLine()
-                sb.AppendLine("Levels subdir :")
-                sb.AppendLine($"{GetDirectoryPath("levels")}")
-                sb.AppendLine()
-                sb.AppendLine("Misc subdir :")
-                sb.AppendLine($"{GetDirectoryPath("misc")}")
-                sb.AppendLine()
-                sb.AppendLine("Mods subdir :")
-                sb.AppendLine($"{GetDirectoryPath("mods")}")
-                sb.AppendLine()
-                sb.AppendLine()
-                sb.AppendLine(".SelectedPort :")
-                sb.AppendLine($"{ .SelectedPort}")
-                sb.AppendLine()
-                sb.AppendLine(".SelectedIwad:")
-                sb.AppendLine($"{ .SelectedIwad}")
-                sb.AppendLine()
-                sb.AppendLine(".SelectedLevel :")
-                sb.AppendLine($"{ .SelectedLevel}")
-                sb.AppendLine()
-                sb.AppendLine(".SelectedMisc :")
-                sb.AppendLine($"{ .SelectedMisc}")
-                sb.AppendLine()
-                sb.AppendLine(".FilesMods :")
-                For Each file As String In .FilesMods
-                    sb.AppendLine($"{file}")
-                Next
-
-                MessageBox.Show(sb.ToString)
-
-            End With
-
-        End Sub
-
-        Private Sub Button_TestMySettings_Reset_Click(sender As Object, e As RoutedEventArgs)
-
-            My.Settings.Reset()
-
-        End Sub
-
         Private Sub Button_Options_HelpAbout_Click(sender As Object, e As RoutedEventArgs)
-
             Try
                 Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
                 Dim helpWindow As New HelpWindow() With {.Owner = mainWindow}
@@ -883,7 +698,6 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
             End Try
-
         End Sub
 
 #End Region
