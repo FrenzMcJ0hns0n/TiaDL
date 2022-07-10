@@ -8,7 +8,11 @@ Namespace Views
 
 
 #Region "Constants"
-        Private Const TBX_SELECT_PORT As String = "Drop port executable here... (GZDoom, Zandronum, etc.)"
+        Private Const TBX_SELECT_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
+
+        Private Const ERR_MISSING_INPUT As String = "Error : missing input data"
+        Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
+        Private Const ERR_MISSING_IWAD As String = "You need an Iwad as game base content"
 #End Region
 
 
@@ -725,13 +729,14 @@ Namespace Views
 
             Try
                 If ReturnSelectedPort() = Nothing Then
-                    MessageBox.Show("Error : you need to define a Port")
+                    MessageBox.Show(ERR_MISSING_PORT, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     Return False
                 End If
 
                 'If ReturnSelectedLevels() Is Nothing Then
                 If TextBox_Summary_Iwad.Text = Nothing Then
-                    MessageBox.Show("Error : you need to choose Levels")
+                    MessageBox.Show(ERR_MISSING_IWAD, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+
                     Return False
                 End If
 

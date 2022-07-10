@@ -52,7 +52,7 @@
                     VerticalContentAlignment="Center"
                     Foreground="Gray"
                     FontStyle="Italic"
-                    Text="Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
+                    Text="Drop port executable... (GZDoom, Zandronum, etc.)"
                     Cursor="Arrow"
                     IsReadOnly="True"
                     AllowDrop="True"
