@@ -9,6 +9,10 @@ Namespace Views
 
 #Region "Constants"
         Private Const TBX_SELECT_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
+        Private Const TBX_SELECT_IWAD As String = "Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
+        Private Const TBX_SELECT_LEVEL As String = "Drop Level file... (.wad/.pk3)" '+ /.zip ? TODO: Rename LEVEL into MAPS eventually
+        Private Const TBX_SELECT_MISC As String = "Drop extra file... (.deh/.bex/.txt)"
+        Private Const TBX_SELECT_PICT As String = "Drop picture file... (.jpg/.png)" '+ others ?
 
         Private Const ERR_MISSING_INPUT As String = "Error : missing input data"
         Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
@@ -233,7 +237,7 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
+            UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
         End Sub
 
         Private Sub TextBox_NewLevel_Level_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -246,7 +250,7 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
+            UnfillTextBox(TextBox_NewLevel_Level, TBX_SELECT_LEVEL)
         End Sub
 
         Private Sub TextBox_NewLevel_Misc_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -259,7 +263,7 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
+            UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
         End Sub
 
         Private Sub TextBox_NewLevel_Image_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -272,7 +276,7 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_Image_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Image, "Drop a .jpg/.png file here...")
+            UnfillTextBox(TextBox_NewLevel_Image, TBX_SELECT_PICT)
         End Sub
 
         Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
@@ -284,9 +288,9 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Iwad, "Drop an IWAD file here...")
-            UnfillTextBox(TextBox_NewLevel_Level, "Drop a .wad/.pk3 file here...")
-            UnfillTextBox(TextBox_NewLevel_Misc, "Drop a .deh/.bex file here...")
+            UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
+            UnfillTextBox(TextBox_NewLevel_Level, TBX_SELECT_LEVEL)
+            UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
         End Sub
 
         Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
