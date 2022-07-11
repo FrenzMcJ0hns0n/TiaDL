@@ -700,7 +700,7 @@
                             Cursor="Hand"
                             Padding="6"
                             Content="Open root dir"
-                            IsEnabled="False"
+                            Click="Button_Options_OpenRootDir_Click"
                             />
                     <Button x:Name="Button_Options_MoreContents"
                             HorizontalAlignment="Center"

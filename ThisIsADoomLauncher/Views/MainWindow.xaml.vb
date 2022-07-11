@@ -684,6 +684,10 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub Button_Options_OpenRootDir_Click(sender As Object, e As RoutedEventArgs)
+            Process.Start(GetDirectoryPath())
+        End Sub
+
 #End Region
 
 
