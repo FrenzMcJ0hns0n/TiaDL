@@ -448,6 +448,7 @@ Namespace Views
                 If fileNames.Count = 0 Then Return
 
                 For Each name As String In fileNames
+                    If name Is Nothing OrElse name = "" Then Continue For 'OrElse prevents name from being evaluated As String if null (Maybe temp, until changing JSON null values to "" ?)
                     StackPanel_Summary_FilesMods.Children.Add(
                         New TextBox() With
                             {
@@ -649,7 +650,7 @@ Namespace Views
                         FillTextBox(TextBox_Summary_Port, .Port)
                     End If
                     If File.Exists(Path.Combine(GetDirectoryPath("iwads"), .Iwad)) Then TextBox_Summary_Iwad.Text = .Iwad
-                    If Not .Level = Nothing Then DisplayLevels_Summary(New List(Of String) From { .Level})
+                    If Not .Level = Nothing Then DisplayLevels_Summary(New List(Of String) From { .Level, .Misc})
                     If Not .FilesMods.Count = 0 Then DisplayMods_Summary(.FilesMods)
                 End With
 
