@@ -369,7 +369,7 @@ Namespace Views
                 End If
 
                 Dim command As String = $"""{port}"" -iwad ""{GetAbsolutePath_Iwad(iwad)}"""
-                'TODO: Add port parameters before -iwad
+                'TODO: Manage port parameters, to be added before " -iwad"
 
                 'Handle Levels/Misc/Mods
                 Dim tbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
@@ -649,7 +649,7 @@ Namespace Views
                     If Not .FilesMods.Count = 0 Then DisplayMods_Summary(.FilesMods)
                 End With
 
-                UpdateSummary()
+                'UpdateSummary() Not necessary anymore as we do update Summary manually (WYSIWYG-like)
                 UpdateCommand()
                 DecorateCommand()
             Catch ex As Exception
