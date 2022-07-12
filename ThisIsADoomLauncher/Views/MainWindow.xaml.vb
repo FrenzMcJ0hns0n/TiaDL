@@ -129,12 +129,12 @@ Namespace Views
 
         Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
             Try
-                Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-                Dim fileExtension As String = New FileInfo(droppedFile).Extension.ToLowerInvariant
+                Dim portFilepath As String = e.Data.GetData(DataFormats.FileDrop)(0)
 
-                If fileExtension = ".exe" Then
-                    FillTextBox(TextBox_Port, droppedFile)
-                    UpdateSummary()
+                If New FileInfo(portFilepath).Extension.ToLowerInvariant = ".exe" Then
+                    FillTextBox(TextBox_Port, portFilepath)
+                    FillTextBox(TextBox_Summary_Port, portFilepath)
+                    'UpdateSummary()
                     UpdateCommand()
                     DecorateCommand()
                 End If
@@ -145,7 +145,8 @@ Namespace Views
 
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
             UnfillTextBox(TextBox_Port, TBX_SELECT_PORT)
-            UpdateSummary()
+            UnfillTextBox(TextBox_Summary_Port, String.Empty)
+            'UpdateSummary()
             UpdateCommand()
             DecorateCommand()
         End Sub
@@ -294,9 +295,17 @@ Namespace Views
         End Sub
 
         Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            UpdateSummary()
-            UpdateCommand()
-            DecorateCommand()
+            Try
+                Dim lp As LevelPreset = ReturnSelectedLevels()
+
+                TextBox_Summary_Iwad.Text = GetAbsolutePath_Iwad(lp.Iwad)
+                DisplayLevels_Summary(New List(Of String) From {lp.Level, lp.Misc})
+
+                UpdateCommand()
+                DecorateCommand()
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+            End Try
         End Sub
 
         Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
@@ -305,12 +314,12 @@ Namespace Views
 
         Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
-                Dim p As ModPreset = CType(sender.SelectedItem, ModPreset)
+                Dim mp As ModPreset = ReturnSelectedMods()
 
-                TextBlock_Mods_Desc.Text = p.Desc
-                ListView_Mods_Files.ItemsSource = p.Files
+                TextBlock_Mods_Desc.Text = mp.Desc
+                ListView_Mods_Files.ItemsSource = mp.Files
+                DisplayMods_Summary(mp.Files)
 
-                UpdateSummary()
                 UpdateCommand()
                 DecorateCommand()
             Catch ex As Exception
@@ -328,7 +337,7 @@ Namespace Views
                     Case 0
                         preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
                     Case 1
-                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset)
+                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
                     Case 2
                         preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .ImagePath = ""} 'TODO
                 End Select
@@ -447,19 +456,31 @@ Namespace Views
             Try
                 If fileNames.Count = 0 Then Return
 
+                'TODO! INSERT LEVELS FIRST, BEFORE MODS, AND IN THE RIGHT ORDER: FIND SMTHG POWERFUL MAN
+                'TODO: Use lambda to shorten?
+                Dim textboxes As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+
+                For Each tbx In textboxes
+                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
+                        StackPanel_Summary_FilesMods.Children.Remove(tbx)
+                    End If
+                Next
+
                 For Each name As String In fileNames
-                    If name Is Nothing OrElse name = "" Then Continue For 'OrElse prevents name from being evaluated As String if null (Maybe temp, until changing JSON null values to "" ?)
-                    StackPanel_Summary_FilesMods.Children.Add(
+                    'If name Is Nothing OrElse (OrElse was relative to JSON possible null values, should not be necessary actually)
+                    If name = String.Empty Then Continue For
+
+                    StackPanel_Summary_FilesMods.Children.Insert(0,
                         New TextBox() With
-                            {
-                                .Margin = New Thickness(0, 0, 6, 0),
-                                .Background = Brushes.LightGray,
-                                .Text = name
-                            }
-                        )
+                        {
+                            .Margin = New Thickness(0, 0, 6, 0),
+                            .Background = Brushes.LightGray,
+                            .Text = name
+                        }
+                    )
                 Next
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'HandleLevels_Summary()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'DisplayLevels_Summary()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -467,18 +488,26 @@ Namespace Views
             Try
                 If fileNames.Count = 0 Then Return
 
+                'TODO: Use lambda to shorten?
+                Dim textboxes As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                For Each tbx In textboxes
+                    If tbx.Background Is Brushes.DarkGray Then 'TODO: Use constant or similar to target the color
+                        StackPanel_Summary_FilesMods.Children.Remove(tbx)
+                    End If
+                Next
+
                 For Each name As String In fileNames
                     'Ignore file not found or not specified
-                    If name = Nothing Then Continue For
+                    If name = String.Empty Then Continue For
 
                     StackPanel_Summary_FilesMods.Children.Add(
                         New TextBox() With
-                            {
-                                .Margin = New Thickness(0, 0, 6, 0),
-                                .Background = Brushes.DarkGray,
-                                .Text = name
-                            }
-                        )
+                        {
+                            .Margin = New Thickness(0, 0, 6, 0),
+                            .Background = Brushes.DarkGray,
+                            .Text = New FileInfo(name).Name 'TODO: Use dedicated function
+                        }
+                    )
                 Next
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
