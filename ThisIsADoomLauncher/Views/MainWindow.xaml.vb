@@ -454,30 +454,31 @@ Namespace Views
 
         Private Sub DisplayLevels_Summary(fileNames As List(Of String))
             Try
-                If fileNames.Count = 0 Then Return
+                If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
 
-                'TODO! INSERT LEVELS FIRST, BEFORE MODS, AND IN THE RIGHT ORDER: FIND SMTHG POWERFUL MAN
                 'TODO: Use lambda to shorten?
-                Dim textboxes As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
 
-                For Each tbx In textboxes
-                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
-                        StackPanel_Summary_FilesMods.Children.Remove(tbx)
+                Dim modTbxs As New List(Of TextBox)
+                For Each tbx In allTbxs
+                    If tbx.Background Is Brushes.DarkGray Then 'TODO: Use constant or similar to target the color
+                        modTbxs.Add(tbx)
                     End If
                 Next
 
-                For Each name As String In fileNames
-                    'If name Is Nothing OrElse (OrElse was relative to JSON possible null values, should not be necessary actually)
-                    If name = String.Empty Then Continue For
+                StackPanel_Summary_FilesMods.Children.Clear()
 
-                    StackPanel_Summary_FilesMods.Children.Insert(0,
-                        New TextBox() With
-                        {
-                            .Margin = New Thickness(0, 0, 6, 0),
-                            .Background = Brushes.LightGray,
-                            .Text = name
-                        }
-                    )
+                For Each name As String In fileNames
+                    If name = String.Empty Then Continue For
+                    StackPanel_Summary_FilesMods.Children.Add(New TextBox() With
+                    {
+                        .Margin = New Thickness(0, 0, 6, 0),
+                        .Background = Brushes.LightGray,
+                        .Text = name
+                    })
+                Next
+                For Each tbx In modTbxs
+                    StackPanel_Summary_FilesMods.Children.Add(tbx)
                 Next
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayLevels_Summary()'. Exception : " & ex.ToString)
@@ -486,28 +487,31 @@ Namespace Views
 
         Private Sub DisplayMods_Summary(fileNames As List(Of String))
             Try
-                If fileNames.Count = 0 Then Return
+                If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
 
                 'TODO: Use lambda to shorten?
-                Dim textboxes As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-                For Each tbx In textboxes
-                    If tbx.Background Is Brushes.DarkGray Then 'TODO: Use constant or similar to target the color
-                        StackPanel_Summary_FilesMods.Children.Remove(tbx)
+                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+
+                Dim lvlTbxs As New List(Of TextBox)
+                For Each tbx In allTbxs
+                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
+                        lvlTbxs.Add(tbx)
                     End If
                 Next
 
-                For Each name As String In fileNames
-                    'Ignore file not found or not specified
-                    If name = String.Empty Then Continue For
+                StackPanel_Summary_FilesMods.Children.Clear()
 
-                    StackPanel_Summary_FilesMods.Children.Add(
-                        New TextBox() With
-                        {
-                            .Margin = New Thickness(0, 0, 6, 0),
-                            .Background = Brushes.DarkGray,
-                            .Text = New FileInfo(name).Name 'TODO: Use dedicated function
-                        }
-                    )
+                For Each tbx In lvlTbxs
+                    StackPanel_Summary_FilesMods.Children.Add(tbx)
+                Next
+                For Each name As String In fileNames
+                    If name = String.Empty Then Continue For
+                    StackPanel_Summary_FilesMods.Children.Add(New TextBox() With
+                    {
+                        .Margin = New Thickness(0, 0, 6, 0),
+                        .Background = Brushes.DarkGray,
+                        .Text = New FileInfo(name).Name 'TODO: Use dedicated function
+                    })
                 Next
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
