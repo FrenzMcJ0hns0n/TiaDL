@@ -65,104 +65,38 @@ Module IOMethods
 
     End Function
 
+    'TODO: Use consistent names everywhere (Port, Iwad, Level, Misc, Mods)
+    'TODO: Investigate about old code > ConvertPathRelativeToAbsolute_Level : Handle wildcard for "Wolf3D_*.pk3"
     ''' <summary>
-    ''' Build absolute path from Iwad relative filename
+    ''' Get absolute path of a file from relative one.
+    ''' Requires a directory to search in, as target.
+    ''' No target ("") means search everywhere
     ''' </summary>
-    ''' 
-    Function GetAbsolutePath_Iwad(iwadFilename As String) As String
-
-        Dim iwadAbsolutePath As String = Nothing
+    ''' <param name="targetName">One of the project directories (port, iwads, levels, misc, mods)</param>
+    ''' <param name="filename">The filename to get the absolute path of</param>
+    ''' <returns></returns>
+    Public Function GetFileAbsolutePath(targetName As String, filename As String) As String
+        Dim absolutePath As String = String.Empty
 
         Try
-            Dim iwadsDir As String = GetDirectoryPath("iwads")
+            Dim targetDirectory As String = GetDirectoryPath(targetName)
 
-            'Try files directly in iwadsDir
-            Dim probablePath As String = Path.Combine(iwadsDir, iwadFilename)
-            If File.Exists(probablePath) Then Return probablePath
-
-            'Search recursively in subdirs
-            For Each dir As String In Directory.GetDirectories(iwadsDir)
-                For Each fi As FileInfo In New DirectoryInfo(dir).GetFiles
-                    If fi.Name = iwadFilename Then Return fi.FullName
-                Next
-            Next
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ConvertPathRelativeToAbsolute_Iwad()'. Exception : " & ex.ToString)
-        End Try
-
-        Return iwadAbsolutePath
-
-    End Function
-
-    ''' <summary>
-    ''' Build absolute path from Level relative filename
-    ''' </summary>
-    ''' 
-    Function ConvertPathRelativeToAbsolute_Level(levelFilename As String) As String
-
-        Dim levelAbsolutePath As String = Nothing
-
-        Try
-            Dim levelsDir As String = GetDirectoryPath("levels")
-
-            'Try files directly in levelsDir
-            Dim probablePath As String = Path.Combine(levelsDir, levelFilename)
-            If File.Exists(probablePath) Then Return probablePath
+            'Try file directly in target directory
+            Dim probablePath As String = Path.Combine(targetDirectory, filename)
+            If File.Exists(probablePath) Then absolutePath = probablePath
 
             'Search recursively in subdirs
-            For Each dir As String In Directory.GetDirectories(levelsDir)
-                For Each fi As FileInfo In New DirectoryInfo(dir).GetFiles
-
-                    'Handle wildcard for "Wolf3D_*.pk3"
-                    If levelFilename.Contains("*") Then
-                        Dim wildcardIndex As Integer = levelFilename.IndexOf("*")
-                        Dim cutFilename As String = levelFilename.Substring(0, wildcardIndex)
-                        If fi.Name.Contains(cutFilename) Then Return Path.Combine(fi.DirectoryName, levelFilename)
-                    End If
-
-                    'Normal processing
-                    If fi.Name = levelFilename Then Return fi.FullName
-
+            For Each dir As String In Directory.GetDirectories(targetDirectory)
+                Dim fileInfoList As FileInfo() = New DirectoryInfo(dir).GetFiles
+                For Each fi As FileInfo In fileInfoList
+                    If fi.Name = filename Then absolutePath = fi.FullName
                 Next
             Next
-
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ConvertPathRelativeToAbsolute_Level()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'GetFileAbsolutePath()'. Exception : " & ex.ToString)
         End Try
 
-        Return levelAbsolutePath
-
-    End Function
-
-    ''' <summary>
-    ''' Build absolute path from Misc relative filename
-    ''' </summary>
-    ''' 
-    Function ConvertPathRelativeToAbsolute_Misc(miscFilename As String) As String
-
-        Dim miscAbsolutePath As String = Nothing
-
-        Try
-            Dim miscDir As String = GetDirectoryPath("misc")
-
-            'Try files directly in miscDir
-            Dim probablePath As String = Path.Combine(miscDir, miscFilename)
-            If File.Exists(probablePath) Then Return probablePath
-
-            'Search recursively in subdirs
-            For Each dir As String In Directory.GetDirectories(miscDir)
-                For Each fi As FileInfo In New DirectoryInfo(dir).GetFiles
-                    If fi.Name = miscFilename Then Return fi.FullName
-                Next
-            Next
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ConvertPathRelativeToAbsolute_Misc()'. Exception : " & ex.ToString)
-        End Try
-
-        Return miscAbsolutePath
-
+        Return absolutePath
     End Function
 
     ''' <summary>

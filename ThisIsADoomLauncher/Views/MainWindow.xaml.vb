@@ -298,7 +298,7 @@ Namespace Views
             Try
                 Dim lp As LevelPreset = ReturnSelectedLevels()
 
-                TextBox_Summary_Iwad.Text = GetAbsolutePath_Iwad(lp.Iwad)
+                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("iwads", lp.Iwad)
                 DisplayLevels_Summary(New List(Of String) From {lp.Level, lp.Misc})
 
                 UpdateCommand()
@@ -381,13 +381,13 @@ Namespace Views
                     Return
                 End If
 
-                Dim command As String = $"""{port}"" -iwad ""{GetAbsolutePath_Iwad(iwad)}"""
+                Dim command As String = $"""{port}"" -iwad ""{iwad}"""
                 'TODO: Manage port parameters, to be added before " -iwad"
 
                 'Handle Levels/Misc/Mods
                 Dim tbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
                 For Each tbx As TextBox In tbxs
-                    command &= $" -file ""{tbx.Text}"""
+                    command &= $" -file ""{GetFileAbsolutePath("", tbx.Text)}"""
                 Next
 
                 FillRichTextBox_Command(command)
