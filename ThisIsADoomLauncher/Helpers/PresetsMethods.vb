@@ -5,7 +5,8 @@ Imports ThisIsADoomLauncher.Views
 
 Module PresetsMethods
 
-    'TODO! v3+ Use JSON instead of CSV
+    'TODO? v3+ Use JSON instead of CSV
+    'Well, we will see...
 
 #Region "Click on user preset"
 

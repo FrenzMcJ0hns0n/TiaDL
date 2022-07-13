@@ -44,11 +44,26 @@ Module IOMethods
 
     End Function
 
+    'TODO: Determine if useful
+    Private Function ConvertFilePath_AbsoluteToRelative(filePaths As List(Of String)) As List(Of String)
+        Dim fileNames As New List(Of String)
+
+        Try
+            For Each path As String In filePaths
+                fileNames.Add(New FileInfo(path).Name)
+            Next
+        Catch ex As Exception
+            WriteToLog(Date.Now & " - Error in 'ConvertFilePath_AbsoluteToRelative()'. Exception : " & ex.ToString)
+        End Try
+
+        Return fileNames
+    End Function
+
     ''' <summary>
-    ''' Get the path of a TiaDL directory. 
-    ''' Leave subDirName = Nothing to get RootDirPath
+    ''' Get the path of a TiaDL directory.
     ''' </summary>
-    ''' 
+    ''' <param name="subDirName">Target directory. Leave empty ("") to get the root dir</param>
+    ''' <returns></returns>
     Function GetDirectoryPath(Optional subDirName As String = Nothing) As String
 
         Dim directoryPath As String = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
@@ -135,6 +150,7 @@ Module IOMethods
 
     End Sub
 
+    'TODO: Use constants and maybe rewrite
     ''' <summary>
     ''' Check if all directories can be found
     ''' Validate paths
@@ -160,6 +176,7 @@ Module IOMethods
 
     End Sub
 
+    'TODO: Rewrite as only one function
     Function ValidateFile_Iwad(filepath As String) As Boolean
 
         Try
@@ -178,6 +195,7 @@ Module IOMethods
 
     End Function
 
+    'TODO: Rewrite as only one function
     Function ValidateFile_Level(filepath As String) As Boolean
 
         Try
@@ -195,6 +213,7 @@ Module IOMethods
 
     End Function
 
+    'TODO: Rewrite as only one function
     Function ValidateFile_Misc(filepath As String) As Boolean
 
         Try
@@ -212,6 +231,7 @@ Module IOMethods
 
     End Function
 
+    'TODO: Rewrite as only one function
     Function ValidateFile_Image(filepath As String) As Boolean
 
         Try
@@ -229,6 +249,7 @@ Module IOMethods
 
     End Function
 
+    'TODO: Use constants and maybe rewrite
     ''' <summary>
     ''' Create file 'presets.csv' with some commented lines, if it does not exist
     ''' </summary>
@@ -258,6 +279,7 @@ Module IOMethods
 
     End Sub
 
+    'TODO: Write Date.Now here, not in parameter "content"
     ''' <summary>
     ''' Log content in file 'log.txt'
     ''' </summary>

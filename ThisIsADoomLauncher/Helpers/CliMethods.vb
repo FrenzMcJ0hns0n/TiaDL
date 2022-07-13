@@ -149,6 +149,8 @@ Module CliMethods
     End Sub
 
 
+    'Looks like this is the only useful function around here.
+    'TODO: Make sure
     Sub LaunchProcessV3(args As String)
 
         Dim cmdExe As New ProcessStartInfo("cmd.exe") With

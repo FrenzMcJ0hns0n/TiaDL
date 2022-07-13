@@ -62,7 +62,6 @@ Namespace Views
 #End Region
 
 
-
 #Region "Add new preset"
 
         'Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
@@ -88,8 +87,7 @@ Namespace Views
 #End Region
 
 
-
-#Region "v2.3 stuff"
+#Region "To (re?)implement"
 
         Private Sub CopyCommandToClipboard()
             Try
@@ -120,8 +118,7 @@ Namespace Views
 #End Region
 
 
-
-#Region "TiaDL v3"
+#Region "Events : Port"
 
         Private Sub TextBox_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
@@ -134,7 +131,6 @@ Namespace Views
                 If New FileInfo(portFilepath).Extension.ToLowerInvariant = ".exe" Then
                     FillTextBox(TextBox_Port, portFilepath)
                     FillTextBox(TextBox_Summary_Port, portFilepath)
-                    'UpdateSummary()
                     UpdateCommand()
                     DecorateCommand()
                 End If
@@ -143,19 +139,30 @@ Namespace Views
             End Try
         End Sub
 
+        'TODO
+        'Implement button "Browse..."
+
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
             UnfillTextBox(TextBox_Port, TBX_SELECT_PORT)
             UnfillTextBox(TextBox_Summary_Port, String.Empty)
-            'UpdateSummary()
             UpdateCommand()
             DecorateCommand()
         End Sub
 
+        'TODO
+        'Implement edition of Port parameters
 
+#End Region
+
+
+#Region "Events : Levels"
+
+        'NOT READY
         Private Sub GroupBox_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
+        'NOT READY
         ''' <summary>
         ''' This feature allows to drop multiples files into the GroupBox "Levels"
         ''' </summary>
@@ -186,47 +193,42 @@ Namespace Views
             End Try
         End Sub
 
-        ''' <summary>
-        ''' Check and order the files dropped into the GroupBox "Levels"
-        ''' </summary>
-        Private Function OrderDroppedFiles_Levels(filePaths As String()) As List(Of String)
-            Dim orderedFiles As New List(Of String)
 
+
+        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
-                'Do as many outer loops as there are files, to obtain the correct order in the end (for instance 3 times for 3 files)
-                For i As Integer = 1 To filePaths.Length
-                    For Each path As String In filePaths
+                Dim lp As LevelPreset = ReturnSelectedLevels()
 
-                        If orderedFiles.Contains(path) Then Continue For
+                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("iwads", lp.Iwad)
+                DisplayLevels_Summary(New List(Of String) From {lp.Level, lp.Misc})
 
-                        If ValidateFile_Iwad(path) Then
-                            orderedFiles.Add(path)
-                            Continue For
-                        End If
-
-                        If ValidateFile_Level(path) And orderedFiles.Count > 0 Then
-                            orderedFiles.Add(path)
-                            Continue For
-                        End If
-
-                        If ValidateFile_Misc(path) And orderedFiles.Count > 1 Then
-                            orderedFiles.Add(path)
-                            Continue For
-                        End If
-
-                        If ValidateFile_Image(path) And orderedFiles.Count > 2 Then
-                            orderedFiles.Add(path)
-                            Continue For
-                        End If
-
-                    Next
-                Next
+                UpdateCommand()
+                DecorateCommand()
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'OrderDroppedFiles_Levels()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
             End Try
+        End Sub
 
-            Return orderedFiles
-        End Function
+        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            Try
+                Dim mp As ModPreset = ReturnSelectedMods()
+
+                TextBlock_Mods_Desc.Text = mp.Desc
+                ListView_Mods_Files.ItemsSource = mp.Files
+                DisplayMods_Summary(mp.Files)
+
+                UpdateCommand()
+                DecorateCommand()
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+            End Try
+        End Sub
+
+
+
+        Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            'TODO
+        End Sub
 
         Private Sub TextBox_NewLevel_Iwad_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
@@ -294,163 +296,74 @@ Namespace Views
             UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
         End Sub
 
-        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+#End Region
+
+
+#Region "Actions : Sidebar"
+
+        Private Sub Button_Options_HelpAbout_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim lp As LevelPreset = ReturnSelectedLevels()
+                Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
+                Dim helpWindow As New HelpWindow() With {.Owner = mainWindow}
+                helpWindow.ShowDialog()
 
-                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("iwads", lp.Iwad)
-                DisplayLevels_Summary(New List(Of String) From {lp.Level, lp.Misc})
-
-                UpdateCommand()
-                DecorateCommand()
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
-        Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            'TODO
+        Private Sub Button_Options_OpenRootDir_Click(sender As Object, e As RoutedEventArgs)
+            Process.Start(GetDirectoryPath())
         End Sub
 
-        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub Button_Options_ToggleView_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim mp As ModPreset = ReturnSelectedMods()
-
-                TextBlock_Mods_Desc.Text = mp.Desc
-                ListView_Mods_Files.ItemsSource = mp.Files
-                DisplayMods_Summary(mp.Files)
-
-                UpdateCommand()
-                DecorateCommand()
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
-            End Try
-        End Sub
-
-
-
-        Private Function ReturnSelectedLevels() As LevelPreset
-            Dim preset As LevelPreset = Nothing
-
-            Try
-                Select Case TabControl_Levels.SelectedIndex
-                    Case 0
-                        preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
-                    Case 1
-                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
-                    Case 2
-                        preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .ImagePath = ""} 'TODO
-                End Select
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
-            End Try
-
-            Return preset
-        End Function
-
-
-        Private Function ReturnSelectedMods() As ModPreset
-            Dim preset As ModPreset = Nothing
-
-            Try
-                Select Case TabControl_Mods.SelectedIndex
-                    Case 0
-                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
-                    Case 1
-                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset) 'TODO
-                    Case 2
-                        preset = New ModPreset() With {.Files = New List(Of String)} 'TODO
-                    Case Else
-                        'TODO?
-                End Select
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
-            End Try
-
-            Return preset
-        End Function
-
-
-        Private Sub UpdateCommand()
-            Try
-                Dim port As String = TextBox_Summary_Port.Text
-                Dim iwad As String = TextBox_Summary_Iwad.Text
-
-                If String.IsNullOrWhiteSpace(port) OrElse String.IsNullOrWhiteSpace(iwad) Then
-                    RichTextBox_Command.Document.Blocks.Clear()
-                    Return
+                If Grid_Summary.Visibility = Visibility.Visible Then
+                    Grid_Summary.Visibility = Visibility.Collapsed
+                    Grid_Command.Visibility = Visibility.Visible
+                Else
+                    Grid_Summary.Visibility = Visibility.Visible
+                    Grid_Command.Visibility = Visibility.Collapsed
                 End If
-
-                Dim command As String = $"""{port}"" -iwad ""{iwad}"""
-                'TODO: Manage port parameters, to be added before " -iwad"
-
-                'Handle Levels/Misc/Mods
-                Dim tbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-                For Each tbx As TextBox In tbxs
-                    command &= $" -file ""{GetFileAbsolutePath("", tbx.Text)}"""
-                Next
-
-                FillRichTextBox_Command(command)
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'Button_Options_ToggleView_Click()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
-        Private Sub DecorateCommand()
+        Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
-                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
-                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped = 4 for each path as in ""complete_path""
-
-                For Each m As Match In matches
-                    For Each c As Capture In m.Captures
-
-                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
-                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
-                        Dim rangeToEdit As New TextRange(startIndex, endIndex)
-
-                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
-                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
-
-                    Next
-                    quotesCount += 1
-                Next
-
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
-            End Try
-        End Sub
-
-
-        Private Sub UpdateSummary()
-            Try
-                'Port
-                TextBox_Summary_Port.Text = ReturnSelectedPort()
-
-                'Port Parameters
-                'TODO
-
-                StackPanel_Summary_FilesMods.Children.Clear()
-
-                Dim lp As LevelPreset = ReturnSelectedLevels()
-                If lp IsNot Nothing Then
-                    'Iwad
-                    TextBox_Summary_Iwad.Text = GetAbsolutePath_Iwad(lp.Iwad)
-                    'Level & Misc
-                    Dim levelFileNames As New List(Of String)
-                    If Not lp.Level = Nothing Then levelFileNames.Add(lp.Level)
-                    If Not lp.Misc = Nothing Then levelFileNames.Add(lp.Misc)
-                    DisplayLevels_Summary(levelFileNames)
+                If ReadyToLaunch() Then
+                    'LaunchGame()
+                    SaveSettings()
                 End If
-
-                Dim mp As ModPreset = ReturnSelectedMods()
-                If mp IsNot Nothing Then DisplayMods_Summary(mp.Files)
-
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'UpdateSummary()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
+#End Region
+
+
+#Region "GUI operations & helpers"
+
+        Private Function CreateFileModsTbx(filename As String, type As String) As TextBox
+            Dim fi As New FileInfo(filename)
+            Dim Color As SolidColorBrush = IIf(type = "Level",
+                                               Brushes.White,
+                                               Brushes.LightGray)
+            Return New TextBox() With
+            {
+                .Background = Color,
+                .Cursor = Cursors.Arrow,
+                .IsReadOnly = True,
+                .Margin = New Thickness(0, 0, 6, 0),
+                .Text = fi.Name,
+                .ToolTip = New StringBuilder(
+                    $"File type : {type}" & vbCrLf &
+                    $"Directory : {fi.DirectoryName}"
+                )
+            }
+        End Function
 
         Private Sub DisplayLevels_Summary(fileNames As List(Of String))
             Try
@@ -508,65 +421,173 @@ Namespace Views
             End Try
         End Sub
 
-        Private Function CreateFileModsTbx(filename As String, type As String) As TextBox
-            Dim fi As New FileInfo(filename)
-            Dim Color As SolidColorBrush = IIf(type = "Level",
-                                               Brushes.White,
-                                               Brushes.LightGray)
-            Return New TextBox() With
-            {
-                .Background = Color,
-                .Cursor = Cursors.Arrow,
-                .IsReadOnly = True,
-                .Margin = New Thickness(0, 0, 6, 0),
-                .Text = fi.Name,
-                .ToolTip = New StringBuilder(
-                    $"File type : {type}" & vbCrLf &
-                    $"Directory : {fi.DirectoryName}"
-                )
-            }
-        End Function
 
 
+        Private Sub FillRichTextBox_Command(content As String)
+            Try
+                Dim flow As New FlowDocument()
+                Dim para As New Paragraph()
+                para.Inlines.Add(content)
+                flow.Blocks.Add(para)
+
+                RichTextBox_Command.Document = flow
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
+            End Try
+        End Sub
+
+
+
+        'NOT READY
         ''' <summary>
-        ''' Note 1 : Generic/Common function -> to be moved to Helpers files
-        ''' Note 2 : Really useful to have it separated from the Display Subs ?
+        ''' Check and order the files dropped into the GroupBox "Levels"
         ''' </summary>
-        Private Function ConvertFilePath_AbsoluteToRelative(filePaths As List(Of String)) As List(Of String)
-            Dim fileNames As New List(Of String)
+        Private Function OrderDroppedFiles_Levels(filePaths As String()) As List(Of String)
+            Dim orderedFiles As New List(Of String)
 
             Try
-                For Each path As String In filePaths
-                    fileNames.Add(New FileInfo(path).Name)
+                'Do as many outer loops as there are files, to obtain the correct order in the end (for instance 3 times for 3 files)
+                For i As Integer = 1 To filePaths.Length
+                    For Each path As String In filePaths
+
+                        If orderedFiles.Contains(path) Then Continue For
+
+                        If ValidateFile_Iwad(path) Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile_Level(path) And orderedFiles.Count > 0 Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile_Misc(path) And orderedFiles.Count > 1 Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                        If ValidateFile_Image(path) And orderedFiles.Count > 2 Then
+                            orderedFiles.Add(path)
+                            Continue For
+                        End If
+
+                    Next
                 Next
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ConvertFilePath_AbsoluteToRelative()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'OrderDroppedFiles_Levels()'. Exception : " & ex.ToString)
             End Try
 
-            Return fileNames
+            Return orderedFiles
         End Function
 
 
-        Private Function ConvertModPath_RelativeToAbsolute(modFilesList As List(Of String)) As List(Of String)
-            Dim absoluteModPaths As New List(Of String)
+
+        Private Function ReturnSelectedLevels() As LevelPreset
+            Dim preset As LevelPreset = Nothing
 
             Try
-                For Each modFile As String In modFilesList
-
-                    'Read absolute path
-                    If File.Exists(modFile) Then absoluteModPaths.Add(modFile)
-
-                    'Build absolute path with modsSubDir & filename 
-                    Dim probablePath As String = Path.Combine(GetDirectoryPath("mods"), modFile)
-                    If File.Exists(probablePath) Then absoluteModPaths.Add(probablePath)
-
-                Next
+                Select Case TabControl_Levels.SelectedIndex
+                    Case 0
+                        preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
+                    Case 1
+                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
+                    Case 2
+                        preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .ImagePath = ""} 'TODO
+                End Select
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ConvertModPath_RelativeToAbsolute()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
             End Try
 
-            Return absoluteModPaths
+            Return preset
         End Function
+
+        Private Function ReturnSelectedMods() As ModPreset
+            Dim preset As ModPreset = Nothing
+
+            Try
+                Select Case TabControl_Mods.SelectedIndex
+                    Case 0
+                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
+                    Case 1
+                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset) 'TODO
+                    Case 2
+                        preset = New ModPreset() With {.Files = New List(Of String)} 'TODO
+                    Case Else
+                        'TODO?
+                End Select
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
+            End Try
+
+            Return preset
+        End Function
+
+        Private Function ReturnSelectedPort() As String
+            Dim portPath As String = Nothing
+
+            Try
+                If Not TextBox_Port.Text = TBX_SELECT_PORT Then portPath = TextBox_Port.Text
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'ReturnSelectedPort()'. Exception : " & ex.ToString)
+            End Try
+
+            Return portPath
+        End Function
+
+
+
+        'Summary : Command line view
+        Private Sub UpdateCommand()
+            Try
+                Dim port As String = TextBox_Summary_Port.Text
+                Dim iwad As String = TextBox_Summary_Iwad.Text
+
+                If String.IsNullOrWhiteSpace(port) OrElse String.IsNullOrWhiteSpace(iwad) Then
+                    RichTextBox_Command.Document.Blocks.Clear()
+                    Return
+                End If
+
+                Dim command As String = $"""{port}"" -iwad ""{iwad}"""
+                'TODO: Manage port parameters, to be added before " -iwad"
+
+                'Handle Levels/Misc/Mods
+                Dim tbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                For Each tbx As TextBox In tbxs
+                    command &= $" -file ""{GetFileAbsolutePath("", tbx.Text)}"""
+                Next
+
+                FillRichTextBox_Command(command)
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
+            End Try
+        End Sub
+
+        Private Sub DecorateCommand()
+            Try
+                Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
+                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
+                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped = 4 for each path as in ""complete_path""
+
+                For Each m As Match In matches
+                    For Each c As Capture In m.Captures
+
+                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
+                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
+                        Dim rangeToEdit As New TextRange(startIndex, endIndex)
+
+                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
+                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
+
+                    Next
+                    quotesCount += 1
+                Next
+
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
+            End Try
+        End Sub
+
 
 
         Private Sub FillTextBox(tbx As TextBox, content As String)
@@ -595,45 +616,7 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub FillRichTextBox_Command(content As String)
-            Try
-                Dim flow As New FlowDocument()
-                Dim para As New Paragraph()
-                para.Inlines.Add(content)
-                flow.Blocks.Add(para)
 
-                RichTextBox_Command.Document = flow
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
-            End Try
-        End Sub
-
-        Private Sub Button_Options_ToggleView_Click(sender As Object, e As RoutedEventArgs)
-            Try
-                If Grid_Summary.Visibility = Visibility.Visible Then
-                    Grid_Summary.Visibility = Visibility.Collapsed
-                    Grid_Command.Visibility = Visibility.Visible
-                Else
-                    Grid_Summary.Visibility = Visibility.Visible
-                    Grid_Command.Visibility = Visibility.Collapsed
-                End If
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Options_ToggleView_Click()'. Exception : " & ex.ToString)
-            End Try
-        End Sub
-
-
-
-        Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
-            Try
-                If ReadyToLaunch() Then
-                    'LaunchGame()
-                    SaveSettings()
-                End If
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
-            End Try
-        End Sub
 
         Private Function ReadyToLaunch() As Boolean
             Try
@@ -664,6 +647,8 @@ Namespace Views
                 WriteToLog(Date.Now & " - Error in 'LaunchGame()'. Exception : " & ex.ToString)
             End Try
         End Sub
+
+
 
         Private Sub SaveSettings()
             Try
@@ -702,33 +687,6 @@ Namespace Views
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'LoadSettings()'. Exception : " & ex.ToString)
             End Try
-        End Sub
-
-        Private Function ReturnSelectedPort() As String
-            Dim portPath As String = Nothing
-
-            Try
-                If Not TextBox_Port.Text = TBX_SELECT_PORT Then portPath = TextBox_Port.Text
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ReturnSelectedPort()'. Exception : " & ex.ToString)
-            End Try
-
-            Return portPath
-        End Function
-
-        Private Sub Button_Options_HelpAbout_Click(sender As Object, e As RoutedEventArgs)
-            Try
-                Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
-                Dim helpWindow As New HelpWindow() With {.Owner = mainWindow}
-                helpWindow.ShowDialog()
-
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
-            End Try
-        End Sub
-
-        Private Sub Button_Options_OpenRootDir_Click(sender As Object, e As RoutedEventArgs)
-            Process.Start(GetDirectoryPath())
         End Sub
 
 #End Region
