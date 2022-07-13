@@ -456,12 +456,12 @@ Namespace Views
             Try
                 If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
 
-                'TODO: Use lambda to shorten?
+                'TODO? Use lambda to shorten TextBox retrieval
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
 
                 Dim modTbxs As New List(Of TextBox)
                 For Each tbx In allTbxs
-                    If tbx.Background Is Brushes.DarkGray Then 'TODO: Use constant or similar to target the color
+                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
                         modTbxs.Add(tbx)
                     End If
                 Next
@@ -470,12 +470,7 @@ Namespace Views
 
                 For Each name As String In fileNames
                     If name = String.Empty Then Continue For
-                    StackPanel_Summary_FilesMods.Children.Add(New TextBox() With
-                    {
-                        .Margin = New Thickness(0, 0, 6, 0),
-                        .Background = Brushes.LightGray,
-                        .Text = name
-                    })
+                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(name, "Level"))
                 Next
                 For Each tbx In modTbxs
                     StackPanel_Summary_FilesMods.Children.Add(tbx)
@@ -489,12 +484,12 @@ Namespace Views
             Try
                 If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
 
-                'TODO: Use lambda to shorten?
+                'TODO? Use lambda to shorten TextBox retrieval
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
 
                 Dim lvlTbxs As New List(Of TextBox)
                 For Each tbx In allTbxs
-                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
+                    If tbx.Background Is Brushes.White Then 'TODO: Use constant or similar to target the color
                         lvlTbxs.Add(tbx)
                     End If
                 Next
@@ -506,17 +501,31 @@ Namespace Views
                 Next
                 For Each name As String In fileNames
                     If name = String.Empty Then Continue For
-                    StackPanel_Summary_FilesMods.Children.Add(New TextBox() With
-                    {
-                        .Margin = New Thickness(0, 0, 6, 0),
-                        .Background = Brushes.DarkGray,
-                        .Text = New FileInfo(name).Name 'TODO: Use dedicated function
-                    })
+                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(name, "Mod"))
                 Next
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
             End Try
         End Sub
+
+        Private Function CreateFileModsTbx(filename As String, type As String) As TextBox
+            Dim fi As New FileInfo(filename)
+            Dim Color As SolidColorBrush = IIf(type = "Level",
+                                               Brushes.White,
+                                               Brushes.LightGray)
+            Return New TextBox() With
+            {
+                .Background = Color,
+                .Cursor = Cursors.Arrow,
+                .IsReadOnly = True,
+                .Margin = New Thickness(0, 0, 6, 0),
+                .Text = fi.Name,
+                .ToolTip = New StringBuilder(
+                    $"File type : {type}" & vbCrLf &
+                    $"Directory : {fi.DirectoryName}"
+                )
+            }
+        End Function
 
 
         ''' <summary>
