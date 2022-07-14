@@ -1,6 +1,7 @@
-﻿Imports System.IO
+﻿Module CliMethods
 
-Module CliMethods
+
+#Region "Legacy code, should be useless now we have Summary -> Command"
 
     Function ReturnEngine() As String
 
@@ -148,11 +149,12 @@ Module CliMethods
 
     End Sub
 
+#End Region
+
 
     'Looks like this is the only useful function around here.
     'TODO: Make sure
     Sub LaunchProcessV3(args As String)
-
         Dim cmdExe As New ProcessStartInfo("cmd.exe") With
         {
             .UseShellExecute = False,
@@ -161,8 +163,6 @@ Module CliMethods
         }
 
         Process.Start(cmdExe)
-
     End Sub
-
 
 End Module
