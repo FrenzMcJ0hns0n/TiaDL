@@ -8,13 +8,132 @@ Module PresetsMethods
     'TODO? v3+ Use JSON instead of CSV
     'Well, we will see...
 
-#Region "Click on user preset"
 
+#Region "Currently enabled"
+
+    'TODO: Do more tests + TODO? Rewrite
     ''' <summary>
-    ''' <para>Triggered when user right-clicks a custom preset</para>
-    ''' <para>Delete a preset by its name</para>
+    ''' Configure the TextFieldParser object to parse CSV data
     ''' </summary>
-    '''
+    ''' <param name="presetsType">Type of content to get</param>
+    ''' <returns></returns>
+    Function ConfigureTextFieldParser(presetsType As String) As TextFieldParser
+        Dim parser As TextFieldParser = Nothing
+
+        Select Case presetsType
+            Case "base_levels"
+                parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
+            Case "base_mods"
+                parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
+            Case "user_levels"
+                parser = New TextFieldParser(Path.Combine(GetDirectoryPath(""), "presets.csv"))
+            Case "user_mods"
+                'TODO
+            Case Else 'TODO?
+        End Select
+
+        With parser
+            .CommentTokens = New String() {"#"}
+            .Delimiters = New String() {";"}
+            .TextFieldType = FieldType.Delimited
+            .TrimWhiteSpace = True
+        End With
+
+        Return parser
+    End Function
+
+    Function GetLevelPresets_FromCsv(presetsType As String) As List(Of LevelPreset)
+        Dim levelPresets As New List(Of LevelPreset)
+
+        Try
+            Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
+            Using parser
+                Do While Not parser.EndOfData
+                    Try
+                        Dim parsedValues As String() = parser.ReadFields()
+                        'If a preset does not contain BOTH Name and Iwad path, it is ignored (useless safety ?)
+                        If parsedValues.Length < 2 Then Continue Do
+
+                        levelPresets.Add(New LevelPreset() With
+                        {
+                            .Name = parsedValues(0),
+                            .Iwad = parsedValues(1),
+                            .Level = IIf(parsedValues.Length >= 3, parsedValues(2), String.Empty),
+                            .Misc = IIf(parsedValues.Length >= 4, parsedValues(3), String.Empty),
+                            .ImagePath = IIf(parsedValues.Length = 5, parsedValues(4), String.Empty)
+                        })
+                    Catch exception As MalformedLineException
+                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
+                    End Try
+                Loop
+            End Using
+        Catch ex As Exception
+            WriteToLog(Date.Now & " - Error in 'FormatPresetsData_FromCsv()'. Exception : " & ex.ToString)
+        End Try
+
+        Return levelPresets
+    End Function
+
+    Function GetModPresets_FromCSV(presetsType As String) As List(Of ModPreset)
+        Dim modPresets As New List(Of ModPreset)
+
+        Try
+            Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
+            Using parser
+                Do While Not parser.EndOfData
+                    Try
+                        Dim parsedValues As String() = parser.ReadFields()
+                        'If a preset does not contain all info, it is ignored (useless safety ?)
+                        If parsedValues.Length < 4 Then Continue Do
+
+                        modPresets.Add(New ModPreset() With
+                        {
+                            .Name = parsedValues(0),
+                            .Desc = parsedValues(1),
+                            .ImagePath = parsedValues(2),
+                            .Files = parsedValues(3).Split(",").ToList
+                        })
+                    Catch exception As MalformedLineException
+                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
+                    End Try
+                Loop
+            End Using
+        Catch ex As Exception
+            WriteToLog(Date.Now & " - Error in 'GetModPresets_FromCSV()'. Exception : " & ex.ToString)
+        End Try
+
+        Return modPresets
+    End Function
+
+#End Region
+
+
+#Region "Not used yet / to implement"
+
+    Sub DeletePreset(name As String)
+
+        Dim rootDirPath = GetDirectoryPath("")
+        Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
+
+        Dim lines As List(Of String) = File.ReadAllLines(presetFile).ToList
+        Dim count As Integer = 0
+
+        For Each line As String In lines
+            count += 1
+            If line.StartsWith(name) Then
+                lines.RemoveAt(count - 1)
+                File.WriteAllLines(presetFile, lines)
+                Exit For
+            End If
+        Next
+
+    End Sub
+
+    '''' <summary>
+    '''' <para>Triggered when user right-clicks a custom preset</para>
+    '''' <para>Delete a preset by its name</para>
+    '''' </summary>
+    ''''
     'Sub DeleteUserLevelPreset(presetName As String)
 
     '    Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
@@ -25,8 +144,6 @@ Module PresetsMethods
     '    End If
 
     'End Sub
-
-#End Region
 
 
     'Private Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
@@ -61,125 +178,10 @@ Module PresetsMethods
     'End Function
 
 
-    ''' <summary>
-    ''' Use the parser object to collect data from CSV file
-    ''' </summary>
-    ''' 
-    Function GetLevelPresets_FromCsv(presetsType As String) As List(Of LevelPreset)
-
-        Dim presets As New List(Of LevelPreset)
-        Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
-
-        Try
-            Using parser
-                Do While Not parser.EndOfData
-
-                    Try
-                        Dim readValues As String() = parser.ReadFields()
-                        If readValues.Length < 2 Then Continue Do 'If a preset does not contain BOTH Name and Iwad path, it is ignored (useless safety ?)
-
-                        presets.Add(
-                            New LevelPreset() With
-                            {
-                                .Name = readValues(0),
-                                .Iwad = readValues(1),
-                                .Level = If(readValues.Length >= 3, readValues(2), Nothing),
-                                .Misc = If(readValues.Length >= 4, readValues(3), Nothing),
-                                .ImagePath = If(readValues.Length = 5, readValues(4), Nothing)
-                            }
-                        )
-
-                    Catch exception As MalformedLineException
-                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
-                    End Try
-
-                Loop
-            End Using
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'FormatPresetsData_FromCsv()'. Exception : " & ex.ToString)
-        End Try
-
-        Return presets
-
-    End Function
-
-    Function GetModPresets_FromCSV(presetsType As String) As List(Of ModPreset)
-
-        Dim presets As New List(Of ModPreset)
-        Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
-
-        Try
-            Using parser
-                Do While Not parser.EndOfData
-
-                    Try
-                        Dim readValues As String() = parser.ReadFields()
-                        If readValues.Length < 4 Then Continue Do 'If a preset does not contain all info, it is ignored (useless safety ?)
-
-                        presets.Add(
-                            New ModPreset() With
-                            {
-                                .Name = readValues(0),
-                                .Desc = readValues(1),
-                                .ImagePath = readValues(2),
-                                .Files = readValues(3).Split(",").ToList
-                            }
-                        )
-
-                    Catch exception As MalformedLineException
-                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
-
-                    End Try
-
-                Loop
-            End Using
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'GetModPresets_FromCSV()'. Exception : " & ex.ToString)
-        End Try
-
-        Return presets
-
-    End Function
-
-
-    ''' <summary>
-    ''' Configure the parser as needed
-    ''' </summary>
-    ''' 
-    Function ConfigureTextFieldParser(presetsType As String) As TextFieldParser
-
-        Dim parser As TextFieldParser = Nothing
-
-        'TODO: Use Select Case
-        If presetsType = "base_levels" Then
-            parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
-        ElseIf presetsType = "base_mods" Then
-            parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
-        ElseIf presetsType = "user_levels" Then
-            parser = New TextFieldParser(Path.Combine(GetDirectoryPath(""), "presets.csv")) 'TODO : Change/Add RootDirPath variable
-        ElseIf presetsType = "user_mods" Then
-            'TODO
-        End If
-
-        With parser
-            .TextFieldType = FieldType.Delimited
-            .CommentTokens = New String() {"#"}
-            .Delimiters = New String() {";"}
-            .TrimWhiteSpace = True
-        End With
-
-        Return parser
-
-    End Function
-
-
-
-    ''' <summary>
-    ''' Handle New user preset save from GUI event
-    ''' </summary>
-    ''' 
+    '''' <summary>
+    '''' Handle New user preset save from GUI event
+    '''' </summary>
+    '''' 
     'Sub Save_NewPreset()
 
     '    Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
@@ -210,6 +212,7 @@ Module PresetsMethods
     '    End With
 
     'End Sub
+
 
     ''' <summary>
     ''' Write attributes for New user preset.
@@ -248,24 +251,7 @@ Module PresetsMethods
 
     End Sub
 
+#End Region
 
-    Sub DeletePreset(name As String)
-
-        Dim rootDirPath = GetDirectoryPath("")
-        Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
-
-        Dim lines As List(Of String) = File.ReadAllLines(presetFile).ToList
-        Dim count As Integer = 0
-
-        For Each line As String In lines
-            count += 1
-            If line.StartsWith(name) Then
-                lines.RemoveAt(count - 1)
-                File.WriteAllLines(presetFile, lines)
-                Exit For
-            End If
-        Next
-
-    End Sub
 
 End Module
