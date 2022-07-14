@@ -58,9 +58,9 @@ Friend Module PresetsMethods
                         {
                             .Name = parsedValues(0),
                             .Iwad = parsedValues(1),
-                            .Level = IIf(parsedValues.Length >= 3, parsedValues(2), String.Empty),
-                            .Misc = IIf(parsedValues.Length >= 4, parsedValues(3), String.Empty),
-                            .ImagePath = IIf(parsedValues.Length = 5, parsedValues(4), String.Empty)
+                            .Level = If(parsedValues.Length >= 3, parsedValues(2), String.Empty),
+                            .Misc = If(parsedValues.Length >= 4, parsedValues(3), String.Empty),
+                            .ImagePath = If(parsedValues.Length = 5, parsedValues(4), String.Empty)
                         })
                     Catch exception As MalformedLineException
                         WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
@@ -68,13 +68,13 @@ Friend Module PresetsMethods
                 Loop
             End Using
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'FormatPresetsData_FromCsv()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'GetLevelPresets_FromCsv()'. Exception : " & ex.ToString)
         End Try
 
         Return levelPresets
     End Function
 
-    Public Function GetModPresets_FromCSV(presetsType As String) As List(Of ModPreset)
+    Public Function GetModPresets_FromCsv(presetsType As String) As List(Of ModPreset)
         Dim modPresets As New List(Of ModPreset)
 
         Try
