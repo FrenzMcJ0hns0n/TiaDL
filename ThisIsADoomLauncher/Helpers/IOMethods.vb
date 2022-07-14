@@ -4,21 +4,20 @@ Imports System.Text
 
 Module IOMethods
 
-    Function GetJsonFilepath() As String
-        Return Path.Combine(GetDirectoryPath(), "try.json")
+
+#Region "FileInfo helpers : useless ?"
+
+    ''' <summary>
+    ''' Return input's parent directory full path
+    ''' </summary>
+    '''
+    Function File_GetDir(input As String) As String
+
+        With New FileInfo(input)
+            Return If(File.Exists(.FullName), .DirectoryName, Nothing)
+        End With
+
     End Function
-
-    '''' <summary>
-    '''' Return input's parent directory full path
-    '''' </summary>
-    '''' 
-    'Function File_GetDir(input As String) As String
-
-    '    With New FileInfo(input)
-    '        Return If(File.Exists(.FullName), .DirectoryName, Nothing)
-    '    End With
-
-    'End Function
 
     ''' <summary>
     ''' Return input's extension
@@ -44,20 +43,36 @@ Module IOMethods
 
     End Function
 
-    'TODO: Determine if useful
-    Private Function ConvertFilePath_AbsoluteToRelative(filePaths As List(Of String)) As List(Of String)
-        Dim fileNames As New List(Of String)
+#End Region
+
+
+#Region "Other helpers"
+
+    'TODO: Use constants and maybe rewrite
+    ''' <summary>
+    ''' Check if all directories can be found
+    ''' Validate paths
+    ''' </summary>
+    ''' 
+    Sub CheckProjectSubdirectories()
+
+        Dim errorText As String = Nothing
 
         Try
-            For Each path As String In filePaths
-                fileNames.Add(New FileInfo(path).Name)
+            For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods"}
+                If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir
             Next
+
+            If Not errorText = Nothing Then
+                MessageBox.Show("Startup error. Unable to find the following subdirectories :" & errorText)
+                WriteToLog(Date.Now & " - Startup error. Subdirectories not found :" & errorText)
+            End If
+
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ConvertFilePath_AbsoluteToRelative()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'CheckProjectSubdirectories()'. Exception : " & ex.ToString)
         End Try
 
-        Return fileNames
-    End Function
+    End Sub
 
     ''' <summary>
     ''' Get the path of a TiaDL directory.
@@ -114,6 +129,10 @@ Module IOMethods
         Return absolutePath
     End Function
 
+    Function GetJsonFilepath() As String
+        Return Path.Combine(GetDirectoryPath(), "try.json")
+    End Function
+
     ''' <summary>
     ''' Set .ini files from models, at first TiaDL launch
     ''' TODO (v2+) : .ini file selection in GUI ?
@@ -146,32 +165,6 @@ Module IOMethods
 
         Catch ex As Exception
             WriteToLog(Date.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
-        End Try
-
-    End Sub
-
-    'TODO: Use constants and maybe rewrite
-    ''' <summary>
-    ''' Check if all directories can be found
-    ''' Validate paths
-    ''' </summary>
-    ''' 
-    Sub CheckProjectSubdirectories()
-
-        Dim errorText As String = Nothing
-
-        Try
-            For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods"}
-                If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir
-            Next
-
-            If Not errorText = Nothing Then
-                MessageBox.Show("Startup error. Unable to find the following subdirectories :" & errorText)
-                WriteToLog(Date.Now & " - Startup error. Subdirectories not found :" & errorText)
-            End If
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'CheckProjectSubdirectories()'. Exception : " & ex.ToString)
         End Try
 
     End Sub
@@ -265,5 +258,8 @@ Module IOMethods
         End Using
 
     End Sub
+
+#End Region
+
 
 End Module
