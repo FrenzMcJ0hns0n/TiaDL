@@ -128,7 +128,7 @@ Namespace Views
             Try
                 Dim portFilepath As String = e.Data.GetData(DataFormats.FileDrop)(0)
 
-                If New FileInfo(portFilepath).Extension.ToLowerInvariant = ".exe" Then
+                If ValidateFile(portFilepath, "Port") Then
                     FillTextBox(TextBox_Port, portFilepath)
                     FillTextBox(TextBox_Summary_Port, portFilepath)
                     UpdateCommand()
@@ -236,7 +236,7 @@ Namespace Views
 
         Private Sub TextBox_NewLevel_Iwad_Drop(sender As Object, e As DragEventArgs)
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Iwad(droppedFile) Then FillTextBox(sender, droppedFile)
+            If ValidateFile(droppedFile, "Iwad") Then FillTextBox(sender, droppedFile)
         End Sub
 
         Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs)
@@ -249,7 +249,7 @@ Namespace Views
 
         Private Sub TextBox_NewLevel_Level_Drop(sender As Object, e As DragEventArgs)
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Level(droppedFile) Then FillTextBox(sender, droppedFile)
+            If ValidateFile(droppedFile, "Level") Then FillTextBox(sender, droppedFile)
         End Sub
 
         Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs)
@@ -262,7 +262,7 @@ Namespace Views
 
         Private Sub TextBox_NewLevel_Misc_Drop(sender As Object, e As DragEventArgs)
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Misc(droppedFile) Then FillTextBox(sender, droppedFile)
+            If ValidateFile(droppedFile, "Misc") Then FillTextBox(sender, droppedFile)
         End Sub
 
         Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs)
@@ -275,7 +275,7 @@ Namespace Views
 
         Private Sub TextBox_NewLevel_Image_Drop(sender As Object, e As DragEventArgs)
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile_Image(droppedFile) Then FillTextBox(sender, droppedFile)
+            If ValidateFile(droppedFile, "Image") Then FillTextBox(sender, droppedFile)
         End Sub
 
         Private Sub Button_NewLevel_Image_Clear_Click(sender As Object, e As RoutedEventArgs)
@@ -452,22 +452,22 @@ Namespace Views
 
                         If orderedFiles.Contains(path) Then Continue For
 
-                        If ValidateFile_Iwad(path) Then
+                        If ValidateFile(path, "Iwad") Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
 
-                        If ValidateFile_Level(path) And orderedFiles.Count > 0 Then
+                        If ValidateFile(path, "Level") And orderedFiles.Count > 0 Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
 
-                        If ValidateFile_Misc(path) And orderedFiles.Count > 1 Then
+                        If ValidateFile(path, "Misc") And orderedFiles.Count > 1 Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
 
-                        If ValidateFile_Image(path) And orderedFiles.Count > 2 Then
+                        If ValidateFile(path, "Image") And orderedFiles.Count > 2 Then
                             orderedFiles.Add(path)
                             Continue For
                         End If

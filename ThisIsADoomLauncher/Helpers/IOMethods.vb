@@ -176,77 +176,48 @@ Module IOMethods
 
     End Sub
 
-    'TODO: Rewrite as only one function
-    Function ValidateFile_Iwad(filepath As String) As Boolean
-
+    'TODO: Use consistent names everywhere (Port, Iwad, Level, Misc, Mods)
+    ''' <summary>
+    ''' Validate file as proper Doom content
+    ''' </summary>
+    ''' <param name="filepath">Filepath of the file to validate</param>
+    ''' <param name="type">Target, such as : Port, Iwad, Level, Misc, Mods</param>
+    ''' <returns></returns>
+    Public Function ValidateFile(filepath As String, type As String) As Boolean
         Try
-            Using reader As New BinaryReader(File.OpenRead(filepath))
-                Dim bytes As Byte() = reader.ReadBytes(4)
-                Dim fileh As String = Encoding.Default.GetString(bytes)
+            Dim extension As String = New FileInfo(filepath).Extension.ToLowerInvariant
 
-                If fileh = "IWAD" Then Return True
-            End Using
+            Select Case type
+                Case "Port"
+                    'TODO? Add other validation rules
+                    If extension = ".exe" Then Return True
 
+                Case "Iwad"
+                    Using reader As New BinaryReader(File.OpenRead(filepath))
+                        Dim bytes As Byte() = reader.ReadBytes(4)
+                        If Encoding.Default.GetString(bytes) = "IWAD" And extension = ".wad" Then Return True
+                    End Using
+
+                Case "Level"
+                    Dim validExtensions As New List(Of String) From {".pk3", ".wad", ".zip"} 'TODO: Use constants or similar
+                    If validExtensions.Contains(extension) Then Return True
+
+                Case "Misc"
+                    Dim validExtensions As New List(Of String) From {".bex", ".deh", ".txt"} 'TODO: Use constants or similar
+                    If validExtensions.Contains(extension) Then Return True
+
+                Case "Image"
+                    Dim validExtensions As New List(Of String) From {".jpg", ".jpeg", ".png"} 'TODO: Use constants or similar
+                    If validExtensions.Contains(extension) Then Return True
+
+                Case Else 'TODO?
+
+            End Select
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ValidateFileIwad()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'ValidateFile()'. Exception : " & ex.ToString)
         End Try
 
         Return False
-
-    End Function
-
-    'TODO: Rewrite as only one function
-    Function ValidateFile_Level(filepath As String) As Boolean
-
-        Try
-            Dim file_info As New FileInfo(filepath)
-            Dim extension As String = file_info.Extension.ToLowerInvariant
-            Dim valid_ext As String() = {".pk3", ".wad"}
-
-            If valid_ext.Contains(extension) Then Return True
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ValidateFileLevel()'. Exception : " & ex.ToString)
-        End Try
-
-        Return False
-
-    End Function
-
-    'TODO: Rewrite as only one function
-    Function ValidateFile_Misc(filepath As String) As Boolean
-
-        Try
-            Dim file_info As New FileInfo(filepath)
-            Dim extension As String = file_info.Extension.ToLowerInvariant
-            Dim valid_ext As String() = {".bex", ".deh"}
-
-            If valid_ext.Contains(extension) Then Return True
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ValidateFileMisc()'. Exception : " & ex.ToString)
-        End Try
-
-        Return False
-
-    End Function
-
-    'TODO: Rewrite as only one function
-    Function ValidateFile_Image(filepath As String) As Boolean
-
-        Try
-            Dim file_info As New FileInfo(filepath)
-            Dim extension As String = file_info.Extension.ToLowerInvariant
-            Dim valid_ext As String() = {".jpg", ".jpeg", ".png"}
-
-            If valid_ext.Contains(extension) Then Return True
-
-        Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ValidateFileImage()'. Exception : " & ex.ToString)
-        End Try
-
-        Return False
-
     End Function
 
     'TODO: Use constants and maybe rewrite
