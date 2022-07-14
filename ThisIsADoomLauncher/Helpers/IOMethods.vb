@@ -2,7 +2,7 @@
 Imports System.Reflection
 Imports System.Text
 
-Module IOMethods
+Friend Module IOMethods
 
 
 #Region "FileInfo helpers : useless ?"
@@ -11,7 +11,7 @@ Module IOMethods
     ''' Return input's parent directory full path
     ''' </summary>
     '''
-    Function File_GetDir(input As String) As String
+    Public Function File_GetDir(input As String) As String
 
         With New FileInfo(input)
             Return If(File.Exists(.FullName), .DirectoryName, Nothing)
@@ -23,7 +23,7 @@ Module IOMethods
     ''' Return input's extension
     ''' </summary>
     ''' 
-    Function File_GetExtension(input As String) As String
+    Public Function File_GetExtension(input As String) As String
 
         With New FileInfo(input)
             Return If(File.Exists(.FullName), .Extension, Nothing)
@@ -35,7 +35,7 @@ Module IOMethods
     ''' Return input's filename
     ''' </summary>
     ''' 
-    Function File_GetName(input As String) As String
+    Public Function File_GetName(input As String) As String
 
         With New FileInfo(input)
             Return If(File.Exists(.FullName), .Name, Nothing)
@@ -54,7 +54,7 @@ Module IOMethods
     ''' Validate paths
     ''' </summary>
     ''' 
-    Sub CheckProjectSubdirectories()
+    Public Sub CheckProjectSubdirectories()
 
         Dim errorText As String = Nothing
 
@@ -79,7 +79,7 @@ Module IOMethods
     ''' </summary>
     ''' <param name="subDirName">Target directory. Leave empty ("") to get the root dir</param>
     ''' <returns></returns>
-    Function GetDirectoryPath(Optional subDirName As String = Nothing) As String
+    Public Function GetDirectoryPath(Optional subDirName As String = Nothing) As String
 
         Dim directoryPath As String = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
 
@@ -129,7 +129,7 @@ Module IOMethods
         Return absolutePath
     End Function
 
-    Function GetJsonFilepath() As String
+    Public Function GetJsonFilepath() As String
         Return Path.Combine(GetDirectoryPath(), "try.json")
     End Function
 
@@ -138,7 +138,7 @@ Module IOMethods
     ''' TODO (v2+) : .ini file selection in GUI ?
     ''' </summary>
     ''' 
-    Sub SetIniFiles()
+    Public Sub SetIniFiles()
 
         Try
             'TODO : Write v3 equivalent
@@ -218,7 +218,7 @@ Module IOMethods
     ''' Create file 'presets.csv' with some commented lines, if it does not exist
     ''' </summary>
     ''' 
-    Sub WritePresetsFileHeader()
+    Public Sub WritePresetsFileHeader()
 
         Try
             Dim rootDirPath = GetDirectoryPath("")
@@ -248,7 +248,7 @@ Module IOMethods
     ''' Log content in file 'log.txt'
     ''' </summary>
     ''' 
-    Sub WriteToLog(content As String)
+    Public Sub WriteToLog(content As String)
 
         Dim rootDirPath = GetDirectoryPath("")
         Dim logfilePath = Path.Combine(rootDirPath, "log.txt")

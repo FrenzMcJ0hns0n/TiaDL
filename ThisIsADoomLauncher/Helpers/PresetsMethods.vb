@@ -3,7 +3,7 @@ Imports Microsoft.VisualBasic.FileIO
 Imports ThisIsADoomLauncher.Models
 Imports ThisIsADoomLauncher.Views
 
-Module PresetsMethods
+Friend Module PresetsMethods
 
     'TODO? v3+ Use JSON instead of CSV
     'Well, we will see...
@@ -17,7 +17,7 @@ Module PresetsMethods
     ''' </summary>
     ''' <param name="presetsType">Type of content to get</param>
     ''' <returns></returns>
-    Function ConfigureTextFieldParser(presetsType As String) As TextFieldParser
+    Public Function ConfigureTextFieldParser(presetsType As String) As TextFieldParser
         Dim parser As TextFieldParser = Nothing
 
         Select Case presetsType
@@ -42,7 +42,7 @@ Module PresetsMethods
         Return parser
     End Function
 
-    Function GetLevelPresets_FromCsv(presetsType As String) As List(Of LevelPreset)
+    Public Function GetLevelPresets_FromCsv(presetsType As String) As List(Of LevelPreset)
         Dim levelPresets As New List(Of LevelPreset)
 
         Try
@@ -74,7 +74,7 @@ Module PresetsMethods
         Return levelPresets
     End Function
 
-    Function GetModPresets_FromCSV(presetsType As String) As List(Of ModPreset)
+    Public Function GetModPresets_FromCSV(presetsType As String) As List(Of ModPreset)
         Dim modPresets As New List(Of ModPreset)
 
         Try
@@ -110,7 +110,7 @@ Module PresetsMethods
 
 #Region "Not used yet / to implement"
 
-    Sub DeletePreset(name As String)
+    Public Sub DeletePreset(name As String)
 
         Dim rootDirPath = GetDirectoryPath("")
         Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
@@ -134,7 +134,7 @@ Module PresetsMethods
     '''' <para>Delete a preset by its name</para>
     '''' </summary>
     ''''
-    'Sub DeleteUserLevelPreset(presetName As String)
+    'Public Sub DeleteUserLevelPreset(presetName As String)
 
     '    Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
 
@@ -146,7 +146,7 @@ Module PresetsMethods
     'End Sub
 
 
-    'Private Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
+    'Public  Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
 
     '    Dim buttonsList As List(Of Button) = New List(Of Button)
 
@@ -182,7 +182,7 @@ Module PresetsMethods
     '''' Handle New user preset save from GUI event
     '''' </summary>
     '''' 
-    'Sub Save_NewPreset()
+    'Public Sub Save_NewPreset()
 
     '    Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
 
@@ -219,7 +219,7 @@ Module PresetsMethods
     ''' As line in 'presets.csv'
     ''' </summary>
     ''' 
-    Private Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
+    Public Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
 
         Try
             'Check if user-presets file exists

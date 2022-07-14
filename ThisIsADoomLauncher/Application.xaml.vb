@@ -1,9 +1,9 @@
-﻿Class Application
+﻿Public Class Application
 
     Private Sub Application_Startup(sender As Object, e As StartupEventArgs)
 
         With My.Settings
-            .DateTimeAtLaunch = DateTime.Now
+            .DateTimeAtLaunch = Date.Now
             .Save()
         End With
 

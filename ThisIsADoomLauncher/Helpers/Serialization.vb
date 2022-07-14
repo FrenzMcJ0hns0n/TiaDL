@@ -3,8 +3,7 @@ Imports ThisIsADoomLauncher.Models
 
 Imports Newtonsoft.Json
 
-
-Module Serialization
+Friend Module Serialization
 
     Public Function LoadFromJsonData() As Setting
         Dim jsonData As String = File.ReadAllText(GetJsonFilepath())

@@ -1,9 +1,9 @@
-﻿Module CliMethods
+﻿Friend Module CliMethods
 
 
 #Region "Legacy code, should be useless now we have Summary -> Command"
 
-    Function ReturnEngine() As String
+    Public Function ReturnEngine() As String
 
         'With My.Settings
         '    If .SelectedPort.ToLowerInvariant = "gzdoom" Then
@@ -15,7 +15,7 @@
 
     End Function
 
-    Function ReturnScalemode() As String
+    Public Function ReturnScalemode() As String
 
         With My.Settings
             If .SelectedPort.ToLowerInvariant = "gzdoom" Then
@@ -27,7 +27,7 @@
 
     End Function
 
-    Function ReturnIwad()
+    Public Function ReturnIwad()
 
         With My.Settings
             Return String.Format(" -iwad ""{0}""", .SelectedIwad)
@@ -35,7 +35,7 @@
 
     End Function
 
-    Function ReturnLevel() As String
+    Public Function ReturnLevel() As String
 
         With My.Settings
             Return If(.SelectedLevel = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedLevel))
@@ -43,13 +43,13 @@
 
     End Function
 
-    Function ReturnMisc() As String
+    Public Function ReturnMisc() As String
         With My.Settings
             Return If(.SelectedMisc = Nothing, Nothing, String.Format(" -file ""{0}""", .SelectedMisc))
         End With
     End Function
 
-    Function ReturnWolfData() As String
+    Public Function ReturnWolfData() As String
 
         'With My.Settings
         '    Dim wolfPath1 As String = Path.Combine(.WolfDir, "Wolf3D.pk3")
@@ -65,7 +65,7 @@
     ''' Build then return the command line to be executed with cmd.exe.
     ''' </summary>
     ''' 
-    Function BuildCommandLine(wolf As Boolean) As String
+    Public Function BuildCommandLine(wolf As Boolean) As String
 
         'TODO v3 : Use this to access UI elements : MainWindow_Instance().element = ...
         'WYSIWYG !
@@ -135,7 +135,7 @@
     ''' /c start "" "engine_path" [+param1 value1, +param2 value2, etc.] -iwad "iwad_path" [-file "level_path" | -file "misc_path" | -file "mod_path"]
     ''' </summary>
     ''' 
-    Sub LaunchProcess(command As String)
+    Public Sub LaunchProcess(command As String)
 
         Dim cmd As New ProcessStartInfo("cmd.exe")
 
@@ -154,7 +154,7 @@
 
     'Looks like this is the only useful function around here.
     'TODO: Make sure
-    Sub LaunchProcessV3(args As String)
+    Public Sub LaunchProcessV3(args As String)
         Dim cmdExe As New ProcessStartInfo("cmd.exe") With
         {
             .UseShellExecute = False,

@@ -4,7 +4,7 @@ Imports System.Text.RegularExpressions
 Imports ThisIsADoomLauncher.Models
 
 Namespace Views
-    Class MainWindow
+    Public Class MainWindow
 
 
 #Region "Constants"

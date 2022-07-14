@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports System.Reflection
 
-Module General
+Friend Module General
 
     Function GetFormattedAppTitle() As String
         Dim executingAssembly As Assembly = Assembly.GetExecutingAssembly()
