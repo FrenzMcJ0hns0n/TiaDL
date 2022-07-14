@@ -85,8 +85,11 @@ Friend Module IOMethods
 
         Try
             Dim combinedPath As String = Path.Combine(directoryPath, subDirName)
-            If Directory.Exists(combinedPath) Then directoryPath = combinedPath 'Useless check? As Exception would be raised at previous line
+            'If Directory.Exists(combinedPath) Then directoryPath = combinedPath 'Useless check? As Exception would be raised at previous line
+            directoryPath = combinedPath
 
+        Catch ex As ArgumentNullException
+            WriteToLog(Date.Now & " - Warning, potential error in 'GetDirectoryPath()' as parameter 'subDirName' was null")
         Catch ex As Exception
             WriteToLog(Date.Now & " - Error in 'GetDirectoryPath()'. Exception : " & ex.ToString)
         End Try
@@ -112,9 +115,9 @@ Friend Module IOMethods
             Dim targetDirectory As String = GetDirectoryPath(targetName)
 
             'Try file directly in target directory
-            Dim probablePath As String = Path.Combine(targetDirectory, filename)
-            If File.Exists(probablePath) Then 'Useless check? As Exception would be raised at previous line
-                absolutePath = probablePath
+            If Not String.IsNullOrEmpty(targetName) Then
+                'Dim probablePath As String = Path.Combine(targetDirectory, filename)
+                absolutePath = Path.Combine(targetDirectory, filename) 'Path.Combine() did not raise exception, probable path must be right
                 GoTo functionEnd
             End If
 

@@ -383,7 +383,7 @@ Namespace Views
 
                 For Each name As String In fileNames
                     If name = String.Empty Then Continue For
-                    Dim filepath As String = GetFileAbsolutePath("", name)
+                    Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
                     StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(filepath, "Level"))
                 Next
                 For Each tbx In modTbxs
@@ -415,7 +415,7 @@ Namespace Views
                 Next
                 For Each name As String In fileNames
                     If name = String.Empty Then Continue For
-                    Dim filepath As String = GetFileAbsolutePath("", name)
+                    Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
                     StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(filepath, "Mod"))
                 Next
             Catch ex As Exception
@@ -556,7 +556,7 @@ Namespace Views
                 'Handle Levels/Misc/Mods
                 Dim tbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
                 For Each tbx As TextBox In tbxs
-                    command &= $" -file ""{GetFileAbsolutePath("", tbx.Text)}"""
+                    command &= $" -file ""{ExtractFileFullPath(tbx)}"""
                 Next
 
                 FillRichTextBox_Command(command)
