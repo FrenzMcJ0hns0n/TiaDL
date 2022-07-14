@@ -346,8 +346,8 @@ Namespace Views
 
 #Region "GUI operations & helpers"
 
-        Private Function CreateFileModsTbx(filename As String, type As String) As TextBox
-            Dim fi As New FileInfo(filename)
+        Private Function CreateFileModsTbx(filepath As String, type As String) As TextBox
+            Dim fi As New FileInfo(filepath)
             Dim Color As SolidColorBrush = IIf(type = "Level",
                                                Brushes.White,
                                                Brushes.LightGray)
@@ -383,7 +383,8 @@ Namespace Views
 
                 For Each name As String In fileNames
                     If name = String.Empty Then Continue For
-                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(name, "Level"))
+                    Dim filepath As String = GetFileAbsolutePath("", name)
+                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(filepath, "Level"))
                 Next
                 For Each tbx In modTbxs
                     StackPanel_Summary_FilesMods.Children.Add(tbx)
@@ -414,7 +415,8 @@ Namespace Views
                 Next
                 For Each name As String In fileNames
                     If name = String.Empty Then Continue For
-                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(name, "Mod"))
+                    Dim filepath As String = GetFileAbsolutePath("", name)
+                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(filepath, "Mod"))
                 Next
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
