@@ -524,7 +524,7 @@ Namespace Views
         End Function
 
         Private Function ReturnSelectedPort() As String
-            Dim portPath As String = Nothing
+            Dim portPath As String = String.Empty
 
             Try
                 If Not TextBox_Port.Text = TBX_SELECT_PORT Then portPath = TextBox_Port.Text
@@ -620,21 +620,22 @@ Namespace Views
 
         Private Function ReadyToLaunch() As Boolean
             Try
-                If ReturnSelectedPort() = Nothing Then
+                If String.IsNullOrEmpty(TextBox_Summary_Port.Text) Then
                     MessageBox.Show(ERR_MISSING_PORT, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     Return False
                 End If
 
-                If TextBox_Summary_Iwad.Text = Nothing Then
+                If String.IsNullOrEmpty(TextBox_Summary_Iwad.Text) Then
                     MessageBox.Show(ERR_MISSING_IWAD, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     Return False
                 End If
 
-                Return True
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ReadyToLaunch()'. Exception : " & ex.ToString)
                 Return False
             End Try
+
+            Return True
         End Function
 
         Private Sub LaunchGame()
@@ -648,17 +649,78 @@ Namespace Views
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Retrieve full path of files "Level" or "Misc", using the TextBox tooltip.
+        ''' Maybe not the best way, but OK for now...
+        ''' </summary>
+        ''' <param name="type">Target : "Level" or "Misc"</param>
+        ''' <returns></returns>
+        Private Function GetLvlsMiscFullPath(type As String) As String
+            Dim fullPath As String = String.Empty
 
+            Try
+                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                Dim lvlTbxs As New List(Of TextBox)
+                For Each tbx In allTbxs
+                    If tbx.Background Is Brushes.White Then 'TODO: Use constant or similar to target the color
+                        lvlTbxs.Add(tbx)
+                    End If
+                Next
+
+                If lvlTbxs.Count > 0 And type = "Level" Then
+                    fullPath = ExtractFileFullPath(lvlTbxs(0))
+                End If
+
+                If lvlTbxs.Count > 1 And type = "Misc" Then
+                    fullPath = ExtractFileFullPath(lvlTbxs(1))
+                End If
+
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'GetLvlsMiscFullPath()'. Exception : " & ex.ToString)
+            End Try
+
+            Return fullPath
+        End Function
+
+        Private Function ExtractFileFullPath(tbx As TextBox) As String
+            Dim directoryPath As String = tbx.ToolTip.ToString.Split(vbLf)(1).Replace("Directory : ", "")
+            Dim filename As String = tbx.Text
+
+            Return Path.Combine(directoryPath, filename)
+        End Function
+
+        Private Function GetModsFullPath() As List(Of String)
+            Dim fullPaths As New List(Of String)
+
+            Try
+                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                Dim modTbxs As New List(Of TextBox)
+                For Each tbx In allTbxs
+                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
+                        modTbxs.Add(tbx)
+                    End If
+                Next
+
+                For Each tbx In modTbxs
+                    fullPaths.Add(ExtractFileFullPath(tbx))
+                Next
+
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'GetLevelOrMiscFullPath()'. Exception : " & ex.ToString)
+            End Try
+
+            Return fullPaths
+        End Function
 
         Private Sub SaveSettings()
             Try
                 Dim lastLaunched As New Setting With
                 {
-                    .Port = ReturnSelectedPort(),
-                    .Iwad = ReturnSelectedLevels().Iwad,
-                    .Level = ReturnSelectedLevels().Level,
-                    .Misc = ReturnSelectedLevels().Misc,
-                    .FilesMods = ReturnSelectedMods().Files,
+                    .Port = TextBox_Summary_Port.Text,
+                    .Iwad = TextBox_Summary_Iwad.Text,
+                    .Level = GetLvlsMiscFullPath("Level"),
+                    .Misc = GetLvlsMiscFullPath("Misc"),
+                    .FilesMods = GetModsFullPath(),
                     .PortParameters = New List(Of String)
                 }
                 SaveToJsonData(lastLaunched)
