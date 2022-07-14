@@ -11,6 +11,16 @@
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
 
+    <Window.Resources>
+        <Style x:Key="Label_SummaryEntries" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,-1,0,0"/>
+        </Style>
+        
+        
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
@@ -579,12 +589,9 @@
                         <ColumnDefinition Width="10" />
                     </Grid.ColumnDefinitions>
 
-                    <Label Grid.Row="1" 
-                        Grid.Column="1" 
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="0,-1,0,0"
-                        Content="Port :"/>
+                    <Label Style="{StaticResource Label_SummaryEntries}"
+                           Grid.Row="1" Grid.Column="1" Content="Port :"
+                           />
                     <TextBox 
                         x:Name="TextBox_Summary_Port" 
                         Grid.Row="1"
@@ -597,14 +604,9 @@
                         AllowDrop="False"
                         />
 
-                    <Label 
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="0,-1,0,0"
-                        Content="Params :"
-                        />
+                    <Label Style="{StaticResource Label_SummaryEntries}"
+                           Grid.Row="2" Grid.Column="1" Content="Params :"
+                           />
                     <StackPanel 
                         x:Name="StackPanel_Summary_PortParameters"
                         Grid.Row="4" 
@@ -622,14 +624,9 @@
                             Cursor="Arrow"
                             IsReadOnly="True"/>-->
 
-                    <Label 
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="0,-1,0,0"
-                        Content="Iwad :"
-                        />
+                    <Label Style="{StaticResource Label_SummaryEntries}"
+                           Grid.Row="3" Grid.Column="1" Content="Iwad :"
+                           />
                     <TextBox
                         x:Name="TextBox_Summary_Iwad"
                         Grid.Row="3" 
@@ -641,14 +638,9 @@
                         IsReadOnly="True"
                         />
 
-                    <Label Grid.Row="4"
-                            Grid.Column="1"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Margin="0,-1,0,0"
-                            Content="File(s) :"
-                            />
-
+                    <Label Style="{StaticResource Label_SummaryEntries}"
+                           Grid.Row="4" Grid.Column="1" Content="File(s) :"
+                           />
                     <StackPanel 
                         x:Name="StackPanel_Summary_FilesMods"
                         Grid.Row="4" 
