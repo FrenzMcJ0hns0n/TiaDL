@@ -85,7 +85,7 @@ Friend Module IOMethods
 
         Try
             Dim combinedPath As String = Path.Combine(directoryPath, subDirName)
-            If Directory.Exists(combinedPath) Then directoryPath = combinedPath
+            If Directory.Exists(combinedPath) Then directoryPath = combinedPath 'Useless check? As Exception would be raised at previous line
 
         Catch ex As Exception
             WriteToLog(Date.Now & " - Error in 'GetDirectoryPath()'. Exception : " & ex.ToString)
@@ -100,7 +100,7 @@ Friend Module IOMethods
     ''' <summary>
     ''' Get absolute path of a file from relative one.
     ''' Requires a directory to search in, as target.
-    ''' No target ("") means search everywhere
+    ''' No target ("") means search everywhere from project root folder
     ''' </summary>
     ''' <param name="targetName">One of the project directories (port, iwads, levels, misc, mods)</param>
     ''' <param name="filename">The filename to get the absolute path of</param>
@@ -113,19 +113,25 @@ Friend Module IOMethods
 
             'Try file directly in target directory
             Dim probablePath As String = Path.Combine(targetDirectory, filename)
-            If File.Exists(probablePath) Then absolutePath = probablePath
+            If File.Exists(probablePath) Then 'Useless check? As Exception would be raised at previous line
+                absolutePath = probablePath
+                GoTo functionEnd
+            End If
 
-            'Search recursively in subdirs
-            For Each dir As String In Directory.GetDirectories(targetDirectory)
-                Dim fileInfoList As FileInfo() = New DirectoryInfo(dir).GetFiles
-                For Each fi As FileInfo In fileInfoList
-                    If fi.Name = filename Then absolutePath = fi.FullName
-                Next
+            'Search recursively from directory "targetName"
+            Dim allFiles() As String = Directory.GetFiles(targetDirectory, "*.*", SearchOption.AllDirectories)
+            For Each filepath As String In allFiles
+                If New FileInfo(filepath).Name = filename Then
+                    absolutePath = filepath
+                    GoTo functionEnd
+                End If
             Next
+
         Catch ex As Exception
             WriteToLog(Date.Now & " - Error in 'GetFileAbsolutePath()'. Exception : " & ex.ToString)
         End Try
 
+functionEnd:
         Return absolutePath
     End Function
 
