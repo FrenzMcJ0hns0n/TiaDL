@@ -17,6 +17,7 @@ Namespace Views
         Private Const ERR_MISSING_INPUT As String = "Error : missing input data"
         Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
         Private Const ERR_MISSING_IWAD As String = "You need an Iwad as game base content"
+
 #End Region
 
 
@@ -369,26 +370,26 @@ Namespace Views
             Try
                 If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
 
-                'TODO? Use lambda to shorten TextBox retrieval
+                ' Get all TextBoxes from the Stackpanel
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
 
-                Dim modTbxs As New List(Of TextBox)
-                For Each tbx In allTbxs
-                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
-                        modTbxs.Add(tbx)
-                    End If
-                Next
+                ' Get the mods TextBoxes (the ones with the LightGray background)
+                Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(t) t.Background Is Brushes.LightGray).ToList
 
+                ' Creating the fileMods TextBoxes
+                Dim fileModsTbx As List(Of TextBox) = fileNames.Select(Function(fileName)
+                                                                           If Not String.IsNullOrWhiteSpace(fileName) Then
+                                                                               Dim filepath As String = If(File.Exists(fileName), fileName, GetFileAbsolutePath("", fileName)) 'Fullpath is required
+                                                                               Return CreateFileModsTbx(filepath, "Level")
+                                                                           End If
+                                                                           Return Nothing
+                                                                       End Function).ToList
+
+                'Cleaning the StackPanel content and adding the mod and fileMods TextBoxes
                 StackPanel_Summary_FilesMods.Children.Clear()
+                fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+                modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
-                For Each name As String In fileNames
-                    If name = String.Empty Then Continue For
-                    Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
-                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(filepath, "Level"))
-                Next
-                For Each tbx In modTbxs
-                    StackPanel_Summary_FilesMods.Children.Add(tbx)
-                Next
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayLevels_Summary()'. Exception : " & ex.ToString)
             End Try
@@ -398,26 +399,26 @@ Namespace Views
             Try
                 If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
 
-                'TODO? Use lambda to shorten TextBox retrieval
+                ' Get all TextBoxes from the Stackpanel
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
 
-                Dim lvlTbxs As New List(Of TextBox)
-                For Each tbx In allTbxs
-                    If tbx.Background Is Brushes.White Then 'TODO: Use constant or similar to target the color
-                        lvlTbxs.Add(tbx)
-                    End If
-                Next
+                ' Get the levels TextBoxes (the ones with the White background)
+                Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(t) t.Background Is Brushes.White).ToList
 
+                ' Creating the fileMods TextBoxes
+                Dim fileModsTbx As List(Of TextBox) = fileNames.Select(Function(fileName)
+                                                                           If Not String.IsNullOrWhiteSpace(fileName) Then
+                                                                               Dim filepath As String = If(File.Exists(fileName), fileName, GetFileAbsolutePath("", fileName)) 'Fullpath is required
+                                                                               Return CreateFileModsTbx(filepath, "Mod")
+                                                                           End If
+                                                                           Return Nothing
+                                                                       End Function).ToList
+
+                'Cleaning the StackPanel content and adding the mod and fileMods TextBoxes
                 StackPanel_Summary_FilesMods.Children.Clear()
+                lvlTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+                fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
-                For Each tbx In lvlTbxs
-                    StackPanel_Summary_FilesMods.Children.Add(tbx)
-                Next
-                For Each name As String In fileNames
-                    If name = String.Empty Then Continue For
-                    Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
-                    StackPanel_Summary_FilesMods.Children.Add(CreateFileModsTbx(filepath, "Mod"))
-                Next
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
             End Try
@@ -662,12 +663,9 @@ Namespace Views
 
             Try
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-                Dim lvlTbxs As New List(Of TextBox)
-                For Each tbx In allTbxs
-                    If tbx.Background Is Brushes.White Then 'TODO: Use constant or similar to target the color
-                        lvlTbxs.Add(tbx)
-                    End If
-                Next
+
+                ' Get the levels TextBoxes (the ones with the White background)
+                Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(t) t.Background Is Brushes.White).ToList
 
                 If lvlTbxs.Count > 0 And type = "Level" Then
                     fullPath = ExtractFileFullPath(lvlTbxs(0))
@@ -696,12 +694,9 @@ Namespace Views
 
             Try
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-                Dim modTbxs As New List(Of TextBox)
-                For Each tbx In allTbxs
-                    If tbx.Background Is Brushes.LightGray Then 'TODO: Use constant or similar to target the color
-                        modTbxs.Add(tbx)
-                    End If
-                Next
+
+                ' Get the mods TextBoxes (the ones with the LightGray background)
+                Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(t) t.Background Is Brushes.LightGray).ToList
 
                 For Each tbx In modTbxs
                     fullPaths.Add(ExtractFileFullPath(tbx))
