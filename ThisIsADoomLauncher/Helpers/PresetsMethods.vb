@@ -99,7 +99,7 @@ Friend Module PresetsMethods
                 Loop
             End Using
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'GetModPresets_FromCSV()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'GetModPresets_FromCsv()'. Exception : " & ex.ToString)
         End Try
 
         Return modPresets
