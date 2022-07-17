@@ -709,6 +709,9 @@ Namespace Views
             Return fullPaths
         End Function
 
+        ''' <summary>
+        ''' Save "Settings" (currently selected contents in Summary) to JSON
+        ''' </summary>
         Private Sub SaveSettings()
             Try
                 Dim lastLaunched As New Setting With
@@ -717,7 +720,7 @@ Namespace Views
                     .Iwad = TextBox_Summary_Iwad.Text,
                     .Level = GetLvlsMiscFullPath("Level"),
                     .Misc = GetLvlsMiscFullPath("Misc"),
-                    .FilesMods = GetModsFullPath(),
+                    .Mods = GetModsFullPath(),
                     .PortParameters = New List(Of String)
                 }
                 SaveToJsonData(lastLaunched)
@@ -726,6 +729,9 @@ Namespace Views
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Load "Settings" (last launched contents) from JSON to update Summary views
+        ''' </summary>
         Private Sub LoadSettings()
             Try
                 Dim savedSettings As Setting = LoadFromJsonData()
@@ -735,12 +741,13 @@ Namespace Views
                         FillTextBox(TextBox_Port, .Port)
                         FillTextBox(TextBox_Summary_Port, .Port)
                     End If
+                    'TODO: Handle case of invalid .Port 
                     If File.Exists(Path.Combine(GetDirectoryPath("iwads"), .Iwad)) Then TextBox_Summary_Iwad.Text = .Iwad
-                    If Not .Level = Nothing Then UpdateLevelAndMisc_Summary(New List(Of String) From { .Level, .Misc})
-                    If Not .FilesMods.Count = 0 Then UpdateMods_Summary(.FilesMods)
+                    'TODO: Handle case of invalid .Iwad 
+                    If Not .Level = String.Empty Then UpdateLevelAndMisc_Summary(New List(Of String) From { .Level, .Misc})
+                    If Not .Mods.Count = 0 Then UpdateMods_Summary(.Mods)
                 End With
 
-                'UpdateSummary() Not necessary anymore as we do update Summary manually (WYSIWYG-like)
                 UpdateCommand()
                 DecorateCommand()
             Catch ex As Exception

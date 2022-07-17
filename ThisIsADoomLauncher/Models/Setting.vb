@@ -6,7 +6,7 @@
         Public Property Level As String
         Public Property Misc As String
         Public Property PortParameters As List(Of String) = New List(Of String)
-        Public Property FilesMods As List(Of String) = New List(Of String)
+        Public Property Mods As List(Of String) = New List(Of String)
 
         'Public Sub New(Port As String, Iwad As String, Level As String, Misc As String, PortParameters As List(Of String), FilesMods As List(Of String))
         '    Me.Port = Port
