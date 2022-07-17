@@ -105,7 +105,7 @@ Namespace Views
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
 
                 Dim now_formatted As String = Date.Now.ToString("yyyy-MM-dd_HH-mm-ss")
-                Dim batPath As String = Path.Combine(GetDirectoryPath(""), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
+                Dim batPath As String = Path.Combine(GetDirectoryPath(), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
 
                 Using writer As New StreamWriter(batPath, False, Encoding.Default)
                     writer.WriteLine("@echo off")

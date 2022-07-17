@@ -48,7 +48,7 @@ Friend Module IOMethods
 
 #Region "Other helpers"
 
-    'TODO: Use constants and maybe rewrite
+    'TODO: Use constants and maybe rewrite (Make sure about GetDirectoryPath() usage here!)
     ''' <summary>
     ''' Check if all directories can be found
     ''' Validate paths
@@ -60,7 +60,7 @@ Friend Module IOMethods
 
         Try
             For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods"}
-                If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir
+                If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir 'Seems incorrect now, TODO!
             Next
 
             If Not errorText = Nothing Then
@@ -77,17 +77,14 @@ Friend Module IOMethods
     ''' <summary>
     ''' Get the path of a TiaDL directory.
     ''' </summary>
-    ''' <param name="subDirName">Target directory. Leave empty ("") to get the root dir</param>
+    ''' <param name="subDirName">Target. Leave unfilled () or empty ("") to get the project root directory</param>
     ''' <returns></returns>
-    Public Function GetDirectoryPath(Optional subDirName As String = Nothing) As String
-
+    Public Function GetDirectoryPath(Optional subDirName As String = "") As String
         Dim directoryPath As String = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
 
         Try
             Dim combinedPath As String = Path.Combine(directoryPath, subDirName)
-            'If Directory.Exists(combinedPath) Then directoryPath = combinedPath 'Useless check? As Exception would be raised at previous line
             directoryPath = combinedPath
-
         Catch ex As ArgumentNullException
             WriteToLog(Date.Now & " - Warning, potential error in 'GetDirectoryPath()' as parameter 'subDirName' was null")
         Catch ex As Exception
@@ -95,17 +92,14 @@ Friend Module IOMethods
         End Try
 
         Return directoryPath
-
     End Function
 
     'TODO: Use consistent names everywhere (Port, Iwad, Level, Misc, Mods)
     'TODO: Investigate about old code > ConvertPathRelativeToAbsolute_Level : Handle wildcard for "Wolf3D_*.pk3"
     ''' <summary>
-    ''' Get absolute path of a file from relative one.
-    ''' Requires a directory to search in, as target.
-    ''' No target ("") means search everywhere from project root folder
+    ''' Get the absolute path of a file from its relative one within TiaDL project tree
     ''' </summary>
-    ''' <param name="targetName">One of the project directories (port, iwads, levels, misc, mods)</param>
+    ''' <param name="targetName">One of the project directories: "port", "iwads", "levels", "misc", "mods", or "" for any</param>
     ''' <param name="filename">The filename to get the absolute path of</param>
     ''' <returns></returns>
     Public Function GetFileAbsolutePath(targetName As String, filename As String) As String
@@ -114,14 +108,13 @@ Friend Module IOMethods
         Try
             Dim targetDirectory As String = GetDirectoryPath(targetName)
 
-            'Try file directly in target directory
-            If Not String.IsNullOrEmpty(targetName) Then
-                'Dim probablePath As String = Path.Combine(targetDirectory, filename)
-                absolutePath = Path.Combine(targetDirectory, filename) 'Path.Combine() did not raise exception, probable path must be right
+            'Get file with targetName provided explicitly from caller
+            If Not targetName = String.Empty Then
+                absolutePath = Path.Combine(targetDirectory, filename)
                 GoTo functionEnd
             End If
 
-            'Search recursively from directory "targetName"
+            'Search recursively from root directory, as no targetName
             Dim allFiles() As String = Directory.GetFiles(targetDirectory, "*.*", SearchOption.AllDirectories)
             For Each filepath As String In allFiles
                 If New FileInfo(filepath).Name = filename Then
@@ -230,7 +223,7 @@ functionEnd:
     Public Sub WritePresetsFileHeader()
 
         Try
-            Dim rootDirPath = GetDirectoryPath("")
+            Dim rootDirPath = GetDirectoryPath()
             Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
 
             Using writer As New StreamWriter(presetFile, True, Encoding.Default)
@@ -259,7 +252,7 @@ functionEnd:
     ''' 
     Public Sub WriteToLog(content As String)
 
-        Dim rootDirPath = GetDirectoryPath("")
+        Dim rootDirPath = GetDirectoryPath()
         Dim logfilePath = Path.Combine(rootDirPath, "log.txt")
 
         Using streamWriter As New StreamWriter(logfilePath, True)
