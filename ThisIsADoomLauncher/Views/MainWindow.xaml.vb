@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Text
 Imports System.Text.RegularExpressions
+Imports Microsoft.Win32
 Imports ThisIsADoomLauncher.Models
 
 Namespace Views
@@ -140,8 +141,25 @@ Namespace Views
             End Try
         End Sub
 
-        'TODO
-        'Implement button "Browse..."
+        Private Sub Button_Port_Browse_Click(sender As Object, e As RoutedEventArgs)
+            Try
+                Dim dialog As New OpenFileDialog With
+                {
+                    .Filter = "EXE file (*.exe)|*.exe",
+                    .InitialDirectory = GetDirectoryPath(), 'TiaDL root directory
+                    .Title = "Select a Doom port executable"
+                }
+
+                If dialog.ShowDialog() Then
+                    FillTextBox(TextBox_Port, dialog.FileName)
+                    FillTextBox(TextBox_Summary_Port, dialog.FileName)
+                    UpdateCommand()
+                    DecorateCommand()
+                End If
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'Button_Port_Browse_Click()'. Exception : " & ex.ToString)
+            End Try
+        End Sub
 
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
             UnfillTextBox(TextBox_Port, TBX_SELECT_PORT)
