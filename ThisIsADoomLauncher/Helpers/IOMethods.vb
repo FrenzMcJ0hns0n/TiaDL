@@ -95,7 +95,7 @@ Friend Module IOMethods
     End Function
 
     'TODO: Use consistent names everywhere (Port, Iwad, Level, Misc, Mods)
-    'TODO: Investigate about old code > ConvertPathRelativeToAbsolute_Level : Handle wildcard for "Wolf3D_*.pk3"
+    'TODO: Figure out a way to handle wildcard * in "Wolf3D_*.pk3" (confirmed issue, as recursive search fails on that)
     ''' <summary>
     ''' Get the absolute path of a file from its relative one within TiaDL project tree
     ''' </summary>
@@ -117,7 +117,7 @@ Friend Module IOMethods
             'Search recursively from root directory, as no targetName
             Dim allFiles() As String = Directory.GetFiles(targetDirectory, "*.*", SearchOption.AllDirectories)
             For Each filepath As String In allFiles
-                If New FileInfo(filepath).Name = filename Then
+                If New FileInfo(filepath).Name.ToLowerInvariant = filename.ToLowerInvariant Then
                     absolutePath = filepath
                     GoTo functionEnd
                 End If
