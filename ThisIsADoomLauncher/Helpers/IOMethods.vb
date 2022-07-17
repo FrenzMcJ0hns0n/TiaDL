@@ -48,30 +48,24 @@ Friend Module IOMethods
 
 #Region "Other helpers"
 
-    'TODO: Use constants and maybe rewrite (Make sure about GetDirectoryPath() usage here!)
     ''' <summary>
-    ''' Check if all directories can be found
-    ''' Validate paths
+    ''' Check presence of project directories
     ''' </summary>
-    ''' 
-    Public Sub CheckProjectSubdirectories()
-
-        Dim errorText As String = Nothing
+    Public Sub CheckProjectDirectories()
+        Dim missingDirectories As New List(Of String)
 
         Try
             For Each dir As String In DIRECTORIES_LIST
-                If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir 'Seems incorrect now, TODO!
+                If Not Directory.Exists(GetDirectoryPath(dir)) Then missingDirectories.Add(dir)
             Next
 
-            If Not errorText = Nothing Then
-                MessageBox.Show("Startup error. Unable to find the following subdirectories :" & errorText)
-                WriteToLog(Date.Now & " - Startup error. Subdirectories not found :" & errorText)
+            If missingDirectories.Count > 0 Then
+                MessageBox.Show(ERR_MISSING_DIR & vbCrLf & String.Join(vbCrLf, missingDirectories), ERR_STARTUP, MessageBoxButton.OK, MessageBoxImage.Error)
+                WriteToLog(Date.Now & " - " & ERR_STARTUP & ". " & ERR_MISSING_DIR & String.Join(", ", missingDirectories))
             End If
-
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'CheckProjectSubdirectories()'. Exception : " & ex.ToString)
+            WriteToLog(Date.Now & " - Error in 'CheckProjectDirectories()'. Exception : " & ex.ToString)
         End Try
-
     End Sub
 
     ''' <summary>

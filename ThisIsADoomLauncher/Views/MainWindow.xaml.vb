@@ -28,7 +28,7 @@ Namespace Views
             Title = GetFormattedAppTitle()
 
             Try
-                CheckProjectSubdirectories()
+                CheckProjectDirectories()
                 LoadSettings()
 
                 'SetIniFiles() 'TODO? V3
