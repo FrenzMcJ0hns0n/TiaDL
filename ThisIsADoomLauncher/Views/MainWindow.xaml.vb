@@ -741,11 +741,13 @@ Namespace Views
                         FillTextBox(TextBox_Port, .Port)
                         FillTextBox(TextBox_Summary_Port, .Port)
                     End If
-                    'TODO: Handle case of invalid .Port 
-                    If File.Exists(Path.Combine(GetDirectoryPath("iwads"), .Iwad)) Then TextBox_Summary_Iwad.Text = .Iwad
-                    'TODO: Handle case of invalid .Iwad 
-                    If Not .Level = String.Empty Then UpdateLevelAndMisc_Summary(New List(Of String) From { .Level, .Misc})
-                    If Not .Mods.Count = 0 Then UpdateMods_Summary(.Mods)
+                    'TODO: Handle case of invalid .Port
+
+                    If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
+                    'TODO: Handle case of invalid .Iwad
+
+                    UpdateLevelAndMisc_Summary(New List(Of String) From { .Level, .Misc})
+                    UpdateMods_Summary(.Mods)
                 End With
 
                 UpdateCommand()
