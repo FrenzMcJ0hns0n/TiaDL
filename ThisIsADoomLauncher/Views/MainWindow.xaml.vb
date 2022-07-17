@@ -49,7 +49,7 @@ Namespace Views
             Try
                 ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'PopulateBaseLevelPresets()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -57,7 +57,7 @@ Namespace Views
             Try
                 ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCsv("base_mods")
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'SetCommonPresets()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'PopulateBaseModsPresets()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -224,7 +224,7 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'ListView_Levels_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -327,7 +327,7 @@ Namespace Views
                 helpWindow.ShowDialog()
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Menu_Help_Click()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'Button_Options_HelpAbout_Click()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -409,7 +409,7 @@ Namespace Views
                 modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'DisplayLevels_Summary()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'UpdateLevelAndMisc_Summary()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -438,7 +438,7 @@ Namespace Views
                 fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'DisplayMods_Summary()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'UpdateMods_Summary()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -453,7 +453,7 @@ Namespace Views
 
                 RichTextBox_Command.Document = flow
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'FillRichTextBox()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'FillRichTextBox_Command()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -605,7 +605,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'DecorateCommandPreview()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'DecorateCommand()'. Exception : " & ex.ToString)
             End Try
         End Sub
 
@@ -721,7 +721,7 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'GetLevelOrMiscFullPath()'. Exception : " & ex.ToString)
+                WriteToLog(Date.Now & " - Error in 'GetModsFullPath()'. Exception : " & ex.ToString)
             End Try
 
             Return fullPaths
