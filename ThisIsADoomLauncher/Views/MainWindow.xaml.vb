@@ -540,25 +540,25 @@ Namespace Views
 
 
 
-        'Summary : Command line view
+        ''' <summary>
+        ''' Update the "Command" Summary from the "Fields" Summary view
+        ''' </summary>
         Private Sub UpdateCommand()
             Try
                 Dim port As String = TextBox_Summary_Port.Text
                 Dim iwad As String = TextBox_Summary_Iwad.Text
 
-                If String.IsNullOrWhiteSpace(port) OrElse String.IsNullOrWhiteSpace(iwad) Then
-                    RichTextBox_Command.Document.Blocks.Clear()
+                If port = String.Empty Or iwad = String.Empty Then
+                    RichTextBox_Command.Document.Blocks.Clear() 'TODO? Display text about Missing Port & Iwad ?
                     Return
                 End If
 
                 Dim command As String = $"""{port}"" -iwad ""{iwad}"""
                 'TODO: Manage port parameters, to be added before " -iwad"
 
-                'Handle Levels/Misc/Mods
-                Dim tbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-                For Each tbx As TextBox In tbxs
-                    command &= $" -file ""{ExtractFileFullPath(tbx)}"""
-                Next
+                'Add Level/Misc/Mods to the command line
+                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                allTbxs.ForEach(Sub(tbx) command &= $" -file ""{ExtractFileFullPath(tbx)}""")
 
                 FillRichTextBox_Command(command)
             Catch ex As Exception
