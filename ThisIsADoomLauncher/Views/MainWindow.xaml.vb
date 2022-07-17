@@ -8,7 +8,7 @@ Namespace Views
     Public Class MainWindow
 
 
-#Region "Constants"
+#Region "GUI related constants"
         Private Const TBX_SELECT_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
         Private Const TBX_SELECT_IWAD As String = "Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
         Private Const TBX_SELECT_LEVEL As String = "Drop Level file... (.wad/.pk3)" '+ /.zip ? TODO: Rename LEVEL into MAPS eventually

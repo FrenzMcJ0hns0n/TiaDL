@@ -59,7 +59,7 @@ Friend Module IOMethods
         Dim errorText As String = Nothing
 
         Try
-            For Each dir As String In New List(Of String) From {"iwads", "levels", "misc", "mods"}
+            For Each dir As String In DIRECTORIES_LIST
                 If GetDirectoryPath(dir) = Nothing Then errorText &= Environment.NewLine & dir 'Seems incorrect now, TODO!
             Next
 

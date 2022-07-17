@@ -91,6 +91,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\CliMethods.vb" />
+    <Compile Include="Helpers\Constants.vb" />
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
     <Compile Include="Helpers\General.vb" />
     <Compile Include="Helpers\Serialization.vb" />
