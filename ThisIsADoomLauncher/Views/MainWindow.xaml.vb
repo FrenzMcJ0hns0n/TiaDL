@@ -19,6 +19,8 @@ Namespace Views
         Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
         Private Const ERR_MISSING_IWAD As String = "You need an Iwad as game base content"
 
+        Private Const ERR_INVALID_INPUT As String = "Error : invalid input data"
+        Private Const ERR_INPUT_NOT_FILE As String = "Submitted element was not a file"
 #End Region
 
 
@@ -245,7 +247,7 @@ Namespace Views
 
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
             If Not File.Exists(droppedFile) Then
-                MessageBox.Show("Submitted element was not a file", "Error : invalid input data", MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show(ERR_INPUT_NOT_FILE, ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return
             End If
 
