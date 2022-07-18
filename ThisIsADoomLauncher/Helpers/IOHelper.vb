@@ -180,31 +180,17 @@ functionEnd:
             Dim extension As String = New FileInfo(filepath).Extension.ToLowerInvariant
 
             Select Case type
-                Case "Port"
-                    'TODO? Add other validation rules
-                    If extension = ".exe" Then Return True
-
+                Case "Port" : If extension = ".exe" Then Return True 'TODO? Add other validation rules
                 Case "Iwad"
                     Using reader As New BinaryReader(File.OpenRead(filepath))
-                        Dim bytes As Byte() = reader.ReadBytes(4)
-                        If Encoding.Default.GetString(bytes) = "IWAD" And extension = ".wad" Then Return True
+                        If extension = ".wad" AndAlso Encoding.Default.GetString(reader.ReadBytes(4)) = "IWAD" Then Return True
                     End Using
-
-                Case "Level"
-                    Dim validExtensions As New List(Of String) From {".pk3", ".wad", ".zip"} 'TODO: Use constants or similar
-                    If validExtensions.Contains(extension) Then Return True
-
-                Case "Misc"
-                    Dim validExtensions As New List(Of String) From {".bex", ".deh", ".txt"} 'TODO: Use constants or similar
-                    If validExtensions.Contains(extension) Then Return True
-
-                Case "Image"
-                    Dim validExtensions As New List(Of String) From {".jpg", ".jpeg", ".png"} 'TODO: Use constants or similar
-                    If validExtensions.Contains(extension) Then Return True
-
+                Case "Level" : If VALID_EXTENSIONS_LEVEL.Contains(extension) Then Return True
+                Case "Misc" : If VALID_EXTENSIONS_MISC.Contains(extension) Then Return True
+                Case "Image" : If VALID_EXTENSIONS_PICT.Contains(extension) Then Return True
                 Case Else 'TODO?
-
             End Select
+
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {filepath}, {type}")
