@@ -732,9 +732,13 @@ Namespace Views
         Private Sub LaunchGame()
             Try
                 Dim rtbText As String = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
-                Dim command As String = String.Format("/c start """" {0}", rtbText)
-                LaunchProcessV3(command)
-
+                Dim cmdExe As New ProcessStartInfo("cmd.exe") With
+                {
+                    .UseShellExecute = False,
+                    .CreateNoWindow = True,
+                    .Arguments = $"/c start """" {rtbText}"
+                }
+                Process.Start(cmdExe)
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'LaunchGame()'. Exception : " & ex.ToString)
             End Try
