@@ -18,6 +18,10 @@
             <Setter Property="Margin" Value="0,-1,0,0"/>
         </Style>
 
+        <Style x:Key="Label_NewLevel" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
         <Style x:Key="Button_NewLevel_Browse" TargetType="{x:Type Button}">
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Content" Value="Browse..."/>
@@ -227,11 +231,10 @@
                                 <ColumnDefinition Width="20"/>
                             </Grid.ColumnDefinitions>
 
-                            <Label Grid.Row="1"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Iwad :"/>
+                            
+                            <Label Style="{StaticResource Label_NewLevel}"
+                                   Grid.Row="1" Grid.Column="1"
+                                   Content="Iwad :"/>
                             <TextBox 
                                 x:Name="TextBox_NewLevel_Iwad"
                                 Grid.Row="1"
@@ -256,11 +259,10 @@
                                     Style="{StaticResource Button_NewLevel_Clear}"
                                     Grid.Row="1" Grid.Column="3"/>
 
-                            <Label Grid.Row="3"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Level :"/>
+                            
+                            <Label Style="{StaticResource Label_NewLevel}"
+                                   Grid.Row="3" Grid.Column="1"
+                                   Content="Level :"/>
                             <TextBox x:Name="TextBox_NewLevel_Level"
                                         Grid.Row="3" 
                                         Grid.Column="2"
@@ -284,11 +286,10 @@
                                     Style="{StaticResource Button_NewLevel_Clear}"
                                     Grid.Row="3" Grid.Column="3"/>
 
-                            <Label Grid.Row="5"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Misc. :"/>
+                            
+                            <Label Style="{StaticResource Label_NewLevel}"
+                                   Grid.Row="5" Grid.Column="1"
+                                   Content="Misc. :"/>
                             <TextBox x:Name="TextBox_NewLevel_Misc"
                                         Grid.Row="5" 
                                         Grid.Column="2"
@@ -312,12 +313,10 @@
                                     Style="{StaticResource Button_NewLevel_Clear}"
                                     Grid.Row="5" Grid.Column="3"/>
 
-                            <Label Grid.Row="7"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Image :"/>
+                            
+                            <Label Style="{StaticResource Label_NewLevel}"
+                                   Grid.Row="7" Grid.Column="1"
+                                   Content="Image :"/>
                             <!--<TextBox Grid.Row="7" 
                                         Grid.Column="2"
                                         Margin="50,0,50,0"
@@ -352,11 +351,7 @@
                                     Style="{StaticResource Button_NewLevel_Clear}"
                                     Grid.Row="7" Grid.Column="3"/>
 
-                            <Label Grid.Row="9"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Options :"/>
+
                             <Grid Grid.Row="9"
                                     Grid.Column="2"
                                     Margin="150,0,150,0">
