@@ -100,7 +100,7 @@
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\IOMethods.vb" />
+    <Compile Include="Helpers\IOHelper.vb" />
     <Compile Include="Helpers\PresetsMethods.vb" />
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>

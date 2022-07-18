@@ -2,7 +2,7 @@
 Imports System.Reflection
 Imports System.Text
 
-Friend Module IOMethods
+Friend Module IOHelper
 
 
 #Region "FileInfo helpers : useless ?"
