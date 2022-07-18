@@ -355,7 +355,22 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
-            'TODO
+            Dim iwadInput As String = TextBox_NewLevel_Iwad.Text
+            Dim levelInput As String = TextBox_NewLevel_Level.Text
+            Dim miscInput As String = TextBox_NewLevel_Misc.Text
+
+            'At least 2 contents (including Iwad) are required
+            If iwadInput = TBX_SELECT_IWAD Then Return
+            If levelInput = TBX_SELECT_LEVEL And miscInput = TBX_SELECT_MISC Then
+                MessageBox.Show("You only submitted an Iwad. Please select it from the ""Base presets"" tab instead", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                Return
+            End If
+
+            'Update Summary "Fields" view
+            TextBox_Summary_Iwad.Text = iwadInput
+            UpdateLevelAndMisc_Summary(New List(Of String) From {levelInput, miscInput})
+            UpdateCommand()
+            DecorateCommand()
         End Sub
 
         Private Sub Button_NewLevel_SaveAs_Click(sender As Object, e As RoutedEventArgs)
