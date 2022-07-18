@@ -191,6 +191,7 @@ Namespace Views
             Try
                 '1) Collect files
                 Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                'TODO: Make sure dropped elements are files
 
                 '2) Check & order files
                 Dim confirmedFiles As List(Of String) = OrderDroppedFiles_Levels(filePaths)
@@ -255,15 +256,6 @@ Namespace Views
             If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
         End Sub
 
-        Private Sub TextBox_NewLevel_Iwad_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Iwad_Drop(sender As Object, e As DragEventArgs)
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile(droppedFile, "Iwad") Then FillTextBox(sender, droppedFile)
-        End Sub
-
         Private Sub Button_NewLevel_Browse_Click(sender As Object, e As RoutedEventArgs)
             Dim btn As Button = sender
 
@@ -319,33 +311,6 @@ Namespace Views
                 Case "Misc" : UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
                 Case "Image" : UnfillTextBox(TextBox_NewLevel_Image, TBX_SELECT_PICT)
             End Select
-        End Sub
-
-        Private Sub TextBox_NewLevel_Level_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Level_Drop(sender As Object, e As DragEventArgs)
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile(droppedFile, "Level") Then FillTextBox(sender, droppedFile)
-        End Sub
-
-        Private Sub TextBox_NewLevel_Misc_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Misc_Drop(sender As Object, e As DragEventArgs)
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile(droppedFile, "Misc") Then FillTextBox(sender, droppedFile)
-        End Sub
-
-        Private Sub TextBox_NewLevel_Image_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
-        Private Sub TextBox_NewLevel_Image_Drop(sender As Object, e As DragEventArgs)
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If ValidateFile(droppedFile, "Image") Then FillTextBox(sender, droppedFile)
         End Sub
 
         Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
