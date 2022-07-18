@@ -24,6 +24,37 @@ Namespace Views
 #End Region
 
 
+#Region "GUI related enums"
+
+        Private Function GetActiveLvlTab() As LVLPRESET_TAB
+            Select Case TabControl_Levels.SelectedIndex
+                Case 0 : Return LVLPRESET_TAB.Base
+                Case 1 : Return LVLPRESET_TAB.User
+                Case 2 : Return LVLPRESET_TAB.AddNew
+                Case Else : Return LVLPRESET_TAB.None
+            End Select
+        End Function
+
+        Private Sub SetActiveLvlTab(value As LVLPRESET_TAB)
+            TabControl_Levels.SelectedIndex = value
+        End Sub
+
+        Private Function GetActiveModTab() As MODPRESET_TAB
+            Select Case TabControl_Mods.SelectedIndex
+                Case 0 : Return MODPRESET_TAB.Base
+                Case 1 : Return MODPRESET_TAB.User
+                Case 2 : Return MODPRESET_TAB.AddNew
+                Case Else : Return MODPRESET_TAB.None
+            End Select
+        End Function
+
+        Private Sub SetActiveModTab(value As MODPRESET_TAB)
+            TabControl_Mods.SelectedIndex = value
+        End Sub
+
+#End Region
+
+
 #Region "Startup"
 
         Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
@@ -204,7 +235,7 @@ Namespace Views
 
                 '3) Feed GUI if Count > 0
                 If confirmedFiles.Count = 0 Then Return
-                TabControl_Levels.SelectedIndex = 2
+                SetActiveLvlTab(LVLPRESET_TAB.AddNew)
 
                 If confirmedFiles.Count > 0 Then FillTextBox(TextBox_NewLevel_Iwad, confirmedFiles(0))
                 If confirmedFiles.Count > 1 Then FillTextBox(TextBox_NewLevel_Level, confirmedFiles(1))
@@ -543,13 +574,16 @@ Namespace Views
             Dim preset As LevelPreset = Nothing
 
             Try
-                Select Case TabControl_Levels.SelectedIndex
-                    Case 0
+                Select Case GetActiveLvlTab()
+                    Case LVLPRESET_TAB.Base
                         preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
-                    Case 1
+
+                    Case LVLPRESET_TAB.User
                         preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
-                    Case 2
+
+                    Case LVLPRESET_TAB.AddNew
                         preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .ImagePath = ""} 'TODO
+
                 End Select
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
@@ -562,15 +596,16 @@ Namespace Views
             Dim preset As ModPreset = Nothing
 
             Try
-                Select Case TabControl_Mods.SelectedIndex
-                    Case 0
+                Select Case GetActiveModTab()
+                    Case MODPRESET_TAB.Base
                         preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
-                    Case 1
+
+                    Case MODPRESET_TAB.User
                         preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset) 'TODO
-                    Case 2
+
+                    Case MODPRESET_TAB.AddNew
                         preset = New ModPreset() With {.Files = New List(Of String)} 'TODO
-                    Case Else
-                        'TODO?
+
                 End Select
             Catch ex As Exception
                 WriteToLog(Date.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
