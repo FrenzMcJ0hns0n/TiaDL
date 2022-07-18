@@ -4,50 +4,6 @@ Imports System.Text
 
 Friend Module IOHelper
 
-
-#Region "FileInfo helpers : useless ?"
-
-    ''' <summary>
-    ''' Return input's parent directory full path
-    ''' </summary>
-    '''
-    Public Function File_GetDir(input As String) As String
-
-        With New FileInfo(input)
-            Return If(File.Exists(.FullName), .DirectoryName, Nothing)
-        End With
-
-    End Function
-
-    ''' <summary>
-    ''' Return input's extension
-    ''' </summary>
-    ''' 
-    Public Function File_GetExtension(input As String) As String
-
-        With New FileInfo(input)
-            Return If(File.Exists(.FullName), .Extension, Nothing)
-        End With
-
-    End Function
-
-    ''' <summary>
-    ''' Return input's filename
-    ''' </summary>
-    ''' 
-    Public Function File_GetName(input As String) As String
-
-        With New FileInfo(input)
-            Return If(File.Exists(.FullName), .Name, Nothing)
-        End With
-
-    End Function
-
-#End Region
-
-
-#Region "Other helpers"
-
     ''' <summary>
     ''' Check presence of project directories
     ''' </summary>
@@ -244,8 +200,5 @@ functionEnd:
         End Using
 
     End Sub
-
-#End Region
-
 
 End Module
