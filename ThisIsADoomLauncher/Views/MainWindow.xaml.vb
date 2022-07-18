@@ -302,6 +302,19 @@ Namespace Views
             End Select
         End Sub
 
+        Private Sub Button_NewLevel_Clear_Click(sender As Object, e As RoutedEventArgs)
+            Dim btn As Button = sender
+
+            'Restore default placeholder
+            Dim sourceBtn As String = btn.Name.Split("_")(2)
+            Select Case sourceBtn
+                Case "Iwad" : UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
+                Case "Level" : UnfillTextBox(TextBox_NewLevel_Level, TBX_SELECT_LEVEL)
+                Case "Misc" : UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
+                Case "Image" : UnfillTextBox(TextBox_NewLevel_Image, TBX_SELECT_PICT)
+            End Select
+        End Sub
+
         Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs)
             UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
         End Sub

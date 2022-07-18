@@ -23,6 +23,11 @@
             <Setter Property="Content" Value="Browse..."/>
             <EventSetter Event="Click" Handler="Button_NewLevel_Browse_Click"/>
         </Style>
+        <Style x:Key="Button_NewLevel_Clear" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <Setter Property="Content" Value="Clear &#x21ba;"/>
+            <EventSetter Event="Click" Handler="Button_NewLevel_Clear_Click"/>
+        </Style>
 
     </Window.Resources>
     
@@ -239,7 +244,7 @@
                                 IsReadOnly="True"
                                 FontStyle="Italic"
                                 Foreground="Gray"
-                                Text="Drop an IWAD file here..."
+                                Text="Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
                                 AllowDrop="True"
                                 PreviewDragOver="TextBox_NewLevel_Iwad_PreviewDragOver"
                                 Drop="TextBox_NewLevel_Iwad_Drop"
@@ -247,14 +252,9 @@
                             <Button x:Name="Button_NewLevel_Iwad_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="1" Grid.Column="3"/>
-                            <Button 
-                                x:Name="Button_NewLevel_Iwad_Clear"
-                                Grid.Row="1" 
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom" 
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Iwad_Clear_Click"
-                                />
+                            <Button x:Name="Button_NewLevel_Iwad_Clear"
+                                    Style="{StaticResource Button_NewLevel_Clear}"
+                                    Grid.Row="1" Grid.Column="3"/>
 
                             <Label Grid.Row="3"
                                     Grid.Column="1"
@@ -272,7 +272,7 @@
                                         IsReadOnly="True"
                                         FontStyle="Italic"
                                         Foreground="Gray"
-                                        Text="Drop a .wad/.pk3 file here..."
+                                        Text="Drop Level file... (.wad/.pk3)"
                                         AllowDrop="True"
                                         PreviewDragOver="TextBox_NewLevel_Level_PreviewDragOver"
                                         Drop="TextBox_NewLevel_Level_Drop"
@@ -280,14 +280,9 @@
                             <Button x:Name="Button_NewLevel_Level_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="3" Grid.Column="3"/>
-                            <Button 
-                                x:Name="Button_NewLevel_Level_Clear"
-                                Grid.Row="3"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Level_Clear_Click"
-                                />
+                            <Button x:Name="Button_NewLevel_Level_Clear"
+                                    Style="{StaticResource Button_NewLevel_Clear}"
+                                    Grid.Row="3" Grid.Column="3"/>
 
                             <Label Grid.Row="5"
                                     Grid.Column="1"
@@ -305,7 +300,7 @@
                                         IsReadOnly="True"
                                         FontStyle="Italic"
                                         Foreground="Gray"
-                                        Text="Drop a .deh/.bex file here..."
+                                        Text="Drop extra file... (.deh/.bex/.txt)"
                                         AllowDrop="True"
                                         PreviewDragOver="TextBox_NewLevel_Misc_PreviewDragOver"
                                         Drop="TextBox_NewLevel_Misc_Drop"
@@ -313,14 +308,9 @@
                             <Button x:Name="Button_NewLevel_Misc_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="5" Grid.Column="3"/>
-                            <Button 
-                                x:Name="Button_NewLevel_Misc_Clear"
-                                Grid.Row="5"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Misc_Clear_Click"
-                                />
+                            <Button x:Name="Button_NewLevel_Misc_Clear"
+                                    Style="{StaticResource Button_NewLevel_Clear}"
+                                    Grid.Row="5" Grid.Column="3"/>
 
                             <Label Grid.Row="7"
                                     Grid.Column="1"
@@ -350,7 +340,7 @@
                                 IsReadOnly="True"
                                 FontStyle="Italic"
                                 Foreground="Gray"
-                                Text="Drop a .jpg/.png file here..."
+                                Text="Drop picture file... (.jpg/.png)"
                                 AllowDrop="True"
                                 PreviewDragOver="TextBox_NewLevel_Image_PreviewDragOver"
                                 Drop="TextBox_NewLevel_Image_Drop"     
@@ -358,14 +348,9 @@
                             <Button x:Name="Button_NewLevel_Image_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="7" Grid.Column="3"/>
-                            <Button 
-                                x:Name="Button_NewLevel_Image_Clear"
-                                Grid.Row="7"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Image_Clear_Click"
-                                />
+                            <Button x:Name="Button_NewLevel_Image_Clear"
+                                    Style="{StaticResource Button_NewLevel_Clear}"
+                                    Grid.Row="7" Grid.Column="3"/>
 
                             <Label Grid.Row="9"
                                     Grid.Column="1"
