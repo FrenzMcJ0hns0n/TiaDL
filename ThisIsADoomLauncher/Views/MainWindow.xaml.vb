@@ -404,6 +404,10 @@ Namespace Views
             Dim Color As SolidColorBrush = IIf(type = "Level",
                                                Brushes.White,
                                                Brushes.LightGray)
+            Dim sBuilder As New StringBuilder()
+            sBuilder.AppendLine($"File type : {type}")
+            sBuilder.Append($"Directory : {fi.DirectoryName}")
+
             Return New TextBox() With
             {
                 .Background = Color,
@@ -411,10 +415,7 @@ Namespace Views
                 .IsReadOnly = True,
                 .Margin = New Thickness(0, 0, 6, 0),
                 .Text = fi.Name,
-                .ToolTip = New StringBuilder(
-                    $"File type : {type}" & vbCrLf &
-                    $"Directory : {fi.DirectoryName}"
-                )
+                .ToolTip = sBuilder.ToString
             }
         End Function
 
