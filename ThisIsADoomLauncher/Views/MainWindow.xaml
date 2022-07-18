@@ -22,6 +22,19 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+        <Style x:Key="TextBox_NewLevel" TargetType="{x:Type TextBox}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="AllowDrop" Value="True"/>
+            <EventSetter Event="PreviewDragOver" Handler="TextBox_NewLevel_PreviewDragOver"/>
+            <EventSetter Event="Drop" Handler="TextBox_NewLevel_Drop"/>
+        </Style>
         <Style x:Key="Button_NewLevel_Browse" TargetType="{x:Type Button}">
             <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Content" Value="Browse..."/>
@@ -235,23 +248,10 @@
                             <Label Style="{StaticResource Label_NewLevel}"
                                    Grid.Row="1" Grid.Column="1"
                                    Content="Iwad :"/>
-                            <TextBox 
-                                x:Name="TextBox_NewLevel_Iwad"
-                                Grid.Row="1"
-                                Grid.Column="2"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                Cursor="Arrow"
-                                IsReadOnly="True"
-                                FontStyle="Italic"
-                                Foreground="Gray"
-                                Text="Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
-                                AllowDrop="True"
-                                PreviewDragOver="TextBox_NewLevel_Iwad_PreviewDragOver"
-                                Drop="TextBox_NewLevel_Iwad_Drop"
-                                />
+                            <TextBox x:Name="TextBox_NewLevel_Iwad"
+                                     Style="{StaticResource TextBox_NewLevel}"
+                                     Grid.Row="1" Grid.Column="2"
+                                     Text="Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"/>
                             <Button x:Name="Button_NewLevel_Iwad_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="1" Grid.Column="3"/>
@@ -264,21 +264,9 @@
                                    Grid.Row="3" Grid.Column="1"
                                    Content="Level :"/>
                             <TextBox x:Name="TextBox_NewLevel_Level"
-                                        Grid.Row="3" 
-                                        Grid.Column="2"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Cursor="Arrow"
-                                        IsReadOnly="True"
-                                        FontStyle="Italic"
-                                        Foreground="Gray"
-                                        Text="Drop Level file... (.wad/.pk3)"
-                                        AllowDrop="True"
-                                        PreviewDragOver="TextBox_NewLevel_Level_PreviewDragOver"
-                                        Drop="TextBox_NewLevel_Level_Drop"
-                                        />
+                                     Style="{StaticResource TextBox_NewLevel}"
+                                     Grid.Row="3" Grid.Column="2"
+                                     Text="Drop Level file... (.wad/.pk3)"/>
                             <Button x:Name="Button_NewLevel_Level_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="3" Grid.Column="3"/>
@@ -291,21 +279,9 @@
                                    Grid.Row="5" Grid.Column="1"
                                    Content="Misc. :"/>
                             <TextBox x:Name="TextBox_NewLevel_Misc"
-                                        Grid.Row="5" 
-                                        Grid.Column="2"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Cursor="Arrow"
-                                        IsReadOnly="True"
-                                        FontStyle="Italic"
-                                        Foreground="Gray"
-                                        Text="Drop extra file... (.deh/.bex/.txt)"
-                                        AllowDrop="True"
-                                        PreviewDragOver="TextBox_NewLevel_Misc_PreviewDragOver"
-                                        Drop="TextBox_NewLevel_Misc_Drop"
-                                        />
+                                     Style="{StaticResource TextBox_NewLevel}"
+                                     Grid.Row="5" Grid.Column="2"
+                                     Text="Drop extra file... (.deh/.bex/.txt)"/>
                             <Button x:Name="Button_NewLevel_Misc_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="5" Grid.Column="3"/>
@@ -327,23 +303,10 @@
                                         FontStyle="Italic"
                                         Foreground="Gray"
                                         Text="Enter preset name..."/>-->
-                            <TextBox 
-                                x:Name="TextBox_NewLevel_Image"
-                                Grid.Row="7" 
-                                Grid.Column="2"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                Cursor="Arrow"
-                                IsReadOnly="True"
-                                FontStyle="Italic"
-                                Foreground="Gray"
-                                Text="Drop picture file... (.jpg/.png)"
-                                AllowDrop="True"
-                                PreviewDragOver="TextBox_NewLevel_Image_PreviewDragOver"
-                                Drop="TextBox_NewLevel_Image_Drop"     
-                                />
+                            <TextBox x:Name="TextBox_NewLevel_Image"
+                                     Style="{StaticResource TextBox_NewLevel}"
+                                     Grid.Row="7" Grid.Column="2"
+                                     Text="Drop picture file... (.jpg/.png)"/>
                             <Button x:Name="Button_NewLevel_Image_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="7" Grid.Column="3"/>

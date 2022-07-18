@@ -234,6 +234,25 @@ Namespace Views
             'TODO
         End Sub
 
+
+
+        Private Sub TextBox_NewLevel_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub TextBox_NewLevel_Drop(sender As Object, e As DragEventArgs)
+            Dim tbx As TextBox = sender
+
+            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+            If Not File.Exists(droppedFile) Then
+                MessageBox.Show("Submitted element was not a file", "Error : invalid input data", MessageBoxButton.OK, MessageBoxImage.Error)
+                Return
+            End If
+
+            Dim sourceTbx As String = tbx.Name.Split("_")(2) 'Iwad, Level, Misc, Image
+            If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
+        End Sub
+
         Private Sub TextBox_NewLevel_Iwad_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
