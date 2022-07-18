@@ -83,8 +83,36 @@ functionEnd:
         Return absolutePath
     End Function
 
-    Public Function GetJsonFilepath() As String
-        Return Path.Combine(GetDirectoryPath(), "try.json")
+    ''' <summary>
+    ''' Return the text found in the specified JSON file
+    ''' </summary>
+    ''' <param name="jsonFilepath">Path of the target JSON file</param>
+    ''' <returns>JSON data as String</returns>
+    Public Function GetJsonData(jsonFilepath As String) As String
+        Dim jsonData As String = String.Empty
+
+        Try
+            jsonData = File.ReadAllText(jsonFilepath)
+        Catch ex As Exception
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {jsonFilepath}")
+        End Try
+
+        Return jsonData
+    End Function
+
+    Public Sub PersistJsonData(filepath As String, jsonData As String)
+        Try
+            If File.Exists(filepath) Then Debug.Print("Ok")
+            File.WriteAllText(filepath, jsonData)
+        Catch ex As Exception
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {jsonData}, {filepath}")
+        End Try
+    End Sub
+
+    Public Function GetJsonFilepath(type As String) As String
+        Return Path.Combine(GetDirectoryPath(), $"{type}.json")
     End Function
 
     ''' <summary>

@@ -862,7 +862,8 @@ Namespace Views
                     .Mods = GetModsFullPath(),
                     .PortParameters = New List(Of String)
                 }
-                SaveToJsonData(lastLaunched)
+                lastLaunched.Save()
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -873,10 +874,12 @@ Namespace Views
         ''' Load "Settings" (last launched contents) from JSON to update Summary views
         ''' </summary>
         Private Sub LoadSettings()
+            If Not CanLoadSettings() Then Return
             Try
-                Dim savedSettings As Setting = LoadFromJsonData()
+                Dim persistedSettings As New Setting()
+                persistedSettings.Load()
 
-                With savedSettings
+                With persistedSettings
                     If File.Exists(.Port) Then
                         FillTextBox(TextBox_Port, .Port)
                         FillTextBox(TextBox_Summary_Port, .Port)
@@ -897,6 +900,29 @@ Namespace Views
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
+
+        'TODO? Put in Setting.vb with other methods
+        'TODO! Improve: invalid Json detection, exception handling, etc.
+        Private Function CanLoadSettings() As Boolean
+            Try
+                Dim settingsFilePath As String = GetJsonFilepath("Settings")
+
+                If Not File.Exists(settingsFilePath) Then Return False
+                If File.ReadAllText(settingsFilePath) = String.Empty Then Return False
+
+                Dim reader As New Newtonsoft.Json.JsonTextReader(New StringReader(File.ReadAllText(settingsFilePath)))
+                While reader.Read()
+                    'If reader.Value IsNot Nothing Then
+                    Debug.Print($"{reader.Value} : {reader.TokenType}")
+                    'End If
+                End While
+
+            Catch ex As Exception
+                Return False
+            End Try
+
+            Return True
+        End Function
 
 #End Region
 
