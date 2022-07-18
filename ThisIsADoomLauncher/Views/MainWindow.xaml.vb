@@ -228,21 +228,6 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            Try
-                Dim mp As ModPreset = ReturnSelectedMods()
-
-                TextBlock_Mods_Desc.Text = mp.Desc
-                ListView_Mods_Files.ItemsSource = mp.Files
-                UpdateMods_Summary(mp.Files)
-
-                UpdateCommand()
-                DecorateCommand()
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
-            End Try
-        End Sub
-
 
 
         Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
@@ -275,7 +260,7 @@ Namespace Views
                 Case "Level"
                     Dim dialog As New OpenFileDialog With
                     {
-                        .Filter = "Level file (*.wad;*.pk3;*.zip)|*.wad;*.pk3;*.zip",
+                        .Filter = "Level file (*.wad;*.pk3)|*.wad;*.pk3", '.zip needs testing, never used such format for levels
                         .InitialDirectory = GetDirectoryPath("levels"),
                         .Title = "Select a Level file for the new preset"
                     }
@@ -315,10 +300,6 @@ Namespace Views
             End Select
         End Sub
 
-        Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
-        End Sub
-
         Private Sub TextBox_NewLevel_Level_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
@@ -326,10 +307,6 @@ Namespace Views
         Private Sub TextBox_NewLevel_Level_Drop(sender As Object, e As DragEventArgs)
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
             If ValidateFile(droppedFile, "Level") Then FillTextBox(sender, droppedFile)
-        End Sub
-
-        Private Sub Button_NewLevel_Level_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Level, TBX_SELECT_LEVEL)
         End Sub
 
         Private Sub TextBox_NewLevel_Misc_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -341,10 +318,6 @@ Namespace Views
             If ValidateFile(droppedFile, "Misc") Then FillTextBox(sender, droppedFile)
         End Sub
 
-        Private Sub Button_NewLevel_Misc_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
-        End Sub
-
         Private Sub TextBox_NewLevel_Image_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
@@ -352,10 +325,6 @@ Namespace Views
         Private Sub TextBox_NewLevel_Image_Drop(sender As Object, e As DragEventArgs)
             Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
             If ValidateFile(droppedFile, "Image") Then FillTextBox(sender, droppedFile)
-        End Sub
-
-        Private Sub Button_NewLevel_Image_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Image, TBX_SELECT_PICT)
         End Sub
 
         Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
@@ -370,7 +339,29 @@ Namespace Views
             UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
             UnfillTextBox(TextBox_NewLevel_Level, TBX_SELECT_LEVEL)
             UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
+            UnfillTextBox(TextBox_NewLevel_Image, TBX_SELECT_PICT)
         End Sub
+
+#End Region
+
+
+#Region "Events - Mods"
+
+        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            Try
+                Dim mp As ModPreset = ReturnSelectedMods()
+
+                TextBlock_Mods_Desc.Text = mp.Desc
+                ListView_Mods_Files.ItemsSource = mp.Files
+                UpdateMods_Summary(mp.Files)
+
+                UpdateCommand()
+                DecorateCommand()
+            Catch ex As Exception
+                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+            End Try
+        End Sub
+
 
 #End Region
 
