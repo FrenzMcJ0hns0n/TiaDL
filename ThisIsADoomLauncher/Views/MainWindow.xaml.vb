@@ -258,6 +258,50 @@ Namespace Views
             If ValidateFile(droppedFile, "Iwad") Then FillTextBox(sender, droppedFile)
         End Sub
 
+        Private Sub Button_NewLevel_Browse_Click(sender As Object, e As RoutedEventArgs)
+            Dim btn As Button = sender
+
+            Dim sourceBtn As String = btn.Name.Split("_")(2)
+            Select Case sourceBtn
+                Case "Iwad"
+                    Dim dialog As New OpenFileDialog With
+                    {
+                        .Filter = "IWAD file (*.wad)|*.wad",
+                        .InitialDirectory = GetDirectoryPath("iwads"),
+                        .Title = "Select an IWAD as base content for the new preset"
+                    }
+                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Iwad, dialog.FileName)
+
+                Case "Level"
+                    Dim dialog As New OpenFileDialog With
+                    {
+                        .Filter = "Level file (*.wad;*.pk3;*.zip)|*.wad;*.pk3;*.zip",
+                        .InitialDirectory = GetDirectoryPath("levels"),
+                        .Title = "Select a Level file for the new preset"
+                    }
+                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Level, dialog.FileName)
+
+                Case "Misc"
+                    Dim dialog As New OpenFileDialog With
+                    {
+                        .Filter = "Misc. file (*.deh;*.bex;*.txt)|*.deh;*.bex;*.txt",
+                        .InitialDirectory = GetDirectoryPath("misc"),
+                        .Title = "Select a Misc file for the new preset"
+                    }
+                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Misc, dialog.FileName)
+
+                Case "Image"
+                    Dim dialog As New OpenFileDialog With
+                    {
+                        .Filter = "Image file (*.jpg;*.png)|*.jpg;*.png",
+                        .InitialDirectory = GetDirectoryPath(), 'Or any other place in user computer?
+                        .Title = "Select an image for the new preset"
+                    }
+                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Image, dialog.FileName)
+
+            End Select
+        End Sub
+
         Private Sub Button_NewLevel_Iwad_Clear_Click(sender As Object, e As RoutedEventArgs)
             UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
         End Sub

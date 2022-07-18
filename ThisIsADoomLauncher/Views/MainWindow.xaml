@@ -17,8 +17,13 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0,-1,0,0"/>
         </Style>
-        
-        
+
+        <Style x:Key="Button_NewLevel_Browse" TargetType="{x:Type Button}">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Content" Value="Browse..."/>
+            <EventSetter Event="Click" Handler="Button_NewLevel_Browse_Click"/>
+        </Style>
+
     </Window.Resources>
     
     <Grid>
@@ -194,7 +199,7 @@
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Add new preset" IsEnabled="False">
+                    <TabItem Header="Add new preset">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="20"/>
@@ -239,15 +244,9 @@
                                 PreviewDragOver="TextBox_NewLevel_Iwad_PreviewDragOver"
                                 Drop="TextBox_NewLevel_Iwad_Drop"
                                 />
-                            <Button Grid.Row="1" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="1" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
+                            <Button x:Name="Button_NewLevel_Iwad_Browse"
+                                    Style="{StaticResource Button_NewLevel_Browse}"
+                                    Grid.Row="1" Grid.Column="3"/>
                             <Button 
                                 x:Name="Button_NewLevel_Iwad_Clear"
                                 Grid.Row="1" 
@@ -278,15 +277,9 @@
                                         PreviewDragOver="TextBox_NewLevel_Level_PreviewDragOver"
                                         Drop="TextBox_NewLevel_Level_Drop"
                                         />
-                            <Button Grid.Row="3" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="3" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
+                            <Button x:Name="Button_NewLevel_Level_Browse"
+                                    Style="{StaticResource Button_NewLevel_Browse}"
+                                    Grid.Row="3" Grid.Column="3"/>
                             <Button 
                                 x:Name="Button_NewLevel_Level_Clear"
                                 Grid.Row="3"
@@ -317,15 +310,9 @@
                                         PreviewDragOver="TextBox_NewLevel_Misc_PreviewDragOver"
                                         Drop="TextBox_NewLevel_Misc_Drop"
                                         />
-                            <Button Grid.Row="5" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="5" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
+                            <Button x:Name="Button_NewLevel_Misc_Browse"
+                                    Style="{StaticResource Button_NewLevel_Browse}"
+                                    Grid.Row="5" Grid.Column="3"/>
                             <Button 
                                 x:Name="Button_NewLevel_Misc_Clear"
                                 Grid.Row="5"
@@ -368,15 +355,9 @@
                                 PreviewDragOver="TextBox_NewLevel_Image_PreviewDragOver"
                                 Drop="TextBox_NewLevel_Image_Drop"     
                                 />
-                            <Button Grid.Row="7" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="7" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
+                            <Button x:Name="Button_NewLevel_Image_Browse"
+                                    Style="{StaticResource Button_NewLevel_Browse}"
+                                    Grid.Row="7" Grid.Column="3"/>
                             <Button 
                                 x:Name="Button_NewLevel_Image_Clear"
                                 Grid.Row="7"
