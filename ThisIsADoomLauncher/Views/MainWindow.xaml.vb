@@ -196,7 +196,7 @@ Namespace Views
                 '2) Check & order files
                 Dim confirmedFiles As List(Of String) = OrderDroppedFiles_Levels(filePaths)
 
-                '------------- Template of confirmedFiles, according to .Count :
+                '------------- Template of confirmedFiles, depending on .Count :
                 '-------------  1 = Iwad
                 '-------------  2 = Iwad, Level
                 '-------------  3 = Iwad, Level, Misc
@@ -512,17 +512,17 @@ Namespace Views
                             Continue For
                         End If
 
-                        If ValidateFile(path, "Level") And orderedFiles.Count > 0 Then
+                        If orderedFiles.Count > 0 AndAlso ValidateFile(path, "Level") Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
 
-                        If ValidateFile(path, "Misc") And orderedFiles.Count > 1 Then
+                        If orderedFiles.Count > 1 AndAlso ValidateFile(path, "Misc") Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
 
-                        If ValidateFile(path, "Image") And orderedFiles.Count > 2 Then
+                        If orderedFiles.Count > 2 AndAlso ValidateFile(path, "Image") Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
