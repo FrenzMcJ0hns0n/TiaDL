@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports Microsoft.VisualBasic.FileIO
 Imports ThisIsADoomLauncher.Models
 Imports ThisIsADoomLauncher.Views
@@ -20,24 +21,30 @@ Friend Module PresetsMethods
     Public Function ConfigureTextFieldParser(presetsType As String) As TextFieldParser
         Dim parser As TextFieldParser = Nothing
 
-        Select Case presetsType
-            Case "base_levels"
-                parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
-            Case "base_mods"
-                parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
-            Case "user_levels"
-                parser = New TextFieldParser(Path.Combine(GetDirectoryPath(), "presets.csv"))
-            Case "user_mods"
-                'TODO
-            Case Else 'TODO?
-        End Select
+        Try
+            Select Case presetsType
+                Case "base_levels"
+                    parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
+                Case "base_mods"
+                    parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
+                Case "user_levels"
+                    parser = New TextFieldParser(Path.Combine(GetDirectoryPath(), "presets.csv"))
+                Case "user_mods"
+                    'TODO
+                Case Else 'TODO?
+            End Select
 
-        With parser
-            .CommentTokens = New String() {"#"}
-            .Delimiters = New String() {";"}
-            .TextFieldType = FieldType.Delimited
-            .TrimWhiteSpace = True
-        End With
+            With parser
+                .CommentTokens = New String() {"#"}
+                .Delimiters = New String() {";"}
+                .TextFieldType = FieldType.Delimited
+                .TrimWhiteSpace = True
+            End With
+
+        Catch ex As Exception
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
+        End Try
 
         Return parser
     End Function
@@ -68,7 +75,8 @@ Friend Module PresetsMethods
                 Loop
             End Using
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'GetLevelPresets_FromCsv()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
         End Try
 
         Return levelPresets
@@ -99,7 +107,8 @@ Friend Module PresetsMethods
                 Loop
             End Using
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'GetModPresets_FromCsv()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
         End Try
 
         Return modPresets
@@ -214,6 +223,7 @@ Friend Module PresetsMethods
     'End Sub
 
 
+    'TODO Use LevelPreset as input parameter
     ''' <summary>
     ''' Write attributes for New user preset.
     ''' As line in 'presets.csv'
@@ -246,7 +256,8 @@ Friend Module PresetsMethods
             End Using
 
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'WritePresetToFile()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : (TODO)")
         End Try
 
     End Sub

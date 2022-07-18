@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Reflection
 Imports System.Text
 Imports System.Text.RegularExpressions
 Imports Microsoft.Win32
@@ -73,7 +74,8 @@ Namespace Views
                 Dim timeSpan As TimeSpan = dateTimeReady.Subtract(My.Settings.DateTimeAtLaunch)
                 WriteToLog(Date.Now & " - Time elapsed from Launch to Ready : " & timeSpan.Milliseconds & " milliseconds")
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'MainWindow:Window_Loaded()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
 
         End Sub
@@ -82,7 +84,8 @@ Namespace Views
             Try
                 ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'PopulateBaseLevelPresets()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -90,7 +93,8 @@ Namespace Views
             Try
                 ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCsv("base_mods")
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'PopulateBaseModsPresets()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -129,7 +133,8 @@ Namespace Views
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
                 Clipboard.SetText(commandText)
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'CopyCommandToClipboard()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -145,7 +150,8 @@ Namespace Views
                     writer.WriteLine("start """" " & commandText)
                 End Using
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ExportCommandAsBat()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -170,7 +176,8 @@ Namespace Views
                     DecorateCommand()
                 End If
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'TextBox_Port_Drop()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -190,7 +197,8 @@ Namespace Views
                     DecorateCommand()
                 End If
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Port_Browse_Click()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -242,7 +250,8 @@ Namespace Views
                 If confirmedFiles.Count > 2 Then FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
                 If confirmedFiles.Count > 3 Then FillTextBox(TextBox_NewLevel_Image, confirmedFiles(3))
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'GroupBox_Levels_Drop()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -258,7 +267,8 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ListView_Levels_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -375,7 +385,8 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ListView_Mods_BasePresets_SelectionChanged()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -392,7 +403,8 @@ Namespace Views
                 helpWindow.ShowDialog()
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Options_HelpAbout_Click()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -410,7 +422,8 @@ Namespace Views
                     Grid_Command.Visibility = Visibility.Collapsed
                 End If
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Options_ToggleView_Click()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -421,7 +434,8 @@ Namespace Views
                     SaveSettings()
                 End If
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'Button_Options_LaunchSave_Click()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -475,7 +489,9 @@ Namespace Views
                 modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'UpdateLevelAndMisc_Summary()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                Dim fileNamesJoined As String = String.Join(", ", fileNames)
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileNamesJoined}")
             End Try
         End Sub
 
@@ -504,7 +520,9 @@ Namespace Views
                 fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'UpdateMods_Summary()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                Dim fileNamesJoined As String = String.Join(", ", fileNames)
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileNamesJoined}")
             End Try
         End Sub
 
@@ -519,7 +537,8 @@ Namespace Views
 
                 RichTextBox_Command.Document = flow
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'FillRichTextBox_Command()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {content}")
             End Try
         End Sub
 
@@ -562,7 +581,9 @@ Namespace Views
                     Next
                 Next
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'OrderDroppedFiles_Levels()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                Dim filePathsJoined As String = String.Join(", ", filePaths)
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {filePathsJoined}")
             End Try
 
             Return orderedFiles
@@ -586,7 +607,8 @@ Namespace Views
 
                 End Select
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ReturnSelectedLevels()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
 
             Return preset
@@ -608,7 +630,8 @@ Namespace Views
 
                 End Select
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ReturnSelectedMods()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
 
             Return preset
@@ -632,6 +655,7 @@ Namespace Views
         ''' Update the "Command" Summary from the "Fields" Summary view
         ''' </summary>
         Private Sub UpdateCommand()
+            Dim command As String = String.Empty
             Try
                 Dim port As String = TextBox_Summary_Port.Text
                 Dim iwad As String = TextBox_Summary_Iwad.Text
@@ -641,7 +665,7 @@ Namespace Views
                     Return
                 End If
 
-                Dim command As String = $"""{port}"" -iwad ""{iwad}"""
+                command &= $"""{port}"" -iwad ""{iwad}"""
                 'TODO: Manage port parameters, to be added before " -iwad"
 
                 'Add Level/Misc/Mods to the command line
@@ -650,7 +674,8 @@ Namespace Views
 
                 FillRichTextBox_Command(command)
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'UpdateCommand()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Command : {command}")
             End Try
         End Sub
 
@@ -675,7 +700,8 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'DecorateCommand()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -690,20 +716,22 @@ Namespace Views
                 End With
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'FillTextBox()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
         Private Sub UnfillTextBox(tbx As TextBox, content As String)
             Try
                 With tbx
-                    .Text = content 'TODO? Use constants
+                    .Text = content
                     .FontStyle = FontStyles.Italic
                     .Foreground = Brushes.Gray
                 End With
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'UnfillTextBox()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -722,7 +750,8 @@ Namespace Views
                 End If
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ReadyToLaunch()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
                 Return False
             End Try
 
@@ -740,7 +769,8 @@ Namespace Views
                 }
                 Process.Start(cmdExe)
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'LaunchGame()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -768,7 +798,8 @@ Namespace Views
                 End If
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'GetLvlsMiscFullPath()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {type}")
             End Try
 
             Return fullPath
@@ -795,7 +826,8 @@ Namespace Views
                 Next
 
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'GetModsFullPath()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
 
             Return fullPaths
@@ -817,7 +849,8 @@ Namespace Views
                 }
                 SaveToJsonData(lastLaunched)
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'SaveSettings()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
@@ -845,7 +878,8 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
             Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'LoadSettings()'. Exception : " & ex.ToString)
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 

@@ -64,7 +64,8 @@ Friend Module IOHelper
                 WriteToLog(Date.Now & " - " & ERR_STARTUP & ". " & ERR_MISSING_DIR & String.Join(", ", missingDirectories))
             End If
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'CheckProjectDirectories()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
         End Try
     End Sub
 
@@ -79,10 +80,10 @@ Friend Module IOHelper
         Try
             Dim combinedPath As String = Path.Combine(directoryPath, subDirName)
             directoryPath = combinedPath
-        Catch ex As ArgumentNullException
-            WriteToLog(Date.Now & " - Warning, potential error in 'GetDirectoryPath()' as parameter 'subDirName' was null")
+
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'GetDirectoryPath()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {subDirName}")
         End Try
 
         Return directoryPath
@@ -118,7 +119,8 @@ Friend Module IOHelper
             Next
 
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'GetFileAbsolutePath()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {targetName}, {filename}")
         End Try
 
 functionEnd:
@@ -160,7 +162,8 @@ functionEnd:
             'End With
 
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'SetIniFiles()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
         End Try
 
     End Sub
@@ -203,7 +206,8 @@ functionEnd:
 
             End Select
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'ValidateFile()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {filepath}, {type}")
         End Try
 
         Return False
@@ -234,12 +238,12 @@ functionEnd:
             End Using
 
         Catch ex As Exception
-            WriteToLog(Date.Now & " - Error in 'WritePresetsFileHeader()'. Exception : " & ex.ToString)
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
         End Try
 
     End Sub
 
-    'TODO: Write Date.Now here, not in parameter "content"
     ''' <summary>
     ''' Log content in file 'log.txt'
     ''' </summary>
