@@ -875,8 +875,10 @@ Namespace Views
         ''' </summary>
         Private Sub LoadSettings()
             Try
-                Dim persistedSettings As New Setting(GetJsonFilepath("Settings"))
+                Dim settingsFilepath As String = GetJsonFilepath("Settings")
+                If Not File.Exists(settingsFilepath) Then Return
 
+                Dim persistedSettings As New Setting(settingsFilepath)
                 If Not persistedSettings.CanLoad() Then Return
 
                 persistedSettings.Load()
