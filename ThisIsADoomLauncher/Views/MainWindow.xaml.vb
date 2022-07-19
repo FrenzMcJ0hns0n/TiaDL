@@ -262,7 +262,8 @@ Namespace Views
                 Dim lp As LevelPreset = ReturnSelectedLevels()
 
                 TextBox_Summary_Iwad.Text = GetFileAbsolutePath("iwads", lp.Iwad)
-                UpdateLevelAndMisc_Summary(New List(Of String) From {lp.Level, lp.Misc})
+                'UpdateLevelAndMisc_Summary(New List(Of String) From {lp.Level, lp.Misc})
+                UpdateLvlsMods_Summary(lp.Level, lp.Misc, Nothing)
 
                 UpdateCommand()
                 DecorateCommand()
@@ -368,7 +369,8 @@ Namespace Views
 
             'Update Summary "Fields" view
             TextBox_Summary_Iwad.Text = iwadInput
-            UpdateLevelAndMisc_Summary(New List(Of String) From {levelInput, miscInput})
+            'UpdateLevelAndMisc_Summary(New List(Of String) From {levelInput, miscInput})
+            UpdateLvlsMods_Summary(levelInput, miscInput, Nothing)
             UpdateCommand()
             DecorateCommand()
         End Sub
@@ -395,7 +397,8 @@ Namespace Views
 
                 TextBlock_Mods_Desc.Text = mp.Desc
                 ListView_Mods_Files.ItemsSource = mp.Files
-                UpdateMods_Summary(mp.Files)
+                'UpdateMods_Summary(mp.Files)
+                UpdateLvlsMods_Summary("", "", mp.Files)
 
                 UpdateCommand()
                 DecorateCommand()
@@ -479,67 +482,118 @@ Namespace Views
             }
         End Function
 
-        'TODO(later): Gather two Sub into one, with 2 List(Of String) as input parameters
-        Private Sub UpdateLevelAndMisc_Summary(fileNames As List(Of String))
+        ''' <summary>
+        ''' Update the TextBox items in StackPanel depending on the subroutine parameters.
+        ''' If a parameter is not provided, the corresponding Tbx will be preserved.
+        ''' </summary>
+        ''' <param name="level">Level filename or filepath</param>
+        ''' <param name="misc">Misc filename or filepath</param>
+        ''' <param name="mods">Mods filenames or filepaths</param>
+        Private Sub UpdateLvlsMods_Summary(Optional level As String = "", Optional misc As String = "", Optional mods As List(Of String) = Nothing)
             Try
-                If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
-
-                'Get all TextBoxes from the StackPanel
+                'Gather existing contents in StackPanel
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-
-                'Get the mods TextBoxes (the ones with the LightGray background)
+                Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
                 Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
 
-                'Create the fileMods TextBoxes
-                Dim fileModsTbx As New List(Of TextBox)
-                For Each name As String In fileNames
-                    If name = String.Empty Then Continue For
-                    Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
-                    fileModsTbx.Add(CreateFileModsTbx(filepath, "Level"))
-                Next
-
-                'Clean the StackPanel content and add FileMods TextBoxes
+                'Clear the StackPanel content
                 StackPanel_Summary_FilesMods.Children.Clear()
-                fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
-                modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+
+                'Create New List(Of TextBox) to be filled
+                Dim lvlsModsTbxs As New List(Of TextBox)
+
+                If level = String.Empty Then 'Preserve
+                    lvlTbxs.ForEach(Sub(tbx) lvlsModsTbxs.Add(tbx))
+                Else 'Create
+                    Dim lvls As New List(Of String) From {level, misc}
+                    For Each nameOrPath As String In lvls
+                        If nameOrPath = String.Empty Then Continue For
+
+                        Dim fullpath As String = If(File.Exists(nameOrPath), nameOrPath, GetFileAbsolutePath("", nameOrPath))
+                        lvlsModsTbxs.Add(CreateFileModsTbx(fullpath, "Level"))
+                    Next
+                End If
+
+                If mods Is Nothing Then 'Preserve
+                    modTbxs.ForEach(Sub(tbx) lvlsModsTbxs.Add(tbx))
+                Else 'Create
+                    For Each nameOrPath As String In mods
+                        If nameOrPath = String.Empty Then Continue For
+
+                        Dim fullpath As String = If(File.Exists(nameOrPath), nameOrPath, GetFileAbsolutePath("", nameOrPath))
+                        lvlsModsTbxs.Add(CreateFileModsTbx(fullpath, "Mod"))
+                    Next
+                End If
+
+                'Fill the StackPanel with gathered TextBoxes
+                lvlsModsTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                Dim fileNamesJoined As String = String.Join(", ", fileNames)
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileNamesJoined}")
+                Dim modsJoined As String = String.Join(", ", mods)
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {level}, {misc}, {modsJoined}")
             End Try
         End Sub
 
-        'TODO? Rewrite, as only mods need to be edited in this Sub
-        Private Sub UpdateMods_Summary(fileNames As List(Of String))
-            Try
-                If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
+        'Private Sub UpdateLevelAndMisc_Summary(fileNames As List(Of String))
+        '    Try
+        '        If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
 
-                'Get all TextBoxes from the StackPanel
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+        '        'Get all TextBoxes from the StackPanel
+        '        Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
 
-                'Get the Level&Misc TextBoxes (the ones with the White background)
-                Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
+        '        'Get the mods TextBoxes (the ones with the LightGray background)
+        '        Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
 
-                'Create the fileMods TextBoxes
-                Dim fileModsTbx As New List(Of TextBox)
-                For Each name As String In fileNames
-                    If name = String.Empty Then Continue For
-                    Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
-                    fileModsTbx.Add(CreateFileModsTbx(filepath, "Mod"))
-                Next
+        '        'Create the fileMods TextBoxes
+        '        Dim fileModsTbx As New List(Of TextBox)
+        '        For Each name As String In fileNames
+        '            If name = String.Empty Then Continue For
+        '            Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
+        '            fileModsTbx.Add(CreateFileModsTbx(filepath, "Level"))
+        '        Next
 
-                'Clean the StackPanel content and add FileMods TextBoxes
-                StackPanel_Summary_FilesMods.Children.Clear()
-                lvlTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
-                fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+        '        'Clean the StackPanel content and add FileMods TextBoxes
+        '        StackPanel_Summary_FilesMods.Children.Clear()
+        '        fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+        '        modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
 
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                Dim fileNamesJoined As String = String.Join(", ", fileNames)
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileNamesJoined}")
-            End Try
-        End Sub
+        '    Catch ex As Exception
+        '        Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+        '        Dim fileNamesJoined As String = String.Join(", ", fileNames)
+        '        WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileNamesJoined}")
+        '    End Try
+        'End Sub
+
+        'Private Sub UpdateMods_Summary(fileNames As List(Of String))
+        '    Try
+        '        If fileNames.Count = 0 Then Return 'TODO: Determine if necessary
+
+        '        'Get all TextBoxes from the StackPanel
+        '        Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+
+        '        'Get the Level&Misc TextBoxes (the ones with the White background)
+        '        Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
+
+        '        'Create the fileMods TextBoxes
+        '        Dim fileModsTbx As New List(Of TextBox)
+        '        For Each name As String In fileNames
+        '            If name = String.Empty Then Continue For
+        '            Dim filepath As String = If(File.Exists(name), name, GetFileAbsolutePath("", name)) 'Fullpath is required
+        '            fileModsTbx.Add(CreateFileModsTbx(filepath, "Mod"))
+        '        Next
+
+        '        'Clean the StackPanel content and add FileMods TextBoxes
+        '        StackPanel_Summary_FilesMods.Children.Clear()
+        '        lvlTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+        '        fileModsTbx.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+
+        '    Catch ex As Exception
+        '        Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+        '        Dim fileNamesJoined As String = String.Join(", ", fileNames)
+        '        WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileNamesJoined}")
+        '    End Try
+        'End Sub
 
 
 
@@ -892,8 +946,9 @@ Namespace Views
                     If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
                     'TODO: Handle case of invalid .Iwad
 
-                    UpdateLevelAndMisc_Summary(New List(Of String) From { .Level, .Misc})
-                    UpdateMods_Summary(.Mods)
+                    'UpdateLevelAndMisc_Summary(New List(Of String) From { .Level, .Misc})
+                    UpdateLvlsMods_Summary(.Level, .Misc, .Mods)
+                    'UpdateMods_Summary(.Mods)
                 End With
 
                 UpdateCommand()
