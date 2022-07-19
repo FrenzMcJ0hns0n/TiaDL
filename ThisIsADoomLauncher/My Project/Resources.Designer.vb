@@ -62,15 +62,15 @@ Namespace My.Resources
         
         '''<summary>
         '''  Recherche une chaîne localisée semblable à #BASE PRESETS - LEVELS
-        '''#Name						#Iwad			#Level			#Misc.			#Image
+        '''#Name						#Iwad			#Level				#Misc.				#Image
         '''
-        '''Ultimate Doom, 				Doom.wad,		,				,				doom_icon.jpg
-        '''Ultimate Doom + Sigil,		Doom.wad, 		SIGIL_v1_21.wad,,				Sigil_cover.jpg
-        '''Doom II: Hell on Earth, 	Doom2.wad,		,				,				doom2_icon.jpg
-        '''TNT: Evilution, 			TNT.wad,		,				,				final_doom_icon.jpg
-        '''The Plutonia Experiment,	Plutonia.wad,	,				,				final_doom_icon.jpg
-        '''Doom Zero,					Doom2.wad, 		DoomZero.wad,	DOOMZERO.DEH,	DE_DOOM_Zero_edit.jpg
-        '''Freedoom: Phase 1,			freedoom1.wad,	,			 [le reste de la chaîne a été tronqué]&quot;;.
+        '''Ultimate Doom; 				Doom.wad;		;					;					doom_icon.jpg
+        '''Ultimate Doom + Sigil;		Doom.wad; 		SIGIL_v1_21.wad;	;					Sigil_cover.jpg
+        '''Doom II: Hell on Earth; 	Doom2.wad;		;					;					doom2_icon.jpg
+        '''TNT: Evilution; 			TNT.wad;		;					;					final_doom_icon.jpg
+        '''The Plutonia Experiment;	Plutonia.wad;	;					;					final_doom_icon.jpg
+        '''Doom Zero;					Doom2.wad; 		DoomZero.wad;		DOOMZERO.DEH;		DE_DOOM_Zero_edit.jpg
+        '''Freedoom: Phase 1;			freed [le reste de la chaîne a été tronqué]&quot;;.
         '''</summary>
         Public ReadOnly Property base_presets_Levels() As String
             Get
@@ -80,17 +80,48 @@ Namespace My.Resources
         
         '''<summary>
         '''  Recherche une chaîne localisée semblable à #BASE PRESETS - MODS
-        '''#Name								#Desc															#Image						#Files
+        '''#Name										#Desc																		#Image						#Files
         '''
-        '''Brutal Doom v20b					Older version of Brutal Doom
-        '''Brutal Doom v21						Last version of Brutal Doom
-        '''Brutal Doom v21 + Power Fantasy v2	Last version of Brutal Doom + Addon Power Fantasy v2
-        '''Embers of Armageddon				Partial conversion into Doom 2016 gameplay
-        '''Embers of Armageddon with monsters	Partial conversion into Doom 2016 gameplay, including monsters.
+        '''No mod;										Play Vanilla Doom;															;							
+        '''Brutal Doom v20b;							Older version of Brutal Doom;												;							brutalv20b_R.pk3
+        '''Brutal Doom v21;							Last version of Brutal Doom;												;							brutalv21.pk3
+        '''Brutal Doom v21 + Power Fantasy v2;			Last version of Brutal Doom + Addon Power Fantasy v2;						;							brutalv21.pk3,BrutalDoom PowerFantasy v2.pk3
+        '''Brutal Doom Power Fantasy Final Beta;		Las [le reste de la chaîne a été tronqué]&quot;;.
         '''</summary>
         Public ReadOnly Property base_presets_Mods() As String
             Get
                 Return ResourceManager.GetString("base_presets_Mods", resourceCulture)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Recherche une chaîne localisée semblable à {
+        '''    &quot;type&quot;: &quot;object&quot;,
+        '''    &quot;default&quot;: {},
+        '''    &quot;title&quot;: &quot;TiaDL settings&quot;,
+        '''    &quot;required&quot;: [
+        '''        &quot;Port&quot;,
+        '''        &quot;PortParameters&quot;,
+        '''        &quot;Iwad&quot;,
+        '''        &quot;Level&quot;,
+        '''        &quot;Misc&quot;,
+        '''        &quot;Mods&quot;
+        '''    ],
+        '''    &quot;properties&quot;: {
+        '''        &quot;Port&quot;: {
+        '''            &quot;type&quot;: &quot;string&quot;,
+        '''            &quot;default&quot;: &quot;&quot;,
+        '''            &quot;title&quot;: &quot;Selected Port filepath&quot;,
+        '''            &quot;examples&quot;: [
+        '''                &quot;C:\\Path\\to\\gzdoom.exe&quot;
+        '''            ]
+        '''        },
+        '''        &quot;PortParameters&quot;: {
+        '''            &quot;type&quot;: &quot; [le reste de la chaîne a été tronqué]&quot;;.
+        '''</summary>
+        Public ReadOnly Property SettingSchema() As String
+            Get
+                Return ResourceManager.GetString("SettingSchema", resourceCulture)
             End Get
         End Property
     End Module
