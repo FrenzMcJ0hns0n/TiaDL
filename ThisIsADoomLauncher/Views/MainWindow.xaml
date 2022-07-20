@@ -152,40 +152,34 @@
                 <TabControl x:Name="TabControl_Levels" Margin="8">
                     <!-- Add Name ? -->
                     <TabItem Header="Base presets">
-
                         <Grid>
-                            <!--<Grid.RowDefinitions>
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="5*" />
-                                <RowDefinition Height="10" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="8*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="14*" />
-                                <ColumnDefinition Width="10" />
-                            </Grid.ColumnDefinitions>-->
 
-
-                            <!--Grid.Row="0"
-                                Grid.Column="0"
-                                Grid.RowSpan="3"
-                                Grid.ColumnSpan="2"-->
                             <ListView 
                                 x:Name="ListView_Levels_BasePresets"
-                                            
                                 Margin="-3"
                                 SelectionChanged="ListView_Levels_BasePresets_SelectionChanged"
                                 >
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image 
+                                            <Image
                                                 Source="{Binding Pict,Converter={StaticResource ImgConverter}}"
                                                 Margin="-3,0,0,0"
-                                                Height="64"
-                                                />
+                                                Height="64">
+                                                <Image.ToolTip>
+                                                    <StackPanel Orientation="Vertical">
+                                                        <Image
+                                                            Source="{Binding Pict,Converter={StaticResource ImgConverter}}"
+                                                            Margin="0,0,0,4"
+                                                            Height="128"
+                                                        />
+                                                        <TextBlock
+                                                            TextAlignment="Center"
+                                                            Text="{Binding Desc}"
+                                                            />
+                                                    </StackPanel>
+                                                </Image.ToolTip>
+                                            </Image>
                                             <TextBlock
                                                 Margin="8,0,0,0"
                                                 VerticalAlignment="Center"

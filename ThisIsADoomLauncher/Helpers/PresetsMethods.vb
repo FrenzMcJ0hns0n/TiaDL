@@ -58,16 +58,24 @@ Friend Module PresetsMethods
                 Do While Not parser.EndOfData
                     Try
                         Dim parsedValues As String() = parser.ReadFields()
-                        'If a preset does not contain BOTH Name and Iwad path, it is ignored (useless safety ?)
-                        If parsedValues.Length < 2 Then Continue Do
+
+                        'Name, Base, Year and Iwad are mandatory
+                        If parsedValues.Length < 4 Then Continue Do
+
+                        'Skip Wolf3D, as not functional yet
+                        If parsedValues(0) = "Wolfenstein 3D" Then Continue Do
 
                         levelPresets.Add(New LevelPreset() With
                         {
                             .Name = parsedValues(0),
-                            .Iwad = parsedValues(1),
-                            .Level = If(parsedValues.Length >= 3, parsedValues(2), String.Empty),
-                            .Misc = If(parsedValues.Length >= 4, parsedValues(3), String.Empty),
-                            .Pict = If(parsedValues.Length = 5, parsedValues(4), String.Empty)
+                            .Base = parsedValues(1),
+                            .Year = Convert.ToInt32(parsedValues(2)),
+                            .Desc = $"Release year : { .Year}{vbCrLf}Base : { .Base}",
+ _
+                            .Iwad = parsedValues(3),
+                            .Level = If(parsedValues.Length >= 5, parsedValues(4), String.Empty),
+                            .Misc = If(parsedValues.Length >= 6, parsedValues(5), String.Empty),
+                            .Pict = If(parsedValues.Length = 7, parsedValues(6), String.Empty)
                         })
                     Catch exception As MalformedLineException
                         WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?

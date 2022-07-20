@@ -672,7 +672,7 @@ Namespace Views
                         preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
 
                     Case LVLPRESET_TAB.AddNew
-                        preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .Pict = ""} 'TODO
+                        'TODO
 
                 End Select
             Catch ex As Exception
