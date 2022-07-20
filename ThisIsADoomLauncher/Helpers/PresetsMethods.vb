@@ -67,7 +67,7 @@ Friend Module PresetsMethods
                             .Iwad = parsedValues(1),
                             .Level = If(parsedValues.Length >= 3, parsedValues(2), String.Empty),
                             .Misc = If(parsedValues.Length >= 4, parsedValues(3), String.Empty),
-                            .ImagePath = If(parsedValues.Length = 5, parsedValues(4), String.Empty)
+                            .Pict = If(parsedValues.Length = 5, parsedValues(4), String.Empty)
                         })
                     Catch exception As MalformedLineException
                         WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?

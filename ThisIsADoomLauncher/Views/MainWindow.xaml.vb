@@ -448,7 +448,7 @@ Namespace Views
         Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
             Try
                 If ReadyToLaunch() Then
-                    'LaunchGame()
+                    LaunchGame()
                     SaveSettings()
                 End If
             Catch ex As Exception
@@ -672,7 +672,7 @@ Namespace Views
                         preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
 
                     Case LVLPRESET_TAB.AddNew
-                        preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .ImagePath = ""} 'TODO
+                        preset = New LevelPreset() With {.Iwad = "", .Level = "", .Misc = "", .Pict = ""} 'TODO
 
                 End Select
             Catch ex As Exception
