@@ -451,7 +451,7 @@ Namespace Views
         Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
             Try
                 If ReadyToLaunch() Then
-                    LaunchGame()
+                    'LaunchGame()
                     SaveSettings()
                 End If
             Catch ex As Exception
@@ -803,37 +803,48 @@ Namespace Views
             End Try
         End Sub
 
+        'TODO(v4?) Use a more OOP way
         ''' <summary>
-        ''' Retrieve full path of files "Level" or "Misc", using the TextBox tooltip.
-        ''' Maybe not the best way, but OK for now...
+        ''' Retrieve full path of files "Level/Misc" or "Mods" in StackPanel_Summary_FilesMods.
+        ''' It is done by reading the TextBox tooltip
         ''' </summary>
-        ''' <param name="type">Target : "Level" or "Misc"</param>
+        ''' <param name="target">Target : "Level" or "Mod"</param>
         ''' <returns></returns>
-        Private Function GetLvlsMiscFullPath(type As String) As String
-            Dim fullPath As String = String.Empty
+        Private Function GetLevelsModsFullPaths(target As String) As List(Of String)
+            Dim fullPaths As New List(Of String)
 
             Try
                 Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
 
-                'Get the Level&Misc TextBoxes (the ones with the White background)
-                Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
+                If target = "Level" Then
+                    'Build a List(Of String) of Length = 2, as {Level, Misc}
+                    Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
 
-                If lvlTbxs.Count > 0 And type = "Level" Then
-                    fullPath = ExtractFileFullPath(lvlTbxs(0))
+                    If lvlTbxs.Count > 0 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(0))) : Else fullPaths.Add(String.Empty) : End If
+                    If lvlTbxs.Count > 1 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(1))) : Else fullPaths.Add(String.Empty) : End If
                 End If
 
-                If lvlTbxs.Count > 1 And type = "Misc" Then
-                    fullPath = ExtractFileFullPath(lvlTbxs(1))
+                If target = "Mod" Then
+                    'Build a List(Of String) of Length = N, as {ModFile1, ModFile2, ModFile3, etc.}
+                    Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
+
+                    modTbxs.ForEach(Sub(tbx) fullPaths.Add(ExtractFileFullPath(tbx)))
                 End If
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {type}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {target}")
             End Try
 
-            Return fullPath
+            Return fullPaths
         End Function
 
+
+        ''' <summary>
+        ''' Extract file fullpath from TextBox tooltip
+        ''' </summary>
+        ''' <param name="tbx">TextBox to extract from</param>
+        ''' <returns></returns>
         Private Function ExtractFileFullPath(tbx As TextBox) As String
             Dim directoryPath As String = tbx.ToolTip.ToString.Split(vbLf)(1).Replace("Directory : ", "")
             Dim filename As String = tbx.Text
@@ -841,40 +852,22 @@ Namespace Views
             Return Path.Combine(directoryPath, filename)
         End Function
 
-        Private Function GetModsFullPath() As List(Of String)
-            Dim fullPaths As New List(Of String)
-
-            Try
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-
-                'Get the mods TextBoxes (the ones with the LightGray background)
-                Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
-
-                For Each tbx In modTbxs
-                    fullPaths.Add(ExtractFileFullPath(tbx))
-                Next
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-
-            Return fullPaths
-        End Function
-
         ''' <summary>
         ''' Save "Settings" (currently selected contents in Summary) to JSON
         ''' </summary>
         Private Sub SaveSettings()
             Try
+                Dim levelsPaths As List(Of String) = GetLevelsModsFullPaths("Level")
+                Dim modsPaths As List(Of String) = GetLevelsModsFullPaths("Mod")
+
                 Dim lastLaunched As New Setting(GetJsonFilepath("Settings")) With
                 {
                     .Port = TextBox_Summary_Port.Text,
+                    .PortParameters = New List(Of String),
                     .Iwad = TextBox_Summary_Iwad.Text,
-                    .Level = GetLvlsMiscFullPath("Level"),
-                    .Misc = GetLvlsMiscFullPath("Misc"),
-                    .Mods = GetModsFullPath(),
-                    .PortParameters = New List(Of String)
+                    .Level = levelsPaths(0),
+                    .Misc = levelsPaths(1),
+                    .Mods = modsPaths
                 }
                 lastLaunched.Save()
 
