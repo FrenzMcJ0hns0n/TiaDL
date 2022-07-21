@@ -10,11 +10,17 @@ Namespace Views
 
 
 #Region "GUI related constants"
-        Private Const TBX_SELECT_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
-        Private Const TBX_SELECT_IWAD As String = "Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
-        Private Const TBX_SELECT_MAPS As String = "Drop Maps file... (.wad/.pk3)" '+ /.zip ? TODO: Rename LEVEL into MAPS eventually
-        Private Const TBX_SELECT_MISC As String = "Drop Misc. file... (.deh/.bex/.txt)"
-        Private Const TBX_SELECT_PICT As String = "Drop Image file... (.jpg/.png)" '+ others ?
+        Private Const TBX_DROP_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
+        Private Const TBX_DROP_IWAD As String = "Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
+        Private Const TBX_DROP_MAPS As String = "Drop Maps file... (.wad/.pk3)" '+ /.zip ?
+        Private Const TBX_DROP_MISC As String = "Drop Misc. file... (.deh/.bex/.txt)"
+        Private Const TBX_DROP_PICT As String = "Drop Image file... (.jpg/.png)" '+ others ?
+
+        Private Const TBX_SELECT_PORT As String = "Select a Doom port executable"
+        Private Const TBX_SELECT_IWAD As String = "Select an Iwad file for the new preset"
+        Private Const TBX_SELECT_MAPS As String = "Select a Maps file for the new preset"
+        Private Const TBX_SELECT_MISC As String = "Select a Misc. file for the new preset"
+        Private Const TBX_SELECT_PICT As String = "Select an Image file for the new preset"
 
         Private Const ERR_MISSING_INPUT As String = "Error : missing input data"
         Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
@@ -187,7 +193,7 @@ Namespace Views
                 {
                     .Filter = "EXE file (*.exe)|*.exe",
                     .InitialDirectory = GetDirectoryPath("Port"), 'TiaDL root directory
-                    .Title = "Select a Doom port executable"
+                    .Title = TBX_SELECT_PORT
                 }
 
                 If dialog.ShowDialog() Then
@@ -203,7 +209,7 @@ Namespace Views
         End Sub
 
         Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_Port, TBX_SELECT_PORT)
+            UnfillTextBox(TextBox_Port, TBX_DROP_PORT)
             UnfillTextBox(TextBox_Summary_Port, String.Empty)
             UpdateCommand()
             DecorateCommand()
@@ -240,7 +246,7 @@ Namespace Views
                 '-------------  1 = Iwad
                 '-------------  2 = Iwad, Maps
                 '-------------  3 = Iwad, Maps, Misc
-                '-------------  4 = Iwad, Maps, Misc, Image
+                '-------------  4 = Iwad, Maps, Misc, Pict
 
                 '3) Feed GUI if Count > 0
                 If confirmedFiles.Count = 0 Then Return
@@ -310,7 +316,7 @@ Namespace Views
                     {
                         .Filter = "IWAD file (*.wad)|*.wad",
                         .InitialDirectory = GetDirectoryPath("Iwad"),
-                        .Title = "Select an IWAD as base content for the new preset"
+                        .Title = TBX_SELECT_IWAD
                     }
                     If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Iwad, dialog.FileName)
 
@@ -319,7 +325,7 @@ Namespace Views
                     {
                         .Filter = "Maps file (*.wad;*.pk3)|*.wad;*.pk3", '.zip needs testing, never used such format for Maps
                         .InitialDirectory = GetDirectoryPath("Maps"),
-                        .Title = "Select a Maps file for the new preset"
+                        .Title = TBX_SELECT_MAPS
                     }
                     If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Maps, dialog.FileName)
 
@@ -327,8 +333,8 @@ Namespace Views
                     Dim dialog As New OpenFileDialog With
                     {
                         .Filter = "Misc. file (*.deh;*.bex;*.txt)|*.deh;*.bex;*.txt",
-                        .InitialDirectory = GetDirectoryPath("misc"),
-                        .Title = "Select a Misc file for the new preset"
+                        .InitialDirectory = GetDirectoryPath("Misc"),
+                        .Title = TBX_SELECT_MISC
                     }
                     If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Misc, dialog.FileName)
 
@@ -337,7 +343,7 @@ Namespace Views
                     {
                         .Filter = "Image file (*.jpg;*.png)|*.jpg;*.png",
                         .InitialDirectory = GetDirectoryPath(), 'Or any other place in user computer?
-                        .Title = "Select an image for the new preset"
+                        .Title = TBX_SELECT_PICT
                     }
                     If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Pict, dialog.FileName)
 
@@ -350,10 +356,10 @@ Namespace Views
             'Restore default placeholder
             Dim sourceBtn As String = btn.Name.Split("_")(2)
             Select Case sourceBtn
-                Case "Iwad" : UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
-                Case "Maps" : UnfillTextBox(TextBox_NewLevel_Maps, TBX_SELECT_MAPS)
-                Case "Misc" : UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
-                Case "Pict" : UnfillTextBox(TextBox_NewLevel_Pict, TBX_SELECT_PICT)
+                Case "Iwad" : UnfillTextBox(TextBox_NewLevel_Iwad, TBX_DROP_IWAD)
+                Case "Maps" : UnfillTextBox(TextBox_NewLevel_Maps, TBX_DROP_MAPS)
+                Case "Misc" : UnfillTextBox(TextBox_NewLevel_Misc, TBX_DROP_MISC)
+                Case "Pict" : UnfillTextBox(TextBox_NewLevel_Pict, TBX_DROP_PICT)
             End Select
         End Sub
 
@@ -363,8 +369,8 @@ Namespace Views
             Dim miscInput As String = TextBox_NewLevel_Misc.Text
 
             'At least 2 contents (including Iwad) are required
-            If iwadInput = TBX_SELECT_IWAD Then Return
-            If mapsInput = TBX_SELECT_MAPS And miscInput = TBX_SELECT_MISC Then
+            If iwadInput = TBX_DROP_IWAD Then Return
+            If mapsInput = TBX_DROP_MAPS And miscInput = TBX_DROP_MISC Then
                 MessageBox.Show("You only submitted an Iwad. Please select it from the ""Base presets"" tab instead", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return
             End If
@@ -383,10 +389,10 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
-            UnfillTextBox(TextBox_NewLevel_Maps, TBX_SELECT_MAPS)
-            UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
-            UnfillTextBox(TextBox_NewLevel_Pict, TBX_SELECT_PICT)
+            UnfillTextBox(TextBox_NewLevel_Iwad, TBX_DROP_IWAD)
+            UnfillTextBox(TextBox_NewLevel_Maps, TBX_DROP_MAPS)
+            UnfillTextBox(TextBox_NewLevel_Misc, TBX_DROP_MISC)
+            UnfillTextBox(TextBox_NewLevel_Pict, TBX_DROP_PICT)
         End Sub
 
 #End Region
