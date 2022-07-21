@@ -1,10 +1,11 @@
 ﻿Namespace Models
     Public Class LevelPreset
 
-        'Preset information
         Public Property Name As String
+
+        'Preset properties
         Public Property Desc As String 'Short description, for Tooltip text
-        Public Property Base As String 'Base assets type : Doom 1 / Doom2 / Other
+        Public Property Type As String 'Assets type : Doom 1 / Doom2 / Other
         Public Property Year As Integer 'Year of last release
 
         'Associated files

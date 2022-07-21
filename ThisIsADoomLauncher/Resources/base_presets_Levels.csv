@@ -1,5 +1,5 @@
 #BASE PRESETS - LEVELS
-#Name									#Base	#Year	#Iwad			#Level				#Misc.			#Pict.
+#Name									#Type	#Year	#Iwad			#Level				#Misc.			#Pict.
 
 Ultimate Doom; 							Doom 1;	1993;	Doom.wad;		;					;				doom_icon.jpg
 Ultimate Doom + Sigil;					Doom 1;	2019;	Doom.wad; 		SIGIL_v1_21.wad;	;				Sigil_cover.jpg

@@ -59,7 +59,7 @@ Friend Module PresetsMethods
                     Try
                         Dim parsedValues As String() = parser.ReadFields()
 
-                        'Name, Base, Year and Iwad are mandatory
+                        'Name, Type, Year and Iwad are mandatory
                         If parsedValues.Length < 4 Then Continue Do
 
                         'Skip Wolf3D, as not functional yet
@@ -68,9 +68,9 @@ Friend Module PresetsMethods
                         levelPresets.Add(New LevelPreset() With
                         {
                             .Name = parsedValues(0),
-                            .Base = parsedValues(1),
+                            .Type = parsedValues(1),
                             .Year = Convert.ToInt32(parsedValues(2)),
-                            .Desc = $"Release year : { .Year}{vbCrLf}Base : { .Base}",
+                            .Desc = $"Release year : { .Year}{vbCrLf}Type : { .Type}",
  _
                             .Iwad = parsedValues(3),
                             .Level = If(parsedValues.Length >= 5, parsedValues(4), String.Empty),
