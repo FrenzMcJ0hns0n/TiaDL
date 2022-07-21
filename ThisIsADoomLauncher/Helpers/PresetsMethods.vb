@@ -2,7 +2,6 @@
 Imports System.Reflection
 Imports Microsoft.VisualBasic.FileIO
 Imports ThisIsADoomLauncher.Models
-Imports ThisIsADoomLauncher.Views
 
 Friend Module PresetsMethods
 
@@ -106,7 +105,7 @@ Friend Module PresetsMethods
                         {
                             .Name = parsedValues(0),
                             .Desc = parsedValues(1),
-                            .ImagePath = parsedValues(2),
+                            .Pict = parsedValues(2),
                             .Files = parsedValues(3).Split(",").ToList
                         })
                     Catch exception As MalformedLineException

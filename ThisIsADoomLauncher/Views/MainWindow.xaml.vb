@@ -1,15 +1,15 @@
-﻿Imports System.IO
+﻿Imports Microsoft.Win32
+Imports System.IO
 Imports System.Reflection
 Imports System.Text
 Imports System.Text.RegularExpressions
-Imports Microsoft.Win32
 Imports ThisIsADoomLauncher.Models
 
 Namespace Views
     Public Class MainWindow
 
 
-#Region "GUI related constants"
+#Region "GUI related Constants"
         Private Const TBX_DROP_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
         Private Const TBX_DROP_IWAD As String = "Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
         Private Const TBX_DROP_MAPS As String = "Drop Maps file... (.wad/.pk3)" '+ /.zip ?
@@ -31,7 +31,7 @@ Namespace Views
 #End Region
 
 
-#Region "GUI related enums"
+#Region "GUI related Enums"
 
         Private Function GetActiveLvlTab() As LVLPRESET_TAB
             Select Case TabControl_Levels.SelectedIndex
@@ -149,7 +149,7 @@ Namespace Views
                 Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
 
                 Dim now_formatted As String = Date.Now.ToString("yyyy-MM-dd_HH-mm-ss")
-                Dim batPath As String = Path.Combine(GetDirectoryPath(), now_formatted & "_command.bat") 'TODO : Change/Add RootDirPath variable
+                Dim batPath As String = Path.Combine(GetDirectoryPath(), now_formatted & "_command.bat")
 
                 Using writer As New StreamWriter(batPath, False, Encoding.Default)
                     writer.WriteLine("@echo off")
@@ -192,7 +192,7 @@ Namespace Views
                 Dim dialog As New OpenFileDialog With
                 {
                     .Filter = "EXE file (*.exe)|*.exe",
-                    .InitialDirectory = GetDirectoryPath("Port"), 'TiaDL root directory
+                    .InitialDirectory = GetDirectoryPath("Port"),
                     .Title = TBX_SELECT_PORT
                 }
 
@@ -224,14 +224,37 @@ Namespace Views
 
 #Region "Events : Levels"
 
-        'NOT READY
+        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            Try
+                Dim lp As LevelPreset = ReturnSelectedLevels()
+
+                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
+                UpdateLevels_Summary(lp.Maps, lp.Misc)
+                UpdateCommand()
+                DecorateCommand()
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
+
+
+
+        Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            'TODO
+        End Sub
+
+
+
+
         Private Sub GroupBox_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
-        'NOT READY
         ''' <summary>
-        ''' This feature allows to drop multiples files into the GroupBox "Levels"
+        ''' Handle multiple file drops onto GroupBox "Levels"
         ''' </summary>
         Private Sub GroupBox_Levels_Drop(sender As Object, e As DragEventArgs)
             Try
@@ -261,33 +284,6 @@ Namespace Views
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
-
-
-
-        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            Try
-                Dim lp As LevelPreset = ReturnSelectedLevels()
-
-                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
-                'UpdateLevelAndMisc_Summary(New List(Of String) From {lp.Level, lp.Misc})
-                'UpdateLvlsMods_Summary(lp.Level, lp.Misc, Nothing)
-                UpdateLevels_Summary(lp.Maps, lp.Misc)
-
-                UpdateCommand()
-                DecorateCommand()
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
-
-
-        Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            'TODO
-        End Sub
-
-
 
         Private Sub TextBox_NewLevel_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
@@ -371,15 +367,15 @@ Namespace Views
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
             If mapsInput = TBX_DROP_MAPS And miscInput = TBX_DROP_MISC Then
+                'TODO: Use string constant
                 MessageBox.Show("You only submitted an Iwad. Please select it from the ""Base presets"" tab instead", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return
             End If
 
             'Update Summary "Fields" view
             TextBox_Summary_Iwad.Text = iwadInput
-            'UpdateLevelAndMisc_Summary(New List(Of String) From {levelInput, miscInput})
-            'UpdateLvlsMods_Summary(levelInput, miscInput, Nothing)
             UpdateLevels_Summary(mapsInput, miscInput)
+
             UpdateCommand()
             DecorateCommand()
         End Sub
@@ -406,18 +402,15 @@ Namespace Views
 
                 TextBlock_Mods_Desc.Text = mp.Desc
                 ListView_Mods_Files.ItemsSource = mp.Files
-                'UpdateMods_Summary(mp.Files)
-                'UpdateLvlsMods_Summary("", "", mp.Files)
                 UpdateMods_Summary(mp.Files)
-
                 UpdateCommand()
                 DecorateCommand()
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
-
 
 #End Region
 
@@ -426,8 +419,7 @@ Namespace Views
 
         Private Sub Button_Options_HelpAbout_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
-                Dim helpWindow As New HelpWindow() With {.Owner = mainWindow}
+                Dim helpWindow As New HelpWindow() With {.Owner = Me}
                 helpWindow.ShowDialog()
 
             Catch ex As Exception
@@ -470,26 +462,109 @@ Namespace Views
 #End Region
 
 
-#Region "GUI operations & helpers"
+#Region "Operations / Helpers"
 
-        Private Function CreateFileModsTbx(filepath As String, type As String) As TextBox
-            Dim fi As New FileInfo(filepath)
-            Dim Color As SolidColorBrush = IIf(type = "Level",
-                                               Brushes.White,
-                                               Brushes.LightGray)
+        Private Sub FillTextBox(tbx As TextBox, content As String)
+            Try
+                With tbx
+                    .Text = content
+                    .FontStyle = FontStyles.Normal
+                    .Foreground = Brushes.Black
+                End With
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
+        Private Sub UnfillTextBox(tbx As TextBox, content As String)
+            Try
+                With tbx
+                    .Text = content
+                    .FontStyle = FontStyles.Italic
+                    .Foreground = Brushes.Gray
+                End With
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
+
+
+
+        ''' <summary>
+        ''' Create new TextBox to represent a file in StackPanel_Summary_FilesMods
+        ''' </summary>
+        ''' <param name="filepath">Full path of represented file</param>
+        ''' <param name="target">Target : "Level" or "Mod"</param>
+        ''' <returns></returns>
+        Private Function CreateTbx(filepath As String, target As String) As TextBox
+            Dim info As New FileInfo(filepath)
+
             Dim sBuilder As New StringBuilder()
-            sBuilder.AppendLine($"File type : {type}")
-            sBuilder.Append($"Directory : {fi.DirectoryName}")
+            sBuilder.AppendLine($"File type : {target}")
+            sBuilder.Append($"Directory : {info.DirectoryName}")
 
             Return New TextBox() With
             {
-                .Background = Color,
+                .Background = If(target = "Level", Brushes.White, Brushes.LightGray),
                 .Cursor = Cursors.Arrow,
                 .IsReadOnly = True,
                 .Margin = New Thickness(0, 0, 6, 0),
-                .Text = fi.Name,
+                .Text = info.Name,
                 .ToolTip = sBuilder.ToString
             }
+        End Function
+
+        ''' <summary>
+        ''' Extract file fullpath from TextBox tooltip
+        ''' </summary>
+        ''' <param name="tbx">TextBox to extract from</param>
+        ''' <returns></returns>
+        Private Function ExtractFileFullPath(tbx As TextBox) As String
+            Dim directoryPath As String = tbx.ToolTip.ToString.Split(vbLf)(1).Replace("Directory : ", "")
+            Dim filename As String = tbx.Text
+
+            Return Path.Combine(directoryPath, filename)
+        End Function
+
+        'TODO(v4?) Use a more OOP way
+        ''' <summary>
+        ''' Retrieve full path of files "Maps/Misc" or "Mods" in StackPanel_Summary_FilesMods.
+        ''' It is done by reading the TextBox tooltip
+        ''' </summary>
+        ''' <param name="target">Target : "Level" or "Mod"</param>
+        ''' <returns></returns>
+        Private Function GetFullPathsFromStackPanelItems(target As String) As List(Of String)
+            Dim fullPaths As New List(Of String)
+
+            Try
+                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+
+                If target = "Level" Then
+                    'Build a List(Of String) of Length = 2, as {Maps, Misc}
+                    Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
+
+                    If lvlTbxs.Count > 0 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(0))) : Else fullPaths.Add(String.Empty) : End If
+                    If lvlTbxs.Count > 1 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(1))) : Else fullPaths.Add(String.Empty) : End If
+                End If
+
+                If target = "Mod" Then
+                    'Build a List(Of String) of Length = N, as {ModFile1, ModFile2, ModFile3, etc.}
+                    Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
+
+                    modTbxs.ForEach(Sub(tbx) fullPaths.Add(ExtractFileFullPath(tbx)))
+                End If
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {target}")
+            End Try
+
+            Return fullPaths
         End Function
 
         ''' <summary>
@@ -515,7 +590,7 @@ Namespace Views
                     If nameOrPath = String.Empty Then Continue For
 
                     Dim fullpath As String = If(File.Exists(nameOrPath), nameOrPath, GetFileAbsolutePath("", nameOrPath))
-                    lvlTbxs.Add(CreateFileModsTbx(fullpath, "Level"))
+                    lvlTbxs.Add(CreateTbx(fullpath, "Level"))
                 Next
 
                 'Fill the StackPanel with gathered TextBoxes
@@ -549,7 +624,7 @@ Namespace Views
                     If nameOrPath = String.Empty Then Continue For
 
                     Dim fullpath As String = If(File.Exists(nameOrPath), nameOrPath, GetFileAbsolutePath("", nameOrPath))
-                    modTbxs.Add(CreateFileModsTbx(fullpath, "Mod"))
+                    modTbxs.Add(CreateTbx(fullpath, "Mod"))
                 Next
 
                 'Fill the StackPanel with gathered TextBoxes
@@ -564,11 +639,39 @@ Namespace Views
 
 
 
+
+        Private Sub DecorateCommand()
+            Try
+                Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
+                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
+                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped = 4 for each path as in ""complete_path""
+
+                For Each m As Match In matches
+                    For Each c As Capture In m.Captures
+
+                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4))
+                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4) + c.Length)
+                        Dim rangeToEdit As New TextRange(startIndex, endIndex)
+
+                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
+                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
+
+                    Next
+                    quotesCount += 1
+                Next
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
         Private Sub FillRichTextBox_Command(content As String)
             Try
-                Dim flow As New FlowDocument()
                 Dim para As New Paragraph()
                 para.Inlines.Add(content)
+
+                Dim flow As New FlowDocument()
                 flow.Blocks.Add(para)
 
                 RichTextBox_Command.Document = flow
@@ -578,9 +681,60 @@ Namespace Views
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Update the "Command" Summary from the "Fields" Summary view
+        ''' </summary>
+        Private Sub UpdateCommand()
+            Dim command As String = String.Empty
+            Try
+                Dim port As String = TextBox_Summary_Port.Text
+                Dim iwad As String = TextBox_Summary_Iwad.Text
+
+                If port = String.Empty Or iwad = String.Empty Then
+                    RichTextBox_Command.Document.Blocks.Clear() 'TODO? Display text about Missing Port & Iwad ?
+                    Return
+                End If
+
+                command &= $"""{port}"" -iwad ""{iwad}"""
+                'TODO: Manage port parameters, to be added before " -iwad"
+
+                'Add Level/Misc/Mods to the command line
+                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                allTbxs.ForEach(Sub(tbx) command &= $" -file ""{ExtractFileFullPath(tbx)}""")
+
+                FillRichTextBox_Command(command)
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Command : {command}")
+            End Try
+        End Sub
 
 
-        'NOT READY
+
+
+        Private Function ReturnSelectedLevels() As LevelPreset
+            Dim preset As LevelPreset = Nothing
+
+            Try
+                Select Case GetActiveLvlTab()
+                    Case LVLPRESET_TAB.Base
+                        preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
+
+                    Case LVLPRESET_TAB.User
+                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
+
+                    Case LVLPRESET_TAB.AddNew
+                        'TODO
+
+                End Select
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+
+            Return preset
+        End Function
+
         ''' <summary>
         ''' Check and order the files dropped into the GroupBox "Levels"
         ''' </summary>
@@ -625,31 +779,6 @@ Namespace Views
             Return orderedFiles
         End Function
 
-
-
-        Private Function ReturnSelectedLevels() As LevelPreset
-            Dim preset As LevelPreset = Nothing
-
-            Try
-                Select Case GetActiveLvlTab()
-                    Case LVLPRESET_TAB.Base
-                        preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
-
-                    Case LVLPRESET_TAB.User
-                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
-
-                    Case LVLPRESET_TAB.AddNew
-                        'TODO
-
-                End Select
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-
-            Return preset
-        End Function
-
         Private Function ReturnSelectedMods() As ModPreset
             Dim preset As ModPreset = Nothing
 
@@ -673,114 +802,17 @@ Namespace Views
             Return preset
         End Function
 
-        Private Function ReturnSelectedPort() As String
-            Dim portPath As String = String.Empty
-
-            Try
-                If Not TextBox_Port.Text = TBX_SELECT_PORT Then portPath = TextBox_Port.Text
-            Catch ex As Exception
-                WriteToLog(Date.Now & " - Error in 'ReturnSelectedPort()'. Exception : " & ex.ToString)
-            End Try
-
-            Return portPath
-        End Function
-
-
-
-        ''' <summary>
-        ''' Update the "Command" Summary from the "Fields" Summary view
-        ''' </summary>
-        Private Sub UpdateCommand()
-            Dim command As String = String.Empty
-            Try
-                Dim port As String = TextBox_Summary_Port.Text
-                Dim iwad As String = TextBox_Summary_Iwad.Text
-
-                If port = String.Empty Or iwad = String.Empty Then
-                    RichTextBox_Command.Document.Blocks.Clear() 'TODO? Display text about Missing Port & Iwad ?
-                    Return
-                End If
-
-                command &= $"""{port}"" -iwad ""{iwad}"""
-                'TODO: Manage port parameters, to be added before " -iwad"
-
-                'Add Level/Misc/Mods to the command line
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-                allTbxs.ForEach(Sub(tbx) command &= $" -file ""{ExtractFileFullPath(tbx)}""")
-
-                FillRichTextBox_Command(command)
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Command : {command}")
-            End Try
-        End Sub
-
-        Private Sub DecorateCommand()
-            Try
-                Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
-                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
-                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped = 4 for each path as in ""complete_path""
-
-                For Each m As Match In matches
-                    For Each c As Capture In m.Captures
-
-                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4)
-                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + quotesCount * 4 + c.Length)
-                        Dim rangeToEdit As New TextRange(startIndex, endIndex)
-
-                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
-                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
-
-                    Next
-                    quotesCount += 1
-                Next
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
-
-
-        Private Sub FillTextBox(tbx As TextBox, content As String)
-            Try
-                With tbx
-                    .Text = content
-                    .FontStyle = FontStyles.Normal
-                    .Foreground = Brushes.Black
-                End With
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
-        Private Sub UnfillTextBox(tbx As TextBox, content As String)
-            Try
-                With tbx
-                    .Text = content
-                    .FontStyle = FontStyles.Italic
-                    .Foreground = Brushes.Gray
-                End With
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
 
 
 
         Private Function ReadyToLaunch() As Boolean
             Try
-                If String.IsNullOrEmpty(TextBox_Summary_Port.Text) Then
+                If TextBox_Summary_Port.Text = String.Empty Then
                     MessageBox.Show(ERR_MISSING_PORT, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     Return False
                 End If
 
-                If String.IsNullOrEmpty(TextBox_Summary_Iwad.Text) Then
+                If TextBox_Summary_Iwad.Text = String.Empty Then
                     MessageBox.Show(ERR_MISSING_IWAD, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     Return False
                 End If
@@ -797,6 +829,7 @@ Namespace Views
         Private Sub LaunchGame()
             Try
                 Dim rtbText As String = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
+
                 Dim cmdExe As New ProcessStartInfo("cmd.exe") With
                 {
                     .UseShellExecute = False,
@@ -804,73 +837,28 @@ Namespace Views
                     .Arguments = $"/c start """" {rtbText}"
                 }
                 Process.Start(cmdExe)
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
-        'TODO(v4?) Use a more OOP way
-        ''' <summary>
-        ''' Retrieve full path of files "Level/Misc" or "Mods" in StackPanel_Summary_FilesMods.
-        ''' It is done by reading the TextBox tooltip
-        ''' </summary>
-        ''' <param name="target">Target : "Level" or "Mod"</param>
-        ''' <returns></returns>
-        Private Function GetLevelsModsFullPaths(target As String) As List(Of String)
-            Dim fullPaths As New List(Of String)
-
-            Try
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
-
-                If target = "Level" Then
-                    'Build a List(Of String) of Length = 2, as {Level, Misc}
-                    Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
-
-                    If lvlTbxs.Count > 0 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(0))) : Else fullPaths.Add(String.Empty) : End If
-                    If lvlTbxs.Count > 1 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(1))) : Else fullPaths.Add(String.Empty) : End If
-                End If
-
-                If target = "Mod" Then
-                    'Build a List(Of String) of Length = N, as {ModFile1, ModFile2, ModFile3, etc.}
-                    Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
-
-                    modTbxs.ForEach(Sub(tbx) fullPaths.Add(ExtractFileFullPath(tbx)))
-                End If
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {target}")
-            End Try
-
-            Return fullPaths
-        End Function
 
 
-        ''' <summary>
-        ''' Extract file fullpath from TextBox tooltip
-        ''' </summary>
-        ''' <param name="tbx">TextBox to extract from</param>
-        ''' <returns></returns>
-        Private Function ExtractFileFullPath(tbx As TextBox) As String
-            Dim directoryPath As String = tbx.ToolTip.ToString.Split(vbLf)(1).Replace("Directory : ", "")
-            Dim filename As String = tbx.Text
-
-            Return Path.Combine(directoryPath, filename)
-        End Function
 
         ''' <summary>
         ''' Save "Settings" (currently selected contents in Summary) to JSON
         ''' </summary>
         Private Sub SaveSettings()
             Try
-                Dim levelsPaths As List(Of String) = GetLevelsModsFullPaths("Level")
-                Dim modsPaths As List(Of String) = GetLevelsModsFullPaths("Mod")
+                Dim levelsPaths As List(Of String) = GetFullPathsFromStackPanelItems("Level")
+                Dim modsPaths As List(Of String) = GetFullPathsFromStackPanelItems("Mod")
 
                 Dim lastLaunched As New Setting(GetJsonFilepath("Settings")) With
                 {
                     .Port = TextBox_Summary_Port.Text,
-                    .PortParameters = New List(Of String),
+                    .PortParameters = New List(Of String), 'TODO Eventually?
                     .Iwad = TextBox_Summary_Iwad.Text,
                     .Maps = levelsPaths(0),
                     .Misc = levelsPaths(1),
@@ -901,10 +889,10 @@ Namespace Views
                         FillTextBox(TextBox_Port, .Port)
                         FillTextBox(TextBox_Summary_Port, .Port)
                     End If
-                    'TODO: Handle case of invalid .Port
+                    'TODO? Handle case of invalid .Port
 
                     If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
-                    'TODO: Handle case of invalid .Iwad
+                    'TODO? Handle case of invalid .Iwad
 
                     UpdateLevels_Summary(.Maps, .Misc)
                     UpdateMods_Summary(.Mods)
@@ -923,4 +911,3 @@ Namespace Views
 
     End Class
 End Namespace
-
