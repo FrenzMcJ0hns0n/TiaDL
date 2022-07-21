@@ -186,7 +186,7 @@ Namespace Views
                 Dim dialog As New OpenFileDialog With
                 {
                     .Filter = "EXE file (*.exe)|*.exe",
-                    .InitialDirectory = GetDirectoryPath(), 'TiaDL root directory
+                    .InitialDirectory = GetDirectoryPath("Port"), 'TiaDL root directory
                     .Title = "Select a Doom port executable"
                 }
 
@@ -209,8 +209,9 @@ Namespace Views
             DecorateCommand()
         End Sub
 
-        'TODO
+        'TODO?
         'Implement edition of Port parameters
+        'Is it really useful in the end? Having a hard time finding interesting ones, as most settings come from ini files
 
 #End Region
 
