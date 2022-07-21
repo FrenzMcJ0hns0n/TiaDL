@@ -50,7 +50,7 @@ Friend Module IOHelper
     ''' <summary>
     ''' Get the absolute path of a file from its relative one within TiaDL project tree
     ''' </summary>
-    ''' <param name="targetName">One of the project directories: "port", "iwads", "levels", "misc", "mods", or "" for any</param>
+    ''' <param name="targetName">One of the project directories: "Iwad", "Maps", "misc", "mods", "port", or "" for any</param>
     ''' <param name="filename">The filename to get the absolute path of</param>
     ''' <returns></returns>
     Public Function GetFileAbsolutePath(targetName As String, filename As String) As String
@@ -169,9 +169,9 @@ functionEnd:
                     Using reader As New BinaryReader(File.OpenRead(filepath))
                         If extension = ".wad" AndAlso Encoding.Default.GetString(reader.ReadBytes(4)) = "IWAD" Then Return True
                     End Using
-                Case "Level" : If VALID_EXTENSIONS_LEVEL.Contains(extension) Then Return True
+                Case "Maps" : If VALID_EXTENSIONS_MAPS.Contains(extension) Then Return True
                 Case "Misc" : If VALID_EXTENSIONS_MISC.Contains(extension) Then Return True
-                Case "Image" : If VALID_EXTENSIONS_PICT.Contains(extension) Then Return True
+                Case "Pict" : If VALID_EXTENSIONS_PICT.Contains(extension) Then Return True
                 Case Else 'TODO?
             End Select
 

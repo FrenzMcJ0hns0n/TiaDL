@@ -10,7 +10,7 @@
 
         'Associated files
         Public Property Iwad As String
-        Public Property Level As String
+        Public Property Maps As String
         Public Property Misc As String
         Public Property Pict As String
 

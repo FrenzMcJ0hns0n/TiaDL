@@ -73,7 +73,7 @@ Friend Module PresetsMethods
                             .Desc = $"Release year : { .Year}{vbCrLf}Type : { .Type}",
  _
                             .Iwad = parsedValues(3),
-                            .Level = If(parsedValues.Length >= 5, parsedValues(4), String.Empty),
+                            .Maps = If(parsedValues.Length >= 5, parsedValues(4), String.Empty),
                             .Misc = If(parsedValues.Length >= 6, parsedValues(5), String.Empty),
                             .Pict = If(parsedValues.Length = 7, parsedValues(6), String.Empty)
                         })

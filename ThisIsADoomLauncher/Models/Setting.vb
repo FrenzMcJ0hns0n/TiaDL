@@ -13,7 +13,7 @@ Namespace Models
         Public Property Port As String
         Public Property PortParameters As List(Of String) = New List(Of String)
         Public Property Iwad As String
-        Public Property Level As String
+        Public Property Maps As String
         Public Property Misc As String
         Public Property Mods As List(Of String) = New List(Of String)
 
@@ -39,7 +39,7 @@ Namespace Models
                 Port = .Port
                 PortParameters = .PortParameters
                 Iwad = .Iwad
-                Level = .Level
+                Maps = .Maps
                 Misc = .Misc
                 Mods = .Mods
             End With

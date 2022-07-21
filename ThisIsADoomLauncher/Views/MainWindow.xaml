@@ -256,15 +256,15 @@
                             
                             <Label Style="{StaticResource Label_NewLevel}"
                                    Grid.Row="3" Grid.Column="1"
-                                   Content="Level :"/>
-                            <TextBox x:Name="TextBox_NewLevel_Level"
+                                   Content="Maps :"/>
+                            <TextBox x:Name="TextBox_NewLevel_Maps"
                                      Style="{StaticResource TextBox_NewLevel}"
                                      Grid.Row="3" Grid.Column="2"
-                                     Text="Drop Level file... (.wad/.pk3)"/>
-                            <Button x:Name="Button_NewLevel_Level_Browse"
+                                     Text="Drop Maps file... (.wad/.pk3)"/>
+                            <Button x:Name="Button_NewLevel_Maps_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="3" Grid.Column="3"/>
-                            <Button x:Name="Button_NewLevel_Level_Clear"
+                            <Button x:Name="Button_NewLevel_Maps_Clear"
                                     Style="{StaticResource Button_NewLevel_Clear}"
                                     Grid.Row="3" Grid.Column="3"/>
 
@@ -275,7 +275,7 @@
                             <TextBox x:Name="TextBox_NewLevel_Misc"
                                      Style="{StaticResource TextBox_NewLevel}"
                                      Grid.Row="5" Grid.Column="2"
-                                     Text="Drop extra file... (.deh/.bex/.txt)"/>
+                                     Text="Drop Misc. file... (.deh/.bex/.txt)"/>
                             <Button x:Name="Button_NewLevel_Misc_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="5" Grid.Column="3"/>
@@ -297,14 +297,14 @@
                                         FontStyle="Italic"
                                         Foreground="Gray"
                                         Text="Enter preset name..."/>-->
-                            <TextBox x:Name="TextBox_NewLevel_Image"
+                            <TextBox x:Name="TextBox_NewLevel_Pict"
                                      Style="{StaticResource TextBox_NewLevel}"
                                      Grid.Row="7" Grid.Column="2"
-                                     Text="Drop picture file... (.jpg/.png)"/>
-                            <Button x:Name="Button_NewLevel_Image_Browse"
+                                     Text="Drop Image file... (.jpg/.png)"/>
+                            <Button x:Name="Button_NewLevel_Pict_Browse"
                                     Style="{StaticResource Button_NewLevel_Browse}"
                                     Grid.Row="7" Grid.Column="3"/>
-                            <Button x:Name="Button_NewLevel_Image_Clear"
+                            <Button x:Name="Button_NewLevel_Pict_Clear"
                                     Style="{StaticResource Button_NewLevel_Clear}"
                                     Grid.Row="7" Grid.Column="3"/>
 
@@ -557,7 +557,7 @@
                         />
 
                     <Label Style="{StaticResource Label_SummaryEntries}"
-                           Grid.Row="4" Grid.Column="1" Content="File(s) :"
+                           Grid.Row="4" Grid.Column="1" Content="Files :"
                            />
                     <StackPanel 
                         x:Name="StackPanel_Summary_FilesMods"

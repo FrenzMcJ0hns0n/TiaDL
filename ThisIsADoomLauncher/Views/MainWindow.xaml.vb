@@ -12,9 +12,9 @@ Namespace Views
 #Region "GUI related constants"
         Private Const TBX_SELECT_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
         Private Const TBX_SELECT_IWAD As String = "Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
-        Private Const TBX_SELECT_LEVEL As String = "Drop Level file... (.wad/.pk3)" '+ /.zip ? TODO: Rename LEVEL into MAPS eventually
-        Private Const TBX_SELECT_MISC As String = "Drop extra file... (.deh/.bex/.txt)"
-        Private Const TBX_SELECT_PICT As String = "Drop picture file... (.jpg/.png)" '+ others ?
+        Private Const TBX_SELECT_MAPS As String = "Drop Maps file... (.wad/.pk3)" '+ /.zip ? TODO: Rename LEVEL into MAPS eventually
+        Private Const TBX_SELECT_MISC As String = "Drop Misc. file... (.deh/.bex/.txt)"
+        Private Const TBX_SELECT_PICT As String = "Drop Image file... (.jpg/.png)" '+ others ?
 
         Private Const ERR_MISSING_INPUT As String = "Error : missing input data"
         Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
@@ -237,18 +237,18 @@ Namespace Views
 
                 '------------- Template of confirmedFiles, depending on .Count :
                 '-------------  1 = Iwad
-                '-------------  2 = Iwad, Level
-                '-------------  3 = Iwad, Level, Misc
-                '-------------  4 = Iwad, Level, Misc, Image
+                '-------------  2 = Iwad, Maps
+                '-------------  3 = Iwad, Maps, Misc
+                '-------------  4 = Iwad, Maps, Misc, Image
 
                 '3) Feed GUI if Count > 0
                 If confirmedFiles.Count = 0 Then Return
                 SetActiveLvlTab(LVLPRESET_TAB.AddNew)
 
                 If confirmedFiles.Count > 0 Then FillTextBox(TextBox_NewLevel_Iwad, confirmedFiles(0))
-                If confirmedFiles.Count > 1 Then FillTextBox(TextBox_NewLevel_Level, confirmedFiles(1))
+                If confirmedFiles.Count > 1 Then FillTextBox(TextBox_NewLevel_Maps, confirmedFiles(1))
                 If confirmedFiles.Count > 2 Then FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
-                If confirmedFiles.Count > 3 Then FillTextBox(TextBox_NewLevel_Image, confirmedFiles(3))
+                If confirmedFiles.Count > 3 Then FillTextBox(TextBox_NewLevel_Pict, confirmedFiles(3))
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -261,10 +261,10 @@ Namespace Views
             Try
                 Dim lp As LevelPreset = ReturnSelectedLevels()
 
-                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("iwads", lp.Iwad)
+                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
                 'UpdateLevelAndMisc_Summary(New List(Of String) From {lp.Level, lp.Misc})
                 'UpdateLvlsMods_Summary(lp.Level, lp.Misc, Nothing)
-                UpdateLevels_Summary(lp.Level, lp.Misc)
+                UpdateLevels_Summary(lp.Maps, lp.Misc)
 
                 UpdateCommand()
                 DecorateCommand()
@@ -295,7 +295,7 @@ Namespace Views
                 Return
             End If
 
-            Dim sourceTbx As String = tbx.Name.Split("_")(2) 'Iwad, Level, Misc, Image
+            Dim sourceTbx As String = tbx.Name.Split("_")(2) 'Iwad, Maps, Misc, Pict
             If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
         End Sub
 
@@ -308,19 +308,19 @@ Namespace Views
                     Dim dialog As New OpenFileDialog With
                     {
                         .Filter = "IWAD file (*.wad)|*.wad",
-                        .InitialDirectory = GetDirectoryPath("iwads"),
+                        .InitialDirectory = GetDirectoryPath("Iwad"),
                         .Title = "Select an IWAD as base content for the new preset"
                     }
                     If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Iwad, dialog.FileName)
 
-                Case "Level"
+                Case "Maps"
                     Dim dialog As New OpenFileDialog With
                     {
-                        .Filter = "Level file (*.wad;*.pk3)|*.wad;*.pk3", '.zip needs testing, never used such format for levels
-                        .InitialDirectory = GetDirectoryPath("levels"),
-                        .Title = "Select a Level file for the new preset"
+                        .Filter = "Maps file (*.wad;*.pk3)|*.wad;*.pk3", '.zip needs testing, never used such format for Maps
+                        .InitialDirectory = GetDirectoryPath("Maps"),
+                        .Title = "Select a Maps file for the new preset"
                     }
-                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Level, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Maps, dialog.FileName)
 
                 Case "Misc"
                     Dim dialog As New OpenFileDialog With
@@ -331,14 +331,14 @@ Namespace Views
                     }
                     If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Misc, dialog.FileName)
 
-                Case "Image"
+                Case "Pict"
                     Dim dialog As New OpenFileDialog With
                     {
                         .Filter = "Image file (*.jpg;*.png)|*.jpg;*.png",
                         .InitialDirectory = GetDirectoryPath(), 'Or any other place in user computer?
                         .Title = "Select an image for the new preset"
                     }
-                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Image, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Pict, dialog.FileName)
 
             End Select
         End Sub
@@ -350,20 +350,20 @@ Namespace Views
             Dim sourceBtn As String = btn.Name.Split("_")(2)
             Select Case sourceBtn
                 Case "Iwad" : UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
-                Case "Level" : UnfillTextBox(TextBox_NewLevel_Level, TBX_SELECT_LEVEL)
+                Case "Maps" : UnfillTextBox(TextBox_NewLevel_Maps, TBX_SELECT_MAPS)
                 Case "Misc" : UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
-                Case "Image" : UnfillTextBox(TextBox_NewLevel_Image, TBX_SELECT_PICT)
+                Case "Pict" : UnfillTextBox(TextBox_NewLevel_Pict, TBX_SELECT_PICT)
             End Select
         End Sub
 
         Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
             Dim iwadInput As String = TextBox_NewLevel_Iwad.Text
-            Dim levelInput As String = TextBox_NewLevel_Level.Text
+            Dim mapsInput As String = TextBox_NewLevel_Maps.Text
             Dim miscInput As String = TextBox_NewLevel_Misc.Text
 
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_SELECT_IWAD Then Return
-            If levelInput = TBX_SELECT_LEVEL And miscInput = TBX_SELECT_MISC Then
+            If mapsInput = TBX_SELECT_MAPS And miscInput = TBX_SELECT_MISC Then
                 MessageBox.Show("You only submitted an Iwad. Please select it from the ""Base presets"" tab instead", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return
             End If
@@ -372,7 +372,7 @@ Namespace Views
             TextBox_Summary_Iwad.Text = iwadInput
             'UpdateLevelAndMisc_Summary(New List(Of String) From {levelInput, miscInput})
             'UpdateLvlsMods_Summary(levelInput, miscInput, Nothing)
-            UpdateLevels_Summary(levelInput, miscInput)
+            UpdateLevels_Summary(mapsInput, miscInput)
             UpdateCommand()
             DecorateCommand()
         End Sub
@@ -383,9 +383,9 @@ Namespace Views
 
         Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
             UnfillTextBox(TextBox_NewLevel_Iwad, TBX_SELECT_IWAD)
-            UnfillTextBox(TextBox_NewLevel_Level, TBX_SELECT_LEVEL)
+            UnfillTextBox(TextBox_NewLevel_Maps, TBX_SELECT_MAPS)
             UnfillTextBox(TextBox_NewLevel_Misc, TBX_SELECT_MISC)
-            UnfillTextBox(TextBox_NewLevel_Image, TBX_SELECT_PICT)
+            UnfillTextBox(TextBox_NewLevel_Pict, TBX_SELECT_PICT)
         End Sub
 
 #End Region
@@ -486,10 +486,10 @@ Namespace Views
         End Function
 
         ''' <summary>
-        ''' Update the TextBox items in StackPanel for Levels (Level and Misc).
+        ''' Update the TextBox items in StackPanel for Levels (Maps and Misc).
         ''' Clear then refill the entire StackPanel
         ''' </summary>
-        ''' <param name="level">Level filename or filepath</param>
+        ''' <param name="level">Maps filename or filepath</param>
         ''' <param name="misc">Misc filename or filepath</param>
         Private Sub UpdateLevels_Summary(level As String, misc As String)
             Try
@@ -592,7 +592,7 @@ Namespace Views
                             Continue For
                         End If
 
-                        If orderedFiles.Count > 0 AndAlso ValidateFile(path, "Level") Then
+                        If orderedFiles.Count > 0 AndAlso ValidateFile(path, "Maps") Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
@@ -602,7 +602,7 @@ Namespace Views
                             Continue For
                         End If
 
-                        If orderedFiles.Count > 2 AndAlso ValidateFile(path, "Image") Then
+                        If orderedFiles.Count > 2 AndAlso ValidateFile(path, "Pict") Then
                             orderedFiles.Add(path)
                             Continue For
                         End If
@@ -865,7 +865,7 @@ Namespace Views
                     .Port = TextBox_Summary_Port.Text,
                     .PortParameters = New List(Of String),
                     .Iwad = TextBox_Summary_Iwad.Text,
-                    .Level = levelsPaths(0),
+                    .Maps = levelsPaths(0),
                     .Misc = levelsPaths(1),
                     .Mods = modsPaths
                 }
@@ -899,7 +899,7 @@ Namespace Views
                     If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
                     'TODO: Handle case of invalid .Iwad
 
-                    UpdateLevels_Summary(.Level, .Misc)
+                    UpdateLevels_Summary(.Maps, .Misc)
                     UpdateMods_Summary(.Mods)
                 End With
 
