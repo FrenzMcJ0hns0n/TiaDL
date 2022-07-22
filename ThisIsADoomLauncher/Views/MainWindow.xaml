@@ -170,7 +170,7 @@
                                                     <StackPanel Orientation="Vertical">
                                                         <Image
                                                             Source="{Binding Pict,Converter={StaticResource ImgConverter}}"
-                                                            Margin="0,0,0,4"
+                                                            Margin="0,1,0,4"
                                                             Height="128"
                                                         />
                                                         <TextBlock
