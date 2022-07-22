@@ -5,13 +5,9 @@ Imports ThisIsADoomLauncher.Models
 
 Friend Module PresetsMethods
 
-    'TODO? v3+ Use JSON instead of CSV
-    'Well, we will see...
-
 
 #Region "Currently enabled"
 
-    'TODO: Do more tests + TODO? Rewrite
     ''' <summary>
     ''' Configure the TextFieldParser object to parse CSV data
     ''' </summary>
@@ -60,7 +56,6 @@ Friend Module PresetsMethods
 
                         'Name, Type, Year and Iwad are mandatory
                         If parsedValues.Length < 4 Then Continue Do
-
                         'Skip Wolf3D, as not functional yet
                         If parsedValues(0) = "Wolfenstein 3D" Then Continue Do
 
@@ -76,11 +71,12 @@ Friend Module PresetsMethods
                             .Misc = If(parsedValues.Length >= 6, parsedValues(5), String.Empty),
                             .Pict = If(parsedValues.Length = 7, parsedValues(6), String.Empty)
                         })
-                    Catch exception As MalformedLineException
-                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
+                    Catch mleEx As MalformedLineException
+                        WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing presets {presetsType}")
                     End Try
                 Loop
             End Using
+
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
@@ -98,7 +94,8 @@ Friend Module PresetsMethods
                 Do While Not parser.EndOfData
                     Try
                         Dim parsedValues As String() = parser.ReadFields()
-                        'If a preset does not contain all info, it is ignored (useless safety ?)
+
+                        'Name, Desc, Pict and Files are mandatory
                         If parsedValues.Length < 4 Then Continue Do
 
                         modPresets.Add(New ModPreset() With
@@ -108,11 +105,12 @@ Friend Module PresetsMethods
                             .Pict = parsedValues(2),
                             .Files = parsedValues(3).Split(",").ToList
                         })
-                    Catch exception As MalformedLineException
-                        WriteToLog(Date.Now & " - Error : Got MalformedLineException while parsing presets") ' use errorLine ?
+                    Catch mleEx As MalformedLineException
+                        WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing presets {presetsType}")
                     End Try
                 Loop
             End Using
+
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
@@ -144,91 +142,6 @@ Friend Module PresetsMethods
         Next
 
     End Sub
-
-    '''' <summary>
-    '''' <para>Triggered when user right-clicks a custom preset</para>
-    '''' <para>Delete a preset by its name</para>
-    '''' </summary>
-    ''''
-    'Public Sub DeleteUserLevelPreset(presetName As String)
-
-    '    Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
-
-    '    If MessageBox.Show(message, "Delete user preset", MessageBoxButton.OKCancel) = MessageBoxResult.OK Then
-    '        DeletePreset(presetName)
-    '        DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'Update GUI
-    '    End If
-
-    'End Sub
-
-
-    'Public  Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
-
-    '    Dim buttonsList As List(Of Button) = New List(Of Button)
-
-    '    For Each preset As LevelPreset In presetsList
-    '        Dim button As Button = New Button() With
-    '        {
-    '            .Height = 28,
-    '            .Margin = New Thickness(0, 0, 0, 2),
-    '            .FontSize = 14,
-    '            .Content = preset.Name
-    '        }
-
-    '        'Left click
-    '        AddHandler button.Click,
-    '            Sub(sender, e)
-    '                'SelectUserLevelPreset(preset.Iwad, If(preset.Level, Nothing), If(preset.Misc, Nothing))
-    '            End Sub
-    '        'Right click
-    '        AddHandler button.MouseRightButtonDown,
-    '            Sub(sender, e)
-    '                DeleteUserLevelPreset(preset.Name)
-    '            End Sub
-
-    '        buttonsList.Add(button)
-    '    Next
-
-    '    Return buttonsList
-
-    'End Function
-
-
-    '''' <summary>
-    '''' Handle New user preset save from GUI event
-    '''' </summary>
-    '''' 
-    'Public Sub Save_NewPreset()
-
-    '    Dim mainWindow As MainWindow = Windows.Application.Current.Windows(0)
-
-    '    With mainWindow
-    '        Try
-    '            Dim nameToSave As String = .TextBox_NewPreset_Name.Text
-    '            If nameToSave = "Enter preset name..." Or nameToSave = Nothing Then
-    '                MessageBox.Show("New user preset requires a name to be saved")
-    '                Return
-    '            End If
-
-    '            Dim iwadToSave As String = Nothing 'KnowSelectedIwad_NewPreset()
-    '            If iwadToSave = Nothing Then
-    '                MessageBox.Show("New user preset requires an IWAD to be saved")
-    '                Return
-    '            End If
-
-    '            Dim levelToSave As String = Nothing 'KnowSelectedLevel_NewPreset()
-    '            Dim miscToSave As String = Nothing 'KnowSelectedMisc_NewPreset()
-
-    '            WritePresetToFile(nameToSave, iwadToSave, levelToSave, miscToSave)
-    '            MessageBox.Show(String.Format("Preset ""{0}"" saved !", nameToSave))
-
-    '        Catch ex As Exception
-    '            WriteToLog(DateTime.Now & " - Error in 'Button_NewPreset_Save_Click()'. Exception : " & ex.ToString)
-    '        End Try
-    '    End With
-
-    'End Sub
-
 
     'TODO Use LevelPreset as input parameter
     ''' <summary>

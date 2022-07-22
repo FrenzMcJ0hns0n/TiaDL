@@ -802,6 +802,50 @@ Namespace Views
             Return preset
         End Function
 
+        'TODO: Update to v3
+        ''' <summary>
+        ''' Delete a preset by its name
+        ''' Triggered with right click on custom preset
+        ''' </summary>
+        '''
+        Public Sub DeleteUserLevelPreset(presetName As String)
+            Dim message As String = String.Format("Delete preset ""{0}"" ?", presetName)
+
+            If MessageBox.Show(message, "Delete user preset", MessageBoxButton.OKCancel) = MessageBoxResult.OK Then
+                DeletePreset(presetName)
+                'DisplayUserPresets(GetLevelPresets_FromCsv("user")) 'Update GUI
+            End If
+        End Sub
+
+        'TODO: Update to v3
+        Public Function ReturnUserPresetButtons(presetsList As List(Of LevelPreset)) As List(Of Button)
+            Dim buttonsList As New List(Of Button)
+
+            For Each preset As LevelPreset In presetsList
+                Dim button As New Button() With
+                {
+                    .Content = preset.Name,
+                    .FontSize = 14,
+                    .Height = 28,
+                    .Margin = New Thickness(0, 0, 0, 2)
+                }
+
+                AddHandler button.Click, 'Left click
+                Sub(sender, e)
+                    'SelectUserLevelPreset(preset.Iwad, preset.Maps, preset.Misc)
+                End Sub
+
+                AddHandler button.MouseRightButtonDown, 'Right click
+                Sub(sender, e)
+                    DeleteUserLevelPreset(preset.Name)
+                End Sub
+
+                buttonsList.Add(button)
+            Next
+
+            Return buttonsList
+        End Function
+
 
 
 
