@@ -11,14 +11,15 @@ Friend Module IOHelper
         Dim missingDirectories As New List(Of String)
 
         Try
-            For Each dir As String In DIRECTORIES_LIST
-                If Not Directory.Exists(GetDirectoryPath(dir)) Then missingDirectories.Add(dir)
-            Next
+            DIRECTORIES_LIST.ForEach(Sub(dir) If Not Directory.Exists(GetDirectoryPath(dir)) Then missingDirectories.Add(dir))
 
             If missingDirectories.Count > 0 Then
-                MessageBox.Show(ERR_MISSING_DIR & vbCrLf & String.Join(vbCrLf, missingDirectories), ERR_STARTUP, MessageBoxButton.OK, MessageBoxImage.Error)
-                WriteToLog(Date.Now & " - " & ERR_STARTUP & ". " & ERR_MISSING_DIR & String.Join(", ", missingDirectories))
+                Dim errorMessage As String = ERR_MISSING_DIR & vbCrLf & String.Join(vbCrLf, missingDirectories)
+
+                MessageBox.Show(errorMessage, ERR_STARTUP, MessageBoxButton.OK, MessageBoxImage.Error)
+                WriteToLog(Date.Now & " - " & errorMessage)
             End If
+
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -45,22 +46,21 @@ Friend Module IOHelper
         Return directoryPath
     End Function
 
-    'TODO: Use consistent names everywhere (Port, Iwad, Level, Misc, Mods)
     'TODO: Figure out a way to handle wildcard * in "Wolf3D_*.pk3" (confirmed issue, as recursive search fails on that)
     ''' <summary>
     ''' Get the absolute path of a file from its relative one within TiaDL project tree
     ''' </summary>
-    ''' <param name="targetName">One of the project directories: "Iwad", "Maps", "misc", "mods", "port", or "" for any</param>
+    ''' <param name="targetDir">One of the project directories: "Iwad", "Maps", "Misc", "Mods", "Port", or "" for any</param>
     ''' <param name="filename">The filename to get the absolute path of</param>
     ''' <returns></returns>
-    Public Function GetFileAbsolutePath(targetName As String, filename As String) As String
+    Public Function GetFileAbsolutePath(targetDir As String, filename As String) As String
         Dim absolutePath As String = String.Empty
 
         Try
-            Dim targetDirectory As String = GetDirectoryPath(targetName)
+            Dim targetDirectory As String = GetDirectoryPath(targetDir)
 
             'Get file with targetName provided explicitly from caller
-            If Not targetName = String.Empty Then
+            If Not targetDir = String.Empty Then
                 absolutePath = Path.Combine(targetDirectory, filename)
                 GoTo functionEnd
             End If
@@ -76,7 +76,7 @@ Friend Module IOHelper
 
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {targetName}, {filename}")
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {targetDir}, {filename}")
         End Try
 
 functionEnd:
@@ -103,7 +103,6 @@ functionEnd:
 
     Public Sub PersistJsonData(filepath As String, jsonData As String)
         Try
-            If File.Exists(filepath) Then Debug.Print("Ok")
             File.WriteAllText(filepath, jsonData)
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -152,7 +151,7 @@ functionEnd:
 
     End Sub
 
-    'TODO: Use consistent names everywhere (Port, Iwad, Level, Misc, Mods)
+    'TODO: Use consistent names everywhere (Port, Iwad, Maps, Misc, Mods)
     ''' <summary>
     ''' Validate file as proper Doom content
     ''' </summary>
@@ -189,10 +188,8 @@ functionEnd:
     ''' </summary>
     ''' 
     Public Sub WritePresetsFileHeader()
-
         Try
-            Dim rootDirPath = GetDirectoryPath()
-            Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
+            Dim presetFile As String = Path.Combine(GetDirectoryPath(), "presets.csv")
 
             Using writer As New StreamWriter(presetFile, True, Encoding.Default)
                 writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
@@ -211,7 +208,6 @@ functionEnd:
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
         End Try
-
     End Sub
 
     ''' <summary>
@@ -219,14 +215,11 @@ functionEnd:
     ''' </summary>
     ''' 
     Public Sub WriteToLog(content As String)
-
-        Dim rootDirPath = GetDirectoryPath()
-        Dim logfilePath = Path.Combine(rootDirPath, "log.txt")
+        Dim logfilePath = Path.Combine(GetDirectoryPath(), "log.txt")
 
         Using streamWriter As New StreamWriter(logfilePath, True)
             streamWriter.WriteLine(content)
         End Using
-
     End Sub
 
 End Module
