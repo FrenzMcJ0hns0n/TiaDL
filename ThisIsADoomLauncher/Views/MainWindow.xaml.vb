@@ -173,6 +173,9 @@ Namespace Views
 
         Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
             Try
+                'Accept files only
+                If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
+
                 Dim portFilepath As String = e.Data.GetData(DataFormats.FileDrop)(0)
 
                 If ValidateFile(portFilepath, "Port") Then
@@ -181,6 +184,7 @@ Namespace Views
                     UpdateCommand()
                     DecorateCommand()
                 End If
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -258,12 +262,11 @@ Namespace Views
         ''' </summary>
         Private Sub GroupBox_Levels_Drop(sender As Object, e As DragEventArgs)
             Try
-                '1) Collect files
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                'TODO: Make sure dropped elements are files
+                'Accept files only
+                If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-                '2) Check & order files
-                Dim confirmedFiles As List(Of String) = OrderDroppedFiles_Levels(filePaths)
+                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                Dim confirmedFiles As List(Of String) = OrderDroppedLevels(filePaths)
 
                 '------------- Template of confirmedFiles, depending on .Count :
                 '-------------  1 = Iwad
@@ -271,7 +274,6 @@ Namespace Views
                 '-------------  3 = Iwad, Maps, Misc
                 '-------------  4 = Iwad, Maps, Misc, Pict
 
-                '3) Feed GUI if Count > 0
                 If confirmedFiles.Count = 0 Then Return
                 SetActiveLvlTab(LVLPRESET_TAB.AddNew)
 
@@ -290,16 +292,25 @@ Namespace Views
         End Sub
 
         Private Sub TextBox_NewLevel_Drop(sender As Object, e As DragEventArgs)
-            Dim tbx As TextBox = sender
+            Try
+                Dim tbx As TextBox = sender
 
-            Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-            If Not File.Exists(droppedFile) Then
-                MessageBox.Show(ERR_INPUT_NOT_FILE, ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
-                Return
-            End If
+                'Accept files only
+                If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-            Dim sourceTbx As String = tbx.Name.Split("_")(2) 'Iwad, Maps, Misc, Pict
-            If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
+                Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+                If Not File.Exists(droppedFile) Then
+                    MessageBox.Show(ERR_INPUT_NOT_FILE, ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                    Return
+                End If
+
+                Dim sourceTbx As String = tbx.Name.Split("_")(2) 'Iwad, Maps, Misc, Pict
+                If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
         End Sub
 
         Private Sub Button_NewLevel_Browse_Click(sender As Object, e As RoutedEventArgs)
@@ -738,7 +749,7 @@ Namespace Views
         ''' <summary>
         ''' Check and order the files dropped into the GroupBox "Levels"
         ''' </summary>
-        Private Function OrderDroppedFiles_Levels(filePaths As String()) As List(Of String)
+        Private Function OrderDroppedLevels(filePaths As String()) As List(Of String)
             Dim orderedFiles As New List(Of String)
 
             Try
