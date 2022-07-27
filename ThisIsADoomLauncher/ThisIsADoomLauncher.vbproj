@@ -98,6 +98,7 @@
     <Compile Include="Helpers\General.vb" />
     <Compile Include="Models\LevelPreset.vb" />
     <Compile Include="Models\ModPreset.vb" />
+    <Compile Include="Models\Preset.vb" />
     <Compile Include="Models\Setting.vb" />
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>

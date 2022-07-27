@@ -25,4 +25,10 @@ Friend Module Constants
         AddNew = 2
     End Enum
 
+    Public Enum SortCriterion
+        Name
+        Type
+        Year
+    End Enum
+
 End Module

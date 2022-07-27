@@ -35,7 +35,7 @@ Friend Module General
             Case SortCriterion.Name
                 Return If(ascending, presets.OrderBy(Function(preset) preset.Name), presets.OrderByDescending(Function(preset) preset.Name))
 
-            Case SortCriterion.ReleaseDate
+            Case SortCriterion.Year
                 If presets.GetType() IsNot GetType(List(Of LevelPreset)) Then
                     Throw New NotSupportedException("Wrong type")
                 End If
