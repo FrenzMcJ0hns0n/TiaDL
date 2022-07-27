@@ -4,7 +4,7 @@ Imports ThisIsADoomLauncher.Models
 
 Friend Module General
 
-    Function GetFormattedAppTitle() As String
+    Public Function GetFormattedAppTitle() As String
         Dim executingAssembly As Assembly = Assembly.GetExecutingAssembly()
         Dim eaName As AssemblyName = executingAssembly.GetName()
         Dim eaFilePath As String = executingAssembly.Location
@@ -29,7 +29,7 @@ Friend Module General
     ''' <param name="presets">List of Preset</param>
     ''' <param name="sortCriterion">Sorting type (Enum)</param>
     ''' <returns></returns>
-    Function SortPresets(presets As List(Of Preset), sortCriterion As SortCriterion, ascending As Boolean) As List(Of Preset)
+    Public Function SortPresets(presets As List(Of Preset), sortCriterion As SortCriterion, ascending As Boolean) As List(Of Preset)
         Select Case sortCriterion
 
             Case SortCriterion.Name
