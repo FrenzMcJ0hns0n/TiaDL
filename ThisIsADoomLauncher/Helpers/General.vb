@@ -14,9 +14,9 @@ Friend Module General
         Dim hasRevis As Boolean = eaName.Version.Revision > 0
 
         Dim major As String = eaName.Version.Major.ToString
-        Dim minor As String = IIf(hasMinor Or hasBuild Or hasRevis, $".{eaName.Version.Minor}", "")
-        Dim build As String = IIf(hasBuild Or hasRevis, $".{eaName.Version.Build}", "")
-        Dim revis As String = IIf(hasRevis, $".{eaName.Version.Revision}", "")
+        Dim minor As String = If(hasMinor Or hasBuild Or hasRevis, $".{eaName.Version.Minor}", "")
+        Dim build As String = If(hasBuild Or hasRevis, $".{eaName.Version.Build}", "")
+        Dim revis As String = If(hasRevis, $".{eaName.Version.Revision}", "")
 
         Dim eaLastEdit As String = File.GetLastWriteTime(eaFilePath).ToString("yyyy-MM-dd")
 
