@@ -1,5 +1,6 @@
 ﻿Imports System.IO
 Imports System.Reflection
+Imports ThisIsADoomLauncher.Models
 
 Friend Module General
 
@@ -22,4 +23,33 @@ Friend Module General
         Return $"This is a Doom Launcher - v{major}{minor}{build}{revis} ({eaLastEdit})"
     End Function
 
+    ''' <summary>
+    ''' Sorts Presets (NOT TESTED YET)
+    ''' </summary>
+    ''' <param name="presets">List of Preset</param>
+    ''' <param name="sortCriterion">Sorting type (Enum)</param>
+    ''' <returns></returns>
+    Function SortPresets(presets As List(Of Preset), sortCriterion As SortCriterion, ascending As Boolean) As List(Of Preset)
+        Select Case sortCriterion
+
+            Case SortCriterion.Name
+                Return If(ascending, presets.OrderBy(Function(preset) preset.Name), presets.OrderByDescending(Function(preset) preset.Name))
+
+            Case SortCriterion.ReleaseDate
+                If presets.GetType() IsNot GetType(List(Of LevelPreset)) Then
+                    Throw New NotSupportedException("Wrong type")
+                End If
+                Return If(ascending, presets.OrderBy(Function(preset As LevelPreset) preset.Year), presets.OrderByDescending(Function(preset As LevelPreset) preset.Year))
+
+            Case SortCriterion.Type
+                If presets.GetType() IsNot GetType(List(Of LevelPreset)) Then
+                    Throw New NotSupportedException("Wrong type")
+                End If
+                Return If(ascending, presets.OrderBy(Function(preset As LevelPreset) preset.Type), presets.OrderByDescending(Function(preset As LevelPreset) preset.Type))
+
+            Case Else 'By default : no sort
+                Return presets
+
+        End Select
+    End Function
 End Module
