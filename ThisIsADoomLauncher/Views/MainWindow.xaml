@@ -46,6 +46,13 @@
             <EventSetter Event="Click" Handler="Button_NewLevel_Clear_Click"/>
         </Style>
 
+        <Style x:Key="RadioButton_Sorting" TargetType="{x:Type RadioButton}">
+            <Setter Property="IsEnabled" Value="False"/>
+            <Setter Property="GroupName" Value="Sorting"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <EventSetter Event="Checked" Handler="RadioButton_Checked"/>
+            <EventSetter Event="Unchecked" Handler="RadioButton_Unchecked"/>
+        </Style>
     </Window.Resources>
     
     <Grid>
@@ -148,8 +155,16 @@
                     AllowDrop="True"
                     PreviewDragOver="GroupBox_Levels_PreviewDragOver"
                     Drop="GroupBox_Levels_Drop">
-            <Grid>
-                <TabControl x:Name="TabControl_Levels" Margin="8">
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6.5*"/>
+                    <ColumnDefinition Width="3.5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="15*"/>
+                </Grid.RowDefinitions>
+                <TabControl x:Name="TabControl_Levels" Grid.ColumnSpan="2" Grid.RowSpan="2" SelectionChanged="TabControl_Levels_SelectionChanged">
                     <!-- Add Name ? -->
                     <TabItem Header="Base presets">
                         <Grid>
@@ -348,7 +363,17 @@
 
                     </TabItem>
                 </TabControl>
-
+                <StackPanel x:Name="StackPanel_BaseLevelsSorting" Grid.Column="1" Margin="0 -4 0 0" Orientation="Horizontal" Visibility="Hidden">
+                    <Label Content="Sorting :" Margin="0 -3 6 0"/>
+                    <ComboBox x:Name="ComboBox_BaseLevelsSorting" Width="90" Margin="0 0 12 0" SelectionChanged="ComboBox_BaseLevelsSorting_SelectionChanged">
+                        <ComboBoxItem Content="None" IsSelected="True"/>
+                        <ComboBoxItem Content="Name"/>
+                        <ComboBoxItem Content="Type"/>
+                        <ComboBoxItem Content="Year"/>
+                    </ComboBox>
+                    <RadioButton x:Name="RadioButton_SortAsc" Style="{StaticResource RadioButton_Sorting}" Content="Ascending"/>
+                    <RadioButton x:Name="RadioButton_SortDesc" Style="{StaticResource RadioButton_Sorting}" Content="Descending" Margin="9 0 0 0"/>
+                </StackPanel >
             </Grid>
         </GroupBox>
 

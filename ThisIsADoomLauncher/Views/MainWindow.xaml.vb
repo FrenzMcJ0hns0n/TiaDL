@@ -228,6 +228,35 @@ Namespace Views
 
 #Region "Events : Levels"
 
+        Private Sub TabControl_Levels_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            StackPanel_BaseLevelsSorting.Visibility = If(GetActiveLvlTab() = LVLPRESET_TAB.Base, Visibility.Visible, Visibility.Hidden)
+        End Sub
+
+        Private Sub ComboBox_BaseLevelsSorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            If Not GetActiveLvlTab() = LVLPRESET_TAB.Base Then Return 'Fix as Visibility.Visible is required.
+
+            If ComboBox_BaseLevelsSorting.SelectedIndex > 0 Then
+                RadioButton_SortAsc.IsEnabled = True
+                RadioButton_SortDesc.IsEnabled = True
+            Else
+                RadioButton_SortAsc.IsEnabled = False
+                RadioButton_SortDesc.IsEnabled = False
+            End If
+
+            'TODO: Connect to backend functions
+        End Sub
+
+        Private Sub RadioButton_Checked(sender As Object, e As RoutedEventArgs)
+            'TODO: Connect to backend functions
+        End Sub
+
+        Private Sub RadioButton_Unchecked(sender As Object, e As RoutedEventArgs)
+            'TODO: Connect to backend functions
+        End Sub
+
+
+
+
         Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 Dim lp As LevelPreset = ReturnSelectedLevels()
@@ -960,6 +989,7 @@ Namespace Views
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
+
 
 #End Region
 
