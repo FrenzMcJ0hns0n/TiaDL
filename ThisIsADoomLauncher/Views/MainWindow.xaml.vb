@@ -95,6 +95,34 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub PopulateBaseUserPresets()
+            Try
+                'Fake test data... TODO: Persist as CSV or JSON
+                Dim userPresets As New List(Of LevelPreset) From
+                {
+                    New LevelPreset With
+                    {
+                        .Name = "3 Heures d'agonie 3",
+                        .Iwad = "Doom2.wad",
+                        .Maps = "3ha3.wad" 'File dropped into [TiaDL]\Maps\test\
+                    },
+                    New LevelPreset With
+                    {
+                        .Name = "The Rebirth",
+                        .Iwad = "Doom2.wad",
+                        .Maps = "Rebirth1.wad" 'File dropped into [TiaDL]\Maps\test\
+                    }
+                }
+                Label_Levels_NoUserPresets.Visibility = Visibility.Collapsed
+                ListView_Levels_UserPresets.Visibility = Visibility.Visible
+                ListView_Levels_UserPresets.ItemsSource = userPresets
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
         Private Sub PopulateBaseModsPresets()
             Try
                 ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCsv("base_mods")
@@ -230,6 +258,20 @@ Namespace Views
 
         Private Sub TabControl_Levels_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             StackPanel_BaseLevelsSorting.Visibility = If(GetActiveLvlTab() = LVLPRESET_TAB.Base, Visibility.Visible, Visibility.Hidden)
+
+            Select Case GetActiveLvlTab()
+
+                Case LVLPRESET_TAB.Base
+                    '...
+
+                Case LVLPRESET_TAB.User : PopulateBaseUserPresets() 'Refresh each time
+
+
+                Case LVLPRESET_TAB.AddNew
+                    '...
+
+            End Select
+
         End Sub
 
         Private Sub ComboBox_BaseLevelsSorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
@@ -285,17 +327,35 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
 
+                e.Handled = True 'Prevent escalating up to "parent" event TabControl_Levels_SelectionChanged()
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 
-
-
+        'TODO? Factorize in common function?
 
         Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            'TODO
+            Try
+                'Safety fix. SelectedItem is not kept accross tabs, as the content of this one is updated everytime
+                'TODO? Improve
+                If ListView_Levels_UserPresets.SelectedItem Is Nothing Then Return
+
+                Dim lp As LevelPreset = ReturnSelectedLevels()
+
+                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
+                UpdateLevels_Summary(lp.Maps, lp.Misc)
+                UpdateCommand()
+                DecorateCommand()
+
+                e.Handled = True 'Prevent escalating up to "parent" event TabControl_Levels_SelectionChanged()
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
         End Sub
 
 
@@ -777,6 +837,7 @@ Namespace Views
             Try
                 Select Case GetActiveLvlTab()
                     Case LVLPRESET_TAB.Base
+                        MessageBox.Show(ListView_Levels_BasePresets.SelectedItem.ToString)
                         preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
 
                     Case LVLPRESET_TAB.User

@@ -209,14 +209,15 @@
 
                         </Grid>
                     </TabItem>
-                    <TabItem Header="User presets" IsEnabled="False">
+                    <TabItem Header="User presets">
                         <Grid>
+                            
                             <Label x:Name="Label_Levels_NoUserPresets"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontSize="20"
-                                    Foreground="Gray"
-                                    Content="No user presets found"/>
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                   FontSize="20" Foreground="Gray"
+                                   Content="No user presets found"
+                                   />
+                            
                             <ListView x:Name="ListView_Levels_UserPresets"
                                         SelectionChanged="ListView_Levels_UserPresets_SelectionChanged"
                                         Margin="-3"
@@ -224,10 +225,24 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
+                                            <Image
+                                                Source="{Binding Pict,Converter={StaticResource ImgConverter}}"
+                                                Margin="-3,0,0,0"
+                                                Height="32"
+                                                />
+                                            <TextBlock
+                                                Margin="6,0,0,0"
+                                                VerticalAlignment="Center"
+                                                FontWeight="DemiBold"
+                                                FontSize="13"
+                                                Text="{Binding Name}"
+                                                />
+                                            <!--<Button />-->
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
+                            
                         </Grid>
                     </TabItem>
                     <TabItem Header="Add new preset">

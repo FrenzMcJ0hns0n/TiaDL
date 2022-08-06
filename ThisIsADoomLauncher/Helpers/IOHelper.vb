@@ -59,7 +59,7 @@ Friend Module IOHelper
         Try
             Dim targetDirectory As String = GetDirectoryPath(targetDir)
 
-            'Get file with targetName provided explicitly from caller
+            'Get file with targetDir provided explicitly by the caller
             If Not targetDir = String.Empty Then
                 absolutePath = Path.Combine(targetDirectory, filename)
                 GoTo functionEnd
