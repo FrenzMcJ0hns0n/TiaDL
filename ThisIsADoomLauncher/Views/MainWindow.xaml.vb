@@ -253,10 +253,9 @@ Namespace Views
                 Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
 
                 With ListView_Levels_BasePresets
-                    If .ItemsSource.GetType() Is GetType(List(Of LevelPreset)) Then
-                        Dim currentLevelPresets As IEnumerable(Of Preset) = DirectCast(.ItemsSource, IEnumerable(Of LevelPreset))
-                        SortPresets(currentLevelPresets, sortCriterion, isAscending)
-                    End If
+                    Dim currentLevelPresets As List(Of LevelPreset) = .ItemsSource
+                    Dim sortedLevelPresets As List(Of LevelPreset) = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
+                    .ItemsSource = sortedLevelPresets
                 End With
 
             Else

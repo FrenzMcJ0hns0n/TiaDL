@@ -26,29 +26,23 @@ Friend Module General
     ''' <summary>
     ''' Sorts Presets (NOT TESTED YET)
     ''' </summary>
-    ''' <param name="presets">List of Preset</param>
+    ''' <param name="levelPresets">List of LevelPreset</param>
     ''' <param name="sortCriterion">Sorting type (Enum)</param>
     ''' <returns></returns>
-    Public Function SortPresets(presets As List(Of Preset), sortCriterion As SortCriterion, ascending As Boolean) As List(Of Preset)
+    Public Function SortLevelPresets(levelPresets As List(Of LevelPreset), sortCriterion As SortCriterion, ascending As Boolean) As List(Of LevelPreset)
         Select Case sortCriterion
 
             Case SortCriterion.Name
-                Return If(ascending, presets.OrderBy(Function(preset) preset.Name), presets.OrderByDescending(Function(preset) preset.Name))
+                Return If(ascending, levelPresets.OrderBy(Function(preset) preset.Name).ToList(), levelPresets.OrderByDescending(Function(preset) preset.Name).ToList)
 
             Case SortCriterion.Year
-                If presets.GetType() IsNot GetType(List(Of LevelPreset)) Then
-                    Throw New NotSupportedException("Wrong type")
-                End If
-                Return If(ascending, presets.OrderBy(Function(preset As LevelPreset) preset.Year), presets.OrderByDescending(Function(preset As LevelPreset) preset.Year))
+                Return If(ascending, levelPresets.OrderBy(Function(preset) preset.Year).ToList, levelPresets.OrderByDescending(Function(preset) preset.Year).ToList)
 
             Case SortCriterion.Type
-                If presets.GetType() IsNot GetType(List(Of LevelPreset)) Then
-                    Throw New NotSupportedException("Wrong type")
-                End If
-                Return If(ascending, presets.OrderBy(Function(preset As LevelPreset) preset.Type), presets.OrderByDescending(Function(preset As LevelPreset) preset.Type))
+                Return If(ascending, levelPresets.OrderBy(Function(preset) preset.Type).ToList, levelPresets.OrderByDescending(Function(preset) preset.Type).ToList)
 
             Case Else 'By default : no sort
-                Return presets
+                Return levelPresets
 
         End Select
     End Function
