@@ -837,11 +837,10 @@ Namespace Views
             Try
                 Select Case GetActiveLvlTab()
                     Case LVLPRESET_TAB.Base
-                        MessageBox.Show(ListView_Levels_BasePresets.SelectedItem.ToString)
-                        preset = CType(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
+                        preset = DirectCast(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
 
                     Case LVLPRESET_TAB.User
-                        preset = CType(ListView_Levels_UserPresets.SelectedItem, LevelPreset) 'TODO
+                        preset = DirectCast(ListView_Levels_UserPresets.SelectedItem, LevelPreset)
 
                     Case LVLPRESET_TAB.AddNew
                         'TODO
@@ -905,13 +904,13 @@ Namespace Views
             Try
                 Select Case GetActiveModTab()
                     Case MODPRESET_TAB.Base
-                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset)
+                        preset = DirectCast(ListView_Mods_BasePresets.SelectedItem, ModPreset)
 
                     Case MODPRESET_TAB.User
-                        preset = CType(ListView_Mods_BasePresets.SelectedItem, ModPreset) 'TODO
+                        preset = DirectCast(ListView_Mods_BasePresets.SelectedItem, ModPreset)
 
                     Case MODPRESET_TAB.AddNew
-                        preset = New ModPreset() With {.Files = New List(Of String)} 'TODO
+                        'TODO
 
                 End Select
             Catch ex As Exception
