@@ -380,7 +380,9 @@
                 </TabControl>
                 <StackPanel x:Name="StackPanel_BaseLevelsSorting" Grid.Column="1" Margin="0 -4 0 0" Orientation="Horizontal" Visibility="Hidden">
                     <Label Content="Sorting :" Margin="0 -3 6 0"/>
-                    <ComboBox x:Name="ComboBox_BaseLevelsSorting" Width="90" Margin="0 0 12 0" SelectionChanged="ComboBox_BaseLevelsSorting_SelectionChanged">
+                    <ComboBox x:Name="ComboBox_BaseLevelsSorting" Width="90" Margin="0 0 12 0" SelectionChanged="ComboBox_BaseLevelsSorting_SelectionChanged"
+                              ToolTip="Sort Preset by :&#x0a;- Name (Displayed text)&#x0a;- Type (Doom1, Doom2)&#x0a;- Year (Last published release)"
+                              ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="10000">
                         <ComboBoxItem Content="None" IsSelected="True"/>
                         <ComboBoxItem Content="Name"/>
                         <ComboBoxItem Content="Type"/>
