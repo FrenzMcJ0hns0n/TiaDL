@@ -27,11 +27,11 @@ Friend Module General
     ''' Sort list of LevelPreset objects based on selected criterion
     ''' </summary>
     ''' <param name="levelPresets">List of LevelPreset objects</param>
-    ''' <param name="sortCriterion">LevelPreset property to use as sorting criterion</param>
+    ''' <param name="criterion">LevelPreset property to use as sorting criterion</param>
     ''' <param name="isAscending">Is sorting order ascending?</param>
     ''' <returns></returns>
-    Public Function SortLevelPresets(levelPresets As List(Of LevelPreset), sortCriterion As SortCriterion, isAscending As Boolean) As List(Of LevelPreset)
-        Select Case sortCriterion
+    Public Function SortLevelPresets(levelPresets As List(Of LevelPreset), criterion As SortCriterion, isAscending As Boolean) As List(Of LevelPreset)
+        Select Case criterion
 
             Case SortCriterion.Name
                 Return If(isAscending,

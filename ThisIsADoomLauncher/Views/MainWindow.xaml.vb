@@ -282,7 +282,7 @@ Namespace Views
                 RadioButton_SortAsc.IsEnabled = True
                 RadioButton_SortDesc.IsEnabled = True
 
-                'At launch, radio buttons are unchecked. When Sorting is chosen, Ascending becomes the default sorting order
+                'At launch, sorting is disabled, radio buttons are unchecked. Once sorting is enabled, Ascending becomes the default sorting order
                 If Not RadioButton_SortAsc.IsChecked And Not RadioButton_SortDesc.IsChecked Then
                     RadioButton_SortAsc.IsChecked = True
                 End If
@@ -298,20 +298,13 @@ Namespace Views
         End Sub
 
         Private Sub SortLevels()
-            Dim sortCriterion As SortCriterion
-            Select Case ComboBox_BaseLevelsSorting.SelectedIndex
-                'Case 0 : sortCriterion = SortCriterion.None 'Useless (for now?)
-                Case 1 : sortCriterion = SortCriterion.Name
-                Case 2 : sortCriterion = SortCriterion.Type
-                Case 3 : sortCriterion = SortCriterion.Year
-            End Select
+            Dim sortCriterion As SortCriterion = ComboBox_BaseLevelsSorting.SelectedIndex
             Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
 
             With ListView_Levels_BasePresets
                 Dim currentLevelPresets As List(Of LevelPreset) = DirectCast(.ItemsSource, List(Of LevelPreset)) 'TODO: check with Compiler option Strict On
-                Dim sortedLevelPresets As List(Of LevelPreset) = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
 
-                .ItemsSource = sortedLevelPresets
+                .ItemsSource = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
             End With
         End Sub
 
