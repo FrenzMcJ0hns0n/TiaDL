@@ -236,14 +236,45 @@ Namespace Views
             If Not GetActiveLvlTab() = LVLPRESET_TAB.Base Then Return 'Fix as Visibility.Visible is required.
 
             If ComboBox_BaseLevelsSorting.SelectedIndex > 0 Then
+
+                'Sorting = Name/Type/Year
                 RadioButton_SortAsc.IsEnabled = True
                 RadioButton_SortDesc.IsEnabled = True
+
+                If RadioButton_SortAsc.IsChecked = False And RadioButton_SortDesc.IsChecked = False Then RadioButton_SortAsc.IsChecked = True
+
+                Dim sortCriterion As SortCriterion
+                Select Case ComboBox_BaseLevelsSorting.SelectedIndex
+                    Case 0 : sortCriterion = SortCriterion.None
+                    Case 1 : sortCriterion = SortCriterion.Name
+                    Case 2 : sortCriterion = SortCriterion.Type
+                    Case 3 : sortCriterion = SortCriterion.Year
+                End Select
+                Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
+
+                With ListView_Levels_BasePresets
+                    If .ItemsSource.GetType() Is GetType(List(Of LevelPreset)) Then
+                        Dim currentLevelPresets As IEnumerable(Of Preset) = DirectCast(.ItemsSource, IEnumerable(Of LevelPreset))
+                        SortPresets(currentLevelPresets, sortCriterion, isAscending)
+                    End If
+                End With
+
             Else
+
+                'Sorting = None
                 RadioButton_SortAsc.IsEnabled = False
                 RadioButton_SortDesc.IsEnabled = False
-            End If
 
-            'TODO: Connect to backend functions
+                'Make sure ListView has item (first launch)
+                With ListView_Levels_BasePresets
+                    If .ItemsSource.GetType() IsNot GetType(List(Of LevelPreset)) Then
+                        .ItemsSource = GetLevelPresets_FromCsv("base_levels")
+                    End If
+                End With
+
+                'Nothing to sort.
+
+            End If
         End Sub
 
         Private Sub RadioButton_Checked(sender As Object, e As RoutedEventArgs)

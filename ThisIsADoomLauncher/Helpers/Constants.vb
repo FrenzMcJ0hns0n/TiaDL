@@ -26,9 +26,10 @@ Friend Module Constants
     End Enum
 
     Public Enum SortCriterion
-        Name
-        Type
-        Year
+        None = -1
+        Name = 0
+        Type = 1
+        Year = 2
     End Enum
 
 End Module
