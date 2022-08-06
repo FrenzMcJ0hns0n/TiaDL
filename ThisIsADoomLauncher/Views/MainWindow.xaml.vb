@@ -232,7 +232,6 @@ Namespace Views
             StackPanel_BaseLevelsSorting.Visibility = If(GetActiveLvlTab() = LVLPRESET_TAB.Base, Visibility.Visible, Visibility.Hidden)
         End Sub
 
-        'TODO: Refactorize (Manage sorting in dedicated function?)
         Private Sub ComboBox_BaseLevelsSorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             If Not GetActiveLvlTab() = LVLPRESET_TAB.Base Then Return 'Fix as Visibility.Visible is required.
 
@@ -246,20 +245,7 @@ Namespace Views
                     RadioButton_SortAsc.IsChecked = True
                 End If
 
-                Dim sortCriterion As SortCriterion
-                Select Case ComboBox_BaseLevelsSorting.SelectedIndex
-                'Case 0 : sortCriterion = SortCriterion.None 'Useless (for now?)
-                    Case 1 : sortCriterion = SortCriterion.Name
-                    Case 2 : sortCriterion = SortCriterion.Type
-                    Case 3 : sortCriterion = SortCriterion.Year
-                End Select
-                Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
-
-                With ListView_Levels_BasePresets
-                    Dim currentLevelPresets As List(Of LevelPreset) = DirectCast(.ItemsSource, List(Of LevelPreset)) 'TODO: check with Compiler option Strict On
-                    Dim sortedLevelPresets As List(Of LevelPreset) = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
-                    .ItemsSource = sortedLevelPresets
-                End With
+                SortLevels()
             Else
                 'Sorting = None
                 RadioButton_SortAsc.IsEnabled = False
@@ -269,12 +255,22 @@ Namespace Views
             End If
         End Sub
 
-        Private Sub RadioButton_Checked(sender As Object, e As RoutedEventArgs)
-            'TODO: Connect to backend functions
-        End Sub
+        Private Sub SortLevels()
+            Dim sortCriterion As SortCriterion
+            Select Case ComboBox_BaseLevelsSorting.SelectedIndex
+                'Case 0 : sortCriterion = SortCriterion.None 'Useless (for now?)
+                Case 1 : sortCriterion = SortCriterion.Name
+                Case 2 : sortCriterion = SortCriterion.Type
+                Case 3 : sortCriterion = SortCriterion.Year
+            End Select
+            Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
 
-        Private Sub RadioButton_Unchecked(sender As Object, e As RoutedEventArgs)
-            'TODO: Connect to backend functions
+            With ListView_Levels_BasePresets
+                Dim currentLevelPresets As List(Of LevelPreset) = DirectCast(.ItemsSource, List(Of LevelPreset)) 'TODO: check with Compiler option Strict On
+                Dim sortedLevelPresets As List(Of LevelPreset) = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
+
+                .ItemsSource = sortedLevelPresets
+            End With
         End Sub
 
 

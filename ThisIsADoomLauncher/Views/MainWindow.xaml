@@ -50,8 +50,8 @@
             <Setter Property="IsEnabled" Value="False"/>
             <Setter Property="GroupName" Value="Sorting"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <EventSetter Event="Checked" Handler="RadioButton_Checked"/>
-            <EventSetter Event="Unchecked" Handler="RadioButton_Unchecked"/>
+            <EventSetter Event="Checked" Handler="SortLevels"/>
+            <EventSetter Event="Unchecked" Handler="SortLevels"/>
         </Style>
     </Window.Resources>
     
