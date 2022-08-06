@@ -232,48 +232,47 @@ Namespace Views
             StackPanel_BaseLevelsSorting.Visibility = If(GetActiveLvlTab() = LVLPRESET_TAB.Base, Visibility.Visible, Visibility.Hidden)
         End Sub
 
+        'TODO: Refactorize (Manage sorting in dedicated function?)
         Private Sub ComboBox_BaseLevelsSorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             If Not GetActiveLvlTab() = LVLPRESET_TAB.Base Then Return 'Fix as Visibility.Visible is required.
 
             If ComboBox_BaseLevelsSorting.SelectedIndex > 0 Then
-
                 'Sorting = Name/Type/Year
                 RadioButton_SortAsc.IsEnabled = True
                 RadioButton_SortDesc.IsEnabled = True
 
-                If RadioButton_SortAsc.IsChecked = False And RadioButton_SortDesc.IsChecked = False Then RadioButton_SortAsc.IsChecked = True
-
-                Dim sortCriterion As SortCriterion
-                Select Case ComboBox_BaseLevelsSorting.SelectedIndex
-                    Case 0 : sortCriterion = SortCriterion.None
-                    Case 1 : sortCriterion = SortCriterion.Name
-                    Case 2 : sortCriterion = SortCriterion.Type
-                    Case 3 : sortCriterion = SortCriterion.Year
-                End Select
-                Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
-
-                With ListView_Levels_BasePresets
-                    Dim currentLevelPresets As List(Of LevelPreset) = .ItemsSource
-                    Dim sortedLevelPresets As List(Of LevelPreset) = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
-                    .ItemsSource = sortedLevelPresets
-                End With
-
+                'At launch, radio buttons are unchecked. When Sorting is chosen, Ascending becomes the default sorting order
+                If Not RadioButton_SortAsc.IsChecked And Not RadioButton_SortDesc.IsChecked Then
+                    RadioButton_SortAsc.IsChecked = True
+                End If
             Else
-
                 'Sorting = None
                 RadioButton_SortAsc.IsEnabled = False
                 RadioButton_SortDesc.IsEnabled = False
 
-                'Make sure ListView has item (first launch)
+                'Make sure ListView has items (first launch) 'TODO: Check usefulness
                 With ListView_Levels_BasePresets
                     If .ItemsSource.GetType() IsNot GetType(List(Of LevelPreset)) Then
                         .ItemsSource = GetLevelPresets_FromCsv("base_levels")
                     End If
                 End With
-
-                'Nothing to sort.
-
             End If
+
+            'Apply sorting if any
+            Dim sortCriterion As SortCriterion
+            Select Case ComboBox_BaseLevelsSorting.SelectedIndex
+                Case 0 : sortCriterion = SortCriterion.None
+                Case 1 : sortCriterion = SortCriterion.Name
+                Case 2 : sortCriterion = SortCriterion.Type
+                Case 3 : sortCriterion = SortCriterion.Year
+            End Select
+            Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
+
+            With ListView_Levels_BasePresets
+                Dim currentLevelPresets As List(Of LevelPreset) = DirectCast(.ItemsSource, List(Of LevelPreset)) 'TODO: check with Compiler option Strict On
+                Dim sortedLevelPresets As List(Of LevelPreset) = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
+                .ItemsSource = sortedLevelPresets
+            End With
         End Sub
 
         Private Sub RadioButton_Checked(sender As Object, e As RoutedEventArgs)
