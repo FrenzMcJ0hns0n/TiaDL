@@ -24,24 +24,31 @@ Friend Module General
     End Function
 
     ''' <summary>
-    ''' Sorts Presets (NOT TESTED YET)
+    ''' Sort list of LevelPreset objects based on selected criterion
     ''' </summary>
-    ''' <param name="levelPresets">List of LevelPreset</param>
-    ''' <param name="sortCriterion">Sorting type (Enum)</param>
+    ''' <param name="levelPresets">List of LevelPreset objects</param>
+    ''' <param name="sortCriterion">LevelPreset property to use as sorting criterion</param>
+    ''' <param name="isAscending">Is sorting order ascending?</param>
     ''' <returns></returns>
-    Public Function SortLevelPresets(levelPresets As List(Of LevelPreset), sortCriterion As SortCriterion, ascending As Boolean) As List(Of LevelPreset)
+    Public Function SortLevelPresets(levelPresets As List(Of LevelPreset), sortCriterion As SortCriterion, isAscending As Boolean) As List(Of LevelPreset)
         Select Case sortCriterion
 
             Case SortCriterion.Name
-                Return If(ascending, levelPresets.OrderBy(Function(preset) preset.Name).ToList(), levelPresets.OrderByDescending(Function(preset) preset.Name).ToList)
+                Return If(isAscending,
+                          levelPresets.OrderBy(Function(preset) preset.Name).ToList,
+                          levelPresets.OrderByDescending(Function(preset) preset.Name).ToList)
 
             Case SortCriterion.Year
-                Return If(ascending, levelPresets.OrderBy(Function(preset) preset.Year).ToList, levelPresets.OrderByDescending(Function(preset) preset.Year).ToList)
+                Return If(isAscending,
+                          levelPresets.OrderBy(Function(preset) preset.Year).ToList,
+                          levelPresets.OrderByDescending(Function(preset) preset.Year).ToList)
 
             Case SortCriterion.Type
-                Return If(ascending, levelPresets.OrderBy(Function(preset) preset.Type).ToList, levelPresets.OrderByDescending(Function(preset) preset.Type).ToList)
+                Return If(isAscending,
+                          levelPresets.OrderBy(Function(preset) preset.Type).ToList,
+                          levelPresets.OrderByDescending(Function(preset) preset.Type).ToList)
 
-            Case Else 'By default : no sort
+            Case Else 'No sorting
                 Return levelPresets
 
         End Select
