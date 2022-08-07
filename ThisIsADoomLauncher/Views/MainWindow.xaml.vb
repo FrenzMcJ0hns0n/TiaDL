@@ -97,25 +97,9 @@ Namespace Views
 
         Private Sub PopulateBaseUserPresets()
             Try
-                'Fake test data... TODO: Persist as CSV or JSON
-                Dim userPresets As New List(Of LevelPreset) From
-                {
-                    New LevelPreset With
-                    {
-                        .Name = "3 Heures d'agonie 3",
-                        .Iwad = "Doom2.wad",
-                        .Maps = "3ha3.wad" 'File dropped into [TiaDL]\Maps\test\
-                    },
-                    New LevelPreset With
-                    {
-                        .Name = "The Rebirth",
-                        .Iwad = "Doom2.wad",
-                        .Maps = "Rebirth1.wad" 'File dropped into [TiaDL]\Maps\test\
-                    }
-                }
                 Label_Levels_NoUserPresets.Visibility = Visibility.Collapsed
                 ListView_Levels_UserPresets.Visibility = Visibility.Visible
-                ListView_Levels_UserPresets.ItemsSource = userPresets
+                ListView_Levels_UserPresets.ItemsSource = GetLevelPresets_FromCsv("user_levels")
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name

@@ -83,6 +83,28 @@ functionEnd:
         Return absolutePath
     End Function
 
+    Public Function GetCsvData(csvFilepath As String) As List(Of String)
+        Dim csvData As New List(Of String)
+
+        Try
+            csvData = File.ReadAllLines(csvFilepath).ToList
+        Catch ex As Exception
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {csvFilepath}")
+        End Try
+
+        Return csvData
+    End Function
+
+    ''' <summary>
+    ''' Get local CSV filepath by its name
+    ''' </summary>
+    ''' <param name="name">Name of the file (without extension)</param>
+    ''' <returns>Filepath as a String</returns>
+    Public Function GetCsvFilepath(name As String) As String
+        Return Path.Combine(GetDirectoryPath(), $"{name}.csv")
+    End Function
+
     ''' <summary>
     ''' Return the text found in the specified JSON file
     ''' </summary>

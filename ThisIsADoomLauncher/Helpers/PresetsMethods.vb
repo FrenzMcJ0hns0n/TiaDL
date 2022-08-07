@@ -23,7 +23,7 @@ Friend Module PresetsMethods
                 Case "base_mods"
                     parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
                 Case "user_levels"
-                    parser = New TextFieldParser(Path.Combine(GetDirectoryPath(), "presets.csv"))
+                    parser = New TextFieldParser(GetCsvFilepath("UserLevels"))
                 Case "user_mods"
                     'TODO
                 Case Else 'TODO?
@@ -54,23 +54,38 @@ Friend Module PresetsMethods
                     Try
                         Dim parsedValues As String() = parser.ReadFields()
 
-                        'Name, Type, Year and Iwad are mandatory
-                        If parsedValues.Length < 4 Then Continue Do
-                        'Skip Wolf3D, as not functional yet
-                        If parsedValues(0) = "Wolfenstein 3D" Then Continue Do
+                        If presetsType = "base_levels" Then
 
-                        levelPresets.Add(New LevelPreset() With
-                        {
-                            .Name = parsedValues(0),
-                            .Type = parsedValues(1),
-                            .Year = Convert.ToInt32(parsedValues(2)),
-                            .Desc = $"Year : { .Year}{vbCrLf}Type : { .Type}",
- _
-                            .Iwad = parsedValues(3),
-                            .Maps = If(parsedValues.Length >= 5, parsedValues(4), String.Empty),
-                            .Misc = If(parsedValues.Length >= 6, parsedValues(5), String.Empty),
-                            .Pict = If(parsedValues.Length = 7, parsedValues(6), String.Empty)
-                        })
+                            If parsedValues.Length < 4 Then Continue Do 'Skip if first 4 mandatory data are not preset: Name, Type, Year, Iwad
+                            If parsedValues(0) = "Wolfenstein 3D" Then Continue Do 'Skip Wolf3D, as not functional yet
+
+                            levelPresets.Add(New LevelPreset() With
+                            {
+                                .Name = parsedValues(0),
+                                .Type = parsedValues(1),
+                                .Year = Convert.ToInt32(parsedValues(2)),
+                                .Desc = $"Year : { .Year}{vbCrLf}Type : { .Type}",
+                                .Iwad = parsedValues(3),
+                                .Maps = If(parsedValues.Length >= 5, parsedValues(4), String.Empty),
+                                .Misc = If(parsedValues.Length >= 6, parsedValues(5), String.Empty),
+                                .Pict = If(parsedValues.Length = 7, parsedValues(6), String.Empty)
+                            })
+
+                        Else
+
+                            If parsedValues.Length < 3 Then Continue Do 'Skip if first 3 mandatory data are not preset: Name, Iwad, Maps
+
+                            levelPresets.Add(New LevelPreset() With
+                            {
+                                .Name = parsedValues(0),
+                                .Iwad = parsedValues(1),
+                                .Maps = parsedValues(2),
+                                .Misc = If(parsedValues.Length >= 4, parsedValues(3), String.Empty)
+                            })
+
+                        End If
+
+
                     Catch mleEx As MalformedLineException
                         WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing presets {presetsType}")
                     End Try
@@ -143,7 +158,23 @@ Friend Module PresetsMethods
 
     End Sub
 
-    'TODO Use LevelPreset as input parameter
+    Public Sub PersistUserLevelPresets(levelPresets As List(Of LevelPreset))
+        Try
+            Dim csvPath As String = GetCsvFilepath("UserLevels")
+
+            Using writer As New StreamWriter(csvPath, False)
+                writer.Write(String.Join(vbCrLf, USER_LEVELS_HEADER))
+                levelPresets.ForEach(Sub(lp As LevelPreset) writer.WriteLine($"{lp.Name}; {lp.Iwad}; {lp.Maps}; {lp.Misc}"))
+            End Using
+
+        Catch ex As Exception
+            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+            Dim presetNames As List(Of String) = levelPresets.Select(Function(lp As LevelPreset) lp.Name).ToList
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Preset names = {String.Join(", ", presetNames)}")
+        End Try
+    End Sub
+
+    'TODO Delete, to be replaced by the one above
     ''' <summary>
     ''' Write attributes for New user preset.
     ''' As line in 'presets.csv'

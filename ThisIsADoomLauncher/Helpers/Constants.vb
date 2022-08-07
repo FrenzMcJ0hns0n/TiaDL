@@ -11,6 +11,20 @@ Friend Module Constants
     Public ReadOnly VALID_EXTENSIONS_MISC As New List(Of String) From {".bex", ".deh", ".txt"}
     Public ReadOnly VALID_EXTENSIONS_PICT As New List(Of String) From {".jpg", ".jpeg", ".png"}
 
+    Public ReadOnly USER_LEVELS_HEADER As New List(Of String) From
+    {
+        "# Lines starting with ""#"" are ignored by the program",
+        "",
+        "# Preset pattern:",
+        "# <Preset Name>, <Iwad path>, [<Maps path>], [<Misc path>]",
+        "",
+        "# <Preset Name> and <Iwad path> are mandatory",
+        "# <Iwad path> : absolute path to .wad file",
+        "# <Maps path> : absolute path to " & String.Join("/", VALID_EXTENSIONS_MAPS) & " file",
+        "# <Misc path> : absolute path to " & String.Join("/", VALID_EXTENSIONS_MISC) & " file",
+        ""
+    }
+
     Public Enum LVLPRESET_TAB
         None = -1
         Base = 0
