@@ -83,19 +83,6 @@ functionEnd:
         Return absolutePath
     End Function
 
-    Public Function GetCsvData(csvFilepath As String) As List(Of String)
-        Dim csvData As New List(Of String)
-
-        Try
-            csvData = File.ReadAllLines(csvFilepath).ToList
-        Catch ex As Exception
-            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {csvFilepath}")
-        End Try
-
-        Return csvData
-    End Function
-
     ''' <summary>
     ''' Get local CSV filepath by its name
     ''' </summary>
@@ -203,34 +190,6 @@ functionEnd:
 
         Return False
     End Function
-
-    'TODO: Use constants and maybe rewrite
-    ''' <summary>
-    ''' Create file 'presets.csv' with some commented lines, if it does not exist
-    ''' </summary>
-    ''' 
-    Public Sub WritePresetsFileHeader()
-        Try
-            Dim presetFile As String = Path.Combine(GetDirectoryPath(), "presets.csv")
-
-            Using writer As New StreamWriter(presetFile, True, Encoding.Default)
-                writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
-                writer.WriteLine()
-                writer.WriteLine("# Preset pattern :")
-                writer.WriteLine("# <Preset Name>, <Iwad path> [,<Level path>] [,<Misc. path>]")
-                writer.WriteLine()
-                writer.WriteLine("# <Preset Name> and <Iwad path> are mandatory")
-                writer.WriteLine("# <Iwad path> : absolute path to .wad file")
-                writer.WriteLine("# <Level path> : absolute path to .wad/.pk3 file")
-                writer.WriteLine("# <Misc. path> : absolute path to .deh/.dex file")
-                writer.WriteLine()
-            End Using
-
-        Catch ex As Exception
-            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-        End Try
-    End Sub
 
     ''' <summary>
     ''' Log content in file 'log.txt'

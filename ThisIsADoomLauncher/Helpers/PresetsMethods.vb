@@ -158,6 +158,7 @@ Friend Module PresetsMethods
 
     End Sub
 
+    'TODO
     Public Sub PersistUserLevelPresets(levelPresets As List(Of LevelPreset))
         Try
             Dim csvPath As String = GetCsvFilepath("UserLevels")
@@ -172,45 +173,6 @@ Friend Module PresetsMethods
             Dim presetNames As List(Of String) = levelPresets.Select(Function(lp As LevelPreset) lp.Name).ToList
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Preset names = {String.Join(", ", presetNames)}")
         End Try
-    End Sub
-
-    'TODO Delete, to be replaced by the one above
-    ''' <summary>
-    ''' Write attributes for New user preset.
-    ''' As line in 'presets.csv'
-    ''' </summary>
-    ''' 
-    Public Sub WritePresetToFile(name As String, iwad As String, Optional level As String = Nothing, Optional misc As String = Nothing)
-
-        Try
-            'Check if user-presets file exists
-            Dim rootDirPath = GetDirectoryPath()
-            Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
-            If Not File.Exists(presetFile) Then WritePresetsFileHeader()
-
-            'Format preset to be written
-            Dim presetLine As String = String.Format("{0},{1}", name, iwad)
-            presetLine &= If(level = Nothing, Nothing, "," & level)
-            presetLine &= If(misc = Nothing, Nothing, "," & misc)
-
-            'Check if last char is CR-LF (Windows EOL) 'TODO! Remove that and do clean things
-            Dim end_ok As Boolean = False
-            Using reader As New StreamReader(presetFile, Text.Encoding.UTF8)
-                reader.BaseStream.Seek(-2, SeekOrigin.End)
-                If reader.Read = 13 Then end_ok = True
-            End Using
-
-            'Write new preset at end of file
-            Using writer As New StreamWriter(presetFile, True, Text.Encoding.UTF8)
-                If end_ok = False Then writer.WriteLine() 'create new line if necessary
-                writer.WriteLine(presetLine)
-            End Using
-
-        Catch ex As Exception
-            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : (TODO)")
-        End Try
-
     End Sub
 
 #End Region
