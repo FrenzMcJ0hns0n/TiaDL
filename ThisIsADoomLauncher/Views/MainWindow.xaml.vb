@@ -95,18 +95,6 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub PopulateBaseUserPresets()
-            Try
-                Label_Levels_NoUserPresets.Visibility = Visibility.Collapsed
-                ListView_Levels_UserPresets.Visibility = Visibility.Visible
-                ListView_Levels_UserPresets.ItemsSource = GetLevelPresets_FromCsv("user_levels")
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
         Private Sub PopulateBaseModsPresets()
             Try
                 ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCsv("base_mods")
@@ -248,7 +236,7 @@ Namespace Views
                 Case LVLPRESET_TAB.Base
                     '...
 
-                Case LVLPRESET_TAB.User : PopulateBaseUserPresets() 'Refresh each time
+                Case LVLPRESET_TAB.User : PopulateUserLevels() 'Refresh each time
 
 
                 Case LVLPRESET_TAB.AddNew
@@ -271,7 +259,7 @@ Namespace Views
                     RadioButton_SortAsc.IsChecked = True
                 End If
 
-                SortLevels()
+                SortBaseLevels()
             Else
                 'Sorting = None
                 RadioButton_SortAsc.IsEnabled = False
@@ -281,7 +269,12 @@ Namespace Views
             End If
         End Sub
 
-        Private Sub SortLevels()
+        Private Sub ShowNoUserLevels()
+            ListView_Levels_UserPresets.Visibility = Visibility.Collapsed
+            Label_Levels_NoUserPresets.Visibility = Visibility.Visible
+        End Sub
+
+        Private Sub SortBaseLevels()
             Dim sortCriterion As SortCriterion = ComboBox_BaseLevelsSorting.SelectedIndex
             Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
 
@@ -292,8 +285,41 @@ Namespace Views
             End With
         End Sub
 
+        Private Sub PopulateUserLevels()
+            Try
+                Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
+                If Not File.Exists(jsonFilepath) Then
+                    MessageBox.Show("No local JSON file to load data from: use the ""Add new preset"" tab to create some", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Information)
+                    Return 'Early return
+                End If
 
+                Dim jsonString As String = GetJsonData(jsonFilepath)
 
+                If Not CanLoadJsonArray(jsonString) Then
+                    MessageBox.Show("Unable to read user level presets from local JSON file", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                    ShowNoUserLevels()
+                    Return 'Early return
+                End If
+
+                Dim userLevels As List(Of LevelPreset) = LoadUserLevels(jsonString)
+                If userLevels.Count = 0 Then
+                    ShowNoUserLevels()
+                    Return 'Early return
+                End If
+
+                'Display
+                With ListView_Levels_UserPresets
+                    .Visibility = Visibility.Visible
+                    .ItemsSource = userLevels
+                End With
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+
+                ShowNoUserLevels()
+            End Try
+        End Sub
 
         Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
@@ -477,7 +503,42 @@ Namespace Views
         End Sub
 
         Private Sub Button_NewLevel_SaveAs_Click(sender As Object, e As RoutedEventArgs)
-            'TODO
+            Dim iwadInput As String = TextBox_NewLevel_Iwad.Text
+            Dim mapsInput As String = TextBox_NewLevel_Maps.Text
+            Dim miscInput As String = TextBox_NewLevel_Misc.Text
+
+            'At least 2 contents (including Iwad) are required
+            If iwadInput = TBX_DROP_IWAD Then Return
+            If mapsInput = TBX_DROP_MAPS And miscInput = TBX_DROP_MISC Then
+                'TODO: Use string constant
+                MessageBox.Show("You only submitted an Iwad. Please select it from the ""Base presets"" tab instead", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                Return
+            End If
+
+            'Shortcut as saving fake data in order to complete quickly the management of user levels with JSON 
+            Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
+            Dim jsonString As String = GetJsonData(jsonFilepath)
+
+            Dim FAKENAME As String = $"Fake name (created on {Now:yyyy-MM-dd_HH-mm-ss})"
+
+            Dim currentLevels As List(Of LevelPreset) = LoadUserLevels(jsonString)
+            currentLevels.Add(
+                New LevelPreset With
+                {
+                    .Name = FAKENAME,
+                    .Iwad = iwadInput,
+                    .Maps = mapsInput,
+                    .Misc = If(miscInput = TBX_DROP_MISC,
+                               String.Empty,
+                               miscInput),
+                    .Type = "", 'TODO: If iwadInput.ToLowerInvariant.Contains(doom2.wad) Then "Doom 2" Else "Doom 1", etc.
+                    .Year = Now.Year,
+                    .Desc = "",
+                    .Pict = "" 'TODO: Manage this input
+                }
+            )
+            SaveUserLevels(currentLevels, jsonFilepath)
+            MessageBox.Show($"New user level preset ""{FAKENAME}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
         End Sub
 
         Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)

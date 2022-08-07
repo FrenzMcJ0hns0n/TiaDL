@@ -158,7 +158,7 @@ Friend Module PresetsMethods
 
     End Sub
 
-    'TODO
+    'CSV version: may never be used
     Public Sub PersistUserLevelPresets(levelPresets As List(Of LevelPreset))
         Try
             Dim csvPath As String = GetCsvFilepath("UserLevels")
