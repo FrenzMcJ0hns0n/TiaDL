@@ -361,7 +361,55 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub MenuItemView_Click(sender As Object, e As RoutedEventArgs)
+            Dim preset As LevelPreset = ListView_Levels_UserPresets.SelectedItem
 
+            Dim myTextBlock As New TextBlock With {.Margin = New Thickness(10)}
+            For Each pi As PropertyInfo In preset.GetType().GetProperties()
+                myTextBlock.Inlines.Add(New Bold(New Run($"{pi.Name}")))
+                myTextBlock.Inlines.Add(New Run($" : {pi.GetValue(preset)}{vbCrLf}"))
+            Next
+
+            Dim myWindow As New Window With
+            {
+                .Content = myTextBlock,
+                .Height = 200,
+                .Owner = Me,
+                .Width = 600
+            }
+            myWindow.ShowDialog()
+
+            'TODO?
+            'e.Handled = True
+        End Sub
+
+        Private Sub MenuItemDelete_Click(sender As Object, e As RoutedEventArgs)
+            Dim preset As LevelPreset = ListView_Levels_UserPresets.SelectedItem
+
+            If MessageBox.Show($"Delete preset ""{preset.Name}"" ?", "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question) = Forms.DialogResult.Yes Then
+                'TODO: Secure I/O
+                Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
+                Dim jsonString As String = GetJsonData(jsonFilepath)
+                Dim currentLevels As List(Of LevelPreset) = LoadUserLevels(jsonString) 'TODO? Load from ListView instead as we are here actually
+
+                Dim presetIdx As Integer = ListView_Levels_UserPresets.Items.IndexOf(preset)
+                currentLevels.RemoveAt(presetIdx)
+
+                SaveUserLevels(currentLevels, jsonFilepath)
+                PopulateUserLevels()
+            End If
+
+            'TODO?
+            'e.Handled = True
+        End Sub
+
+        Private Function GetClickedUserPreset(sender As Object) As LevelPreset
+            Dim myMenuItem As MenuItem = DirectCast(sender, MenuItem)
+            Dim myCtxtMenu As ContextMenu = DirectCast(myMenuItem.Parent, ContextMenu)
+            Dim myListView As ListView = DirectCast(myCtxtMenu.PlacementTarget, ListView)
+
+            Return myListView.SelectedItem
+        End Function
 
 
         Private Sub GroupBox_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
@@ -1106,7 +1154,6 @@ Namespace Views
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
-
 
 #End Region
 
