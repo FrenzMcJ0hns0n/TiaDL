@@ -579,7 +579,6 @@ Namespace Views
                                miscInput),
                     .Type = "", 'TODO: If iwadInput.ToLowerInvariant.Contains(doom2.wad) Then "Doom 2" Else "Doom 1", etc.
                     .Year = Now.Year,
-                    .Desc = "",
                     .Pict = "" 'TODO: Manage this input
                 }
             )

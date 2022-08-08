@@ -64,7 +64,6 @@ Friend Module PresetsMethods
                                 .Name = parsedValues(0),
                                 .Type = parsedValues(1),
                                 .Year = Convert.ToInt32(parsedValues(2)),
-                                .Desc = $"Year : { .Year}{vbCrLf}Type : { .Type}",
                                 .Iwad = parsedValues(3),
                                 .Maps = If(parsedValues.Length >= 5, parsedValues(4), String.Empty),
                                 .Misc = If(parsedValues.Length >= 6, parsedValues(5), String.Empty),
