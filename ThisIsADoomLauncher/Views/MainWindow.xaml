@@ -620,12 +620,13 @@
                         Orientation="Horizontal"
                         />
                 </Grid>
+                <!-- TODO: Clean this design -->
                 <Grid 
                     x:Name="Grid_Command" 
                     Visibility="Collapsed" 
                     Margin="8"
                     >
-                    <RichTextBox x:Name="RichTextBox_Command" 
+                    <RichTextBox x:Name="RichTextBox_Command" BorderBrush="LightGray"
                                 Grid.Row="1"
                                 Grid.RowSpan="4"
                                 Grid.Column="1"
