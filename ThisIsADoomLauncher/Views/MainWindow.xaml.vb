@@ -653,7 +653,7 @@ Namespace Views
         Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
             Try
                 If ReadyToLaunch() Then
-                    LaunchGame()
+                    'LaunchGame()
                     SaveSettings()
                 End If
             Catch ex As Exception
@@ -717,6 +717,7 @@ Namespace Views
                 .Cursor = Cursors.Arrow,
                 .IsReadOnly = True,
                 .Margin = New Thickness(0, 0, 6, 0),
+                .Tag = info.Directory.ToString,
                 .Text = info.Name,
                 .ToolTip = sBuilder.ToString
             }
@@ -728,7 +729,7 @@ Namespace Views
         ''' <param name="tbx">TextBox to extract from</param>
         ''' <returns></returns>
         Private Function ExtractFileFullPath(tbx As TextBox) As String
-            Dim directoryPath As String = tbx.ToolTip.ToString.Split(vbLf)(1).Replace("Directory : ", "")
+            Dim directoryPath As String = tbx.Tag.ToString
             Dim filename As String = tbx.Text
 
             Return Path.Combine(directoryPath, filename)
