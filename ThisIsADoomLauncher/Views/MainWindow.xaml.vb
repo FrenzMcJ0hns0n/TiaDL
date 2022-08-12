@@ -377,6 +377,7 @@ Namespace Views
                     .Content = myTextBlock,
                     .Height = 200,
                     .Owner = Me,
+                    .Title = "User level preset",
                     .Width = 600,
                     .WindowStartupLocation = WindowStartupLocation.CenterOwner
                 }
@@ -652,7 +653,7 @@ Namespace Views
         Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
             Try
                 If ReadyToLaunch() Then
-                    'LaunchGame()
+                    LaunchGame()
                     SaveSettings()
                 End If
             Catch ex As Exception
