@@ -410,90 +410,32 @@
                 <TabControl x:Name="TabControl_Mods">
                     <TabItem Header="Base presets">
                         <Grid>
+                            
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="10" />
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="4*" />
-                                <RowDefinition Height="18*" />
-                                <RowDefinition Height="10" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="8*" />
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="2*" />
                                 <ColumnDefinition Width="10" />
                                 <ColumnDefinition Width="15*" />
-                                <ColumnDefinition Width="10" />
                             </Grid.ColumnDefinitions>
-                            <ListView 
-                                x:Name="ListView_Mods_BasePresets"
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Grid.RowSpan="4"
-                                Grid.ColumnSpan="2"
-                                Margin="-3"
-                                SelectionChanged="ListView_Mods_BasePresets_SelectionChanged"
-                                >
-                                <!-- Use templates to bind -->
+                            <ListView x:Name="ListView_Mods_BasePresets" Grid.RowSpan="2" Margin="-3" SelectionChanged="ListView_Mods_BasePresets_SelectionChanged">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <!--<StackPanel
-                                            x:Name="StackPanel_Mods"
-                                            Orientation="Vertical"
-                                            >-->
-                                        <TextBlock
-                                                VerticalAlignment="Center"
-                                                FontWeight="DemiBold"
-                                                FontSize="13"
-                                                Text="{Binding Name}"
-                                                />
-                                        <!--</StackPanel>-->
+                                        <TextBlock FontSize="13" FontWeight="DemiBold" Text="{Binding Name}" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            <Label 
-                                x:Name="Label_Mods_Desc"
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="3"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Margin="0,-2,0,0"
-                                Content="Description :"
-                                />
-                            <TextBlock
-                                x:Name="TextBlock_Mods_Desc"
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="5"
-                                Grid.ColumnSpan="2"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                Margin="6,-1,0,0"
-                                FontWeight="DemiBold"
-                                />
+                            
+                            <Label Content="Description :" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="TextBlock_Mods_Desc" FontWeight="DemiBold" Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
-                            <Label 
-                                x:Name="Label_Mods_Files"
-                                Grid.Row="2"
-                                Grid.Column="3"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Margin="0,-2,0,0"
-                                Content="Mod files :"
-                                />
-                            <ListView
-                                x:Name="ListView_Mods_Files"
-                                Grid.Row="2"
-                                Grid.RowSpan="2"
-                                Grid.Column="5"
-                                Grid.ColumnSpan="2"
-                                Margin="0,0,0,0"
-                                BorderBrush="LightGray"
-                                FontSize="11"
-                                IsManipulationEnabled="False"
-                                >
-                            </ListView>
+                            <Label Content="Mod files :" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            <ListView x:Name="ListView_Mods_Files" FontSize="11" Grid.Column="5" Grid.Row="2" IsManipulationEnabled="False"/>
+                            
                         </Grid>
                     </TabItem>
                     <TabItem Header="User presets" IsEnabled="False">
