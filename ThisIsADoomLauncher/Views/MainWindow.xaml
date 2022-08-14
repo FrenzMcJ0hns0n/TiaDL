@@ -12,48 +12,75 @@
         Loaded="Window_Loaded">
 
     <Window.Resources>
-        <Style x:Key="Label_SummaryEntries" TargetType="{x:Type Label}">
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+        <!-- ======================= -->
+        <!-- Styles resources - Port -->
+        <!-- ======================= -->
+
+        
+        
+        <!-- ========================= -->
+        <!-- Styles resources - Levels -->
+        <!-- ========================= -->
+        
+        <Style x:Key="RadioButton_Sorting" TargetType="{x:Type RadioButton}">
+            <Setter Property="GroupName" Value="Sorting"/>
+            <Setter Property="IsEnabled" Value="False"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="0,-1,0,0"/>
+            <EventSetter Event="Checked" Handler="SortBaseLevels"/>
+            <EventSetter Event="Unchecked" Handler="SortBaseLevels"/>
         </Style>
 
         <Style x:Key="Label_NewLevel" TargetType="{x:Type Label}">
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+        
         <Style x:Key="TextBox_NewLevel" TargetType="{x:Type TextBox}">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="AllowDrop" Value="True"/>
             <Setter Property="Cursor" Value="Arrow"/>
             <Setter Property="FontStyle" Value="Italic"/>
             <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <EventSetter Event="PreviewDragOver" Handler="TextBox_NewLevel_PreviewDragOver"/>
             <EventSetter Event="Drop" Handler="TextBox_NewLevel_Drop"/>
         </Style>
+        
         <Style x:Key="Button_NewLevel_Browse" TargetType="{x:Type Button}">
-            <Setter Property="VerticalAlignment" Value="Top"/>
             <Setter Property="Content" Value="Browse..."/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
             <EventSetter Event="Click" Handler="Button_NewLevel_Browse_Click"/>
         </Style>
+        
         <Style x:Key="Button_NewLevel_Clear" TargetType="{x:Type Button}">
-            <Setter Property="VerticalAlignment" Value="Bottom"/>
             <Setter Property="Content" Value="Clear &#x21ba;"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
             <EventSetter Event="Click" Handler="Button_NewLevel_Clear_Click"/>
         </Style>
 
-        <Style x:Key="RadioButton_Sorting" TargetType="{x:Type RadioButton}">
-            <Setter Property="IsEnabled" Value="False"/>
-            <Setter Property="GroupName" Value="Sorting"/>
+        <!-- ======================= -->
+        <!-- Styles resources - Mods -->
+        <!-- ======================= -->
+        
+        
+        
+        <!-- ========================== -->
+        <!-- Styles resources - Summary -->
+        <!-- ========================== -->
+        
+        <Style x:Key="Label_SummaryEntries" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <EventSetter Event="Checked" Handler="SortBaseLevels"/>
-            <EventSetter Event="Unchecked" Handler="SortBaseLevels"/>
+            <Setter Property="Margin" Value="0,-1,0,0"/>
         </Style>
 
+        <!-- ========================= -->
+        <!-- Styles resources - Common -->
+        <!-- ========================= -->
+        
         <Style x:Key="Label_NoUserPresets" TargetType="{x:Type Label}">
             <Setter Property="Content" Value="No user presets found"/>
             <Setter Property="Foreground" Value="Gray"/>
@@ -83,6 +110,7 @@
             <ColumnDefinition Width="20" />
         </Grid.ColumnDefinitions>
 
+        <!-- Port -->
         <GroupBox Grid.Row="1"
                     Grid.Column="1"
                     Header="Port">
@@ -407,6 +435,7 @@
             </Grid>
         </GroupBox>
 
+        <!-- Mods -->
         <GroupBox Grid.Row="5"
                     Grid.Column="1"
                     Header="Mods">
@@ -414,7 +443,7 @@
                 <TabControl x:Name="TabControl_Mods">
                     <TabItem Header="Base presets">
                         <Grid>
-                            
+
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="4*" />
@@ -433,13 +462,13 @@
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            
+
                             <Label Content="Description :" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                             <TextBlock x:Name="TextBlock_Mods_Desc" FontWeight="DemiBold" Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
 
                             <Label Content="Mod files :" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                             <ListView x:Name="ListView_Mods_Files" FontSize="11" Grid.Column="5" Grid.Row="2" IsManipulationEnabled="False"/>
-                            
+
                         </Grid>
                     </TabItem>
                     <TabItem Header="User presets">
@@ -459,32 +488,10 @@
 
                     </TabItem>
                 </TabControl>
-                <!--<Grid.RowDefinitions>
-                    <RowDefinition Height="2*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="18*" />
-                    <ColumnDefinition Width="2*" />
-                </Grid.ColumnDefinitions>
-                <Border BorderThickness="1"
-                        BorderBrush="DarkGray">
-                    <StackPanel x:Name="StackPanel_Mods"
-                            Orientation="Horizontal">
-
-                    </StackPanel>
-                </Border>
-                <Button x:Name="Button_ModInfo"
-                        Grid.Column="1"
-                        Content="Get more info..."/>
-                <Border Grid.Row="1"
-                        BorderThickness="1"
-                        BorderBrush="DarkGray">
-                                
-                </Border>-->
             </Grid>
         </GroupBox>
 
+        <!-- Summary -->
         <GroupBox Grid.Row="7"
                     Grid.Column="1"
                     Header="Summary">
