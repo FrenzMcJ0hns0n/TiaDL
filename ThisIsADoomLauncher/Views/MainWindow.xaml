@@ -12,11 +12,41 @@
         Loaded="Window_Loaded">
 
     <Window.Resources>
+
+        <!-- ========================= -->
+        <!-- Styles resources - Common -->
+        <!-- ========================= -->
+
+        <!-- TODO: Same for Browse.../Clear buttons -->
+        
+        <Style x:Key="Tbx_Dropable" TargetType="{x:Type TextBox}">
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Lbl_NoUserPresets" TargetType="{x:Type Label}">
+            <Setter Property="Content" Value="No user presets found"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
         <!-- ======================= -->
         <!-- Styles resources - Port -->
         <!-- ======================= -->
 
-        
+        <Style x:Key="Tbx_Port" TargetType="{x:Type TextBox}" BasedOn="{StaticResource Tbx_Dropable}">
+            <Setter Property="Text" Value="Drop port executable... (GZDoom, Zandronum, etc.)"/>
+            <EventSetter Event="Drop" Handler="Tbx_Port_Drop"/>
+            <EventSetter Event="PreviewDragOver" Handler="Tbx_Port_PreviewDragOver"/>
+        </Style>
         
         <!-- ========================= -->
         <!-- Styles resources - Levels -->
@@ -34,19 +64,10 @@
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        
-        <Style x:Key="Tbx_NewLevel" TargetType="{x:Type TextBox}">
-            <Setter Property="AllowDrop" Value="True"/>
-            <Setter Property="Cursor" Value="Arrow"/>
-            <Setter Property="FontStyle" Value="Italic"/>
-            <Setter Property="Foreground" Value="Gray"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <EventSetter Event="PreviewDragOver" Handler="TextBox_NewLevel_PreviewDragOver"/>
+
+        <Style x:Key="Tbx_NewLevel" TargetType="{x:Type TextBox}" BasedOn="{StaticResource Tbx_Dropable}">
             <EventSetter Event="Drop" Handler="TextBox_NewLevel_Drop"/>
+            <EventSetter Event="PreviewDragOver" Handler="TextBox_NewLevel_PreviewDragOver"/>
         </Style>
         
         <Style x:Key="Btn_NewLevelBrowse" TargetType="{x:Type Button}">
@@ -91,18 +112,8 @@
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
         
-        <!-- ========================= -->
-        <!-- Styles resources - Common -->
-        <!-- ========================= -->
-        
-        <Style x:Key="Lbl_NoUserPresets" TargetType="{x:Type Label}">
-            <Setter Property="Content" Value="No user presets found"/>
-            <Setter Property="Foreground" Value="Gray"/>
-            <Setter Property="FontSize" Value="20"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
     </Window.Resources>
+    
     
     <Grid>
         <Grid.RowDefinitions>
@@ -125,75 +136,34 @@
         </Grid.ColumnDefinitions>
 
         <!-- Port -->
-        <GroupBox Grid.Row="1"
-                    Grid.Column="1"
-                    Header="Port">
+        <GroupBox Grid.Column="1" Grid.Row="1" Header="Port">
             <Grid Margin="8">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10*" />
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="10*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBox 
-                    x:Name="TextBox_Port"
-                    Grid.Column="0"
-                    Margin="0,0,0,1"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Foreground="Gray"
-                    FontStyle="Italic"
-                    Text="Drop port executable... (GZDoom, Zandronum, etc.)"
-                    Cursor="Arrow"
-                    IsReadOnly="True"
-                    AllowDrop="True"
-                    PreviewDragOver="TextBox_Port_PreviewDragOver"
-                    Drop="TextBox_Port_Drop"
-                    TextWrapping="Wrap"
-                    />
-                <Grid Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="0,0,0,1"
-                        >
+                <TextBox Style="{StaticResource Tbx_Port}" x:Name="Tbx_Port"/>
+                <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Button 
-                        x:Name="Button_Port_Browse"
-                        Grid.Row="0"
-                        VerticalAlignment="Top"
-                        Margin="0,0,0,-1"
-                        Content="Browse..."
-                        Click="Button_Port_Browse_Click"
-                        />
-                    <Button 
-                        x:Name="Button_Port_Clear"
-                        Grid.Row="1"
-                        VerticalAlignment="Bottom"
-                        Content="Clear &#x21ba;"
-                        Click="Button_Port_Clear_Click"
-                        />
+                    <Button Content="Browse..." VerticalAlignment="Top" Click="Btn_PortBrowse_Click"/>
+                    <Button Content="Clear &#x21ba;" Grid.Row="1" VerticalAlignment="Bottom" Click="Btn_PortClear_Click"/>
                 </Grid>
-                <StackPanel x:Name="StackPanel_PortParams"
-                            Grid.Row="1"
-                            Orientation="Horizontal"/>
-                <TextBox x:Name="TextBox_PortParameters"
-                            Grid.Row="1"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Text="+ 0 parameters"
-                            Cursor="Arrow"
-                            IsReadOnly="True"/>
-                <Button x:Name="Button_EngineParams_Edit"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Content="Edit..."
-                        IsEnabled="False"
-                        />
+
+                <StackPanel x:Name="Stkp_PortParams" Grid.Row="1" Orientation="Horizontal">
+                    <!-- TODO -->
+                </StackPanel>
+                <TextBox x:Name="Tbx_PortParameters" Cursor="Arrow" Grid.Row="1" HorizontalContentAlignment="Center"
+                         IsReadOnly="True" Text="+ 0 parameters" VerticalContentAlignment="Center"
+                         />
+                <Button x:Name="Btn_PortParamsEdit" Content="Edit..." Grid.Column="1" Grid.Row="1" IsEnabled="False"/> <!-- TODO -->
             </Grid>
         </GroupBox>
 
@@ -421,7 +391,7 @@
                     <TextBox Style="{StaticResource Tbx_SummaryEntries}" x:Name="TextBox_Summary_Port" Grid.Column="2" Grid.Row="1"/>
 
                     <Label Style="{StaticResource Lbl_SummaryEntries}" Grid.Column="1" Grid.Row="2" Content="Params :"/>
-                    <StackPanel x:Name="StackPanel_Summary_PortParameters" Grid.Column="2" Grid.Row="2"
+                    <StackPanel x:Name="Stkp_SummaryPortParameters" Grid.Column="2" Grid.Row="2"
                                 HorizontalAlignment="Stretch" Margin="0 1 0 0" Orientation="Horizontal" VerticalAlignment="Center">
                         <!-- TODO -->
                     </StackPanel>
@@ -430,7 +400,7 @@
                     <TextBox Style="{StaticResource Tbx_SummaryEntries}" x:Name="TextBox_Summary_Iwad" Grid.Column="2" Grid.Row="3"/>
 
                     <Label Style="{StaticResource Lbl_SummaryEntries}" Content="Files :" Grid.Column="1" Grid.Row="4"/>
-                    <StackPanel x:Name="StackPanel_Summary_FilesMods" Grid.Column="2" Grid.Row="4" 
+                    <StackPanel x:Name="Stkp_SummaryFilesMods" Grid.Column="2" Grid.Row="4" 
                                 HorizontalAlignment="Stretch" Margin="0 1 0 0" Orientation="Horizontal" VerticalAlignment="Center"/>
                 </Grid>
                 

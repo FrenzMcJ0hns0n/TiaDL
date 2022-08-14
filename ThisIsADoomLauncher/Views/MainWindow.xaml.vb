@@ -167,11 +167,11 @@ Namespace Views
 
 #Region "Events : Port"
 
-        Private Sub TextBox_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
+        Private Sub Tbx_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
-        Private Sub TextBox_Port_Drop(sender As Object, e As DragEventArgs)
+        Private Sub Tbx_Port_Drop(sender As Object, e As DragEventArgs)
             Try
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
@@ -179,7 +179,7 @@ Namespace Views
                 Dim portFilepath As String = e.Data.GetData(DataFormats.FileDrop)(0)
 
                 If ValidateFile(portFilepath, "Port") Then
-                    FillTextBox(TextBox_Port, portFilepath)
+                    FillTextBox(Tbx_Port, portFilepath)
                     FillTextBox(TextBox_Summary_Port, portFilepath)
                     UpdateCommand()
                     DecorateCommand()
@@ -191,7 +191,7 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub Button_Port_Browse_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Btn_PortBrowse_Click(sender As Object, e As RoutedEventArgs)
             Try
                 Dim dialog As New OpenFileDialog With
                 {
@@ -201,7 +201,7 @@ Namespace Views
                 }
 
                 If dialog.ShowDialog() Then
-                    FillTextBox(TextBox_Port, dialog.FileName)
+                    FillTextBox(Tbx_Port, dialog.FileName)
                     FillTextBox(TextBox_Summary_Port, dialog.FileName)
                     UpdateCommand()
                     DecorateCommand()
@@ -212,8 +212,8 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub Button_Port_Clear_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_Port, TBX_DROP_PORT)
+        Private Sub Btn_PortClear_Click(sender As Object, e As RoutedEventArgs)
+            UnfillTextBox(Tbx_Port, TBX_DROP_PORT)
             UnfillTextBox(TextBox_Summary_Port, String.Empty)
             UpdateCommand()
             DecorateCommand()
@@ -748,7 +748,7 @@ Namespace Views
             Dim fullPaths As New List(Of String)
 
             Try
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                Dim allTbxs As List(Of TextBox) = Stkp_SummaryFilesMods.Children.OfType(Of TextBox).ToList
 
                 If target = "Level" Then
                     'Build a List(Of String) of Length = 2, as {Maps, Misc}
@@ -782,11 +782,11 @@ Namespace Views
         Private Sub UpdateLevels_Summary(level As String, misc As String)
             Try
                 'Gather existing contents in StackPanel : update Levels but preserve Mods if any
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                Dim allTbxs As List(Of TextBox) = Stkp_SummaryFilesMods.Children.OfType(Of TextBox).ToList
                 Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
 
                 'Clear the StackPanel content
-                StackPanel_Summary_FilesMods.Children.Clear()
+                Stkp_SummaryFilesMods.Children.Clear()
 
                 'Create New List(Of TextBox) to be filled
                 Dim lvlTbxs As New List(Of TextBox)
@@ -800,8 +800,8 @@ Namespace Views
                 Next
 
                 'Fill the StackPanel with gathered TextBoxes
-                lvlTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
-                modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+                lvlTbxs.ForEach(Sub(tbx) Stkp_SummaryFilesMods.Children.Add(tbx))
+                modTbxs.ForEach(Sub(tbx) Stkp_SummaryFilesMods.Children.Add(tbx))
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -817,11 +817,11 @@ Namespace Views
         Private Sub UpdateMods_Summary(mods As List(Of String))
             Try
                 'Gather existing contents in StackPanel : update Levels but preserve Mods if any
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                Dim allTbxs As List(Of TextBox) = Stkp_SummaryFilesMods.Children.OfType(Of TextBox).ToList
                 Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
 
                 'Remove previous mods
-                modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Remove(tbx))
+                modTbxs.ForEach(Sub(tbx) Stkp_SummaryFilesMods.Children.Remove(tbx))
 
                 'Clear the list to be filled again
                 modTbxs.Clear()
@@ -834,7 +834,7 @@ Namespace Views
                 Next
 
                 'Fill the StackPanel with gathered TextBoxes
-                modTbxs.ForEach(Sub(tbx) StackPanel_Summary_FilesMods.Children.Add(tbx))
+                modTbxs.ForEach(Sub(tbx) Stkp_SummaryFilesMods.Children.Add(tbx))
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -904,8 +904,8 @@ Namespace Views
                 command &= $"""{port}"" -iwad ""{iwad}"""
                 'TODO: Manage port parameters, to be added before " -iwad"
 
-                'Add Level/Misc/Mods to the command line
-                Dim allTbxs As List(Of TextBox) = StackPanel_Summary_FilesMods.Children.OfType(Of TextBox).ToList
+                'Add Maps/Misc/Mods to the command line
+                Dim allTbxs As List(Of TextBox) = Stkp_SummaryFilesMods.Children.OfType(Of TextBox).ToList
                 allTbxs.ForEach(Sub(tbx) command &= $" -file ""{ExtractFileFullPath(tbx)}""")
 
                 FillRichTextBox_Command(command)
@@ -1136,7 +1136,7 @@ Namespace Views
                 persistedSettings.Load()
                 With persistedSettings
                     If File.Exists(.Port) Then
-                        FillTextBox(TextBox_Port, .Port)
+                        FillTextBox(Tbx_Port, .Port)
                         FillTextBox(TextBox_Summary_Port, .Port)
                     End If
                     'TODO? Handle case of invalid .Port
