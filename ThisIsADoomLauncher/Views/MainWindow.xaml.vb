@@ -726,7 +726,7 @@ Namespace Views
         End Function
 
         ''' <summary>
-        ''' Extract file fullpath from TextBox tooltip
+        ''' Extract file fullpath from TextBox.Tag attribute
         ''' </summary>
         ''' <param name="tbx">TextBox to extract from</param>
         ''' <returns></returns>
@@ -737,10 +737,9 @@ Namespace Views
             Return Path.Combine(directoryPath, filename)
         End Function
 
-        'TODO(v4?) Use a more OOP way
         ''' <summary>
         ''' Retrieve full path of files "Maps/Misc" or "Mods" in StackPanel_Summary_FilesMods.
-        ''' It is done by reading the TextBox tooltip
+        ''' It is done by reading the TextBox.Tag attribute
         ''' </summary>
         ''' <param name="target">Target : "Level" or "Mod"</param>
         ''' <returns></returns>
