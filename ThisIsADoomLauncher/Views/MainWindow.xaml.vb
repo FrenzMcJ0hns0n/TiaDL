@@ -604,7 +604,7 @@ Namespace Views
                 Dim mp As ModPreset = ReturnSelectedMods()
 
                 TextBlock_Mods_Desc.Text = mp.Desc
-                ListView_Mods_Files.ItemsSource = mp.Files
+                ListView_Mods_Files.ItemsSource = mp.Files.Where(Function(f As String) Not f = String.Empty) 'Exclude empty filenames
                 UpdateMods_Summary(mp.Files)
                 UpdateCommand()
                 DecorateCommand()
