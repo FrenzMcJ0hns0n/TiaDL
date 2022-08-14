@@ -34,7 +34,7 @@ Namespace Views
 #Region "GUI related Enums"
 
         Private Function GetActiveLvlTab() As LVLPRESET_TAB
-            Select Case TabControl_Levels.SelectedIndex
+            Select Case Tbc_Levels.SelectedIndex
                 Case 0 : Return LVLPRESET_TAB.Base
                 Case 1 : Return LVLPRESET_TAB.User
                 Case 2 : Return LVLPRESET_TAB.AddNew
@@ -43,11 +43,11 @@ Namespace Views
         End Function
 
         Private Sub SetActiveLvlTab(value As LVLPRESET_TAB)
-            TabControl_Levels.SelectedIndex = value
+            Tbc_Levels.SelectedIndex = value
         End Sub
 
         Private Function GetActiveModTab() As MODPRESET_TAB
-            Select Case TabControl_Mods.SelectedIndex
+            Select Case Tbc_Mods.SelectedIndex
                 Case 0 : Return MODPRESET_TAB.Base
                 Case 1 : Return MODPRESET_TAB.User
                 Case 2 : Return MODPRESET_TAB.AddNew
@@ -56,7 +56,7 @@ Namespace Views
         End Function
 
         Private Sub SetActiveModTab(value As MODPRESET_TAB)
-            TabControl_Mods.SelectedIndex = value
+            Tbc_Mods.SelectedIndex = value
         End Sub
 
 #End Region
@@ -88,7 +88,7 @@ Namespace Views
 
         Private Sub PopulateBaseLevelPresets()
             Try
-                ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
+                Lvw_LevelsBasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -97,7 +97,7 @@ Namespace Views
 
         Private Sub PopulateBaseModsPresets()
             Try
-                ListView_Mods_BasePresets.ItemsSource = GetModPresets_FromCsv("base_mods")
+                Lvw_ModsBasePresets.ItemsSource = GetModPresets_FromCsv("base_mods")
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -136,7 +136,7 @@ Namespace Views
 
         Private Sub CopyCommandToClipboard()
             Try
-                Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
+                Dim commandText = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
                 Clipboard.SetText(commandText)
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -146,7 +146,7 @@ Namespace Views
 
         Private Sub ExportCommandAsBat()
             Try
-                Dim commandText = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
+                Dim commandText = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
 
                 Dim now_formatted As String = Date.Now.ToString("yyyy-MM-dd_HH-mm-ss")
                 Dim batPath As String = Path.Combine(GetDirectoryPath(), now_formatted & "_command.bat")
@@ -228,57 +228,50 @@ Namespace Views
 
 #Region "Events : Levels"
 
-        Private Sub TabControl_Levels_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
-            StackPanel_BaseLevelsSorting.Visibility = If(GetActiveLvlTab() = LVLPRESET_TAB.Base, Visibility.Visible, Visibility.Hidden)
+        Private Sub Tbc_Levels_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            Stkp_BaseLevelsSorting.Visibility = If(GetActiveLvlTab() = LVLPRESET_TAB.Base, Visibility.Visible, Visibility.Hidden)
 
             Select Case GetActiveLvlTab()
-
-                Case LVLPRESET_TAB.Base
-                    '...
-
+                Case LVLPRESET_TAB.Base '...
                 Case LVLPRESET_TAB.User : PopulateUserLevels() 'Refresh each time
-
-
-                Case LVLPRESET_TAB.AddNew
-                    '...
-
+                Case LVLPRESET_TAB.AddNew '...
             End Select
 
         End Sub
 
-        Private Sub ComboBox_BaseLevelsSorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub Cmbx_BaseLevelsSorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             If Not GetActiveLvlTab() = LVLPRESET_TAB.Base Then Return 'Fix as Visibility.Visible is required.
 
-            If ComboBox_BaseLevelsSorting.SelectedIndex > 0 Then
+            If Cmbx_BaseLevelsSorting.SelectedIndex > 0 Then
                 'Sorting = Name/Type/Year
-                RadioButton_SortAsc.IsEnabled = True
-                RadioButton_SortDesc.IsEnabled = True
+                Rbtn_SortAsc.IsEnabled = True
+                Rbtn_SortDesc.IsEnabled = True
 
                 'At launch, sorting is disabled, radio buttons are unchecked. Once sorting is enabled, Ascending becomes the default sorting order
-                If Not RadioButton_SortAsc.IsChecked And Not RadioButton_SortDesc.IsChecked Then
-                    RadioButton_SortAsc.IsChecked = True
+                If Not Rbtn_SortAsc.IsChecked And Not Rbtn_SortDesc.IsChecked Then
+                    Rbtn_SortAsc.IsChecked = True
                 End If
 
                 SortBaseLevels()
             Else
                 'Sorting = None
-                RadioButton_SortAsc.IsEnabled = False
-                RadioButton_SortDesc.IsEnabled = False
+                Rbtn_SortAsc.IsEnabled = False
+                Rbtn_SortDesc.IsEnabled = False
 
-                ListView_Levels_BasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
+                Lvw_LevelsBasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
             End If
         End Sub
 
         Private Sub ShowNoUserLevels()
-            ListView_Levels_UserPresets.Visibility = Visibility.Collapsed
-            Label_Levels_NoUserPresets.Visibility = Visibility.Visible
+            Lvw_LevelsUserPresets.Visibility = Visibility.Collapsed
+            Lbl_LevelsNoUserPresets.Visibility = Visibility.Visible
         End Sub
 
         Private Sub SortBaseLevels()
-            Dim sortCriterion As SortCriterion = ComboBox_BaseLevelsSorting.SelectedIndex
-            Dim isAscending As Boolean = RadioButton_SortAsc.IsChecked
+            Dim sortCriterion As SortCriterion = Cmbx_BaseLevelsSorting.SelectedIndex
+            Dim isAscending As Boolean = Rbtn_SortAsc.IsChecked
 
-            With ListView_Levels_BasePresets
+            With Lvw_LevelsBasePresets
                 Dim currentLevelPresets As List(Of LevelPreset) = DirectCast(.ItemsSource, List(Of LevelPreset)) 'TODO: check with Compiler option Strict On
 
                 .ItemsSource = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
@@ -308,7 +301,7 @@ Namespace Views
                 End If
 
                 'Display
-                With ListView_Levels_UserPresets
+                With Lvw_LevelsUserPresets
                     .Visibility = Visibility.Visible
                     .ItemsSource = userLevels
                 End With
@@ -321,7 +314,7 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub ListView_Levels_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub Lvw_LevelsBasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 Dim lp As LevelPreset = ReturnSelectedLevels()
 
@@ -330,7 +323,7 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
 
-                e.Handled = True 'Prevent escalating up to "parent" event TabControl_Levels_SelectionChanged()
+                e.Handled = True 'Prevent escalating up to "parent" event Tbc_Levels_SelectionChanged()
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -340,11 +333,11 @@ Namespace Views
 
         'TODO? Factorize in common function?
 
-        Private Sub ListView_Levels_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub Lvw_LevelsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 'Safety fix. SelectedItem is not kept accross tabs, as the content of this one is updated everytime
                 'TODO? Improve
-                If ListView_Levels_UserPresets.SelectedItem Is Nothing Then Return
+                If Lvw_LevelsUserPresets.SelectedItem Is Nothing Then Return
 
                 Dim lp As LevelPreset = ReturnSelectedLevels()
 
@@ -353,7 +346,7 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
 
-                e.Handled = True 'Prevent escalating up to "parent" event TabControl_Levels_SelectionChanged()
+                e.Handled = True 'Prevent escalating up to "parent" event Tbc_Levels_SelectionChanged()
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -364,7 +357,7 @@ Namespace Views
         'TODO? Use XAML
         Private Sub MenuItemView_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim preset As LevelPreset = ListView_Levels_UserPresets.SelectedItem
+                Dim preset As LevelPreset = Lvw_LevelsUserPresets.SelectedItem
 
                 Dim myTextBlock As New TextBlock With {.Margin = New Thickness(10)}
                 For Each pi As PropertyInfo In preset.GetType().GetProperties()
@@ -391,7 +384,7 @@ Namespace Views
 
         Private Sub MenuItemDelete_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim preset As LevelPreset = ListView_Levels_UserPresets.SelectedItem
+                Dim preset As LevelPreset = Lvw_LevelsUserPresets.SelectedItem
 
                 If MessageBox.Show($"Delete preset ""{preset.Name}"" ?", "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question) = Forms.DialogResult.Yes Then
                     'TODO: Secure I/O
@@ -399,7 +392,7 @@ Namespace Views
                     Dim jsonString As String = GetJsonData(jsonFilepath)
                     Dim currentLevels As List(Of LevelPreset) = LoadUserLevels(jsonString) 'TODO? Load from ListView instead as we are here actually
 
-                    Dim presetIdx As Integer = ListView_Levels_UserPresets.Items.IndexOf(preset)
+                    Dim presetIdx As Integer = Lvw_LevelsUserPresets.Items.IndexOf(preset)
                     currentLevels.RemoveAt(presetIdx)
 
                     SaveUserLevels(currentLevels, jsonFilepath)
@@ -411,14 +404,14 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub GroupBox_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
+        Private Sub Gbx_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
 
         ''' <summary>
         ''' Handle multiple file drops onto GroupBox "Levels"
         ''' </summary>
-        Private Sub GroupBox_Levels_Drop(sender As Object, e As DragEventArgs)
+        Private Sub Gbx_Levels_Drop(sender As Object, e As DragEventArgs)
             Try
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
@@ -435,10 +428,10 @@ Namespace Views
                 If confirmedFiles.Count = 0 Then Return
                 SetActiveLvlTab(LVLPRESET_TAB.AddNew)
 
-                If confirmedFiles.Count > 0 Then FillTextBox(TextBox_NewLevel_Iwad, confirmedFiles(0))
-                If confirmedFiles.Count > 1 Then FillTextBox(TextBox_NewLevel_Maps, confirmedFiles(1))
-                If confirmedFiles.Count > 2 Then FillTextBox(TextBox_NewLevel_Misc, confirmedFiles(2))
-                If confirmedFiles.Count > 3 Then FillTextBox(TextBox_NewLevel_Pict, confirmedFiles(3))
+                If confirmedFiles.Count > 0 Then FillTextBox(Tbx_NewLevel_Iwad, confirmedFiles(0))
+                If confirmedFiles.Count > 1 Then FillTextBox(Tbx_NewLevel_Maps, confirmedFiles(1))
+                If confirmedFiles.Count > 2 Then FillTextBox(Tbx_NewLevel_Maps, confirmedFiles(2))
+                If confirmedFiles.Count > 3 Then FillTextBox(Tbx_NewLevel_Pict, confirmedFiles(3))
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -471,10 +464,10 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub Button_NewLevel_Browse_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Btn_NewLevelBrowse_Click(sender As Object, e As RoutedEventArgs)
             Dim btn As Button = sender
 
-            Dim sourceBtn As String = btn.Name.Split("_")(2)
+            Dim sourceBtn As String = btn.Tag.ToString
             Select Case sourceBtn
                 Case "Iwad"
                     Dim dialog As New OpenFileDialog With
@@ -483,7 +476,7 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath("Iwad"),
                         .Title = TBX_SELECT_IWAD
                     }
-                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Iwad, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Iwad, dialog.FileName)
 
                 Case "Maps"
                     Dim dialog As New OpenFileDialog With
@@ -492,7 +485,7 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath("Maps"),
                         .Title = TBX_SELECT_MAPS
                     }
-                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Maps, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Maps, dialog.FileName)
 
                 Case "Misc"
                     Dim dialog As New OpenFileDialog With
@@ -501,7 +494,7 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath("Misc"),
                         .Title = TBX_SELECT_MISC
                     }
-                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Misc, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Misc, dialog.FileName)
 
                 Case "Pict"
                     Dim dialog As New OpenFileDialog With
@@ -510,28 +503,28 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath(), 'Or any other place in user computer?
                         .Title = TBX_SELECT_PICT
                     }
-                    If dialog.ShowDialog() Then FillTextBox(TextBox_NewLevel_Pict, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Pict, dialog.FileName)
 
             End Select
         End Sub
 
-        Private Sub Button_NewLevel_Clear_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Btn_NewLevelClear_Click(sender As Object, e As RoutedEventArgs)
             Dim btn As Button = sender
 
             'Restore default placeholder
-            Dim sourceBtn As String = btn.Name.Split("_")(2)
+            Dim sourceBtn As String = btn.Tag.ToString
             Select Case sourceBtn
-                Case "Iwad" : UnfillTextBox(TextBox_NewLevel_Iwad, TBX_DROP_IWAD)
-                Case "Maps" : UnfillTextBox(TextBox_NewLevel_Maps, TBX_DROP_MAPS)
-                Case "Misc" : UnfillTextBox(TextBox_NewLevel_Misc, TBX_DROP_MISC)
-                Case "Pict" : UnfillTextBox(TextBox_NewLevel_Pict, TBX_DROP_PICT)
+                Case "Iwad" : UnfillTextBox(Tbx_NewLevel_Iwad, TBX_DROP_IWAD)
+                Case "Maps" : UnfillTextBox(Tbx_NewLevel_Maps, TBX_DROP_MAPS)
+                Case "Misc" : UnfillTextBox(Tbx_NewLevel_Misc, TBX_DROP_MISC)
+                Case "Pict" : UnfillTextBox(Tbx_NewLevel_Pict, TBX_DROP_PICT)
             End Select
         End Sub
 
-        Private Sub Button_NewLevel_Try_Click(sender As Object, e As RoutedEventArgs)
-            Dim iwadInput As String = TextBox_NewLevel_Iwad.Text
-            Dim mapsInput As String = TextBox_NewLevel_Maps.Text
-            Dim miscInput As String = TextBox_NewLevel_Misc.Text
+        Private Sub Btn_NewLevelTry_Click(sender As Object, e As RoutedEventArgs)
+            Dim iwadInput As String = Tbx_NewLevel_Iwad.Text
+            Dim mapsInput As String = Tbx_NewLevel_Maps.Text
+            Dim miscInput As String = Tbx_NewLevel_Misc.Text
 
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
@@ -549,10 +542,10 @@ Namespace Views
             DecorateCommand()
         End Sub
 
-        Private Sub Button_NewLevel_SaveAs_Click(sender As Object, e As RoutedEventArgs)
-            Dim iwadInput As String = TextBox_NewLevel_Iwad.Text
-            Dim mapsInput As String = TextBox_NewLevel_Maps.Text
-            Dim miscInput As String = TextBox_NewLevel_Misc.Text
+        Private Sub Btn_NewLevelSaveAs_Click(sender As Object, e As RoutedEventArgs)
+            Dim iwadInput As String = Tbx_NewLevel_Iwad.Text
+            Dim mapsInput As String = Tbx_NewLevel_Maps.Text
+            Dim miscInput As String = Tbx_NewLevel_Misc.Text
 
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
@@ -587,11 +580,11 @@ Namespace Views
             MessageBox.Show($"New user level preset ""{FAKENAME}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
         End Sub
 
-        Private Sub Button_NewLevel_ClearAll_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(TextBox_NewLevel_Iwad, TBX_DROP_IWAD)
-            UnfillTextBox(TextBox_NewLevel_Maps, TBX_DROP_MAPS)
-            UnfillTextBox(TextBox_NewLevel_Misc, TBX_DROP_MISC)
-            UnfillTextBox(TextBox_NewLevel_Pict, TBX_DROP_PICT)
+        Private Sub Btn_NewLevelClearAll_Click(sender As Object, e As RoutedEventArgs)
+            UnfillTextBox(Tbx_NewLevel_Iwad, TBX_DROP_IWAD)
+            UnfillTextBox(Tbx_NewLevel_Maps, TBX_DROP_MAPS)
+            UnfillTextBox(Tbx_NewLevel_Misc, TBX_DROP_MISC)
+            UnfillTextBox(Tbx_NewLevel_Pict, TBX_DROP_PICT)
         End Sub
 
 #End Region
@@ -599,12 +592,12 @@ Namespace Views
 
 #Region "Events - Mods"
 
-        Private Sub ListView_Mods_BasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub Lvw_ModsBasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 Dim mp As ModPreset = ReturnSelectedMods()
 
-                TextBlock_Mods_Desc.Text = mp.Desc
-                ListView_Mods_Files.ItemsSource = mp.Files.Where(Function(f As String) Not f = String.Empty) 'Exclude empty filenames
+                Tbk_ModsDesc.Text = mp.Desc
+                Lvw_ModsFiles.ItemsSource = mp.Files.Where(Function(f As String) Not f = String.Empty) 'Exclude empty filenames
                 UpdateMods_Summary(mp.Files)
                 UpdateCommand()
                 DecorateCommand()
@@ -615,7 +608,7 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub ListView_Mods_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+        Private Sub Lvw_ModsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 'TODO
             Catch ex As Exception
@@ -855,7 +848,7 @@ Namespace Views
 
         Private Sub DecorateCommand()
             Try
-                Dim completeRange As New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd)
+                Dim completeRange As New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd)
                 Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
                 Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped = 4 for each path as in ""complete_path""
 
@@ -887,7 +880,7 @@ Namespace Views
                 Dim flow As New FlowDocument()
                 flow.Blocks.Add(para)
 
-                RichTextBox_Command.Document = flow
+                Rtb_Command.Document = flow
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {content}")
@@ -904,7 +897,7 @@ Namespace Views
                 Dim iwad As String = TextBox_Summary_Iwad.Text
 
                 If port = String.Empty Or iwad = String.Empty Then
-                    RichTextBox_Command.Document.Blocks.Clear() 'TODO? Display text about Missing Port & Iwad ?
+                    Rtb_Command.Document.Blocks.Clear() 'TODO? Display text about Missing Port & Iwad ?
                     Return
                 End If
 
@@ -931,10 +924,10 @@ Namespace Views
             Try
                 Select Case GetActiveLvlTab()
                     Case LVLPRESET_TAB.Base
-                        preset = DirectCast(ListView_Levels_BasePresets.SelectedItem, LevelPreset)
+                        preset = DirectCast(Lvw_LevelsBasePresets.SelectedItem, LevelPreset)
 
                     Case LVLPRESET_TAB.User
-                        preset = DirectCast(ListView_Levels_UserPresets.SelectedItem, LevelPreset)
+                        preset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
 
                     Case LVLPRESET_TAB.AddNew
                         'TODO
@@ -998,10 +991,10 @@ Namespace Views
             Try
                 Select Case GetActiveModTab()
                     Case MODPRESET_TAB.Base
-                        preset = DirectCast(ListView_Mods_BasePresets.SelectedItem, ModPreset)
+                        preset = DirectCast(Lvw_ModsBasePresets.SelectedItem, ModPreset)
 
                     Case MODPRESET_TAB.User
-                        preset = DirectCast(ListView_Mods_BasePresets.SelectedItem, ModPreset)
+                        preset = DirectCast(Lvw_ModsBasePresets.SelectedItem, ModPreset) 'TODO: Update with Lvw_UserPresets
 
                     Case MODPRESET_TAB.AddNew
                         'TODO
@@ -1085,7 +1078,7 @@ Namespace Views
 
         Private Sub LaunchGame()
             Try
-                Dim rtbText As String = New TextRange(RichTextBox_Command.Document.ContentStart, RichTextBox_Command.Document.ContentEnd).Text
+                Dim rtbText As String = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
 
                 Dim cmdExe As New ProcessStartInfo("cmd.exe") With
                 {
