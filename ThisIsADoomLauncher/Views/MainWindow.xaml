@@ -442,9 +442,17 @@
                             
                         </Grid>
                     </TabItem>
-                    <TabItem Header="User presets" IsEnabled="False">
+                    <TabItem Header="User presets">
                         <Grid>
                             <Label x:Name="Label_Mods_NoUserPresets" Style="{StaticResource Label_NoUserPresets}"/>
+
+                            <ListView x:Name="ListView_Mods_UserPresets"
+                                        SelectionChanged="ListView_Mods_UserPresets_SelectionChanged"
+                                        Margin="-3"
+                                        Visibility="Collapsed">
+                                <!-- TODO -->
+                            </ListView>
+
                         </Grid>
                     </TabItem>
                     <TabItem Header="Add new preset" IsEnabled="False">

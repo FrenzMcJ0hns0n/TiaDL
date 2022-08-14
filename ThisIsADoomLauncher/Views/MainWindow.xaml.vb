@@ -615,6 +615,15 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub ListView_Mods_UserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+            Try
+                'TODO
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
 #End Region
 
 
