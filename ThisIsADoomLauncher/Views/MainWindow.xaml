@@ -53,6 +53,14 @@
             <EventSetter Event="Checked" Handler="SortBaseLevels"/>
             <EventSetter Event="Unchecked" Handler="SortBaseLevels"/>
         </Style>
+
+        <Style x:Key="Label_NoUserPresets" TargetType="{x:Type Label}">
+            <Setter Property="Content" Value="No user presets found"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
     </Window.Resources>
     
     <Grid>
@@ -216,11 +224,7 @@
                     <TabItem Header="User presets">
                         <Grid>
                             
-                            <Label x:Name="Label_Levels_NoUserPresets"
-                                   HorizontalAlignment="Center" VerticalAlignment="Center"
-                                   FontSize="20" Foreground="Gray"
-                                   Content="No user presets found"
-                                   />
+                            <Label x:Name="Label_Levels_NoUserPresets" Style="{StaticResource Label_NoUserPresets}"/>
                             
                             <ListView x:Name="ListView_Levels_UserPresets"
                                         SelectionChanged="ListView_Levels_UserPresets_SelectionChanged"
@@ -440,12 +444,7 @@
                     </TabItem>
                     <TabItem Header="User presets" IsEnabled="False">
                         <Grid>
-                            <Label x:Name="Label_Mods_NoUserPresets"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontSize="20"
-                                    Foreground="Gray"
-                                    Content="No user presets found"/>
+                            <Label x:Name="Label_Mods_NoUserPresets" Style="{StaticResource Label_NoUserPresets}"/>
                         </Grid>
                     </TabItem>
                     <TabItem Header="Add new preset" IsEnabled="False">
