@@ -617,6 +617,34 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub Grid_NewModFiles_Drop(sender As Object, e As DragEventArgs)
+            Try
+                'Accept files only
+                If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
+
+                Dim modFilepaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                If modFilepaths.Length > 0 Then
+                    Lbl_NewModFiles.Visibility = Visibility.Collapsed
+                    Dtg_NewModFiles.Visibility = Visibility.Visible
+                End If
+
+                Dim modFiles As New List(Of Tuple(Of String, String, String))
+                For Each filepath As String In modFilepaths
+                    Dim fi As New FileInfo(filepath)
+                    modFiles.Add(New Tuple(Of String, String, String)(fi.Name, fi.Extension, fi.FullName)) 'Not sure
+                Next
+                Dtg_NewModFiles.ItemsSource = modFiles
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
+        Private Sub Grid_NewModFiles_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
 #End Region
 
 
