@@ -1,4 +1,5 @@
 ﻿Imports Microsoft.Win32
+Imports System.Collections.ObjectModel
 Imports System.IO
 Imports System.Reflection
 Imports System.Text
@@ -617,21 +618,34 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub Btn_NewModFilesClear_Click()
+            Dtg_NewModFiles.ItemsSource = Nothing
+            Dtg_NewModFiles.Visibility = Visibility.Collapsed
+            Lbl_NewModFiles.Visibility = Visibility.Visible
+        End Sub
+
         Private Sub Grid_NewModFiles_Drop(sender As Object, e As DragEventArgs)
             Try
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-                Dim modFilepaths As String() = e.Data.GetData(DataFormats.FileDrop)
-                If modFilepaths.Length > 0 Then
+                Dim modFiles As ObservableCollection(Of InputFile) = If(Dtg_NewModFiles.ItemsSource Is Nothing,
+                                                                       New ObservableCollection(Of InputFile),
+                                                                       DirectCast(Dtg_NewModFiles.ItemsSource, ObservableCollection(Of InputFile)))
+
+                If modFiles.Count = 0 Then
                     Lbl_NewModFiles.Visibility = Visibility.Collapsed
                     Dtg_NewModFiles.Visibility = Visibility.Visible
                 End If
 
-                Dim modFiles As New List(Of Tuple(Of String, String, String))
-                For Each filepath As String In modFilepaths
-                    Dim fi As New FileInfo(filepath)
-                    modFiles.Add(New Tuple(Of String, String, String)(fi.Name, fi.Extension, fi.FullName)) 'Not sure
+
+                For Each droppedFile As String In e.Data.GetData(DataFormats.FileDrop)
+                    Dim fi As New FileInfo(droppedFile)
+
+                    Dim iFile As New InputFile(fi.Name, fi.Extension, fi.Directory.ToString)
+                    iFile.CutDirectoryPath()
+
+                    modFiles.Add(iFile)
                 Next
                 Dtg_NewModFiles.ItemsSource = modFiles
 
@@ -1181,6 +1195,10 @@ Namespace Views
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
+        End Sub
+
+        Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
+
         End Sub
 
 #End Region
