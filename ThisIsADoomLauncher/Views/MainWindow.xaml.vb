@@ -642,10 +642,9 @@ Namespace Views
                 For Each droppedFile As String In e.Data.GetData(DataFormats.FileDrop)
                     Dim fi As New FileInfo(droppedFile)
 
-                    Dim iFile As New InputFile(fi.Name, fi.Extension, fi.Directory.ToString)
-                    iFile.CutDirectoryPath()
+                    'Dim iFile As New InputFile(fi.Name, fi.Directory.ToString)
 
-                    modFiles.Add(iFile)
+                    modFiles.Add(New InputFile(fi.Name, fi.Directory.ToString))
                 Next
                 Dtg_NewModFiles.ItemsSource = modFiles
 
@@ -657,6 +656,35 @@ Namespace Views
 
         Private Sub Grid_NewModFiles_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
+        End Sub
+
+        Private Sub Dtg_NewModFiles_LoadingRow(sender As Object, e As DataGridRowEventArgs)
+            e.Row.Header = (e.Row.GetIndex + 1).ToString
+        End Sub
+
+        Private Sub Btn_NewModTry_Click(sender As Object, e As RoutedEventArgs)
+            If Dtg_NewModFiles.ItemsSource Is Nothing Then Return
+
+            'Gather modFiles
+            Dim modFiles As New List(Of String)
+            Dim iFiles As ObservableCollection(Of InputFile) = DirectCast(Dtg_NewModFiles.ItemsSource, ObservableCollection(Of InputFile))
+            iFiles.ToList().ForEach(Sub(iFile As InputFile) modFiles.Add(Path.Combine(iFile.Directory, iFile.Name)))
+
+            UpdateMods_Summary(modFiles)
+            UpdateCommand()
+            DecorateCommand()
+        End Sub
+
+        Private Sub Btn_NewModSave_Click(sender As Object, e As RoutedEventArgs)
+            'TODO
+        End Sub
+
+        Private Sub Btn_NewModClearAll_Click(sender As Object, e As RoutedEventArgs)
+            'TODO: Use UnfillTextBox(Tbx, Placeholder) + Set placeholders
+            Tbx_NewModName.Text = String.Empty
+            Tbx_NewModDesc.Text = String.Empty
+
+            Btn_NewModFilesClear_Click()
         End Sub
 
 #End Region
@@ -1195,10 +1223,6 @@ Namespace Views
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
-        End Sub
-
-        Private Sub Button_Click(sender As Object, e As RoutedEventArgs)
-
         End Sub
 
 #End Region
