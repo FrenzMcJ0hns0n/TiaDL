@@ -265,26 +265,26 @@
                             </Grid.ColumnDefinitions>
 
                             <Label Style="{StaticResource Lbl_NewLevel}"  Content="Iwad :" Grid.Column="1" Grid.Row="1"/>
-                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevel_Iwad" Grid.Column="2" Grid.Row="1"
+                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelIwad" Grid.Column="2" Grid.Row="1" Tag="Iwad"
                                      Text="Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"/>
                             <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="1" Tag="Iwad"/>
                             <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="1" Tag="Iwad"/>
 
                             <Label Style="{StaticResource Lbl_NewLevel}" Content="Maps :" Grid.Column="1" Grid.Row="3"/>
-                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevel_Maps" Grid.Column="2" Grid.Row="3" 
+                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelMaps" Grid.Column="2" Grid.Row="3" Tag="Maps"
                                      Text="Drop Maps file... (.wad/.pk3)"/>
                             <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="3" Tag="Maps"/>
                             <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="3" Tag="Maps"/>
 
                             <Label Style="{StaticResource Lbl_NewLevel}" Content="Misc. :" Grid.Column="1" Grid.Row="5"/>
-                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevel_Misc" Grid.Column="2" Grid.Row="5"
+                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelMisc" Grid.Column="2" Grid.Row="5" Tag="Misc"
                                      Text="Drop Misc. file... (.deh/.bex/.txt)"/>
                             <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="5" Tag="Misc"/>
                             <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="5" Tag="Misc"/>
 
                             <Label Style="{StaticResource Lbl_NewLevel}" Content="Image :" Grid.Column="1" Grid.Row="7"/>
-                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevel_Pict" Grid.Column="2" Grid.Row="7"
-                                     Text="Drop Image file... (.jpg/.png)"/>
+                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelPict" Grid.Column="2" Grid.Row="7" Tag="Pict"
+                                     Text="Drop Image file... (.jpg/.png)" />
                             <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="7" Tag="Pict"/>
                             <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="7" Tag="Pict"/>
 

@@ -429,10 +429,10 @@ Namespace Views
                 If confirmedFiles.Count = 0 Then Return
                 SetActiveLvlTab(LVLPRESET_TAB.AddNew)
 
-                If confirmedFiles.Count > 0 Then FillTextBox(Tbx_NewLevel_Iwad, confirmedFiles(0))
-                If confirmedFiles.Count > 1 Then FillTextBox(Tbx_NewLevel_Maps, confirmedFiles(1))
-                If confirmedFiles.Count > 2 Then FillTextBox(Tbx_NewLevel_Maps, confirmedFiles(2))
-                If confirmedFiles.Count > 3 Then FillTextBox(Tbx_NewLevel_Pict, confirmedFiles(3))
+                If confirmedFiles.Count > 0 Then FillTextBox(Tbx_NewLevelIwad, confirmedFiles(0))
+                If confirmedFiles.Count > 1 Then FillTextBox(Tbx_NewLevelMaps, confirmedFiles(1))
+                If confirmedFiles.Count > 2 Then FillTextBox(Tbx_NewLevelMisc, confirmedFiles(2))
+                If confirmedFiles.Count > 3 Then FillTextBox(Tbx_NewLevelPict, confirmedFiles(3))
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -456,7 +456,7 @@ Namespace Views
                     Return
                 End If
 
-                Dim sourceTbx As String = tbx.Name.Split("_")(2) 'Iwad, Maps, Misc, Pict
+                Dim sourceTbx As String = tbx.Tag 'Iwad, Maps, Misc, Pict
                 If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
 
             Catch ex As Exception
@@ -477,7 +477,7 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath("Iwad"),
                         .Title = TBX_SELECT_IWAD
                     }
-                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Iwad, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevelIwad, dialog.FileName)
 
                 Case "Maps"
                     Dim dialog As New OpenFileDialog With
@@ -486,7 +486,7 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath("Maps"),
                         .Title = TBX_SELECT_MAPS
                     }
-                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Maps, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevelMaps, dialog.FileName)
 
                 Case "Misc"
                     Dim dialog As New OpenFileDialog With
@@ -495,7 +495,7 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath("Misc"),
                         .Title = TBX_SELECT_MISC
                     }
-                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Misc, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevelMisc, dialog.FileName)
 
                 Case "Pict"
                     Dim dialog As New OpenFileDialog With
@@ -504,7 +504,7 @@ Namespace Views
                         .InitialDirectory = GetDirectoryPath(), 'Or any other place in user computer?
                         .Title = TBX_SELECT_PICT
                     }
-                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevel_Pict, dialog.FileName)
+                    If dialog.ShowDialog() Then FillTextBox(Tbx_NewLevelPict, dialog.FileName)
 
             End Select
         End Sub
@@ -515,17 +515,17 @@ Namespace Views
             'Restore default placeholder
             Dim sourceBtn As String = btn.Tag.ToString
             Select Case sourceBtn
-                Case "Iwad" : UnfillTextBox(Tbx_NewLevel_Iwad, TBX_DROP_IWAD)
-                Case "Maps" : UnfillTextBox(Tbx_NewLevel_Maps, TBX_DROP_MAPS)
-                Case "Misc" : UnfillTextBox(Tbx_NewLevel_Misc, TBX_DROP_MISC)
-                Case "Pict" : UnfillTextBox(Tbx_NewLevel_Pict, TBX_DROP_PICT)
+                Case "Iwad" : UnfillTextBox(Tbx_NewLevelIwad, TBX_DROP_IWAD)
+                Case "Maps" : UnfillTextBox(Tbx_NewLevelMaps, TBX_DROP_MAPS)
+                Case "Misc" : UnfillTextBox(Tbx_NewLevelMisc, TBX_DROP_MISC)
+                Case "Pict" : UnfillTextBox(Tbx_NewLevelPict, TBX_DROP_PICT)
             End Select
         End Sub
 
         Private Sub Btn_NewLevelTry_Click(sender As Object, e As RoutedEventArgs)
-            Dim iwadInput As String = Tbx_NewLevel_Iwad.Text
-            Dim mapsInput As String = Tbx_NewLevel_Maps.Text
-            Dim miscInput As String = Tbx_NewLevel_Misc.Text
+            Dim iwadInput As String = Tbx_NewLevelIwad.Text
+            Dim mapsInput As String = Tbx_NewLevelMaps.Text
+            Dim miscInput As String = Tbx_NewLevelMisc.Text
 
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
@@ -544,9 +544,9 @@ Namespace Views
         End Sub
 
         Private Sub Btn_NewLevelSaveAs_Click(sender As Object, e As RoutedEventArgs)
-            Dim iwadInput As String = Tbx_NewLevel_Iwad.Text
-            Dim mapsInput As String = Tbx_NewLevel_Maps.Text
-            Dim miscInput As String = Tbx_NewLevel_Misc.Text
+            Dim iwadInput As String = Tbx_NewLevelIwad.Text
+            Dim mapsInput As String = Tbx_NewLevelMaps.Text
+            Dim miscInput As String = Tbx_NewLevelMisc.Text
 
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
@@ -582,10 +582,10 @@ Namespace Views
         End Sub
 
         Private Sub Btn_NewLevelClearAll_Click(sender As Object, e As RoutedEventArgs)
-            UnfillTextBox(Tbx_NewLevel_Iwad, TBX_DROP_IWAD)
-            UnfillTextBox(Tbx_NewLevel_Maps, TBX_DROP_MAPS)
-            UnfillTextBox(Tbx_NewLevel_Misc, TBX_DROP_MISC)
-            UnfillTextBox(Tbx_NewLevel_Pict, TBX_DROP_PICT)
+            UnfillTextBox(Tbx_NewLevelIwad, TBX_DROP_IWAD)
+            UnfillTextBox(Tbx_NewLevelMaps, TBX_DROP_MAPS)
+            UnfillTextBox(Tbx_NewLevelMisc, TBX_DROP_MISC)
+            UnfillTextBox(Tbx_NewLevelPict, TBX_DROP_PICT)
         End Sub
 
 #End Region
