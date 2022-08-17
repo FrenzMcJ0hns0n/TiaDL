@@ -674,7 +674,32 @@ Namespace Views
         End Sub
 
         Private Sub Btn_NewModSave_Click(sender As Object, e As RoutedEventArgs)
-            'TODO
+
+            Return 'To be continued...
+
+            'TODO: Check user inputs
+
+            'TODO: Create JSON file to use
+            Dim jsonFilepath As String = GetJsonFilepath("UserMods")
+            Dim jsonString As String = GetJsonData(jsonFilepath)
+
+            Dim FAKENAME As String = $"Fake name (created on {Now:yyyy-MM-dd_HH-mm-ss})"
+
+            'Gather modFiles
+            Dim modFiles As New List(Of String)
+            Dim iFiles As ObservableCollection(Of InputFile) = DirectCast(Dtg_NewModFiles.ItemsSource, ObservableCollection(Of InputFile))
+            iFiles.ToList().ForEach(Sub(iFile As InputFile) modFiles.Add(Path.Combine(iFile.Directory, iFile.Name)))
+
+            Dim currentMods As List(Of ModPreset) = LoadUserMods(jsonString)
+            currentMods.Add(New ModPreset With
+            {
+                .Name = FAKENAME,
+                .Desc = "",
+                .Files = modFiles,
+                .Pict = "" 'TODO: Manage this input
+            })
+            SaveUserMods(currentMods, jsonFilepath)
+            MessageBox.Show($"New user mod preset ""{FAKENAME}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
         End Sub
 
         Private Sub Btn_NewModClearAll_Click(sender As Object, e As RoutedEventArgs)
