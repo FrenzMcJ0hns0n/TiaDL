@@ -563,20 +563,18 @@ Namespace Views
             Dim FAKENAME As String = $"Fake name (created on {Now:yyyy-MM-dd_HH-mm-ss})"
 
             Dim currentLevels As List(Of LevelPreset) = LoadUserLevels(jsonString)
-            currentLevels.Add(
-                New LevelPreset With
-                {
-                    .Name = FAKENAME,
-                    .Iwad = iwadInput,
-                    .Maps = mapsInput,
-                    .Misc = If(miscInput = TBX_DROP_MISC,
-                               String.Empty,
-                               miscInput),
-                    .Type = "", 'TODO: If iwadInput.ToLowerInvariant.Contains(doom2.wad) Then "Doom 2" Else "Doom 1", etc.
-                    .Year = Now.Year,
-                    .Pict = "" 'TODO: Manage this input
-                }
-            )
+            currentLevels.Add(New LevelPreset With
+            {
+                .Name = FAKENAME,
+                .Iwad = iwadInput,
+                .Maps = mapsInput,
+                .Misc = If(miscInput = TBX_DROP_MISC,
+                            String.Empty,
+                            miscInput),
+                .Type = If(iwadInput.ToLowerInvariant.Contains("doom2.wad"), "Doom 2", "Doom 1"),
+                .Year = Now.Year,
+                .Pict = "" 'TODO: Manage this input
+            })
             SaveUserLevels(currentLevels, jsonFilepath)
             MessageBox.Show($"New user level preset ""{FAKENAME}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
         End Sub
