@@ -230,8 +230,8 @@
                                 </ListView.ItemTemplate>
                                 <ListView.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="View details" Click="MenuItemView_Click"/>
-                                        <MenuItem Header="Delete preset" Click="MenuItemDelete_Click"/>
+                                        <MenuItem Header="View details" Click="MenuItemLevelView_Click"/>
+                                        <MenuItem Header="Delete preset" Click="MenuItemLevelDelete_Click"/>
                                     </ContextMenu>
                                 </ListView.ContextMenu>
                             </ListView>
@@ -324,7 +324,7 @@
         <!-- Mods -->
         <GroupBox Grid.Column="1" Grid.Row="5" Header="Mods">
             <Grid Margin="8">
-                <TabControl x:Name="Tbc_Mods">
+                <TabControl x:Name="Tbc_Mods" SelectionChanged="Tbc_Mods_SelectionChanged">
                     <TabItem Header="Base presets">
                         <Grid>
 
@@ -360,7 +360,20 @@
                             <Label x:Name="Lbl_ModsNoUserPresets" Style="{StaticResource Lbl_NoUserPresets}"/>
 
                             <ListView x:Name="Lvw_ModsUserPresets" Margin="-3" SelectionChanged="Lvw_ModsUserPresets_SelectionChanged" Visibility="Collapsed">
-                                <!-- TODO -->
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Height="31.5" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ImgConverter}}"/>
+                                            <TextBlock FontSize="11.5" FontWeight="DemiBold" Margin="6 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="View details" Click="MenuItemModView_Click"/>
+                                        <MenuItem Header="Delete preset" Click="MenuItemModDelete_Click"/>
+                                    </ContextMenu>
+                                </ListView.ContextMenu>
                             </ListView>
 
                         </Grid>

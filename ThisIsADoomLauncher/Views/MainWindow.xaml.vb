@@ -355,8 +355,8 @@ Namespace Views
             End Try
         End Sub
 
-        'TODO? Use XAML
-        Private Sub MenuItemView_Click(sender As Object, e As RoutedEventArgs)
+        'TODO? Generate window with XAML
+        Private Sub MenuItemLevelView_Click(sender As Object, e As RoutedEventArgs)
             Try
                 Dim preset As LevelPreset = Lvw_LevelsUserPresets.SelectedItem
 
@@ -383,7 +383,7 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub MenuItemDelete_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub MenuItemLevelDelete_Click(sender As Object, e As RoutedEventArgs)
             Try
                 Dim preset As LevelPreset = Lvw_LevelsUserPresets.SelectedItem
 
@@ -591,6 +591,57 @@ Namespace Views
 
 #Region "Events - Mods"
 
+        Private Sub Tbc_Mods_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
+
+            Select Case GetActiveModTab()
+                Case MODPRESET_TAB.Base '...
+                Case MODPRESET_TAB.User : PopulateUserMods() 'Refresh each time
+                Case MODPRESET_TAB.AddNew '...
+            End Select
+
+        End Sub
+
+        Private Sub ShowNoUserMods()
+            Lvw_ModsUserPresets.Visibility = Visibility.Collapsed
+            Lbl_ModsNoUserPresets.Visibility = Visibility.Visible
+        End Sub
+
+        Private Sub PopulateUserMods()
+            Try
+                Dim jsonFilepath As String = GetJsonFilepath("UserMods")
+                If Not File.Exists(jsonFilepath) Then
+                    MessageBox.Show("No local JSON file to load data from: use the ""Add new preset"" tab to create some", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Information)
+                    Return 'Early return
+                End If
+
+                Dim jsonString As String = GetJsonData(jsonFilepath)
+
+                If Not CanLoadJsonArray(jsonString) Then
+                    MessageBox.Show("Unable to read user mod presets from local JSON file", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                    ShowNoUserMods()
+                    Return 'Early return
+                End If
+
+                Dim userMods As List(Of ModPreset) = LoadUserMods(jsonString)
+                If userMods.Count = 0 Then
+                    ShowNoUserMods()
+                    Return 'Early return
+                End If
+
+                'Display
+                With Lvw_ModsUserPresets
+                    .Visibility = Visibility.Visible
+                    .ItemsSource = userMods
+                End With
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+
+                ShowNoUserMods()
+            End Try
+        End Sub
+
         Private Sub Lvw_ModsBasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 Dim mp As ModPreset = ReturnSelectedMods()
@@ -601,6 +652,8 @@ Namespace Views
                 UpdateCommand()
                 DecorateCommand()
 
+                e.Handled = True 'Prevent escalating up to "parent" event Tbc_Mods_SelectionChanged()
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -609,11 +662,32 @@ Namespace Views
 
         Private Sub Lvw_ModsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
-                'TODO
+                'Safety fix. SelectedItem is not kept accross tabs, as the content of this one is updated everytime
+                'TODO? Improve
+                If Lvw_ModsUserPresets.SelectedItem Is Nothing Then Return
+
+                Dim mp As ModPreset = ReturnSelectedMods()
+
+                UpdateMods_Summary(mp.Files)
+                UpdateCommand()
+                DecorateCommand()
+
+                e.Handled = True 'Prevent escalating up to "parent" event Tbc_Mods_SelectionChanged()
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
+        End Sub
+
+        Private Sub MenuItemModView_Click(sender As Object, e As RoutedEventArgs)
+            'TODO
+            MessageBox.Show("You clicked ""View details""")
+        End Sub
+
+        Private Sub MenuItemModDelete_Click(sender As Object, e As RoutedEventArgs)
+            'TODO
+            MessageBox.Show("You clicked ""Delete preset""")
         End Sub
 
         Private Sub Btn_NewModFilesClear_Click()
@@ -675,31 +749,37 @@ Namespace Views
 
         Private Sub Btn_NewModSave_Click(sender As Object, e As RoutedEventArgs)
 
-            Return 'To be continued...
+            If Dtg_NewModFiles.ItemsSource Is Nothing Then
+                MessageBox.Show("No mod files found: those are mandatory to save a new user mod", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                Return 'Early return
+            End If
 
-            'TODO: Check user inputs
+            If Tbx_NewModName.Text = String.Empty Then
+                MessageBox.Show("A new preset requires a name in order to be saved", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                Return 'Early return
+            End If
 
-            'TODO: Create JSON file to use
+            'Get current user mods
             Dim jsonFilepath As String = GetJsonFilepath("UserMods")
             Dim jsonString As String = GetJsonData(jsonFilepath)
-
-            Dim FAKENAME As String = $"Fake name (created on {Now:yyyy-MM-dd_HH-mm-ss})"
+            Dim currentMods As List(Of ModPreset) = LoadUserMods(jsonString)
 
             'Gather modFiles
             Dim modFiles As New List(Of String)
             Dim iFiles As ObservableCollection(Of InputFile) = DirectCast(Dtg_NewModFiles.ItemsSource, ObservableCollection(Of InputFile))
             iFiles.ToList().ForEach(Sub(iFile As InputFile) modFiles.Add(Path.Combine(iFile.Directory, iFile.Name)))
 
-            Dim currentMods As List(Of ModPreset) = LoadUserMods(jsonString)
+            'Append new preset
             currentMods.Add(New ModPreset With
             {
-                .Name = FAKENAME,
+                .Name = Tbx_NewModName.Text,
                 .Desc = "",
                 .Files = modFiles,
                 .Pict = "" 'TODO: Manage this input
             })
             SaveUserMods(currentMods, jsonFilepath)
-            MessageBox.Show($"New user mod preset ""{FAKENAME}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
+            MessageBox.Show($"New user mod preset ""{Tbx_NewModName.Text}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
+
         End Sub
 
         Private Sub Btn_NewModClearAll_Click(sender As Object, e As RoutedEventArgs)
@@ -1086,7 +1166,7 @@ Namespace Views
                         preset = DirectCast(Lvw_ModsBasePresets.SelectedItem, ModPreset)
 
                     Case MODPRESET_TAB.User
-                        preset = DirectCast(Lvw_ModsBasePresets.SelectedItem, ModPreset) 'TODO: Update with Lvw_UserPresets
+                        preset = DirectCast(Lvw_ModsUserPresets.SelectedItem, ModPreset)
 
                     Case MODPRESET_TAB.AddNew
                         'TODO
