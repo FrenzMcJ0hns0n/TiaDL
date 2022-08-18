@@ -115,6 +115,13 @@
             <Setter Property="Margin" Value="0 1 0 0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
+
+        <Style x:Key="Stkp_SummaryEntries" TargetType="{x:Type StackPanel}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="0 1 0 0"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
         
     </Window.Resources>
     
@@ -467,17 +474,13 @@
                     <TextBox Style="{StaticResource Tbx_SummaryEntries}" x:Name="TextBox_Summary_Port" Grid.Column="2" Grid.Row="1"/>
 
                     <Label Style="{StaticResource Lbl_SummaryEntries}" Grid.Column="1" Grid.Row="2" Content="Params :"/>
-                    <StackPanel x:Name="Stkp_SummaryPortParameters" Grid.Column="2" Grid.Row="2"
-                                HorizontalAlignment="Stretch" Margin="0 1 0 0" Orientation="Horizontal" VerticalAlignment="Center">
-                        <!-- TODO -->
-                    </StackPanel>
+                    <StackPanel Style="{StaticResource Stkp_SummaryEntries}" x:Name="Stkp_SummaryPortParameters" Grid.Column="2" Grid.Row="2"/>
 
                     <Label Style="{StaticResource Lbl_SummaryEntries}" Content="Iwad :" Grid.Column="1" Grid.Row="3"/>
                     <TextBox Style="{StaticResource Tbx_SummaryEntries}" x:Name="TextBox_Summary_Iwad" Grid.Column="2" Grid.Row="3"/>
 
                     <Label Style="{StaticResource Lbl_SummaryEntries}" Content="Files :" Grid.Column="1" Grid.Row="4"/>
-                    <StackPanel x:Name="Stkp_SummaryFilesMods" Grid.Column="2" Grid.Row="4" 
-                                HorizontalAlignment="Stretch" Margin="0 1 0 0" Orientation="Horizontal" VerticalAlignment="Center"/>
+                    <StackPanel Style="{StaticResource Stkp_SummaryEntries}" x:Name="Stkp_SummaryFilesMods" Grid.Column="2" Grid.Row="4"/>
                 </Grid>
                 
                 <Grid x:Name="Grid_Command" Margin="8" Visibility="Collapsed">
