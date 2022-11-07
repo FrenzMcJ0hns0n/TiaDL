@@ -815,9 +815,11 @@ Namespace Views
                 If Grid_Summary.Visibility = Visibility.Visible Then
                     Grid_Summary.Visibility = Visibility.Collapsed
                     Grid_Command.Visibility = Visibility.Visible
+                    Grp_Summary.Header = "Command line"
                 Else
                     Grid_Summary.Visibility = Visibility.Visible
                     Grid_Command.Visibility = Visibility.Collapsed
+                    Grp_Summary.Header = "Summary"
                 End If
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -889,6 +891,7 @@ Namespace Views
             Return New TextBox() With
             {
                 .Background = If(target = "Level", Brushes.White, Brushes.LightGray),
+                .BorderBrush = Brushes.LightGray,
                 .Cursor = Cursors.Arrow,
                 .IsReadOnly = True,
                 .Margin = New Thickness(0, 0, 6, 0),
