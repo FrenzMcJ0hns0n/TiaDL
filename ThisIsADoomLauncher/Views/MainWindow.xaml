@@ -140,11 +140,11 @@
             <RowDefinition Height="12" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="13" />
+            <ColumnDefinition Width="12" />
             <ColumnDefinition Width="18*" />
-            <ColumnDefinition Width="13" />
+            <ColumnDefinition Width="12" />
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="13" />
+            <ColumnDefinition Width="12" />
         </Grid.ColumnDefinitions>
 
         <!-- Port -->
