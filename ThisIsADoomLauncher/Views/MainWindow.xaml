@@ -170,12 +170,12 @@
                 </Grid>
 
                 <StackPanel x:Name="Stkp_PortParams" Grid.Row="1" Orientation="Horizontal">
-                    <!-- TODO -->
+                    <!-- WiP -->
                 </StackPanel>
                 <TextBox x:Name="Tbx_PortParameters" Cursor="Arrow" Grid.Row="1" HorizontalContentAlignment="Center"
-                         IsReadOnly="True" Text="+ 0 parameters" VerticalContentAlignment="Center"
+                         IsReadOnly="True" Text="+ 0 parameters" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="10000" VerticalContentAlignment="Center"
                          />
-                <Button x:Name="Btn_PortParamsEdit" Content="Edit..." Grid.Column="1" Grid.Row="1" IsEnabled="False"/> <!-- TODO -->
+                <Button x:Name="Btn_PortParamsEdit" Content="Edit..." Grid.Column="1" Grid.Row="1" Click="Btn_PortParamsEdit_Click"/>
             </Grid>
         </GroupBox>
 

@@ -107,6 +107,9 @@
     </Compile>
     <Compile Include="Helpers\IOHelper.vb" />
     <Compile Include="Helpers\PresetsMethods.vb" />
+    <Compile Include="Views\PortParamsWindow.xaml.vb">
+      <DependentUpon>PortParamsWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -123,6 +126,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PortParamsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />

@@ -220,9 +220,30 @@ Namespace Views
             DecorateCommand()
         End Sub
 
-        'TODO?
-        'Implement edition of Port parameters
-        'Is it really useful in the end? Having a hard time finding interesting ones, as most settings come from ini files
+        Private Sub Btn_PortParamsEdit_Click(sender As Object, e As RoutedEventArgs)
+            Dim portParamsWindow As New PortParamsWindow() With {.Owner = Me}
+            portParamsWindow.ShowDialog()
+
+            Dim portParamsValues As Dictionary(Of String, Object) = portParamsWindow.ValuesDictionary
+            If portParamsValues.Count > 0 Then
+                Dim portParamsList As New List(Of String)
+                For Each kvp As KeyValuePair(Of String, Object) In portParamsValues
+                    portParamsList.Add($"-{kvp.Key} {If(kvp.Value = True, "", kvp.Value)}")
+                Next
+
+                'Tbx_PortParameters.HorizontalContentAlignment = HorizontalAlignment.Left
+                'Tbx_PortParameters.Text = String.Join(" ", portParamsList)
+
+                Tbx_PortParameters.Text = $"+ {portParamsList.Count} parameters"
+                Tbx_PortParameters.ToolTip = String.Join(vbCrLf, portParamsList)
+                'TODO: Add in StackPanel
+                'Stkp_SummaryPortParameters
+            Else
+                Tbx_PortParameters.Text = "+ 0 parameters"
+                Tbx_PortParameters.ToolTip = Nothing
+            End If
+
+        End Sub
 
 #End Region
 
@@ -1330,6 +1351,7 @@ Namespace Views
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
+
 
 #End Region
 
