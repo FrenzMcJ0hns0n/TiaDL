@@ -224,27 +224,26 @@ Namespace Views
             Dim portParamsWindow As New PortParamsWindow() With {.Owner = Me}
             portParamsWindow.ShowDialog()
 
-            Dim portParamsList As New List(Of String)
-            Dim portParamsValues As Dictionary(Of String, Object) = portParamsWindow.ValuesDictionary
+            Dim portParams As New List(Of String)
+            For Each kvp As KeyValuePair(Of String, Object) In portParamsWindow.ValuesDictionary
+                portParams.Add($"-{kvp.Key}" & If(kvp.Value = True, "", $" {kvp.Value}"))
+            Next
 
-            If portParamsValues.Count > 0 Then
-                For Each kvp As KeyValuePair(Of String, Object) In portParamsValues
-                    portParamsList.Add($"-{kvp.Key}" & If(kvp.Value = True, "", $" {kvp.Value}"))
-                Next
-                'Tbx_PortParameters.HorizontalContentAlignment = HorizontalAlignment.Left
-                'Tbx_PortParameters.Text = String.Join(" ", portParamsList)
-                Tbx_PortParameters.FontWeight = FontWeights.Bold
-                Tbx_PortParameters.Text = $"+ {portParamsList.Count} parameters"
-                Tbx_PortParameters.ToolTip = String.Join(vbCrLf, portParamsList)
-            Else
-                Tbx_PortParameters.ClearValue(TextBlock.FontWeightProperty)
-                Tbx_PortParameters.Text = "+ 0 parameters"
-                Tbx_PortParameters.ToolTip = Nothing
-            End If
-
-            UpdatePortParams_Summary(portParamsList)
+            UpdatePortParams(portParams)
+            UpdatePortParams_Summary(portParams)
             UpdateCommand()
             DecorateCommand()
+        End Sub
+
+        Private Sub UpdatePortParams(portParams As List(Of String))
+            If portParams.Count > 0 Then
+                Tbx_PortParameters.FontWeight = FontWeights.Bold
+                Tbx_PortParameters.ToolTip = String.Join(vbCrLf, portParams)
+            Else
+                Tbx_PortParameters.ClearValue(TextBlock.FontWeightProperty)
+                Tbx_PortParameters.ToolTip = Nothing
+            End If
+            Tbx_PortParameters.Text = $"+ {portParams.Count} parameters"
         End Sub
 
 #End Region
@@ -972,6 +971,25 @@ Namespace Views
         End Function
 
         ''' <summary>
+        ''' Retrieve Port parameters in StackPanel SummaryPortParameters.
+        ''' </summary>
+        ''' <returns></returns>
+        Private Function GetPortParamsFromStackPanel() As List(Of String)
+            Dim params As New List(Of String)
+
+            Try
+                Dim paramTbxs As List(Of TextBox) = Stkp_SummaryPortParameters.Children.OfType(Of TextBox).ToList
+                paramTbxs.ForEach(Sub(tbx) params.Add(tbx.Text))
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+
+            Return params
+        End Function
+
+        ''' <summary>
         ''' Update the TextBox items in StackPanel for Levels (Maps and Misc).
         ''' Clear then refill the entire StackPanel
         ''' </summary>
@@ -1338,7 +1356,7 @@ Namespace Views
                 Dim lastLaunched As New Setting(GetJsonFilepath("Settings")) With
                 {
                     .Port = TextBox_Summary_Port.Text,
-                    .PortParameters = New List(Of String), 'TODO Eventually?
+                    .PortParameters = GetPortParamsFromStackPanel(),
                     .Iwad = TextBox_Summary_Iwad.Text,
                     .Maps = levelsPaths(0),
                     .Misc = levelsPaths(1),
@@ -1370,6 +1388,9 @@ Namespace Views
                         FillTextBox(TextBox_Summary_Port, .Port)
                     End If
                     'TODO? Handle case of invalid .Port
+
+                    UpdatePortParams(.PortParameters)
+                    UpdatePortParams_Summary(.PortParameters)
 
                     If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
                     'TODO? Handle case of invalid .Iwad
