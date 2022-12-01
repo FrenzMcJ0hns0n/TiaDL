@@ -224,25 +224,27 @@ Namespace Views
             Dim portParamsWindow As New PortParamsWindow() With {.Owner = Me}
             portParamsWindow.ShowDialog()
 
+            Dim portParamsList As New List(Of String)
             Dim portParamsValues As Dictionary(Of String, Object) = portParamsWindow.ValuesDictionary
-            If portParamsValues.Count > 0 Then
-                Dim portParamsList As New List(Of String)
-                For Each kvp As KeyValuePair(Of String, Object) In portParamsValues
-                    portParamsList.Add($"-{kvp.Key} {If(kvp.Value = True, "", kvp.Value)}")
-                Next
 
+            If portParamsValues.Count > 0 Then
+                For Each kvp As KeyValuePair(Of String, Object) In portParamsValues
+                    portParamsList.Add($"-{kvp.Key}" & If(kvp.Value = True, "", $" {kvp.Value}"))
+                Next
                 'Tbx_PortParameters.HorizontalContentAlignment = HorizontalAlignment.Left
                 'Tbx_PortParameters.Text = String.Join(" ", portParamsList)
-
+                Tbx_PortParameters.FontWeight = FontWeights.Bold
                 Tbx_PortParameters.Text = $"+ {portParamsList.Count} parameters"
                 Tbx_PortParameters.ToolTip = String.Join(vbCrLf, portParamsList)
-                'TODO: Add in StackPanel
-                'Stkp_SummaryPortParameters
             Else
+                Tbx_PortParameters.ClearValue(TextBlock.FontWeightProperty)
                 Tbx_PortParameters.Text = "+ 0 parameters"
                 Tbx_PortParameters.ToolTip = Nothing
             End If
 
+            UpdatePortParams_Summary(portParamsList)
+            UpdateCommand()
+            DecorateCommand()
         End Sub
 
 #End Region
@@ -1039,7 +1041,34 @@ Namespace Views
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Update the TextBox items in StackPanel for Port parameters
+        ''' </summary>
+        ''' <param name="portParams">Port parameters</param>
+        Private Sub UpdatePortParams_Summary(portParams As List(Of String))
+            Try
+                'Clear StackPanel
+                Stkp_SummaryPortParameters.Children.Clear()
 
+                'Fill StackPanel
+                For Each param As String In portParams
+                    Stkp_SummaryPortParameters.Children.Add(New TextBox() With
+                    {
+                        .Background = Brushes.AliceBlue,
+                        .BorderBrush = Brushes.LightGray,
+                        .Cursor = Cursors.Arrow,
+                        .IsReadOnly = True,
+                        .Margin = New Thickness(0, 0, 6, 0),
+                        .Text = param
+                    })
+                Next
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                Dim paramsJoined As String = String.Join(", ", portParams)
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {paramsJoined}")
+            End Try
+        End Sub
 
 
         Private Sub DecorateCommand()
@@ -1097,8 +1126,13 @@ Namespace Views
                     Return
                 End If
 
-                command &= $"""{port}"" -iwad ""{iwad}"""
-                'TODO: Manage port parameters, to be added before " -iwad"
+                command &= $"""{port}"""
+
+                'Add Port parameters to the command line
+                Dim paramTbxs As List(Of TextBox) = Stkp_SummaryPortParameters.Children.OfType(Of TextBox).ToList
+                paramTbxs.ForEach(Sub(tbx) command &= $" {tbx.Text}")
+
+                command &= $" -iwad ""{iwad}"""
 
                 'Add Maps/Misc/Mods to the command line
                 Dim allTbxs As List(Of TextBox) = Stkp_SummaryFilesMods.Children.OfType(Of TextBox).ToList
