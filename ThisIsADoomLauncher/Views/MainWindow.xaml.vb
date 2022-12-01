@@ -1073,15 +1073,15 @@ Namespace Views
 
         Private Sub DecorateCommand()
             Try
-                Dim completeRange As New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd)
-                Dim matches As MatchCollection = Regex.Matches(completeRange.Text, "-iwad|-file")
-                Dim quotesCount As Integer = 0 'Enclosing quotes " must be skipped = 4 for each path as in ""complete_path""
+                Dim cmdTxtRange As New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd)
+                Dim fileMatches As MatchCollection = Regex.Matches(cmdTxtRange.Text, "-iwad|-file")
+                Dim quotesCount As Integer = 0 'Skip enclosing quotes 4 times per path (like in: ""complete_path"")
 
-                For Each m As Match In matches
-                    For Each c As Capture In m.Captures
+                For Each fm As Match In fileMatches
+                    For Each c As Capture In fm.Captures
 
-                        Dim startIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4))
-                        Dim endIndex As TextPointer = completeRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4) + c.Length)
+                        Dim startIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4))
+                        Dim endIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4) + c.Length)
                         Dim rangeToEdit As New TextRange(startIndex, endIndex)
 
                         rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
