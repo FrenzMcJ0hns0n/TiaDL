@@ -11,8 +11,7 @@
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterOwner"
         
-        Closing="Window_Closing"
-        >
+        Loaded="Window_Loaded">
 
     <Window.Resources>
 
@@ -98,7 +97,7 @@
             </Border>
         </GroupBox>
 
-        <Button x:Name="Btn_OkClose" Content="OK" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" Padding="14 0" Click="Btn_OkClose_Click"/>
+        <Button x:Name="Btn_ApplyClose" Content="OK" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" Padding="14 0" Click="Btn_ApplyClose_Click"/>
 
     </Grid>
 </Window>

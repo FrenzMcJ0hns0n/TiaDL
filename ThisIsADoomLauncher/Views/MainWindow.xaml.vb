@@ -221,29 +221,43 @@ Namespace Views
         End Sub
 
         Private Sub Btn_PortParamsEdit_Click(sender As Object, e As RoutedEventArgs)
-            Dim portParamsWindow As New PortParamsWindow() With {.Owner = Me}
+            Dim portParamsWindow As New PortParamsWindow() With {.Owner = Me, .OldValuesDict = GetPortParamsFromStackPanel()}
             portParamsWindow.ShowDialog()
 
-            Dim portParams As New List(Of String)
-            For Each kvp As KeyValuePair(Of String, Object) In portParamsWindow.ValuesDictionary
-                portParams.Add($"-{kvp.Key}" & If(kvp.Value = True, "", $" {kvp.Value}"))
-            Next
+            If portParamsWindow.UserValidation Then
+                Dim oldParamsDict As Dictionary(Of String, String) = portParamsWindow.OldValuesDict
+                Dim newParamsDict As Dictionary(Of String, String) = If(portParamsWindow.NewValuesDict, New Dictionary(Of String, String))
+                Dim bothIdentical As Boolean = oldParamsDict.Count = newParamsDict.Count AndAlso Not oldParamsDict.Except(newParamsDict).Any()
+                If Not bothIdentical Then
+                    UpdatePortParams(newParamsDict)
+                    UpdatePortParams_Summary(newParamsDict)
+                End If
+            End If
 
-            UpdatePortParams(portParams)
-            UpdatePortParams_Summary(portParams)
             UpdateCommand()
             DecorateCommand()
         End Sub
 
-        Private Sub UpdatePortParams(portParams As List(Of String))
-            If portParams.Count > 0 Then
+        ''' <summary>
+        ''' Update the Port parameters in Port GUI area
+        ''' </summary>
+        ''' <param name="portParamsDict">Dictionary (Parameter:String, ParameterValue:String) </param>
+        Private Sub UpdatePortParams(portParamsDict As Dictionary(Of String, String))
+            If portParamsDict.Count > 0 Then
                 Tbx_PortParameters.FontWeight = FontWeights.Bold
-                Tbx_PortParameters.ToolTip = String.Join(vbCrLf, portParams)
+
+                Dim parametersList As New List(Of String)
+                For Each kvp As KeyValuePair(Of String, String) In portParamsDict
+                    parametersList.Add($"-{kvp.Key}" & If(kvp.Value.Length = 0, "", $" {kvp.Value}"))
+                Next
+
+                Tbx_PortParameters.ToolTip = String.Join(vbCrLf, parametersList)
             Else
                 Tbx_PortParameters.ClearValue(TextBlock.FontWeightProperty)
                 Tbx_PortParameters.ToolTip = Nothing
             End If
-            Tbx_PortParameters.Text = $"+ {portParams.Count} parameters"
+
+            Tbx_PortParameters.Text = $"+ {portParamsDict.Count} parameters"
         End Sub
 
 #End Region
@@ -974,19 +988,25 @@ Namespace Views
         ''' Retrieve Port parameters in StackPanel SummaryPortParameters.
         ''' </summary>
         ''' <returns></returns>
-        Private Function GetPortParamsFromStackPanel() As List(Of String)
-            Dim params As New List(Of String)
+        Private Function GetPortParamsFromStackPanel() As Dictionary(Of String, String)
+            Dim paramsDict As New Dictionary(Of String, String)
 
             Try
                 Dim paramTbxs As List(Of TextBox) = Stkp_SummaryPortParameters.Children.OfType(Of TextBox).ToList
-                paramTbxs.ForEach(Sub(tbx) params.Add(tbx.Text))
+                For Each tbx As TextBox In paramTbxs
+                    If tbx.Text.Contains(" ") Then
+                        paramsDict.Add(tbx.Text.Split(" ")(0).Replace("-", ""), tbx.Text.Split(" ")(1))
+                    Else
+                        paramsDict.Add(tbx.Text.Replace("-", ""), String.Empty)
+                    End If
+                Next
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
 
-            Return params
+            Return paramsDict
         End Function
 
         ''' <summary>
@@ -1062,14 +1082,14 @@ Namespace Views
         ''' <summary>
         ''' Update the TextBox items in StackPanel for Port parameters
         ''' </summary>
-        ''' <param name="portParams">Port parameters</param>
-        Private Sub UpdatePortParams_Summary(portParams As List(Of String))
+        ''' <param name="portParams">Dictionary (Parameter:String, ParameterValue:String) </param>
+        Private Sub UpdatePortParams_Summary(portParams As Dictionary(Of String, String))
             Try
                 'Clear StackPanel
                 Stkp_SummaryPortParameters.Children.Clear()
 
                 'Fill StackPanel
-                For Each param As String In portParams
+                For Each kvp As KeyValuePair(Of String, String) In portParams
                     Stkp_SummaryPortParameters.Children.Add(New TextBox() With
                     {
                         .Background = Brushes.AliceBlue,
@@ -1077,7 +1097,7 @@ Namespace Views
                         .Cursor = Cursors.Arrow,
                         .IsReadOnly = True,
                         .Margin = New Thickness(0, 0, 6, 0),
-                        .Text = param
+                        .Text = $"-{kvp.Key}" & If(kvp.Value.Length = 0, "", $" {kvp.Value}")
                     })
                 Next
 
@@ -1089,7 +1109,9 @@ Namespace Views
         End Sub
 
 
-        Private Sub DecorateCommand()
+
+
+        Private Sub DecorateCommandOld()
             Try
                 Dim cmdTxtRange As New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd)
                 Dim fileMatches As MatchCollection = Regex.Matches(cmdTxtRange.Text, "-iwad|-file")
@@ -1108,6 +1130,60 @@ Namespace Views
                     Next
                     quotesCount += 1
                 Next
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Perform 2 consecutive loops on cmdTxtRange to apply syntax highlighting on 1) keywords 2) port Parameters
+        ''' </summary>
+        Private Sub DecorateCommand() 'TODO? Improve (Simplify code ? Use only one loop ?)
+            Try
+                Dim cmdTxtRange As New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd)
+
+                'Decorate keywords (skip enclosing quotes 4 times per path, like in ""complete_path"")
+                Dim fileMatches As MatchCollection = Regex.Matches(cmdTxtRange.Text, "-iwad|-file")
+                Dim quotesCount As Integer = 0
+                For Each fm As Match In fileMatches
+                    For Each c As Capture In fm.Captures
+                        Dim startIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4))
+                        Dim endIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4) + c.Length)
+                        Dim rangeToEdit As New TextRange(startIndex, endIndex)
+
+                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
+                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
+                    Next
+                    quotesCount += 1
+                Next
+
+                'Decorate Port parameters (at each param, skip the length of the value of the previous one + 1 for the blank space)
+                Dim portParams As Dictionary(Of String, String) = GetPortParamsFromStackPanel()
+                If portParams.Count > 0 Then
+                    Dim paramsKeyWords As New List(Of String)
+                    Dim paramsValueLen As New List(Of Integer)
+                    For Each kvp As KeyValuePair(Of String, String) In portParams
+                        paramsKeyWords.Add($"-{kvp.Key}")
+                        paramsValueLen.Add(kvp.Value.Length)
+                    Next
+                    Dim paramsMatches As MatchCollection = Regex.Matches(cmdTxtRange.Text, String.Join("|", paramsKeyWords))
+                    Dim offset As Integer = 0
+                    Dim i As Integer = 0
+                    For Each pm As Match In paramsMatches
+                        For Each c As Capture In pm.Captures
+                            Dim startIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + offset)
+                            Dim endIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + offset + c.Length)
+                            Dim rangeToEdit As New TextRange(startIndex, endIndex)
+
+                            rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkMagenta)
+                            rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
+                        Next
+                        offset += paramsValueLen(i) + 1
+                        i += 1
+                    Next
+                End If
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name

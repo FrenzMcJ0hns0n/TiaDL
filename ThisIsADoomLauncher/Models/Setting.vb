@@ -11,7 +11,7 @@ Namespace Models
         Public Property FileLocation As String
 
         Public Property Port As String
-        Public Property PortParameters As List(Of String) = New List(Of String)
+        Public Property PortParameters As Dictionary(Of String, String) = New Dictionary(Of String, String)
         Public Property Iwad As String
         Public Property Maps As String
         Public Property Misc As String

@@ -1,10 +1,17 @@
 ﻿Public Class PortParamsWindow
 
-    Public ValuesDictionary As Dictionary(Of String, Object)
+    Public UserValidation As Boolean
+    Public OldValuesDict As Dictionary(Of String, String)
+    Public NewValuesDict As Dictionary(Of String, String)
 
 
 
-    Private Sub Btn_OkClose_Click(sender As Object, e As RoutedEventArgs)
+    Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
+        LoadValues()
+    End Sub
+
+    Private Sub Btn_ApplyClose_Click(sender As Object, e As RoutedEventArgs)
+        UserValidation = True
         SetDictionary()
         Close()
     End Sub
@@ -21,26 +28,32 @@
         End If
     End Sub
 
-    Private Sub Window_Closing(sender As Object, e As ComponentModel.CancelEventArgs)
-        SetDictionary()
-    End Sub
 
 
+    Private Sub LoadValues()
+        If Rbtn_Predefined.IsChecked AndAlso OldValuesDict.Count > 0 Then
+            Dim value As String = Nothing
 
-    Private Sub SetDictionary()
-        'Dim checkboxes As New List(Of CheckBox) From
-        '{
-        '    Cbx_Turbo,
-        '    Cbx_NoMonsters
-        '}
-        ValuesDictionary = New Dictionary(Of String, Object)
+            If OldValuesDict.TryGetValue("turbo", value) Then
+                Cbx_TurboEnabled.IsChecked = True
+                Tbx_TurboValue.Text = value
+            End If
 
-        If Cbx_TurboEnabled.IsChecked OrElse Cbx_NoMonstersEnabled.IsChecked Then
-            If Cbx_TurboEnabled.IsChecked Then ValuesDictionary.Add("turbo", CType(Tbx_TurboValue.Text, Integer))
-            If Cbx_NoMonstersEnabled.IsChecked Then ValuesDictionary.Add("nomonsters", Cbx_NoMonstersEnabled.IsChecked)
+            If OldValuesDict.TryGetValue("nomonsters", value) Then
+                Cbx_NoMonstersEnabled.IsChecked = True
+            End If
+
         End If
     End Sub
 
+    Private Sub SetDictionary()
+        NewValuesDict = New Dictionary(Of String, String)
+
+        If Cbx_TurboEnabled.IsChecked Or Cbx_NoMonstersEnabled.IsChecked Then
+            If Cbx_TurboEnabled.IsChecked Then NewValuesDict.Add("turbo", Tbx_TurboValue.Text)
+            If Cbx_NoMonstersEnabled.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
+        End If
+    End Sub
 
 
 End Class
