@@ -26,6 +26,7 @@ Namespace Views
         Private Const ERR_MISSING_INPUT As String = "Error : missing input data"
         Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
         Private Const ERR_MISSING_IWAD As String = "You need an Iwad as game base content"
+        Private Const ERR_ONLY_IWAD As String = "You only submitted an ""Iwad"" file: at least a ""Maps"" file is required as well"
 
         Private Const ERR_INVALID_INPUT As String = "Error : invalid input data"
         Private Const ERR_INPUT_NOT_FILE As String = "Submitted element was not a file"
@@ -72,11 +73,11 @@ Namespace Views
                 CheckProjectDirectories()
                 LoadSettings()
 
-                'SetIniFiles() 'TODO? V3
+                'SetIniFiles() 'TODO? Implement later in v3+
                 PopulateBaseLevelPresets()
                 PopulateBaseModsPresets()
 
-                'Performance eval
+                'Performance eval 'TODO? Remove that
                 Dim dateTimeReady As Date = Date.Now
                 Dim timeSpan As TimeSpan = dateTimeReady.Subtract(My.Settings.DateTimeAtLaunch)
                 WriteToLog(Date.Now & " - Time elapsed from Launch to Ready : " & timeSpan.Milliseconds & " milliseconds")
@@ -566,8 +567,7 @@ Namespace Views
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
             If mapsInput = TBX_DROP_MAPS And miscInput = TBX_DROP_MISC Then
-                'TODO: Use string constant
-                MessageBox.Show("You only submitted an Iwad. Please select it from the ""Base presets"" tab instead", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show(ERR_ONLY_IWAD, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return
             End If
 
@@ -786,12 +786,12 @@ Namespace Views
         Private Sub Btn_NewModSave_Click(sender As Object, e As RoutedEventArgs)
 
             If Dtg_NewModFiles.ItemsSource Is Nothing Then
-                MessageBox.Show("No mod files found: those are mandatory to save a new user mod", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show("Missing mod files", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return 'Early return
             End If
 
             If Tbx_NewModName.Text = String.Empty Then
-                MessageBox.Show("A new preset requires a name in order to be saved", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show("Missing name", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return 'Early return
             End If
 

@@ -129,22 +129,22 @@
     
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="12" />
+            <RowDefinition Height="16" />
             <RowDefinition Height="Auto" /> <!-- Port -->
-            <RowDefinition Height="12" />
+            <RowDefinition Height="13" />
             <RowDefinition Height="62*" /> <!-- Levels -->
-            <RowDefinition Height="12" />
+            <RowDefinition Height="13" />
             <RowDefinition Height="38*" /> <!-- Mods -->
-            <RowDefinition Height="12" />
+            <RowDefinition Height="13" />
             <RowDefinition Height="30*" /> <!-- Summary -->
-            <RowDefinition Height="12" />
+            <RowDefinition Height="16" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="12" />
+            <ColumnDefinition Width="16" />
             <ColumnDefinition Width="18*" />
-            <ColumnDefinition Width="12" />
+            <ColumnDefinition Width="13" />
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="12" />
+            <ColumnDefinition Width="16" />
         </Grid.ColumnDefinitions>
 
         <!-- Port -->
@@ -169,11 +169,8 @@
                     <Button Content="Clear &#x21ba;" Grid.Row="1" VerticalAlignment="Bottom" Click="Btn_PortClear_Click"/>
                 </Grid>
 
-                <StackPanel x:Name="Stkp_PortParams" Grid.Row="1" Orientation="Horizontal">
-                    <!-- WiP -->
-                </StackPanel>
-                <TextBox x:Name="Tbx_PortParameters" Cursor="Arrow" Grid.Row="1" HorizontalContentAlignment="Center"
-                         IsReadOnly="True" Text="+ 0 parameters" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="10000" VerticalContentAlignment="Center"
+                <TextBox x:Name="Tbx_PortParameters" Cursor="Arrow" Grid.Row="1" HorizontalContentAlignment="Center" IsReadOnly="True" Text="+ 0 parameters"
+                         ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="10000" VerticalContentAlignment="Center"
                          />
                 <Button x:Name="Btn_PortParamsEdit" Content="Edit..." Grid.Column="1" Grid.Row="1" Click="Btn_PortParamsEdit_Click"/>
             </Grid>
@@ -483,7 +480,7 @@
                 </Grid>
                 
                 <Grid x:Name="Grid_Command" Margin="8" Visibility="Collapsed">
-                    <RichTextBox x:Name="Rtb_Command" BorderBrush="LightGray" FontSize="16" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalAlignment="Stretch"/>
+                    <RichTextBox x:Name="Rtb_Command" BorderBrush="LightGray" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalAlignment="Stretch"/>
                 </Grid>
             </Grid>
         </GroupBox>
