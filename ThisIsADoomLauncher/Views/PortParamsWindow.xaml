@@ -15,8 +15,8 @@
 
     <Window.Resources>
 
-        <Style x:Key="Rbtn_InputType" TargetType="{x:Type RadioButton}">
-            <Setter Property="GroupName" Value="InputType"/>
+        <Style x:Key="Rbtn_ParamsType" TargetType="{x:Type RadioButton}">
+            <Setter Property="GroupName" Value="ParamsType"/>
             <Setter Property="Margin" Value="14 0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <!-- TODO: Handle Groupboxes activation from here
@@ -30,11 +30,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="12" />
-            <RowDefinition Height="14*" />
+            <RowDefinition Height="12*" />
             <RowDefinition Height="12" />
-            <RowDefinition Height="40*" />
+            <RowDefinition Height="38*" />
             <RowDefinition Height="12" />
-            <RowDefinition Height="40*" />
+            <RowDefinition Height="44*" />
             <RowDefinition Height="12" />
             <RowDefinition Height="6*" />
             <RowDefinition Height="12" />
@@ -47,37 +47,36 @@
 
         <GroupBox Grid.Column="1" Grid.Row="1" Header="Type">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                <RadioButton Style="{StaticResource Rbtn_InputType}" x:Name="Rbtn_Predefined" Content="Predefined" IsChecked="True"/>
-                <RadioButton Style="{StaticResource Rbtn_InputType}" x:Name="Rbtn_Custom" Content="Custom" IsEnabled="False"/>
+                <RadioButton Style="{StaticResource Rbtn_ParamsType}" x:Name="Rbtn_Predefined" Content="Predefined" IsChecked="True"/>
+                <RadioButton Style="{StaticResource Rbtn_ParamsType}" x:Name="Rbtn_Custom" Content="Custom" IsEnabled="False"/>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Grid.Column="1" Grid.Row="3" Header="Predefined">
+        <!-- Parameters type : Predefined -->
+        <GroupBox Grid.Column="1" Grid.Row="3" Header="Predefined"> <!-- TODO v3+: Update to DataGrid -->
             <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="12" />
-                    <RowDefinition Height="16.6*" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="16.6*" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="16.6*" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="16.6*" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="16.6*" />
-                    <RowDefinition Height="3" />
-                    <RowDefinition Height="16.6*" />
-                    <RowDefinition Height="12" />
-                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="12" />
-                    <ColumnDefinition Width="60*" />
+                    <ColumnDefinition Width="65*" />
                     <ColumnDefinition Width="3" />
-                    <ColumnDefinition Width="30*" />
+                    <ColumnDefinition Width="25*" />
                     <ColumnDefinition Width="3" />
-                    <ColumnDefinition Width="20*" />
+                    <ColumnDefinition Width="10*" />
                     <ColumnDefinition Width="12" />
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="12" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
+                </Grid.RowDefinitions>
 
                 <!-- Turbo -->
                 <CheckBox x:Name="Cbx_TurboEnabled" Content="Turbo" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
@@ -85,19 +84,27 @@
                 <Label x:Name="Lbl_TurboUnit" Grid.Column="5" Grid.Row="1" HorizontalAlignment="Left" Content="%" VerticalAlignment="Center"/>
 
                 <!-- No monsters -->
-                <CheckBox x:Name="Cbx_NoMonstersEnabled" Content="No monsters" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <CheckBox x:Name="Cbx_NoMonsters" Content="No monsters" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
+                <!-- No music -->
+                <CheckBox x:Name="Cbx_NoMusic" Content="No music" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                <!-- No SFX -->
+                <CheckBox x:Name="Cbx_NoSFX" Content="No SFX" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Column="1" Grid.Row="5" Header="Customized" IsEnabled="False">
+        <!-- Parameters type : Custom -->
+        <GroupBox Grid.Column="1" Grid.Row="5" Header="Customized" IsEnabled="False"> <!-- TODO v3+: Update to DataGrid -->
             <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="12" SnapsToDevicePixels="True">
                 <TextBlock x:Name="Tbk_CustomParams" FontSize="11" Foreground="DarkGray" Padding="2" Text="Param1 Value1, Param2 Value2, etc." TextWrapping="Wrap" 
                            GotFocus="Tbk_CustomParams_GotFocus" LostFocus="Tbk_CustomParams_LostFocus"/>
             </Border>
         </GroupBox>
 
-        <Button x:Name="Btn_ApplyClose" Content="OK" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" Padding="14 0" Click="Btn_ApplyClose_Click"/>
+        <Button x:Name="Btn_ApplyClose" Background="#c6ecc6" Content="Apply &amp; close" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" Padding="14 0"
+                Click="Btn_ApplyClose_Click"/>
 
     </Grid>
 </Window>

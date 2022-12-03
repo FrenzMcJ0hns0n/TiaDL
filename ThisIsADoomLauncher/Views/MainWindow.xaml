@@ -483,7 +483,7 @@
                 </Grid>
                 
                 <Grid x:Name="Grid_Command" Margin="8" Visibility="Collapsed">
-                    <RichTextBox x:Name="Rtb_Command" BorderBrush="LightGray" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalAlignment="Stretch"/>
+                    <RichTextBox x:Name="Rtb_Command" BorderBrush="LightGray" FontSize="16" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalAlignment="Stretch"/>
                 </Grid>
             </Grid>
         </GroupBox>

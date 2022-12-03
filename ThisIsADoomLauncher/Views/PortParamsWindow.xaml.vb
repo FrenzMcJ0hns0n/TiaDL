@@ -40,7 +40,15 @@
             End If
 
             If OldValuesDict.TryGetValue("nomonsters", value) Then
-                Cbx_NoMonstersEnabled.IsChecked = True
+                Cbx_NoMonsters.IsChecked = True
+            End If
+
+            If OldValuesDict.TryGetValue("nomusic", value) Then
+                Cbx_NoMusic.IsChecked = True
+            End If
+
+            If OldValuesDict.TryGetValue("nosfx", value) Then
+                Cbx_NoSFX.IsChecked = True
             End If
 
         End If
@@ -49,9 +57,11 @@
     Private Sub SetDictionary()
         NewValuesDict = New Dictionary(Of String, String)
 
-        If Cbx_TurboEnabled.IsChecked Or Cbx_NoMonstersEnabled.IsChecked Then
+        If Cbx_TurboEnabled.IsChecked Or Cbx_NoMonsters.IsChecked Then
             If Cbx_TurboEnabled.IsChecked Then NewValuesDict.Add("turbo", Tbx_TurboValue.Text)
-            If Cbx_NoMonstersEnabled.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
+            If Cbx_NoMonsters.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
+            If Cbx_NoMusic.IsChecked Then NewValuesDict.Add("nomusic", String.Empty)
+            If Cbx_NoSFX.IsChecked Then NewValuesDict.Add("nosfx", String.Empty)
         End If
     End Sub
 

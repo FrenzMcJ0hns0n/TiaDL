@@ -1111,32 +1111,6 @@ Namespace Views
 
 
 
-        Private Sub DecorateCommandOld()
-            Try
-                Dim cmdTxtRange As New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd)
-                Dim fileMatches As MatchCollection = Regex.Matches(cmdTxtRange.Text, "-iwad|-file")
-                Dim quotesCount As Integer = 0 'Skip enclosing quotes 4 times per path (like in: ""complete_path"")
-
-                For Each fm As Match In fileMatches
-                    For Each c As Capture In fm.Captures
-
-                        Dim startIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4))
-                        Dim endIndex As TextPointer = cmdTxtRange.Start.GetPositionAtOffset(c.Index + (quotesCount * 4) + c.Length)
-                        Dim rangeToEdit As New TextRange(startIndex, endIndex)
-
-                        rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkBlue)
-                        rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
-
-                    Next
-                    quotesCount += 1
-                Next
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
         ''' <summary>
         ''' Perform 2 consecutive loops on cmdTxtRange to apply syntax highlighting on 1) keywords 2) port Parameters
         ''' </summary>
@@ -1170,6 +1144,7 @@ Namespace Views
                     Next
                     Dim paramsMatches As MatchCollection = Regex.Matches(cmdTxtRange.Text, String.Join("|", paramsKeyWords))
                     Dim offset As Integer = 0
+                    Dim mem As Integer = 0
                     Dim i As Integer = 0
                     For Each pm As Match In paramsMatches
                         For Each c As Capture In pm.Captures
@@ -1180,7 +1155,8 @@ Namespace Views
                             rangeToEdit.ApplyPropertyValue(TextElement.ForegroundProperty, Brushes.DarkMagenta)
                             rangeToEdit.ApplyPropertyValue(TextElement.FontWeightProperty, FontWeights.Bold)
                         Next
-                        offset += paramsValueLen(i) + 1
+                        mem += paramsValueLen(i)
+                        offset += mem + 1
                         i += 1
                     Next
                 End If
