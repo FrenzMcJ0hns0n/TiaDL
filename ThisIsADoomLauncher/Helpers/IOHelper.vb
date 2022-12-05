@@ -48,7 +48,7 @@ Friend Module IOHelper
 
     'TODO: Figure out a way to handle wildcard * in "Wolf3D_*.pk3" (confirmed issue, as recursive search fails on that)
     ''' <summary>
-    ''' Get the absolute path of file from relative path within TiaDL project
+    ''' Get absolute path of a file within TiaDL project
     ''' </summary>
     ''' <param name="targetDir">One of the project directories: "Iwad", "Maps", "Misc", "Mods", "Port", or "" for any</param>
     ''' <param name="filename">The filename to get the absolute path of</param>

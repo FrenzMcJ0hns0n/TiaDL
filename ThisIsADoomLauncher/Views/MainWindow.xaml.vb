@@ -105,13 +105,12 @@ Namespace Views
                 CheckProjectDirectories()
                 LoadSettings()
 
-                'SetIniFiles() 'TODO? Implement later in v3+
                 PopulateBaseLevelPresets()
                 PopulateBaseModsPresets()
+                'SetIniFiles() 'TODO? Implement later in v3+
 
                 'Performance eval 'TODO? Remove that
-                Dim dateTimeReady As Date = Date.Now
-                Dim timeSpan As TimeSpan = dateTimeReady.Subtract(My.Settings.DateTimeAtLaunch)
+                Dim timeSpan As TimeSpan = Date.Now.Subtract(My.Settings.DateTimeAtLaunch)
                 WriteToLog(Date.Now & " - Time elapsed from Launch to Ready : " & timeSpan.Milliseconds & " milliseconds")
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -352,6 +351,7 @@ Namespace Views
             Try
                 Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
                 If Not File.Exists(jsonFilepath) Then
+                    'TODO: Use constant
                     MessageBox.Show("No local JSON file to load data from: use the ""Add new preset"" tab to create some", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Information)
                     Return 'Early return
                 End If
@@ -359,6 +359,7 @@ Namespace Views
                 Dim jsonString As String = GetJsonData(jsonFilepath)
 
                 If Not CanLoadJsonArray(jsonString) Then
+                    'TODO: Use constant
                     MessageBox.Show("Unable to read user level presets from local JSON file", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     ShowNoUserLevels()
                     Return 'Early return
@@ -406,7 +407,7 @@ Namespace Views
         Private Sub Lvw_LevelsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 'Safety fix. SelectedItem is not kept accross tabs, as the content of this one is updated everytime
-                'TODO? Improve
+                'TODO? Improve. Use GetActiveLvlTab() ?
                 If Lvw_LevelsUserPresets.SelectedItem Is Nothing Then Return
 
                 Dim lp As LevelPreset = ReturnSelectedLevels()
@@ -673,6 +674,7 @@ Namespace Views
             Try
                 Dim jsonFilepath As String = GetJsonFilepath("UserMods")
                 If Not File.Exists(jsonFilepath) Then
+                    'TODO: Use constant
                     MessageBox.Show("No local JSON file to load data from: use the ""Add new preset"" tab to create some", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Information)
                     Return 'Early return
                 End If
@@ -680,6 +682,7 @@ Namespace Views
                 Dim jsonString As String = GetJsonData(jsonFilepath)
 
                 If Not CanLoadJsonArray(jsonString) Then
+                    'TODO: Use constant
                     MessageBox.Show("Unable to read user mod presets from local JSON file", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                     ShowNoUserMods()
                     Return 'Early return
@@ -1486,11 +1489,6 @@ Namespace Views
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
-
-        Private Sub Grid_LevelsUserPresets_Drop(sender As Object, e As DragEventArgs)
-
-        End Sub
-
 
 #End Region
 
