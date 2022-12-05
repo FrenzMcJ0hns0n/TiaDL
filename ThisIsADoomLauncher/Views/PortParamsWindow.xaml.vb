@@ -12,26 +12,26 @@
 
     Private Sub Btn_ApplyClose_Click(sender As Object, e As RoutedEventArgs)
         UserValidation = True
-        SetDictionary()
+        SaveValues()
         Close()
     End Sub
 
     Private Sub Tbk_CustomParams_GotFocus(sender As Object, e As RoutedEventArgs)
         Tbk_CustomParams.ClearValue(TextBlock.ForegroundProperty)
-        Tbk_CustomParams.Text = ""
+        Tbk_CustomParams.Text = String.Empty
     End Sub
 
     Private Sub Tbk_CustomParams_LostFocus(sender As Object, e As RoutedEventArgs)
-        If Tbk_CustomParams.Text = "" Then
+        If Tbk_CustomParams.Text = String.Empty Then
             Tbk_CustomParams.Foreground = New SolidColorBrush(Colors.DarkGray)
-            Tbk_CustomParams.Text = "Param1 Value1, Param2 Value2, etc."
+            Tbk_CustomParams.Text = "-param value, -param2 value2, etc."
         End If
     End Sub
 
 
 
     Private Sub LoadValues()
-        If Rbtn_Predefined.IsChecked AndAlso OldValuesDict.Count > 0 Then
+        If Rbtn_Predefined.IsChecked Then
             Dim value As String = Nothing
 
             If OldValuesDict.TryGetValue("turbo", value) Then
@@ -51,17 +51,25 @@
                 Cbx_NoSFX.IsChecked = True
             End If
 
+        ElseIf Rbtn_Custom.IsChecked Then
+            'TODO
         End If
     End Sub
 
-    Private Sub SetDictionary()
+    Private Sub SaveValues()
         NewValuesDict = New Dictionary(Of String, String)
 
-        If Cbx_TurboEnabled.IsChecked Or Cbx_NoMonsters.IsChecked Then
-            If Cbx_TurboEnabled.IsChecked Then NewValuesDict.Add("turbo", Tbx_TurboValue.Text)
-            If Cbx_NoMonsters.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
-            If Cbx_NoMusic.IsChecked Then NewValuesDict.Add("nomusic", String.Empty)
-            If Cbx_NoSFX.IsChecked Then NewValuesDict.Add("nosfx", String.Empty)
+        If Rbtn_Predefined.IsChecked Then
+
+            If Cbx_TurboEnabled.IsChecked Or Cbx_NoMonsters.IsChecked Then
+                If Cbx_TurboEnabled.IsChecked Then NewValuesDict.Add("turbo", Tbx_TurboValue.Text)
+                If Cbx_NoMonsters.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
+                If Cbx_NoMusic.IsChecked Then NewValuesDict.Add("nomusic", String.Empty)
+                If Cbx_NoSFX.IsChecked Then NewValuesDict.Add("nosfx", String.Empty)
+            End If
+
+        ElseIf Rbtn_Custom.IsChecked Then
+            'TODO
         End If
     End Sub
 
