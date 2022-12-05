@@ -48,7 +48,7 @@ Friend Module IOHelper
 
     'TODO: Figure out a way to handle wildcard * in "Wolf3D_*.pk3" (confirmed issue, as recursive search fails on that)
     ''' <summary>
-    ''' Get the absolute path of a file from its relative one within TiaDL project tree
+    ''' Get the absolute path of file from relative path within TiaDL project
     ''' </summary>
     ''' <param name="targetDir">One of the project directories: "Iwad", "Maps", "Misc", "Mods", "Port", or "" for any</param>
     ''' <param name="filename">The filename to get the absolute path of</param>
@@ -160,7 +160,6 @@ functionEnd:
 
     End Sub
 
-    'TODO: Use consistent names everywhere (Port, Iwad, Maps, Misc, Mods)
     ''' <summary>
     ''' Validate file as proper Doom content
     ''' </summary>
@@ -172,14 +171,11 @@ functionEnd:
             Dim extension As String = New FileInfo(filepath).Extension.ToLowerInvariant
 
             Select Case type
-                Case "Port" : If extension = ".exe" Then Return True 'TODO? Add other validation rules
-                Case "Iwad"
-                    Using reader As New BinaryReader(File.OpenRead(filepath))
-                        If extension = ".wad" AndAlso Encoding.Default.GetString(reader.ReadBytes(4)) = "IWAD" Then Return True
-                    End Using
-                Case "Maps" : If VALID_EXTENSIONS_MAPS.Contains(extension) Then Return True
-                Case "Misc" : If VALID_EXTENSIONS_MISC.Contains(extension) Then Return True
-                Case "Pict" : If VALID_EXTENSIONS_PICT.Contains(extension) Then Return True
+                Case "Port" : Return extension = ".exe" 'TODO? Add other validation rules
+                Case "Iwad" : Return extension = ".wad" AndAlso ValidateIwad(filepath)
+                Case "Maps" : Return VALID_EXTENSIONS_MAPS.Contains(extension) AndAlso Not ValidateIwad(filepath)
+                Case "Misc" : Return VALID_EXTENSIONS_MISC.Contains(extension)
+                Case "Pict" : Return VALID_EXTENSIONS_PICT.Contains(extension)
                 Case Else 'TODO?
             End Select
 
@@ -192,11 +188,22 @@ functionEnd:
     End Function
 
     ''' <summary>
+    ''' Check if "filepath" corresponds to an Iwad
+    ''' </summary>
+    ''' <param name="filepath"></param>
+    ''' <returns></returns>
+    Private Function ValidateIwad(filepath As String) As Boolean
+        Using reader As New BinaryReader(File.OpenRead(filepath))
+            Return Encoding.Default.GetString(reader.ReadBytes(4)) = "IWAD"
+        End Using
+    End Function
+
+    ''' <summary>
     ''' Log content in file 'log.txt'
     ''' </summary>
     ''' 
     Public Sub WriteToLog(content As String)
-        Dim logfilePath = Path.Combine(GetDirectoryPath(), "log.txt")
+        Dim logfilePath As String = Path.Combine(GetDirectoryPath(), "log.txt")
 
         Using streamWriter As New StreamWriter(logfilePath, True)
             streamWriter.WriteLine(content)

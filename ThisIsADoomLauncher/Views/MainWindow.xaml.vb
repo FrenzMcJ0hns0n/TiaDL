@@ -11,6 +11,7 @@ Namespace Views
 
 
 #Region "GUI related Constants"
+
         Private Const TBX_DROP_PORT As String = "Drop port executable... (GZDoom, Zandronum, etc.)"
         Private Const TBX_DROP_IWAD As String = "Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"
         Private Const TBX_DROP_MAPS As String = "Drop Maps file... (.wad/.pk3)" '+ /.zip ?
@@ -23,13 +24,12 @@ Namespace Views
         Private Const TBX_SELECT_MISC As String = "Select a Misc. file for the new preset"
         Private Const TBX_SELECT_PICT As String = "Select an Image file for the new preset"
 
+        Private Const ERR_INVALID_INPUT As String = "Error : invalid input data"
         Private Const ERR_MISSING_INPUT As String = "Error : missing input data"
         Private Const ERR_MISSING_PORT As String = "You have to define a port to run Doom"
         Private Const ERR_MISSING_IWAD As String = "You need an Iwad as game base content"
         Private Const ERR_ONLY_IWAD As String = "You only submitted an ""Iwad"" file: at least a ""Maps"" file is required as well"
 
-        Private Const ERR_INVALID_INPUT As String = "Error : invalid input data"
-        Private Const ERR_INPUT_NOT_FILE As String = "Submitted element was not a file"
 #End Region
 
 
@@ -59,6 +59,38 @@ Namespace Views
 
         Private Sub SetActiveModTab(value As MODPRESET_TAB)
             Tbc_Mods.SelectedIndex = value
+        End Sub
+
+#End Region
+
+
+#Region "GUI tabs management"
+
+        Private Sub FocusThisLvlTab(target As LVLPRESET_TAB)
+            If Not GetActiveLvlTab() = target Then SetActiveLvlTab(target)
+        End Sub
+        Private Sub Tbi_LevelsBasePresets_DragOver(sender As Object, e As DragEventArgs)
+            FocusThisLvlTab(LVLPRESET_TAB.Base)
+        End Sub
+        Private Sub Tbi_LevelsUserPresets_DragOver(sender As Object, e As DragEventArgs)
+            FocusThisLvlTab(LVLPRESET_TAB.User)
+        End Sub
+        Private Sub Tbi_LevelsNewPresets_DragOver(sender As Object, e As DragEventArgs)
+            FocusThisLvlTab(LVLPRESET_TAB.AddNew)
+        End Sub
+
+
+        Private Sub FocusThisModTab(target As MODPRESET_TAB)
+            If Not GetActiveModTab() = target Then SetActiveModTab(target)
+        End Sub
+        Private Sub Tbi_ModsBasePresets_DragOver(sender As Object, e As DragEventArgs)
+            FocusThisModTab(MODPRESET_TAB.Base)
+        End Sub
+        Private Sub Tbi_ModsUserPresets_DragOver(sender As Object, e As DragEventArgs)
+            FocusThisModTab(MODPRESET_TAB.User)
+        End Sub
+        Private Sub Tbi_ModsNewPresets_DragOver(sender As Object, e As DragEventArgs)
+            FocusThisModTab(MODPRESET_TAB.AddNew)
         End Sub
 
 #End Region
@@ -442,34 +474,27 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub Gbx_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
-            e.Handled = True
-        End Sub
-
         ''' <summary>
-        ''' Handle multiple file drops onto GroupBox "Levels"
+        ''' Handle multiple file drops onto "New Levels" TabItem itself
         ''' </summary>
-        Private Sub Gbx_Levels_Drop(sender As Object, e As DragEventArgs)
+        Private Sub Tbi_LevelsNewPresets_Drop(sender As Object, e As DragEventArgs)
             Try
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
                 Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
                 Dim confirmedFiles As List(Of String) = OrderDroppedLevels(filePaths)
-
-                '------------- Template of confirmedFiles, depending on .Count :
-                '-------------  1 = Iwad
-                '-------------  2 = Iwad, Maps
-                '-------------  3 = Iwad, Maps, Misc
-                '-------------  4 = Iwad, Maps, Misc, Pict
-
+                'Content of confirmedFiles depending on .Count :
+                '1 = { Iwad }
+                '2 = { Iwad, Maps }
+                '3 = { Iwad, Maps, Misc }
+                '4 = { Iwad, Maps, Misc, Pict }
                 If confirmedFiles.Count = 0 Then Return
-                SetActiveLvlTab(LVLPRESET_TAB.AddNew)
-
                 If confirmedFiles.Count > 0 Then FillTextBox(Tbx_NewLevelIwad, confirmedFiles(0))
                 If confirmedFiles.Count > 1 Then FillTextBox(Tbx_NewLevelMaps, confirmedFiles(1))
                 If confirmedFiles.Count > 2 Then FillTextBox(Tbx_NewLevelMisc, confirmedFiles(2))
                 If confirmedFiles.Count > 3 Then FillTextBox(Tbx_NewLevelPict, confirmedFiles(3))
+
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -480,20 +505,22 @@ Namespace Views
             e.Handled = True
         End Sub
 
+        ''' <summary>
+        ''' Fill sender (TextBox) based on matching with submitted file
+        ''' </summary>
+        ''' <param name="sender">Source control : TextBox</param>
+        ''' <param name="e">Dropped files</param>
         Private Sub TextBox_NewLevel_Drop(sender As Object, e As DragEventArgs)
             Try
-                Dim tbx As TextBox = sender
+                e.Handled = True 'Prevent escalating up to "parent" event Tbi_LevelsNewPresets_Drop()
 
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-                Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
-                If Not File.Exists(droppedFile) Then
-                    MessageBox.Show(ERR_INPUT_NOT_FILE, ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
-                    Return
-                End If
-
+                Dim tbx As TextBox = sender
                 Dim sourceTbx As String = tbx.Tag 'Iwad, Maps, Misc, Pict
+                Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+
                 If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
 
             Catch ex As Exception
@@ -746,13 +773,14 @@ Namespace Views
                     Dtg_NewModFiles.Visibility = Visibility.Visible
                 End If
 
-
                 For Each droppedFile As String In e.Data.GetData(DataFormats.FileDrop)
                     Dim fi As New FileInfo(droppedFile)
-
-                    'Dim iFile As New InputFile(fi.Name, fi.Directory.ToString)
-
-                    modFiles.Add(New InputFile(fi.Name, fi.Directory.ToString))
+                    modFiles.Add(New InputFile(
+                        fi.Name,
+                        fi.Extension,
+                        fi.Directory.ToString,
+                        fi.Length
+                    ))
                 Next
                 Dtg_NewModFiles.ItemsSource = modFiles
 
@@ -1242,7 +1270,7 @@ Namespace Views
         End Function
 
         ''' <summary>
-        ''' Check and order the files dropped into the GroupBox "Levels"
+        ''' Check and order the files dropped onto the "Levels" GroupBox 
         ''' </summary>
         Private Function OrderDroppedLevels(filePaths As String()) As List(Of String)
             Dim orderedFiles As New List(Of String)
@@ -1457,6 +1485,10 @@ Namespace Views
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
+        End Sub
+
+        Private Sub Grid_LevelsUserPresets_Drop(sender As Object, e As DragEventArgs)
+
         End Sub
 
 
