@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
         
-        Title="Port parameters"
+        Title="Edit Port parameters"
         Height="600" Width="320"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterOwner"
@@ -96,7 +96,7 @@
         </GroupBox>
 
         <!-- Parameters type : Custom -->
-        <GroupBox Grid.Column="1" Grid.Row="5" Header="Customized" IsEnabled="False"> <!-- TODO v3+: Update to DataGrid -->
+        <GroupBox Grid.Column="1" Grid.Row="5" Header="Custom" IsEnabled="False"> <!-- TODO v3+: Update to DataGrid -->
             <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="12" SnapsToDevicePixels="True">
                 <TextBlock x:Name="Tbk_CustomParams" FontSize="11" Foreground="DarkGray" Padding="2" Text="-param value, -param2 value2, etc." TextWrapping="Wrap" 
                            GotFocus="Tbk_CustomParams_GotFocus" LostFocus="Tbk_CustomParams_LostFocus"/>

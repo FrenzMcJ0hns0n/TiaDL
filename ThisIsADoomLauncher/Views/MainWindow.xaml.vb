@@ -275,17 +275,17 @@ Namespace Views
         ''' </summary>
         ''' <param name="portParamsDict">Dictionary (Parameter:String, ParameterValue:String) </param>
         Private Sub UpdatePortParams(portParamsDict As Dictionary(Of String, String))
+
             If portParamsDict.Count > 0 Then
-                Tbx_PortParameters.FontWeight = FontWeights.Bold
+                Tbx_PortParameters.ClearValue(TextBlock.ForegroundProperty)
 
                 Dim parametersList As New List(Of String)
                 For Each kvp As KeyValuePair(Of String, String) In portParamsDict
                     parametersList.Add($"-{kvp.Key}" & If(kvp.Value.Length = 0, "", $" {kvp.Value}"))
                 Next
-
                 Tbx_PortParameters.ToolTip = String.Join(vbCrLf, parametersList)
             Else
-                Tbx_PortParameters.ClearValue(TextBlock.FontWeightProperty)
+                Tbx_PortParameters.Foreground = Brushes.DarkGray
                 Tbx_PortParameters.ToolTip = Nothing
             End If
 
