@@ -384,10 +384,12 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="0"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="36*"/>
-                                <ColumnDefinition Width="8*"/>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="10*"/>
                                 <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="46*"/>
+                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="4"/>
+                                <ColumnDefinition Width="10*"/>
                                 <ColumnDefinition Width="0"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
@@ -434,14 +436,12 @@
                                                 <Setter Property="Padding" Value="2"/>
                                             </Style>
                                         </DataGrid.RowHeaderStyle>
-                                        <!--<DataGrid.RowStyle>
-                                            <Style TargetType="{x:Type DataGridRow}">
-                                                <Setter Property="Height" Value="20"/>
-                                            </Style>
-                                        </DataGrid.RowStyle>-->
                                     </DataGrid>
                                 </Grid>
                             </Border>
+                            <StackPanel Grid.Column="7" Grid.Row="1" Grid.RowSpan="5" Orientation="Vertical">
+                                <!-- TODO: Implement control buttons -->
+                            </StackPanel>
 
                             <StackPanel Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center" Orientation="Horizontal">
                                 <Button Style="{StaticResource Btn_NewModActions}" Content="Try  &#x2193;" Click="Btn_NewModTry_Click"/>
