@@ -778,13 +778,11 @@ Namespace Views
 
                 For Each droppedFile As String In e.Data.GetData(DataFormats.FileDrop)
                     Dim fi As New FileInfo(droppedFile)
-                    modFiles.Add(New InputFile(
-                        fi.Name,
-                        fi.Extension,
-                        fi.Directory.ToString,
-                        fi.Length
-                    ))
+                    If VALID_EXTENSIONS_MODS.Contains(fi.Extension) Then
+                        modFiles.Add(New InputFile(fi.Name, fi.Extension, fi.Directory.ToString, fi.Length))
+                    End If
                 Next
+
                 Dtg_NewModFiles.ItemsSource = modFiles
 
             Catch ex As Exception
