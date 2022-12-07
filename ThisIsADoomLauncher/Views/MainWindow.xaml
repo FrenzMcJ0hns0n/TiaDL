@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         
         Title="This is a Doom Launcher v3" 
-        Width="1200" Height="800" 
+        Width="1200" Height="840" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
 
@@ -131,12 +131,12 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="16" />
             <RowDefinition Height="Auto" /> <!-- Port -->
-            <RowDefinition Height="13" />
-            <RowDefinition Height="62*" /> <!-- Levels -->
-            <RowDefinition Height="13" />
-            <RowDefinition Height="38*" /> <!-- Mods -->
-            <RowDefinition Height="13" />
-            <RowDefinition Height="30*" /> <!-- Summary -->
+            <RowDefinition Height="12" />
+            <RowDefinition Height="45*" /> <!-- Levels -->
+            <RowDefinition Height="12" />
+            <RowDefinition Height="35*" /> <!-- Mods -->
+            <RowDefinition Height="12" />
+            <RowDefinition Height="21*" /> <!-- Summary -->
             <RowDefinition Height="16" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -150,14 +150,14 @@
         <!-- Port -->
         <GroupBox Grid.Column="1" Grid.Row="1" Header="Port">
             <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="3*"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10*"/>
-                    <ColumnDefinition Width="1*"/>
-                </Grid.ColumnDefinitions>
 
                 <TextBox Style="{StaticResource Tbx_Port}" x:Name="Tbx_Port"/>
                 <Grid Grid.Column="1">
@@ -248,21 +248,21 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="6"/>
                                     <RowDefinition Height="3*"/>
-                                    <RowDefinition Height="6"/>
+                                    <RowDefinition Height="4"/>
                                     <RowDefinition Height="3*"/>
-                                    <RowDefinition Height="6"/>
+                                    <RowDefinition Height="4"/>
                                     <RowDefinition Height="3*"/>
-                                    <RowDefinition Height="6"/>
+                                    <RowDefinition Height="4"/>
                                     <RowDefinition Height="3*"/>
-                                    <RowDefinition Height="6"/>
+                                    <RowDefinition Height="8"/>
                                     <RowDefinition Height="2*"/>
                                     <RowDefinition Height="4"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="6"/>
-                                    <ColumnDefinition Width="6*"/>
-                                    <ColumnDefinition Width="86*"/>
-                                    <ColumnDefinition Width="8*"/>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="6"/>
                                 </Grid.ColumnDefinitions>
 
@@ -350,7 +350,8 @@
                             </ListView>
 
                             <Label Content="Description :" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="Tbk_ModsDesc" FontWeight="DemiBold" Grid.Column="5" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="Tbk_ModsDesc" FontWeight="DemiBold" Grid.Column="5" HorizontalAlignment="Stretch" 
+                                       Padding="4" TextWrapping="Wrap" VerticalAlignment="Center"/>
 
                             <Label Content="Mod files :" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top"/>
                             <ListView x:Name="Lvw_ModsFiles" FontSize="11" Grid.Column="5" Grid.Row="2" IsManipulationEnabled="False"/>
@@ -382,37 +383,36 @@
                     <TabItem x:Name="Tbi_ModsNewPresets" Header="Add new preset" DragOver="Tbi_ModsNewPresets_DragOver">
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="40*"/>
+                                <ColumnDefinition Width="6"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="41*"/>
                                 <ColumnDefinition Width="10*"/>
-                                <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="40*"/>
-                                <ColumnDefinition Width="4"/>
-                                <ColumnDefinition Width="10*"/>
-                                <ColumnDefinition Width="0"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="47.5*"/>
+                                <ColumnDefinition Width="6"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="0"/>
+                                <RowDefinition Height="6"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="2"/>
+                                <RowDefinition Height="3"/>
                                 <RowDefinition Height="1.5*"/>
-                                <RowDefinition Height="2"/>
+                                <RowDefinition Height="8"/>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="0"/>
+                                <RowDefinition Height="4"/>
                             </Grid.RowDefinitions>
 
                             <Label Content="Name :" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                             <TextBox x:Name="Tbx_NewModName" FontSize="11" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" MaxLength="50" VerticalContentAlignment="Center"/>
 
-                            <Label Content="Description :" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <TextBox x:Name="Tbx_NewModDesc" FontSize="11" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" Padding="0 3" TextWrapping="Wrap"/>
+                            <Label Content="Desc. :" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <TextBox x:Name="Tbx_NewModDesc" FontSize="11" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" MaxLength="100" Padding="0 3" TextWrapping="Wrap"/>
 
-                            <!-- TODO: Cleanup this XAML / Use Static styles -->
+                            <!-- TODO: Implement Static styles -->
                             <Label Content="Files :" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            <Button Background="WhiteSmoke" BorderBrush="DarkGray" Content="Clear" FontSize="12" Grid.Column="3" Grid.Row="2" Grid.RowSpan="2"
-                                    HorizontalAlignment="Right" Padding="0 1 0 2" VerticalAlignment="Top" Width="38" Click="Btn_NewModFilesClear_Click"/>
-                            <Border BorderBrush="LightGray" BorderThickness="1" Grid.Column="5" Grid.Row="1" Grid.RowSpan="5" SnapsToDevicePixels="True">
+                            <Button Background="WhiteSmoke" BorderBrush="DarkGray" Content="Remove" FontSize="11" Grid.Column="3"
+                                    Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Right" Padding="0 1 0 2" VerticalAlignment="Top" Width="46"
+                                    Click="Btn_NewModFilesClear_Click"/>
+                            <Border BorderBrush="DarkGray" BorderThickness="1" Grid.Column="5" Grid.Row="1" Grid.RowSpan="3" SnapsToDevicePixels="True">
                                 <Grid AllowDrop="True" Drop="Grid_NewModFiles_Drop" PreviewDragOver="Grid_NewModFiles_PreviewDragOver">
                                     <Label x:Name="Lbl_NewModFiles" Content="Drop mod files..." FontSize="16" Foreground="Gray"
                                            HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
@@ -437,13 +437,15 @@
                                             </Style>
                                         </DataGrid.RowHeaderStyle>
                                     </DataGrid>
+                                    <!-- Grid/Border with action buttons -->
                                 </Grid>
                             </Border>
                             <StackPanel Grid.Column="7" Grid.Row="1" Grid.RowSpan="5" Orientation="Vertical">
-                                <!-- TODO: Implement control buttons -->
+                                <!-- TODO: Implement control buttons? -->
+                                <!-- Examples : Open parent directory, reorder up/down, remove selected -->
                             </StackPanel>
 
-                            <StackPanel Grid.Column="2" Grid.Row="5" HorizontalAlignment="Center" Orientation="Horizontal">
+                            <StackPanel Grid.ColumnSpan="8" Grid.Row="5" HorizontalAlignment="Center" Orientation="Horizontal">
                                 <Button Style="{StaticResource Btn_NewModActions}" Content="Try  &#x2193;" Click="Btn_NewModTry_Click"/>
                                 <Button Style="{StaticResource Btn_NewModActions}" Content="Save  &#x1f5ab;" Click="Btn_NewModSave_Click"/>
                                 <Button Style="{StaticResource Btn_NewModActions}" Content="Clear all  &#x21ba;" Click="Btn_NewModClearAll_Click"/>
