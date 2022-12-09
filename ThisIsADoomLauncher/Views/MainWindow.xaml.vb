@@ -807,6 +807,48 @@ Namespace Views
             e.Row.Header = (e.Row.GetIndex + 1).ToString
         End Sub
 
+        Private Sub Btn_MoveNewModFileUp_Click(sender As Object, e As RoutedEventArgs)
+            'TODO
+        End Sub
+
+        Private Sub Btn_MoveNewModFileDown_Click(sender As Object, e As RoutedEventArgs)
+            'TODO
+        End Sub
+
+        Private Sub Btn_RemoveNewModFile_Click(sender As Object, e As RoutedEventArgs)
+            Dim dtg As DataGrid = Dtg_NewModFiles
+
+            Dim selectedCount As Integer = dtg.SelectedItems.Count
+            If selectedCount = 0 Then
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                Return
+            End If
+
+            Dim positionsToRemove = New List(Of Integer)
+            For i As Integer = 0 To selectedCount - 1
+                Dim position As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
+                positionsToRemove.Add(position)
+            Next
+
+            Dim iFiles As ObservableCollection(Of InputFile) = dtg.ItemsSource
+            Dim iFilesCount As Integer = iFiles.Count
+            For i = 0 To iFilesCount - 1
+                If positionsToRemove.Contains(i) Then iFiles.RemoveAt(i)
+            Next
+
+            If iFilesCount = 1 Then
+                'Reset initial visibility
+                Dtg_NewModFiles.Visibility = Visibility.Collapsed
+                Brd_NewModFiles.Visibility = Visibility.Collapsed
+                Lbl_NewModFiles.Visibility = Visibility.Visible
+            Else
+                dtg.ItemsSource = Nothing
+                dtg.ItemsSource = iFiles
+                dtg.SelectedIndex = If(positionsToRemove.Max = iFilesCount - 1, positionsToRemove.Max - 1, positionsToRemove.Max)
+                dtg.Focus()
+            End If
+        End Sub
+
         Private Sub Btn_NewModTry_Click(sender As Object, e As RoutedEventArgs)
             If Dtg_NewModFiles.ItemsSource Is Nothing Then Return
 

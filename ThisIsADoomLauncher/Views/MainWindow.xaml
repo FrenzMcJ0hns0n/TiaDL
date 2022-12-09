@@ -297,7 +297,7 @@
 
                                 <StackPanel Grid.ColumnSpan="5" Grid.Row="9" HorizontalAlignment="Center" Orientation="Horizontal" >
                                     <Button Style="{StaticResource Btn_NewLevelActions}" Content="Try  &#x2193;" Click="Btn_NewLevelTry_Click"/>
-                                    <Button Style="{StaticResource Btn_NewLevelActions}" Content="Save as...  &#x1f5ab;" Click="Btn_NewLevelSaveAs_Click"/>
+                                    <Button Style="{StaticResource Btn_NewLevelActions}" Content="Save as ...  &#x1f5ab;" Click="Btn_NewLevelSaveAs_Click"/>
                                     <Button Style="{StaticResource Btn_NewLevelActions}" Content="Clear all  &#x21ba;" Click="Btn_NewLevelClearAll_Click"/>
                                 </StackPanel>
                             </Grid>
@@ -332,19 +332,19 @@
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="4*" />
+                                <RowDefinition Height="1*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="8*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="15*" />
+                                <ColumnDefinition Width="44*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="10*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="44*" />
                             </Grid.ColumnDefinitions>
                             <ListView x:Name="Lvw_ModsBasePresets" Grid.RowSpan="2" Margin="-3" SelectionChanged="Lvw_ModsBasePresets_SelectionChanged">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock FontSize="13" FontWeight="DemiBold" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        <TextBlock FontSize="14" FontWeight="DemiBold" Text="{Binding Name}" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
@@ -365,8 +365,8 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Height="31.5" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ImgConverter}}"/>
-                                            <TextBlock FontSize="11.5" FontWeight="DemiBold" Margin="6 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ImgConverter}}"/>
+                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="6 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -409,14 +409,11 @@
 
                             <!-- TODO: Implement Static styles -->
                             <Label Content="Files :" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
-                            <!--<Button Background="WhiteSmoke" BorderBrush="DarkGray" Content="Remove" FontSize="11" Grid.Column="3"
-                                    Grid.Row="2" Grid.RowSpan="2" HorizontalAlignment="Right" Padding="0 1 0 2" VerticalAlignment="Top" Width="46"
-                                    Click="Btn_NewModFilesClear_Click"/>-->
                             <Border BorderBrush="DarkGray" BorderThickness="1" Grid.Column="5" Grid.Row="1" Grid.RowSpan="3" SnapsToDevicePixels="True">
                                 <Grid AllowDrop="True" Drop="Grid_NewModFiles_Drop" PreviewDragOver="Grid_NewModFiles_PreviewDragOver">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="1*"/>
-                                        <ColumnDefinition Width="80"/>
+                                        <ColumnDefinition Width="72"/>
                                     </Grid.ColumnDefinitions>
                                     <Label x:Name="Lbl_NewModFiles" Content="Drop mod files..." FontSize="16" Foreground="Gray"
                                            Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
@@ -428,6 +425,7 @@
                                               HeadersVisibility="Row"
                                               IsReadOnly="True"
                                               ItemsSource="{Binding}"
+                                              SelectionMode="Single"
                                               VerticalGridLinesBrush="LightGray"
                                               Visibility="Collapsed"
                                               LoadingRow="Dtg_NewModFiles_LoadingRow">
@@ -442,7 +440,10 @@
                                                                         <MultiBinding StringFormat="{} Filename : &quot;{0}&quot; &#x0d;&#x0a; Directory : &quot;{1}&quot; ">
                                                                             <Binding Path="Name"/>
                                                                             <Binding Path="Directory"/>
-                                                                            <!-- <Binding Path="Size" />  &#x0d;&#x0a; Size :  {2} -->
+                                                                            <!-- 
+                                                                            TODO: Implement proper readable file size from IOHelper
+                                                                            <Binding Path="Size" />
+                                                                            -->
                                                                         </MultiBinding>
                                                                     </TextBlock.Text>
                                                                 </TextBlock>
@@ -466,17 +467,17 @@
                                         <Grid>
                                             <StackPanel VerticalAlignment="Top">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2" Margin="2 20 2 0">
-                                                    <Button Content="Move 🡅" BorderThickness="0"/>
+                                                    <Button Content="Move 🡅" BorderThickness="0" Click="Btn_MoveNewModFileUp_Click"/>
                                                 </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Center">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2" Margin="2 0">
-                                                    <Button Content="Remove" BorderThickness="0"/>
+                                                    <Button Content="Remove" BorderThickness="0" Click="Btn_RemoveNewModFile_Click"/>
                                                 </Border>
                                             </StackPanel>
                                             <StackPanel VerticalAlignment="Bottom">
                                                 <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="2" Margin="2 0 2 20">
-                                                    <Button Content="Move 🡇" BorderThickness="0"/>
+                                                    <Button Content="Move 🡇" BorderThickness="0" Click="Btn_MoveNewModFileDown_Click"/>
                                                 </Border>
                                             </StackPanel>
                                         </Grid>
