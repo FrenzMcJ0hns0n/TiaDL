@@ -759,6 +759,7 @@ Namespace Views
         Private Sub Btn_NewModFilesClear_Click()
             Dtg_NewModFiles.ItemsSource = Nothing
             Dtg_NewModFiles.Visibility = Visibility.Collapsed
+            Brd_NewModFiles.Visibility = Visibility.Collapsed
             Lbl_NewModFiles.Visibility = Visibility.Visible
         End Sub
 
@@ -767,20 +768,27 @@ Namespace Views
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-                Dim modFiles As ObservableCollection(Of InputFile) = If(Dtg_NewModFiles.ItemsSource Is Nothing,
-                                                                       New ObservableCollection(Of InputFile),
-                                                                       DirectCast(Dtg_NewModFiles.ItemsSource, ObservableCollection(Of InputFile)))
+                Dim modFiles As New ObservableCollection(Of InputFile)
+                If Dtg_NewModFiles.ItemsSource IsNot Nothing Then
+                    modFiles = Dtg_NewModFiles.ItemsSource
+                End If
 
                 If modFiles.Count = 0 Then
                     Lbl_NewModFiles.Visibility = Visibility.Collapsed
                     Dtg_NewModFiles.Visibility = Visibility.Visible
+                    Brd_NewModFiles.Visibility = Visibility.Visible
                 End If
 
                 For Each droppedFile As String In e.Data.GetData(DataFormats.FileDrop)
-                    Dim fi As New FileInfo(droppedFile)
-                    If VALID_EXTENSIONS_MODS.Contains(fi.Extension) Then
-                        modFiles.Add(New InputFile(fi.Name, fi.Extension, fi.Directory.ToString, fi.Length))
+                    Dim iFile As New InputFile(droppedFile)
+
+                    'Skip invalid input files
+                    If Not VALID_EXTENSIONS_MODS.Contains(iFile.Extension) OrElse
+                        modFiles.Any(Function(f As InputFile) f.Name = iFile.Name AndAlso f.Directory = iFile.Directory) Then
+                        Continue For
                     End If
+
+                    modFiles.Add(iFile)
                 Next
 
                 Dtg_NewModFiles.ItemsSource = modFiles

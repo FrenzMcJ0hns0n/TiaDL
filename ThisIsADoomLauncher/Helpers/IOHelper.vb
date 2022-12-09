@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.Globalization
+Imports System.IO
 Imports System.Reflection
 Imports System.Text
 
@@ -81,6 +82,37 @@ Friend Module IOHelper
 
 functionEnd:
         Return absolutePath
+    End Function
+
+
+    Public Function GetFileInfo_Directory(filepath As String) As String
+        Return New FileInfo(filepath).DirectoryName
+    End Function
+
+    Public Function GetFileInfo_Extension(filepath As String) As String
+        Return New FileInfo(filepath).Extension
+    End Function
+
+    Public Function GetFileInfo_Name(filepath As String, withExtension As Boolean) As String
+        Dim info As New FileInfo(filepath)
+        Return If(withExtension, info.Name, info.Name.Replace(info.Extension, String.Empty))
+    End Function
+
+    Public Function GetFileInfo_Size(filepath As String) As Long
+        Return New FileInfo(filepath).Length
+    End Function
+
+    Public Function GetFileInfo_Size2(filepath As String) As String
+        Dim units() As String = {"b", "Kb", "Mb", "Gb", "Tb"}
+        'Dim units As New List(Of String) From {"b", "Kb", "Mb", "Gb", "Tb"}
+        Dim pos As Integer = 0
+        Dim fLength As Double = New FileInfo(filepath).Length
+        While fLength >= 1024 AndAlso pos < units.Count
+            fLength /= 1024
+            pos += 1
+        End While
+        'Dim nfi As New NumberFormatInfo With {.NumberGroupSeparator = " ", .NumberDecimalDigits = 0}
+        Return String.Format("{0} {1}", fLength, units(pos))
     End Function
 
     ''' <summary>
