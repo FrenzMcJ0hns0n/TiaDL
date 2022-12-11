@@ -5,7 +5,7 @@
         'Public Property ErrorsList As List(Of String)
         Public Property Extension As String
         Public Property Name As String
-        Public Property Size As Integer
+        Public Property Size As Long
 
 
 

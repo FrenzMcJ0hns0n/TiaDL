@@ -100,7 +100,7 @@ Friend Module PresetsMethods
                             .Name = parsedValues(0),
                             .Desc = parsedValues(1),
                             .Pict = parsedValues(2),
-                            .Files = parsedValues(3).Split(",").ToList
+                            .Files = parsedValues(3).Split(CChar(",")).ToList
                         })
                     Catch mleEx As MalformedLineException
                         WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing presets {presetsType}")
@@ -123,7 +123,7 @@ Friend Module PresetsMethods
 
     Public Sub DeletePreset(name As String)
 
-        Dim rootDirPath = GetDirectoryPath()
+        Dim rootDirPath As String = GetDirectoryPath()
         Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
 
         Dim lines As List(Of String) = File.ReadAllLines(presetFile).ToList

@@ -169,7 +169,7 @@ Namespace Views
 
         Private Sub CopyCommandToClipboard()
             Try
-                Dim commandText = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
+                Dim commandText As String = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
                 Clipboard.SetText(commandText)
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -179,7 +179,7 @@ Namespace Views
 
         Private Sub ExportCommandAsBat()
             Try
-                Dim commandText = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
+                Dim commandText As String = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
 
                 Dim now_formatted As String = Date.Now.ToString("yyyy-MM-dd_HH-mm-ss")
                 Dim batPath As String = Path.Combine(GetDirectoryPath(), now_formatted & "_command.bat")
@@ -209,7 +209,8 @@ Namespace Views
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-                Dim portFilepath As String = e.Data.GetData(DataFormats.FileDrop)(0)
+                Dim droppedFiles() As String = CType(e.Data.GetData(DataFormats.FileDrop), String())
+                Dim portFilepath As String = droppedFiles(0)
 
                 If ValidateFile(portFilepath, "Port") Then
                     FillTextBox(Tbx_Port, portFilepath)
@@ -337,12 +338,11 @@ Namespace Views
         End Sub
 
         Private Sub SortBaseLevels()
-            Dim sortCriterion As SortCriterion = Cmbx_BaseLevelsSorting.SelectedIndex
-            Dim isAscending As Boolean = Rbtn_SortAsc.IsChecked
+            Dim sortCriterion As SortCriterion = DirectCast(Cmbx_BaseLevelsSorting.SelectedIndex, SortCriterion)
+            Dim isAscending As Boolean = CBool(Rbtn_SortAsc.IsChecked)
 
             With Lvw_LevelsBasePresets
-                Dim currentLevelPresets As List(Of LevelPreset) = DirectCast(.ItemsSource, List(Of LevelPreset)) 'TODO: check with Compiler option Strict On
-
+                Dim currentLevelPresets As List(Of LevelPreset) = DirectCast(.ItemsSource, List(Of LevelPreset))
                 .ItemsSource = SortLevelPresets(currentLevelPresets, sortCriterion, isAscending)
             End With
         End Sub
@@ -428,7 +428,7 @@ Namespace Views
         'TODO? Generate window with XAML
         Private Sub MenuItemLevelView_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim preset As LevelPreset = Lvw_LevelsUserPresets.SelectedItem
+                Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
 
                 Dim myTextBlock As New TextBlock With {.Margin = New Thickness(10)}
                 For Each pi As PropertyInfo In preset.GetType().GetProperties()
@@ -455,7 +455,7 @@ Namespace Views
 
         Private Sub MenuItemLevelDelete_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim preset As LevelPreset = Lvw_LevelsUserPresets.SelectedItem
+                Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
 
                 If MessageBox.Show($"Delete preset ""{preset.Name}"" ?", "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question) = Forms.DialogResult.Yes Then
                     'TODO: Secure I/O
@@ -483,7 +483,7 @@ Namespace Views
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-                Dim filePaths As String() = e.Data.GetData(DataFormats.FileDrop)
+                Dim filePaths As String() = DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
                 Dim confirmedFiles As List(Of String) = OrderDroppedLevels(filePaths)
                 'Content of confirmedFiles depending on .Count :
                 '1 = { Iwad }
@@ -518,11 +518,11 @@ Namespace Views
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
-                Dim tbx As TextBox = sender
-                Dim sourceTbx As String = tbx.Tag 'Iwad, Maps, Misc, Pict
-                Dim droppedFile As String = e.Data.GetData(DataFormats.FileDrop)(0)
+                Dim tbx As TextBox = DirectCast(sender, TextBox)
+                Dim sourceTbx As String = tbx.Tag.ToString 'Iwad, Maps, Misc, Pict
+                Dim droppedFiles() As String = DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
 
-                If ValidateFile(droppedFile, sourceTbx) Then FillTextBox(sender, droppedFile)
+                If ValidateFile(droppedFiles(0), sourceTbx) Then FillTextBox(tbx, droppedFiles(0))
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -531,7 +531,7 @@ Namespace Views
         End Sub
 
         Private Sub Btn_NewLevelBrowse_Click(sender As Object, e As RoutedEventArgs)
-            Dim btn As Button = sender
+            Dim btn As Button = DirectCast(sender, Button)
 
             Dim sourceBtn As String = btn.Tag.ToString
             Select Case sourceBtn
@@ -575,7 +575,7 @@ Namespace Views
         End Sub
 
         Private Sub Btn_NewLevelClear_Click(sender As Object, e As RoutedEventArgs)
-            Dim btn As Button = sender
+            Dim btn As Button = DirectCast(sender, Button)
 
             'Restore default placeholder
             Dim sourceBtn As String = btn.Tag.ToString
@@ -632,9 +632,7 @@ Namespace Views
                 .Name = FAKENAME,
                 .Iwad = iwadInput,
                 .Maps = mapsInput,
-                .Misc = If(miscInput = TBX_DROP_MISC,
-                            String.Empty,
-                            miscInput),
+                .Misc = If(miscInput = TBX_DROP_MISC, String.Empty, miscInput),
                 .Type = If(iwadInput.ToLowerInvariant.Contains("doom2.wad"), "Doom 2", "Doom 1"),
                 .Year = Now.Year,
                 .Pict = "" 'TODO: Manage this input
@@ -769,9 +767,12 @@ Namespace Views
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
                 Dim modFiles As New ObservableCollection(Of InputFile)
-                If Dtg_NewModFiles.ItemsSource IsNot Nothing Then modFiles = Dtg_NewModFiles.ItemsSource
+                If Dtg_NewModFiles.ItemsSource IsNot Nothing Then
+                    modFiles = DirectCast(Dtg_NewModFiles.ItemsSource, ObservableCollection(Of InputFile))
+                End If
 
-                For Each droppedFile As String In e.Data.GetData(DataFormats.FileDrop)
+                Dim droppedFiles() As String = DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
+                For Each droppedFile As String In droppedFiles
                     Dim iFile As New InputFile(droppedFile)
 
                     'Skip invalid input files
@@ -822,15 +823,15 @@ Namespace Views
                 Return
             End If
 
-            Dim selectedItemsIdxs = New List(Of Integer)
+            Dim selectedItemsIdxs As New List(Of Integer)
             For i As Integer = 0 To selectedCount - 1
                 Dim index As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
                 selectedItemsIdxs.Add(index)
             Next
 
             Dim directoriesPaths As New List(Of String)
-            Dim iFiles As ObservableCollection(Of InputFile) = dtg.ItemsSource
-            For i = 0 To iFiles.Count - 1
+            Dim iFiles As ObservableCollection(Of InputFile) = DirectCast(dtg.ItemsSource, ObservableCollection(Of InputFile))
+            For i As Integer = 0 To iFiles.Count - 1
                 If selectedItemsIdxs.Contains(i) Then directoriesPaths.Add(iFiles(i).Directory)
             Next
 
@@ -846,15 +847,15 @@ Namespace Views
                 Return
             End If
 
-            Dim positionsToRemove = New List(Of Integer)
+            Dim positionsToRemove As New List(Of Integer)
             For i As Integer = 0 To selectedCount - 1
                 Dim position As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
                 positionsToRemove.Add(position)
             Next
 
-            Dim iFiles As ObservableCollection(Of InputFile) = dtg.ItemsSource
+            Dim iFiles As ObservableCollection(Of InputFile) = DirectCast(dtg.ItemsSource, ObservableCollection(Of InputFile))
             Dim iFilesCount As Integer = iFiles.Count
-            For i = 0 To iFilesCount - 1
+            For i As Integer = 0 To iFilesCount - 1
                 If positionsToRemove.Contains(i) Then iFiles.RemoveAt(i)
             Next
 
@@ -1098,7 +1099,7 @@ Namespace Views
                 Dim paramTbxs As List(Of TextBox) = Stkp_SummaryPortParameters.Children.OfType(Of TextBox).ToList
                 For Each tbx As TextBox In paramTbxs
                     If tbx.Text.Contains(" ") Then
-                        paramsDict.Add(tbx.Text.Split(" ")(0).Replace("-", ""), tbx.Text.Split(" ")(1))
+                        paramsDict.Add(tbx.Text.Split(CChar(" "))(0).Replace("-", ""), tbx.Text.Split(CChar(" "))(1))
                     Else
                         paramsDict.Add(tbx.Text.Replace("-", ""), String.Empty)
                     End If
