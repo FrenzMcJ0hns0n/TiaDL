@@ -926,7 +926,7 @@ Namespace Views
             currentMods.Add(New ModPreset With
             {
                 .Name = Tbx_NewModName.Text,
-                .Desc = "",
+                .Desc = Tbx_NewModDesc.Text,
                 .Files = modFiles,
                 .Pict = "" 'TODO: Manage this input
             })
