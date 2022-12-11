@@ -426,7 +426,7 @@ Namespace Views
         End Sub
 
         'TODO? Generate window with XAML
-        Private Sub MenuItemLevelView_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Mitm_ViewUserLevel_Click(sender As Object, e As RoutedEventArgs)
             Try
                 Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
 
@@ -453,20 +453,18 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub MenuItemLevelDelete_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Mitm_DeleteUserLevel_Click(sender As Object, e As RoutedEventArgs)
             Try
-                Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
+                Dim lvw As ListView = Lvw_LevelsUserPresets
+                Dim selectedPreset As LevelPreset = DirectCast(lvw.SelectedItem, LevelPreset)
+                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want to delete preset ""{selectedPreset.Name}"" ?",
+                                                              "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question)
+                If mbr = MessageBoxResult.Yes Then
+                    Dim presets As List(Of LevelPreset) = DirectCast(lvw.ItemsSource, List(Of LevelPreset))
+                    presets.Remove(selectedPreset)
 
-                If MessageBox.Show($"Delete preset ""{preset.Name}"" ?", "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question) = Forms.DialogResult.Yes Then
-                    'TODO: Secure I/O
                     Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
-                    Dim jsonString As String = GetJsonData(jsonFilepath)
-                    Dim currentLevels As List(Of LevelPreset) = LoadUserLevels(jsonString) 'TODO? Load from ListView instead as we are here actually
-
-                    Dim presetIdx As Integer = Lvw_LevelsUserPresets.Items.IndexOf(preset)
-                    currentLevels.RemoveAt(presetIdx)
-
-                    SaveUserLevels(currentLevels, jsonFilepath)
+                    SaveUserLevels(presets, jsonFilepath)
                     PopulateUserLevels()
                 End If
             Catch ex As Exception

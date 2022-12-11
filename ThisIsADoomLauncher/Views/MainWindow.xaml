@@ -246,8 +246,8 @@
                                 </ListView.ItemTemplate>
                                 <ListView.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="View details" Click="MenuItemLevelView_Click"/>
-                                        <MenuItem Header="Delete preset" Click="MenuItemLevelDelete_Click"/>
+                                        <MenuItem Header="View details" Click="Mitm_ViewUserLevel_Click"/>
+                                        <MenuItem Header="Delete preset" Click="Mitm_DeleteUserLevel_Click"/>
                                     </ContextMenu>
                                 </ListView.ContextMenu>
                             </ListView>
