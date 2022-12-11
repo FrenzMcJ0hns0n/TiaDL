@@ -861,11 +861,13 @@ Namespace Views
             Next
 
             If iFilesCount = 1 Then
-                'Reset initial visibility
+                'Reset initial visibility of the Drop area
+                dtg.ItemsSource = Nothing
                 Dtg_NewModFiles.Visibility = Visibility.Collapsed
                 Brd_NewModFiles.Visibility = Visibility.Collapsed
                 Lbl_NewModFiles.Visibility = Visibility.Visible
             Else
+                'Set previous or next item as selected one
                 dtg.ItemsSource = Nothing
                 dtg.ItemsSource = iFiles
                 dtg.SelectedIndex = If(positionsToRemove.Max = iFilesCount - 1, positionsToRemove.Max - 1, positionsToRemove.Max)
