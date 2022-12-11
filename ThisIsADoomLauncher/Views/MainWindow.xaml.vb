@@ -815,6 +815,30 @@ Namespace Views
             'TODO
         End Sub
 
+        Private Sub Btn_OpenNewModFileDir_Click(sender As Object, e As RoutedEventArgs)
+            Dim dtg As DataGrid = Dtg_NewModFiles
+
+            Dim selectedCount As Integer = dtg.SelectedItems.Count
+            If selectedCount = 0 Then
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                Return
+            End If
+
+            Dim selectedItemsIdxs = New List(Of Integer)
+            For i As Integer = 0 To selectedCount - 1
+                Dim index As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
+                selectedItemsIdxs.Add(index)
+            Next
+
+            Dim directoriesPaths As New List(Of String)
+            Dim iFiles As ObservableCollection(Of InputFile) = dtg.ItemsSource
+            For i = 0 To iFiles.Count - 1
+                If selectedItemsIdxs.Contains(i) Then directoriesPaths.Add(iFiles(i).Directory)
+            Next
+
+            directoriesPaths.ForEach(Sub(dirPath As String) Process.Start(dirPath))
+        End Sub
+
         Private Sub Btn_RemoveNewModFile_Click(sender As Object, e As RoutedEventArgs)
             Dim dtg As DataGrid = Dtg_NewModFiles
 
