@@ -676,7 +676,6 @@ Namespace Views
                 End If
 
                 Dim jsonString As String = GetJsonData(jsonFilepath)
-
                 If Not CanLoadJsonArray(jsonString) Then
                     'TODO: Use constant
                     MessageBox.Show("Unable to read user mod presets from local JSON file", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
@@ -684,22 +683,23 @@ Namespace Views
                     Return 'Early return
                 End If
 
-                Dim userMods As List(Of ModPreset) = LoadUserMods(jsonString)
-                If userMods.Count = 0 Then
+                Dim modPresets As List(Of ModPreset) = LoadUserMods(jsonString)
+                If modPresets.Count = 0 Then
                     ShowNoUserMods()
                     Return 'Early return
                 End If
 
+                'Shorten desc to be displayed after preset name
+                modPresets.ForEach(Sub(mp As ModPreset) If mp.Desc.Length > 50 Then mp.Desc = mp.Desc.Substring(0, 49) & "...")
                 'Display
                 With Lvw_ModsUserPresets
+                    .ItemsSource = modPresets
                     .Visibility = Visibility.Visible
-                    .ItemsSource = userMods
                 End With
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-
                 ShowNoUserMods()
             End Try
         End Sub

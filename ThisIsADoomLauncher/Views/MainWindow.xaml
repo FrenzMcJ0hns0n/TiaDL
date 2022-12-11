@@ -382,7 +382,8 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ImgConverter}}"/>
-                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="6 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="6 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="13" FontStyle="Italic" Foreground="DarkGray" Text="{Binding Desc}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
@@ -418,7 +419,7 @@
                             </Grid.RowDefinitions>
 
                             <Label Content="Name :" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                            <TextBox x:Name="Tbx_NewModName" FontSize="11" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" MaxLength="50" VerticalContentAlignment="Center"/>
+                            <TextBox x:Name="Tbx_NewModName" FontSize="11" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" MaxLength="60" VerticalContentAlignment="Center"/>
 
                             <Label Content="Desc. :" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                             <TextBox x:Name="Tbx_NewModDesc" FontSize="11" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" MaxLength="100" Padding="0 3" TextWrapping="Wrap"/>
