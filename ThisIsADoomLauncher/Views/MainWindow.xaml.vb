@@ -769,15 +769,7 @@ Namespace Views
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
 
                 Dim modFiles As New ObservableCollection(Of InputFile)
-                If Dtg_NewModFiles.ItemsSource IsNot Nothing Then
-                    modFiles = Dtg_NewModFiles.ItemsSource
-                End If
-
-                If modFiles.Count = 0 Then
-                    Lbl_NewModFiles.Visibility = Visibility.Collapsed
-                    Dtg_NewModFiles.Visibility = Visibility.Visible
-                    Brd_NewModFiles.Visibility = Visibility.Visible
-                End If
+                If Dtg_NewModFiles.ItemsSource IsNot Nothing Then modFiles = Dtg_NewModFiles.ItemsSource
 
                 For Each droppedFile As String In e.Data.GetData(DataFormats.FileDrop)
                     Dim iFile As New InputFile(droppedFile)
@@ -790,6 +782,12 @@ Namespace Views
 
                     modFiles.Add(iFile)
                 Next
+
+                If modFiles.Count > 0 Then
+                    Lbl_NewModFiles.Visibility = Visibility.Collapsed
+                    Dtg_NewModFiles.Visibility = Visibility.Visible
+                    Brd_NewModFiles.Visibility = Visibility.Visible
+                End If
 
                 Dtg_NewModFiles.ItemsSource = modFiles
 
