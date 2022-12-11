@@ -575,7 +575,7 @@
 
                 <StackPanel Grid.Row="6" VerticalAlignment="Center">
                     <Button Background="#d6e0f5" Content="Switch view &#128065;" Margin="4" Padding="0 8" Click="Button_OptionSwitchView_Click"/>
-                    <Button Background="#c6ecc6" Content="Save &amp; Play" Margin="4" Padding="0 8" Click="Button_OptionSavePlay_Click"/>
+                    <Button Background="#c6ecc6" Content="Save &amp; Play &#10148;" Margin="4" Padding="0 8" Click="Button_OptionSavePlay_Click"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
