@@ -121,7 +121,7 @@ Namespace Views
 
         Private Sub PopulateBaseLevelPresets()
             Try
-                Lvw_LevelsBasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
+                Lvw_LevelsBasePresets.ItemsSource = GetBasePresetsFromCsv_Levels()
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -130,7 +130,7 @@ Namespace Views
 
         Private Sub PopulateBaseModsPresets()
             Try
-                Lvw_ModsBasePresets.ItemsSource = GetModPresets_FromCsv("base_mods")
+                Lvw_ModsBasePresets.ItemsSource = GetBasePresetsFromCsv_Mods()
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -328,7 +328,7 @@ Namespace Views
                 Rbtn_SortAsc.IsEnabled = False
                 Rbtn_SortDesc.IsEnabled = False
 
-                Lvw_LevelsBasePresets.ItemsSource = GetLevelPresets_FromCsv("base_levels")
+                Lvw_LevelsBasePresets.ItemsSource = GetBasePresetsFromCsv_Levels()
             End If
         End Sub
 

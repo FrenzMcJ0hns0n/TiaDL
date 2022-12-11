@@ -11,17 +11,15 @@ Friend Module PresetsMethods
     ''' <summary>
     ''' Configure the TextFieldParser object to parse CSV data
     ''' </summary>
-    ''' <param name="presetsType">Type of content to get</param>
+    ''' <param name="basePresetsType">Type of content to get</param>
     ''' <returns></returns>
-    Public Function ConfigureTextFieldParser(presetsType As String) As TextFieldParser
+    Public Function ConfigureTextFieldParser(basePresetsType As String) As TextFieldParser
         Dim parser As TextFieldParser = Nothing
 
         Try
-            Select Case presetsType
-                Case "base_levels"
-                    parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
-                Case "base_mods"
-                    parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
+            Select Case basePresetsType
+                Case "levels" : parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
+                Case "mods" : parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
             End Select
 
             With parser
@@ -33,17 +31,17 @@ Friend Module PresetsMethods
 
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {basePresetsType}")
         End Try
 
         Return parser
     End Function
 
-    Public Function GetLevelPresets_FromCsv(presetsType As String) As List(Of LevelPreset)
+    Public Function GetBasePresetsFromCsv_Levels() As List(Of LevelPreset)
         Dim levelPresets As New List(Of LevelPreset)
 
         Try
-            Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
+            Dim parser As TextFieldParser = ConfigureTextFieldParser("levels")
             Using parser
                 Do While Not parser.EndOfData
                     Try
@@ -64,24 +62,24 @@ Friend Module PresetsMethods
                         })
 
                     Catch mleEx As MalformedLineException
-                        WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing presets {presetsType}")
+                        WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing base level presets")
                     End Try
                 Loop
             End Using
 
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
         End Try
 
         Return levelPresets
     End Function
 
-    Public Function GetModPresets_FromCsv(presetsType As String) As List(Of ModPreset)
+    Public Function GetBasePresetsFromCsv_Mods() As List(Of ModPreset)
         Dim modPresets As New List(Of ModPreset)
 
         Try
-            Dim parser As TextFieldParser = ConfigureTextFieldParser(presetsType)
+            Dim parser As TextFieldParser = ConfigureTextFieldParser("mods")
             Using parser
                 Do While Not parser.EndOfData
                     Try
@@ -98,14 +96,14 @@ Friend Module PresetsMethods
                             .Files = parsedValues(3).Split(CChar(",")).ToList
                         })
                     Catch mleEx As MalformedLineException
-                        WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing presets {presetsType}")
+                        WriteToLog($"{Date.Now} - Error : Got MalformedLineException while parsing base mod presets")
                     End Try
                 Loop
             End Using
 
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {presetsType}")
+            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
         End Try
 
         Return modPresets
