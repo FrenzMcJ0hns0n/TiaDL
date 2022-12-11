@@ -742,14 +742,29 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub MenuItemModView_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Mitm_ViewUserMod_Click(sender As Object, e As RoutedEventArgs)
             'TODO
             MessageBox.Show("You clicked ""View details""")
         End Sub
 
-        Private Sub MenuItemModDelete_Click(sender As Object, e As RoutedEventArgs)
-            'TODO
-            MessageBox.Show("You clicked ""Delete preset""")
+        Private Sub Mitm_DeleteUserMod_Click(sender As Object, e As RoutedEventArgs)
+            Try
+                Dim lvw As ListView = Lvw_ModsUserPresets
+                Dim selectedPreset As ModPreset = DirectCast(lvw.SelectedItem, ModPreset)
+                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want to delete preset ""{selectedPreset.Name}"" ?",
+                                                              "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question)
+                If mbr = MessageBoxResult.Yes Then
+                    Dim presets As List(Of ModPreset) = DirectCast(lvw.ItemsSource, List(Of ModPreset))
+                    presets.Remove(selectedPreset)
+
+                    Dim jsonFilepath As String = GetJsonFilepath("UserMods")
+                    SaveUserMods(presets, jsonFilepath)
+                    PopulateUserMods()
+                End If
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
         End Sub
 
         Private Sub Btn_NewModFilesClear_Click()

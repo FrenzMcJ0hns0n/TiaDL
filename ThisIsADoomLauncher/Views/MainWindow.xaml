@@ -388,8 +388,8 @@
                                 </ListView.ItemTemplate>
                                 <ListView.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="View details" Click="MenuItemModView_Click"/>
-                                        <MenuItem Header="Delete preset" Click="MenuItemModDelete_Click"/>
+                                        <MenuItem Header="View details" Click="Mitm_ViewUserMod_Click"/>
+                                        <MenuItem Header="Delete preset" Click="Mitm_DeleteUserMod_Click"/>
                                     </ContextMenu>
                                 </ListView.ContextMenu>
                             </ListView>
