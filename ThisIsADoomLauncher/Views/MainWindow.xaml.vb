@@ -286,7 +286,7 @@ Namespace Views
                 Next
                 Tbx_PortParameters.ToolTip = String.Join(vbCrLf, parametersList)
             Else
-                Tbx_PortParameters.Foreground = Brushes.DarkGray
+                Tbx_PortParameters.Foreground = Brushes.Gray
                 Tbx_PortParameters.ToolTip = Nothing
             End If
 
@@ -935,7 +935,7 @@ Namespace Views
 
 #Region "Actions : Sidebar"
 
-        Private Sub Button_Options_HelpAbout_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Button_OptionHelpAbout_Click(sender As Object, e As RoutedEventArgs)
             Try
                 Dim helpWindow As New HelpWindow() With {.Owner = Me}
                 helpWindow.ShowDialog()
@@ -946,11 +946,11 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub Button_Options_OpenRootDir_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Button_OptionOpenRootDir_Click(sender As Object, e As RoutedEventArgs)
             Process.Start(GetDirectoryPath())
         End Sub
 
-        Private Sub Button_Options_ToggleView_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Button_OptionSwitchView_Click(sender As Object, e As RoutedEventArgs)
             Try
                 If Grid_Summary.Visibility = Visibility.Visible Then
                     Grid_Summary.Visibility = Visibility.Collapsed
@@ -967,7 +967,7 @@ Namespace Views
             End Try
         End Sub
 
-        Private Sub Button_Options_LaunchSave_Click(sender As Object, e As RoutedEventArgs)
+        Private Sub Button_OptionSavePlay_Click(sender As Object, e As RoutedEventArgs)
             Try
                 If ReadyToLaunch() Then
                     LaunchGame()
