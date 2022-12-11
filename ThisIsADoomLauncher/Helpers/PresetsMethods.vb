@@ -22,11 +22,6 @@ Friend Module PresetsMethods
                     parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Levels))
                 Case "base_mods"
                     parser = New TextFieldParser(New StringReader(My.Resources.base_presets_Mods))
-                Case "user_levels"
-                    parser = New TextFieldParser(GetCsvFilepath("UserLevels"))
-                Case "user_mods"
-                    'TODO
-                Case Else 'TODO?
             End Select
 
             With parser
@@ -117,47 +112,5 @@ Friend Module PresetsMethods
     End Function
 
 #End Region
-
-
-#Region "Not used yet / to implement"
-
-    Public Sub DeletePreset(name As String)
-
-        Dim rootDirPath As String = GetDirectoryPath()
-        Dim presetFile As String = Path.Combine(rootDirPath, "presets.csv")
-
-        Dim lines As List(Of String) = File.ReadAllLines(presetFile).ToList
-        Dim count As Integer = 0
-
-        For Each line As String In lines
-            count += 1
-            If line.StartsWith(name) Then
-                lines.RemoveAt(count - 1)
-                File.WriteAllLines(presetFile, lines)
-                Exit For
-            End If
-        Next
-
-    End Sub
-
-    'CSV version: may never be used
-    Public Sub PersistUserLevelPresets(levelPresets As List(Of LevelPreset))
-        Try
-            Dim csvPath As String = GetCsvFilepath("UserLevels")
-
-            Using writer As New StreamWriter(csvPath, False)
-                writer.Write(String.Join(vbCrLf, USER_LEVELS_HEADER))
-                levelPresets.ForEach(Sub(lp As LevelPreset) writer.WriteLine($"{lp.Name}; {lp.Iwad}; {lp.Maps}; {lp.Misc}"))
-            End Using
-
-        Catch ex As Exception
-            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            Dim presetNames As List(Of String) = levelPresets.Select(Function(lp As LevelPreset) lp.Name).ToList
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Preset names = {String.Join(", ", presetNames)}")
-        End Try
-    End Sub
-
-#End Region
-
 
 End Module
