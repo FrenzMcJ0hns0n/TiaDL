@@ -6,43 +6,54 @@
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
         
-        Title="Help" 
-        Width="550" Height="840"
-        WindowStartupLocation="CenterOwner"
+        Title="Help / About" 
+        Height="840" Width="550"
+        
+        FontSize="14"
         ResizeMode="CanMinimize"
-        >
+        WindowStartupLocation="CenterOwner">
+
+    <Window.Resources>
+
+        <Style x:Key="Prg_Title" TargetType="{x:Type Paragraph}">
+            <Setter Property="FontSize" Value="28"/>
+            <Setter Property="FontWeight" Value="DemiBold"/>
+        </Style>
+        
+        <Style x:Key="List_Examples" TargetType="{x:Type List}">
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="Margin" Value="0 14 0 28"/>
+            <Setter Property="MarkerStyle" Value="Box"/>
+        </Style>
+    </Window.Resources>
 
     <Grid>
-        <Border Margin="14"
-                BorderThickness="1"
-                BorderBrush="LightGray">
+        <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="16">
             <ScrollViewer>
-                <RichTextBox HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             Margin="8"
-                             BorderThickness="0"
-                             IsReadOnly="True"
-                             Cursor="Arrow">
+                <RichTextBox BorderThickness="0" Cursor="Arrow" IsReadOnly="True" Margin="8">
 
                     <FlowDocument>
                         <Section>
-                            <Paragraph FontWeight="DemiBold" FontSize="24">Files</Paragraph>
-                            <Paragraph FontSize="14">
+                            <Paragraph Style="{StaticResource Prg_Title}">Files</Paragraph>
+                            <Paragraph>
                                 The main types of file you need to play Doom.
                             </Paragraph>
                             <List>
 
                                 <ListItem>
-                                    <Paragraph FontWeight="DemiBold" FontSize="14">Iwad</Paragraph>
-                                    <Paragraph FontSize="14">
+                                    <Paragraph FontWeight="DemiBold">Iwad</Paragraph>
+                                    <Paragraph>
                                         Base game data.
-                                        <LineBreak /> Can be official or community releases.
-                                        <LineBreak /> File extension : .wad
-                                        <LineBreak /> Examples :
+                                        <LineBreak /> 
+                                        Can be official or community releases.
+                                        <LineBreak /> 
+                                        File extension : .wad
+                                        <LineBreak /> 
+                                        Examples :
                                     </Paragraph>
-                                    <List Margin="0,14,0,28" Foreground="Gray" MarkerStyle="Box">
+                                    <List Style="{StaticResource List_Examples}">
                                         <ListItem>
-                                            <Paragraph>doom.wad</Paragraph>
+                                            <Paragraph>Doom.wad</Paragraph>
                                         </ListItem>
                                         <ListItem>
                                             <Paragraph>Doom2.wad</Paragraph>
@@ -57,14 +68,17 @@
                                 </ListItem>
 
                                 <ListItem>
-                                    <Paragraph FontWeight="DemiBold" FontSize="14">Level</Paragraph>
-                                    <Paragraph FontSize="14">
+                                    <Paragraph FontWeight="DemiBold">Level</Paragraph>
+                                    <Paragraph>
                                         Pack of levels, designed by the community.
-                                        <LineBreak /> Needs IWAD resources to be played.
-                                        <LineBreak /> File extension : .wad, .pk3
-                                        <LineBreak /> Examples :
+                                        <LineBreak /> 
+                                        Needs IWAD resources to be played.
+                                        <LineBreak /> 
+                                        File extension : .wad, .pk3
+                                        <LineBreak /> 
+                                        Examples :
                                     </Paragraph>
-                                    <List Margin="0,14,0,28" Foreground="Gray" MarkerStyle="Box">
+                                    <List Style="{StaticResource List_Examples}">
                                         <ListItem>
                                             <Paragraph>ICARUS.wad</Paragraph>
                                         </ListItem>
@@ -78,26 +92,28 @@
                                 </ListItem>
 
                                 <ListItem>
-                                    <Paragraph FontWeight="DemiBold" FontSize="14">Misc.</Paragraph>
-                                    <Paragraph FontSize="14">
+                                    <Paragraph FontWeight="DemiBold">Misc.</Paragraph>
+                                    <Paragraph>
                                         Additional file for levels or mods, not mandatory.
-                                        <LineBreak /> File extension : .deh, .bex
+                                        <LineBreak />
+                                        File extension : .deh, .bex
                                     </Paragraph>
                                 </ListItem>
 
                             </List>
-                            <Paragraph></Paragraph>
                         </Section>
 
                         <Section>
-                            <Paragraph FontWeight="DemiBold" FontSize="24">Ports</Paragraph>
-                            <Paragraph FontSize="14">
+                            <Paragraph Style="{StaticResource Prg_Title}">Ports</Paragraph>
+                            <Paragraph>
                                 Softwares designed to run Doom on nowadays computers.
                                 <LineBreak />
-                                <LineBreak /> Extend/Improve features of the original game, such as : graphics, framerate, mod support, multiplayer, etc.
-                                <LineBreak /> Examples of Doom ports :
+                                <LineBreak />
+                                Extend/Improve features of the original game, such as : graphics, framerate, mod support, multiplayer, etc.
+                                <LineBreak />
+                                Examples of Doom ports :
                             </Paragraph>
-                            <List Margin="0,14,0,28" Foreground="Gray" MarkerStyle="Box">
+                            <List Style="{StaticResource List_Examples}">
                                 <ListItem>
                                     <Paragraph>Chocolate Doom</Paragraph>
                                 </ListItem>
@@ -112,22 +128,21 @@
                                 </ListItem>
                                 
                             </List>
-                            <Paragraph FontSize="14">
+                            <Paragraph>
                                 GZDoom is the recommended port to use with TiaDL.
                             </Paragraph>
-                            <Paragraph></Paragraph>
                         </Section>
 
                         <Section>
-                            <Paragraph FontWeight="DemiBold" FontSize="24">Keys</Paragraph>
-                            <Paragraph FontSize="14">
+                            <Paragraph Style="{StaticResource Prg_Title}">Keys</Paragraph>
+                            <Paragraph>
                                 To use in-game (AZERTY keyboard layout) :
                             </Paragraph>
-                            <List Margin="0,14,0,28" MarkerStyle="Box">
+                            <List Margin="0 14 0 28" MarkerStyle="Box">
 
                                 <ListItem>
-                                    <Paragraph FontSize="14">System</Paragraph>
-                                    <List Margin="0,0,0,6" Foreground="Gray" MarkerStyle="Box">
+                                    <Paragraph>System</Paragraph>
+                                    <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
                                         <ListItem>
                                             <Paragraph>Quick save :
                                                 <Bold>F6</Bold>
@@ -142,8 +157,8 @@
                                 </ListItem>
 
                                 <ListItem>
-                                    <Paragraph FontSize="14">Screen size</Paragraph>
-                                    <List Margin="0,0,0,6"  Foreground="Gray" MarkerStyle="Box">
+                                    <Paragraph>Screen size</Paragraph>
+                                    <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
                                         <ListItem>
                                             <Paragraph>Increase screen size :
                                                 <Bold>)</Bold>
@@ -158,8 +173,8 @@
                                 </ListItem>
 
                                 <ListItem>
-                                    <Paragraph FontSize="14">Cheat codes</Paragraph>
-                                    <List Margin="0,0,0,6"  Foreground="Gray" MarkerStyle="Box">
+                                    <Paragraph>Cheat codes</Paragraph>
+                                    <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
                                         <ListItem>
                                             <Paragraph>Invincibility :
                                                 <Bold>iddad</Bold>
@@ -171,26 +186,26 @@
                                             </Paragraph>
                                         </ListItem>
                                         <ListItem>
-                                            <Paragraph>Toggle collisions on/off : <Bold>idclip</Bold></Paragraph>
+                                            <Paragraph>Toggle collisions on/off :
+                                                <Bold>idclip</Bold>
+                                            </Paragraph>
                                         </ListItem>
                                     </List>
                                 </ListItem>
 
                             </List>
-                            <Paragraph></Paragraph>
                         </Section>
                         
                         <Section>
-                            <Paragraph FontWeight="DemiBold" FontSize="24">User presets</Paragraph>
-                            <Paragraph FontSize="14">
-                                Set your own Iwad + Level combinations from the
-                                <Bold>Add new preset</Bold> tab.
-                                <LineBreak /> Then access them on the
-                                <Bold>User presets</Bold> tab.
+                            <Paragraph Style="{StaticResource Prg_Title}">User presets</Paragraph>
+                            <Paragraph>
+                                Set your own Iwad + Level combinations from the <Bold>Add new preset</Bold> tab.
                                 <LineBreak />
-                                <LineBreak /> To delete a preset, just right-click on it.
+                                Then access them on the <Bold>User presets</Bold> tab.
+                                <LineBreak />
+                                <LineBreak />
+                                To delete a preset, just right-click on it.
                             </Paragraph>
-                            <Paragraph></Paragraph>
                         </Section>
                     </FlowDocument>
 
