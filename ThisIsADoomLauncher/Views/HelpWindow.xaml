@@ -15,14 +15,9 @@
 
     <Window.Resources>
 
-        <Style x:Key="Prg_Title" TargetType="{x:Type Paragraph}">
-            <Setter Property="FontSize" Value="28"/>
-            <Setter Property="FontWeight" Value="DemiBold"/>
-        </Style>
-        
-        <Style x:Key="List_Examples" TargetType="{x:Type List}">
+        <Style x:Key="List_SubList" TargetType="{x:Type List}">
             <Setter Property="Foreground" Value="Gray"/>
-            <Setter Property="Margin" Value="0 14 0 28"/>
+            <Setter Property="Margin" Value="0 10 0 20"/>
             <Setter Property="MarkerStyle" Value="Box"/>
         </Style>
     </Window.Resources>
@@ -31,187 +26,286 @@
         <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="16">
             <ScrollViewer>
                 <RichTextBox BorderThickness="0" Cursor="Arrow" IsReadOnly="True" Margin="8">
-
                     <FlowDocument>
-                        <Section>
-                            <Paragraph Style="{StaticResource Prg_Title}">Files</Paragraph>
-                            <Paragraph>
-                                The main types of file you need to play Doom.
-                            </Paragraph>
-                            <List>
 
-                                <ListItem>
-                                    <Paragraph FontWeight="DemiBold">Iwad</Paragraph>
-                                    <Paragraph>
-                                        Base game data.
-                                        <LineBreak /> 
-                                        Can be official or community releases.
-                                        <LineBreak /> 
-                                        File extension : .wad
-                                        <LineBreak /> 
-                                        Examples :
-                                    </Paragraph>
-                                    <List Style="{StaticResource List_Examples}">
-                                        <ListItem>
-                                            <Paragraph>Doom.wad</Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>Doom2.wad</Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>TNT.WAD</Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>freedoom1.wad</Paragraph>
-                                        </ListItem>
-                                    </List>
-                                </ListItem>
-
-                                <ListItem>
-                                    <Paragraph FontWeight="DemiBold">Level</Paragraph>
-                                    <Paragraph>
-                                        Pack of levels, designed by the community.
-                                        <LineBreak /> 
-                                        Needs IWAD resources to be played.
-                                        <LineBreak /> 
-                                        File extension : .wad, .pk3
-                                        <LineBreak /> 
-                                        Examples :
-                                    </Paragraph>
-                                    <List Style="{StaticResource List_Examples}">
-                                        <ListItem>
-                                            <Paragraph>ICARUS.wad</Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>Requiem.wad</Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>DTS-T.pk3</Paragraph>
-                                        </ListItem>
-                                    </List>
-                                </ListItem>
-
-                                <ListItem>
-                                    <Paragraph FontWeight="DemiBold">Misc.</Paragraph>
-                                    <Paragraph>
-                                        Additional file for levels or mods, not mandatory.
-                                        <LineBreak />
-                                        File extension : .deh, .bex
-                                    </Paragraph>
-                                </ListItem>
-
-                            </List>
-                        </Section>
-
-                        <Section>
-                            <Paragraph Style="{StaticResource Prg_Title}">Ports</Paragraph>
-                            <Paragraph>
-                                Softwares designed to run Doom on nowadays computers.
-                                <LineBreak />
-                                <LineBreak />
-                                Extend/Improve features of the original game, such as : graphics, framerate, mod support, multiplayer, etc.
-                                <LineBreak />
-                                Examples of Doom ports :
-                            </Paragraph>
-                            <List Style="{StaticResource List_Examples}">
-                                <ListItem>
-                                    <Paragraph>Chocolate Doom</Paragraph>
-                                </ListItem>
-                                <ListItem>
-                                    <Paragraph FontWeight="DemiBold">GZDoom</Paragraph>
-                                </ListItem>
-                                <ListItem>
-                                    <Paragraph>PrBoom+</Paragraph>
-                                </ListItem>
-                                <ListItem>
-                                    <Paragraph>Zandronum</Paragraph>
-                                </ListItem>
-                                
-                            </List>
-                            <Paragraph>
-                                GZDoom is the recommended port to use with TiaDL.
-                            </Paragraph>
-                        </Section>
-
-                        <Section>
-                            <Paragraph Style="{StaticResource Prg_Title}">Keys</Paragraph>
-                            <Paragraph>
-                                To use in-game (AZERTY keyboard layout) :
-                            </Paragraph>
-                            <List Margin="0 14 0 28" MarkerStyle="Box">
-
-                                <ListItem>
-                                    <Paragraph>System</Paragraph>
-                                    <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
-                                        <ListItem>
-                                            <Paragraph>Quick save :
-                                                <Bold>F6</Bold>
-                                            </Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>Jump to map n :
-                                                <Bold>idclev n</Bold>
-                                            </Paragraph>
-                                        </ListItem>
-                                    </List>
-                                </ListItem>
-
-                                <ListItem>
-                                    <Paragraph>Screen size</Paragraph>
-                                    <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
-                                        <ListItem>
-                                            <Paragraph>Increase screen size :
-                                                <Bold>)</Bold>
-                                            </Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>Decrease screen size :
-                                                <Bold>=</Bold>
-                                            </Paragraph>
-                                        </ListItem>
-                                    </List>
-                                </ListItem>
-
-                                <ListItem>
-                                    <Paragraph>Cheat codes</Paragraph>
-                                    <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
-                                        <ListItem>
-                                            <Paragraph>Invincibility :
-                                                <Bold>iddad</Bold>
-                                            </Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>Maximum ammo :
-                                                <Bold>idkfq</Bold>
-                                            </Paragraph>
-                                        </ListItem>
-                                        <ListItem>
-                                            <Paragraph>Toggle collisions on/off :
-                                                <Bold>idclip</Bold>
-                                            </Paragraph>
-                                        </ListItem>
-                                    </List>
-                                </ListItem>
-
-                            </List>
-                        </Section>
                         
-                        <Section>
-                            <Paragraph Style="{StaticResource Prg_Title}">User presets</Paragraph>
-                            <Paragraph>
-                                Set your own Iwad + Level combinations from the <Bold>Add new preset</Bold> tab.
-                                <LineBreak />
-                                Then access them on the <Bold>User presets</Bold> tab.
-                                <LineBreak />
-                                <LineBreak />
-                                To delete a preset, just right-click on it.
-                            </Paragraph>
-                        </Section>
-                    </FlowDocument>
+                        <Paragraph Margin="0 0 0 50">
+                            <Run FontSize="24" FontWeight="DemiBold">
+                                TiaDL
+                            </Run>
+                            <LineBreak/>
+                            <Run FontWeight="DemiBold">
+                                This is a Doom Launcher
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                (Yet another) Doom launcher, dedicated to "Classic Doom".
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                It is designed to be as quick and simple to use as possible,
+                                for people who don't have particular knowledge in Doom modding,
+                                or who simply do not want to care much about technical stuff.
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                In this page, you will hopefully find all the help you need.
+                                    If you have suggestions or questions about this program, feel
+                                    free to send me a private message on
+                            </Run>
+                            <Hyperlink NavigateUri="https://www.reddit.com/user/McJ0hns0n/">
+                                my Reddit account
+                            </Hyperlink>
+                        </Paragraph>
 
+
+                        <Paragraph>
+                            <Run FontSize="24" FontWeight="DemiBold">
+                                Files
+                            </Run>
+                            <LineBreak/>
+                            <Run FontWeight="DemiBold">
+                                The various files used in TiaDL
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                The file types named in this section are the ones used in TiaDL,
+                                as a project. They can have different names in other programs,
+                                or even in the Doom community.
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                For instance, the levels distributed by community members are
+                                called "Maps", in TiaDL logic. Not to be confused with "Level"
+                                which is a group of files (Iwad, Maps, Misc). In the program,
+                                you interact with Iwad (mandatory), Maps (optional) and Misc
+                                (optional) files though presets known under the name "Levels".
+                            </Run>
+                        </Paragraph>
+
+
+                        <List Margin="0 0 0 50">
+                            <ListItem>
+                                <Paragraph>
+                                    <Run FontWeight="DemiBold">
+                                        Iwad
+                                    </Run>
+                                    <LineBreak/>
+                                    <Run>
+                                        Base game data. Can be official releases under copyright
+                                        or free community releases. This content is mandatory in
+                                        order to launch a Doom game.
+                                    </Run>
+                                    <Run FontWeight="DemiBold">
+                                        File extension : WAD
+                                    </Run>
+                                    <LineBreak/>
+                                    <Run>
+                                        Examples :
+                                    </Run>
+                                </Paragraph>
+                                <List Style="{StaticResource List_SubList}">
+                                    <ListItem>
+                                        <Paragraph>Doom.wad</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Doom2.wad</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>TNT.WAD</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>freedoom1.wad</Paragraph>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+
+                            <ListItem>
+                                <Paragraph>
+                                    <Run FontWeight="DemiBold">
+                                        Maps
+                                    </Run>
+                                    <LineBreak/>
+                                    <Run>
+                                        Pack of Doom levels, designed and released by the Doom
+                                        community. Requires an Iwad as base resource.
+                                    </Run>
+                                    <Run FontWeight="DemiBold">
+                                        File extensions : WAD, PK3
+                                    </Run>
+                                    <LineBreak/>
+                                    <Run>
+                                        Examples :
+                                    </Run>
+                                </Paragraph>
+                                <List Style="{StaticResource List_SubList}">
+                                    <ListItem>
+                                        <Paragraph>ICARUS.wad</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Requiem.wad</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>DTS-T.pk3</Paragraph>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+
+                            <ListItem>
+                                <Paragraph>
+                                    <Run FontWeight="DemiBold">
+                                        Misc
+                                    </Run>
+                                    <LineBreak/>
+                                    <Run>
+                                        Additional file for levels, not mandatory. Some
+                                        community levels provide such files, that were
+                                        originally created to circumvent limitations or
+                                        rules from the original Doom game.
+                                    </Run>
+                                    <Run FontWeight="DemiBold">
+                                        File extensions : BEX, DEH
+                                    </Run>
+                                    <LineBreak/>
+                                    <Run>
+                                        Examples :
+                                    </Run>
+                                </Paragraph>
+                            </ListItem>
+                        </List>
+
+
+                        <!-- TODO -->
+                        <Paragraph FontSize="24" FontWeight="DemiBold">Ports</Paragraph>
+                        <Paragraph>
+                            Softwares designed to run Doom on nowadays computers.
+                            <LineBreak />
+                            <LineBreak />
+                            Extend/Improve features of the original game, such as : graphics, framerate, mod support, multiplayer, etc.
+                            <LineBreak />
+                            Examples of Doom ports :
+                        </Paragraph>
+                        <List Style="{StaticResource List_SubList}">
+                            <ListItem>
+                                <Paragraph>Chocolate Doom</Paragraph>
+                            </ListItem>
+                            <ListItem>
+                                <Paragraph FontWeight="DemiBold">GZDoom</Paragraph>
+                            </ListItem>
+                            <ListItem>
+                                <Paragraph>PrBoom+</Paragraph>
+                            </ListItem>
+                            <ListItem>
+                                <Paragraph>Zandronum</Paragraph>
+                            </ListItem>
+                        </List>
+                        <Paragraph>
+                            GZDoom is the recommended port to use with TiaDL.
+                        </Paragraph>
+
+
+                        <!-- TODO -->
+                        <Paragraph FontSize="24" FontWeight="DemiBold">Keys</Paragraph>
+                        <Paragraph>
+                            To use in-game (AZERTY keyboard layout) :
+                        </Paragraph>
+
+                        <List Margin="0 14 0 28" MarkerStyle="Box">
+                            <ListItem>
+                                <Paragraph>System</Paragraph>
+                                <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
+                                    <ListItem>
+                                        <Paragraph>Quick save :
+                                            <Bold>F6</Bold>
+                                        </Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Jump to map n :
+                                            <Bold>idclev n</Bold>
+                                        </Paragraph>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+
+                            <ListItem>
+                                <Paragraph>Screen size</Paragraph>
+                                <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
+                                    <ListItem>
+                                        <Paragraph>Increase screen size :
+                                            <Bold>)</Bold>
+                                        </Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Decrease screen size :
+                                            <Bold>=</Bold>
+                                        </Paragraph>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+
+                            <ListItem>
+                                <Paragraph>Cheat codes</Paragraph>
+                                <List Margin="0 0 0 6" Foreground="Gray" MarkerStyle="Box">
+                                    <ListItem>
+                                        <Paragraph>Invincibility :
+                                            <Bold>iddad</Bold>
+                                        </Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Maximum ammo :
+                                            <Bold>idkfq</Bold>
+                                        </Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Toggle collisions on/off :
+                                            <Bold>idclip</Bold>
+                                        </Paragraph>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+                        </List>
+
+
+                        <Paragraph>
+                            <Run FontSize="24" FontWeight="DemiBold">
+                                User presets
+                            </Run>
+                            <LineBreak/>
+                            <Run FontWeight="DemiBold">
+                                Set custom presets for Levels and Mods
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                Define you own presets from the
+                            </Run>
+                            <Bold>
+                                Add new preset
+                            </Bold>
+                            <Run>
+                                tabs of each group.
+                            </Run>
+                            <LineBreak />
+                            <LineBreak />
+                            <Run>
+                                One registered, access them through the
+                            </Run>
+                            <Bold>User presets</Bold>
+                            <Run>
+                                tabs. Use a right-click to interact more
+                                with those.
+                            </Run>
+                        </Paragraph>
+
+
+                    </FlowDocument>
                 </RichTextBox>
             </ScrollViewer>
         </Border>
-        
     </Grid>
 </Window>
