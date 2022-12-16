@@ -17,11 +17,12 @@
 
         <Style x:Key="List_SubList" TargetType="{x:Type List}">
             <Setter Property="Foreground" Value="Gray"/>
-            <Setter Property="Margin" Value="0 10 0 20"/>
+            <Setter Property="Margin" Value="0 8 0 24"/>
             <Setter Property="MarkerStyle" Value="Box"/>
         </Style>
     </Window.Resources>
 
+    
     <Grid>
         <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="16">
             <ScrollViewer>
@@ -29,7 +30,7 @@
                     <FlowDocument>
 
                         
-                        <Paragraph Margin="0 0 0 50">
+                        <Paragraph Margin="0 0 0 60">
                             <Run FontSize="24" FontWeight="DemiBold">
                                 TiaDL
                             </Run>
@@ -40,25 +41,57 @@
                             <LineBreak/>
                             <LineBreak/>
                             <Run>
-                                (Yet another) Doom launcher, dedicated to "Classic Doom".
-                            </Run>
-                            <LineBreak/>
-                            <LineBreak/>
-                            <Run>
-                                It is designed to be as quick and simple to use as possible,
-                                for people who don't have particular knowledge in Doom modding,
-                                or who simply do not want to care much about technical stuff.
+                                (Yet another) launcher for classic Doom games. It is designed
+                                to be as simple to use as possible, for people who don't have
+                                particular knowledge in Doom modding, or who simply do not
+                                want to care much about technical stuff.
                             </Run>
                             <LineBreak/>
                             <LineBreak/>
                             <Run>
                                 In this page, you will hopefully find all the help you need.
-                                    If you have suggestions or questions about this program, feel
-                                    free to send me a private message on
+                                If you have suggestions or questions about this program, feel
+                                free to send a private message to
                             </Run>
                             <Hyperlink NavigateUri="https://www.reddit.com/user/McJ0hns0n/">
-                                my Reddit account
+                                this Reddit account
                             </Hyperlink>
+                        </Paragraph>
+
+
+                        <Paragraph Margin="0 0 0 60">
+                            <Run FontSize="24" FontWeight="DemiBold">
+                                Behaviour
+                            </Run>
+                            <LineBreak/>
+                            <Run FontWeight="DemiBold">
+                                How does this works
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                Navigate from top to bottom to setup the configuration of the game.
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                First, you will need to download a "Port",
+                                also known as "Doom engine" to play : try
+                            </Run>
+                            <Hyperlink NavigateUri="https://zdoom.org/downloads">
+                                GZDoom
+                            </Hyperlink>
+                            <Run>
+                                (64 bits) which is the recommended one. Locate the executable file
+                                and add it within TiaDL. Now you can play base contents, such as
+                                the original "Ultimate Doom" from the "Base presets" list.
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                Clicking on "Save &amp; Play" saves the current configuration, which
+                                will be automatically loaded at the next start-up.
+                            </Run>
                         </Paragraph>
 
 
@@ -68,45 +101,51 @@
                             </Run>
                             <LineBreak/>
                             <Run FontWeight="DemiBold">
-                                The various files used in TiaDL
+                                File resources used by the program
                             </Run>
                             <LineBreak/>
                             <LineBreak/>
-                            <Run>
-                                The file types named in this section are the ones used in TiaDL,
-                                as a project. They can have different names in other programs,
-                                or even in the Doom community.
-                            </Run>
-                            <LineBreak/>
-                            <LineBreak/>
-                            <Run>
-                                For instance, the levels distributed by community members are
-                                called "Maps", in TiaDL logic. Not to be confused with "Level"
-                                which is a group of files (Iwad, Maps, Misc). In the program,
-                                you interact with Iwad (mandatory), Maps (optional) and Misc
-                                (optional) files though presets known under the name "Levels".
+                            <Run FontStyle="Italic" Foreground="Gray">
+                                Note that they can be called differently in other programs, or even in the
+                                Doom community. For instance, levels distributed by community members are
+                                called "Maps" in TiaDL. Not to be confused with "Levels" which are sets of
+                                game data you can manage as presets. So a "Level preset" can contain 3 kinds
+                                of files : Iwad, Maps &amp; Misc. More information in the Presets section...
                             </Run>
                         </Paragraph>
-
-
-                        <List Margin="0 0 0 50">
+                        <List Margin="0 30 0 60">
                             <ListItem>
                                 <Paragraph>
                                     <Run FontWeight="DemiBold">
-                                        Iwad
+                                        Port (File extension : EXE)
                                     </Run>
                                     <LineBreak/>
                                     <Run>
-                                        Base game data. Can be official releases under copyright
-                                        or free community releases. This content is mandatory in
-                                        order to launch a Doom game.
+                                        Executable file of a Doom engine. Mandatory, as this is literally
+                                        what runs the game on your computer. Nowadays players tend to play
+                                        Doom on modern softwares that add/extend a lot of features. In TiaDL
+                                        v3, it is hugely recommended to use GZDoom or Zandronum :
                                     </Run>
+                                </Paragraph>
+                                <List Style="{StaticResource List_SubList}">
+                                    <ListItem>
+                                        <Paragraph>gzdoom.exe</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>zandornum.exe</Paragraph>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+                            <ListItem>
+                                <Paragraph>
                                     <Run FontWeight="DemiBold">
-                                        File extension : WAD
+                                        Iwad (File extension : WAD)
                                     </Run>
                                     <LineBreak/>
                                     <Run>
-                                        Examples :
+                                        Base game data. Can be official releases under copyright or
+                                        free community releases. This is a mandatory content to
+                                        launch a Doom game. Examples :
                                     </Run>
                                 </Paragraph>
                                 <List Style="{StaticResource List_SubList}">
@@ -124,23 +163,15 @@
                                     </ListItem>
                                 </List>
                             </ListItem>
-
                             <ListItem>
                                 <Paragraph>
                                     <Run FontWeight="DemiBold">
-                                        Maps
+                                        Maps (File extensions : WAD, PK3)
                                     </Run>
                                     <LineBreak/>
                                     <Run>
                                         Pack of Doom levels, designed and released by the Doom
-                                        community. Requires an Iwad as base resource.
-                                    </Run>
-                                    <Run FontWeight="DemiBold">
-                                        File extensions : WAD, PK3
-                                    </Run>
-                                    <LineBreak/>
-                                    <Run>
-                                        Examples :
+                                        community. Requires an Iwad as base resource. Examples :
                                     </Run>
                                 </Paragraph>
                                 <List Style="{StaticResource List_SubList}">
@@ -155,62 +186,66 @@
                                     </ListItem>
                                 </List>
                             </ListItem>
-
                             <ListItem>
                                 <Paragraph>
                                     <Run FontWeight="DemiBold">
-                                        Misc
+                                        Misc (File extensions : BEX, DEH)
                                     </Run>
                                     <LineBreak/>
                                     <Run>
-                                        Additional file for levels, not mandatory. Some
-                                        community levels provide such files, that were
-                                        originally created to circumvent limitations or
-                                        rules from the original Doom game.
+                                        Additional file for levels, not mandatory. Some community
+                                        levels provide such files, that were originally created to
+                                        circumvent limitations or rules from the original Doom games.
                                     </Run>
+                                </Paragraph>
+                                <List Style="{StaticResource List_SubList}">
+                                    <ListItem>
+                                        <Paragraph>1k3v1.0.deh</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>DOOMZERO.DEH</Paragraph>
+                                    </ListItem>
+                                </List>
+                            </ListItem>
+                            <ListItem>
+                                <Paragraph>
                                     <Run FontWeight="DemiBold">
-                                        File extensions : BEX, DEH
+                                        Mods (File extensions : PK3, ZIP)
                                     </Run>
                                     <LineBreak/>
                                     <Run>
-                                        Examples :
+                                        Mods for Doom games. Mostly compatible with the modern Doom port
+                                        GZDoom. To be added on top of all the above game data. Examples :
                                     </Run>
+                                </Paragraph>
+                                <List Style="{StaticResource List_SubList}">
+                                    <ListItem>
+                                        <Paragraph>Beautiful Doom</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Brutal Doom</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Embers of Armageddon</Paragraph>
+                                    </ListItem>
+                                    <ListItem>
+                                        <Paragraph>Project Brutality</Paragraph>
+                                    </ListItem>
+                                </List>
+                                <Paragraph>
+                                    <Run>
+                                        You can download mods for websites like
+                                    </Run>
+                                    <Hyperlink NavigateUri="https://www.moddb.com/games/doom/mods">
+                                        ModDB
+                                    </Hyperlink>
                                 </Paragraph>
                             </ListItem>
                         </List>
 
 
-                        <!-- TODO -->
-                        <Paragraph FontSize="24" FontWeight="DemiBold">Ports</Paragraph>
-                        <Paragraph>
-                            Softwares designed to run Doom on nowadays computers.
-                            <LineBreak />
-                            <LineBreak />
-                            Extend/Improve features of the original game, such as : graphics, framerate, mod support, multiplayer, etc.
-                            <LineBreak />
-                            Examples of Doom ports :
-                        </Paragraph>
-                        <List Style="{StaticResource List_SubList}">
-                            <ListItem>
-                                <Paragraph>Chocolate Doom</Paragraph>
-                            </ListItem>
-                            <ListItem>
-                                <Paragraph FontWeight="DemiBold">GZDoom</Paragraph>
-                            </ListItem>
-                            <ListItem>
-                                <Paragraph>PrBoom+</Paragraph>
-                            </ListItem>
-                            <ListItem>
-                                <Paragraph>Zandronum</Paragraph>
-                            </ListItem>
-                        </List>
-                        <Paragraph>
-                            GZDoom is the recommended port to use with TiaDL.
-                        </Paragraph>
-
-
-                        <!-- TODO -->
-                        <Paragraph FontSize="24" FontWeight="DemiBold">Keys</Paragraph>
+                        <!-- TODO: not so much about AZERTY -->
+                        <!--<Paragraph FontSize="24" FontWeight="DemiBold">Keys</Paragraph>
                         <Paragraph>
                             To use in-game (AZERTY keyboard layout) :
                         </Paragraph>
@@ -268,16 +303,24 @@
                                     </ListItem>
                                 </List>
                             </ListItem>
-                        </List>
+                        </List>-->
 
 
-                        <Paragraph>
+                        <!-- TODO: Continue -->
+                        <Paragraph Margin="0 0 0 60">
                             <Run FontSize="24" FontWeight="DemiBold">
-                                User presets
+                                Presets
                             </Run>
                             <LineBreak/>
                             <Run FontWeight="DemiBold">
-                                Set custom presets for Levels and Mods
+                                Manage TiaDL playable contents
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                Out of simplicity, TiaDL is provided with base playable contents out of
+                                the box. You can select and play them from the "Base presets" tabs for
+                                both "Levels" and "Mods".
                             </Run>
                             <LineBreak/>
                             <LineBreak/>
