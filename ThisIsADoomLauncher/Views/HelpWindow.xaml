@@ -7,12 +7,12 @@
         mc:Ignorable="d"
         
         Title="Help / About" 
-        Height="840" Width="550"
+        Height="840" Width="550" 
         
         FontSize="14"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterOwner">
-
+    <!-- Height = 840 | 3000 -->
     <Window.Resources>
 
         <Style x:Key="List_SubList" TargetType="{x:Type List}">
@@ -26,7 +26,7 @@
     <Grid>
         <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="2" Margin="16">
             <ScrollViewer>
-                <RichTextBox BorderThickness="0" Cursor="Arrow" IsReadOnly="True" Margin="8">
+                <RichTextBox BorderThickness="0" Cursor="Arrow" IsDocumentEnabled="True" IsReadOnly="True" Margin="8">
                     <FlowDocument>
 
                         
@@ -53,7 +53,7 @@
                                 If you have suggestions or questions about this program, feel
                                 free to send a private message to
                             </Run>
-                            <Hyperlink NavigateUri="https://www.reddit.com/user/McJ0hns0n/">
+                            <Hyperlink NavigateUri="https://www.reddit.com/user/McJ0hns0n/" RequestNavigate="PM_RequestNavigate">
                                 this Reddit account
                             </Hyperlink>
                         </Paragraph>
@@ -70,27 +70,49 @@
                             <LineBreak/>
                             <LineBreak/>
                             <Run>
-                                Navigate from top to bottom to setup the configuration of the game.
+                                Navigate from top to bottom to setup the game configuration.
                             </Run>
                             <LineBreak/>
                             <LineBreak/>
                             <Run>
-                                First, you will need to download a "Port",
-                                also known as "Doom engine" to play : try
-                            </Run>
-                            <Hyperlink NavigateUri="https://zdoom.org/downloads">
-                                GZDoom
-                            </Hyperlink>
-                            <Run>
-                                (64 bits) which is the recommended one. Locate the executable file
-                                and add it within TiaDL. Now you can play base contents, such as
-                                the original "Ultimate Doom" from the "Base presets" list.
+                                All important choices are reflected in real time in the "Summary" lower
+                                section. TiaDL heavily relies on command lines to play Doom : you can
+                                check it from the "Command line" text block (alternative view).
                             </Run>
                             <LineBreak/>
                             <LineBreak/>
                             <Run>
                                 Clicking on "Save &amp; Play" saves the current configuration, which
                                 will be automatically loaded at the next start-up.
+                            </Run>
+                        </Paragraph>
+
+
+                        <Paragraph Margin="0 0 0 60">
+                            <Run FontSize="24" FontWeight="DemiBold">
+                                Quickstart
+                            </Run>
+                            <LineBreak/>
+                            <Run FontWeight="DemiBold">
+                                Minimal working setup
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                First, you need to download a "Port", also known as "Doom engine" : try
+                            </Run>
+                            <Hyperlink NavigateUri="https://zdoom.org/downloads" RequestNavigate="GZDoom_RequestNavigate">
+                                GZDoom
+                            </Hyperlink>
+                            <Run>
+                                (64 bits) which is the recommended one. Locate the executable file and
+                                add it into TiaDL from the upper part of the interface.
+                            </Run>
+                            <LineBreak/>
+                            <LineBreak/>
+                            <Run>
+                                Select a Level preset, for instance the original "Ultimate Doom",
+                                then launch the game by clicking "Save &amp; Play".
                             </Run>
                         </Paragraph>
 
@@ -132,7 +154,7 @@
                                         <Paragraph>gzdoom.exe</Paragraph>
                                     </ListItem>
                                     <ListItem>
-                                        <Paragraph>zandornum.exe</Paragraph>
+                                        <Paragraph>zandronum.exe</Paragraph>
                                     </ListItem>
                                 </List>
                             </ListItem>
@@ -234,9 +256,9 @@
                                 </List>
                                 <Paragraph>
                                     <Run>
-                                        You can download mods for websites like
+                                        You can download mods from websites like
                                     </Run>
-                                    <Hyperlink NavigateUri="https://www.moddb.com/games/doom/mods">
+                                    <Hyperlink NavigateUri="https://www.moddb.com/games/doom/mods" RequestNavigate="ModDB_RequestNavigate">
                                         ModDB
                                     </Hyperlink>
                                 </Paragraph>
@@ -306,45 +328,44 @@
                         </List>-->
 
 
-                        <!-- TODO: Continue -->
-                        <Paragraph Margin="0 0 0 60">
+                        <Paragraph>
                             <Run FontSize="24" FontWeight="DemiBold">
                                 Presets
                             </Run>
                             <LineBreak/>
                             <Run FontWeight="DemiBold">
-                                Manage TiaDL playable contents
+                                Manage playable contents
                             </Run>
                             <LineBreak/>
                             <LineBreak/>
                             <Run>
-                                Out of simplicity, TiaDL is provided with base playable contents out of
-                                the box. You can select and play them from the "Base presets" tabs for
-                                both "Levels" and "Mods".
+                                Out of simplicity, TiaDL is provided with base playable contents.
+                                Find them from the "Base presets" tabs from "Levels" and "Mods".
                             </Run>
                             <LineBreak/>
                             <LineBreak/>
+                            <Bold>Add new preset</Bold>
+                            <LineBreak />
                             <Run>
-                                Define you own presets from the
-                            </Run>
-                            <Bold>
-                                Add new preset
-                            </Bold>
-                            <Run>
-                                tabs of each group.
+                                Use this tab to create your own custom presets.
                             </Run>
                             <LineBreak />
                             <LineBreak />
-                            <Run>
-                                One registered, access them through the
-                            </Run>
+                            
                             <Bold>User presets</Bold>
+                            <LineBreak />
                             <Run>
-                                tabs. Use a right-click to interact more
-                                with those.
+                                Select (left-click) or manage (right-click) these new presets :
                             </Run>
                         </Paragraph>
-
+                        <List>
+                            <ListItem>
+                                <Paragraph>View details</Paragraph>
+                            </ListItem>
+                            <ListItem>
+                                <Paragraph>Delete preset</Paragraph>
+                            </ListItem>
+                        </List>
 
                     </FlowDocument>
                 </RichTextBox>
