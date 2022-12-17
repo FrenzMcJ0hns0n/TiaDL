@@ -819,11 +819,75 @@ Namespace Views
         End Sub
 
         Private Sub Btn_MoveNewModFileUp_Click(sender As Object, e As RoutedEventArgs)
-            'TODO
+            Dim dtg As DataGrid = Dtg_NewModFiles
+
+            Dim selectedCount As Integer = dtg.SelectedItems.Count
+            If selectedCount = 0 Then
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                Return
+            End If
+
+            Dim positionsToMove As New List(Of Integer)
+            For i As Integer = 0 To selectedCount - 1
+                Dim position As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
+                If position = 0 Then
+                    Return 'Continue For (TODO for multiple selection)
+                Else
+                    positionsToMove.Add(position)
+                End If
+            Next
+
+            Dim iFiles As ObservableCollection(Of InputFile) = DirectCast(dtg.ItemsSource, ObservableCollection(Of InputFile))
+            For i As Integer = 0 To iFiles.Count - 1
+                If positionsToMove.Contains(i) Then
+                    Dim toBeMovedDown As InputFile = iFiles(i - 1)
+                    iFiles.Insert(i - 1, iFiles(i))
+                    iFiles.RemoveAt(i)
+                    iFiles.Insert(i, toBeMovedDown)
+                    iFiles.RemoveAt(i + 1)
+                End If
+            Next
+
+            dtg.ItemsSource = Nothing
+            dtg.ItemsSource = iFiles
+            dtg.SelectedIndex = positionsToMove.First - 1 'Prevent losing the selected elements from altering elements order
+            dtg.Focus()
         End Sub
 
         Private Sub Btn_MoveNewModFileDown_Click(sender As Object, e As RoutedEventArgs)
-            'TODO
+            Dim dtg As DataGrid = Dtg_NewModFiles
+
+            Dim selectedCount As Integer = dtg.SelectedItems.Count
+            If selectedCount = 0 Then
+                MessageBox.Show("No file selected", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                Return
+            End If
+
+            Dim positionsToMove As New List(Of Integer)
+            For i As Integer = 0 To selectedCount - 1
+                Dim position As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
+                If position = dtg.Items.Count - 1 Then
+                    Return 'Continue For (TODO for multiple selection)
+                Else
+                    positionsToMove.Add(position)
+                End If
+            Next
+
+            Dim iFiles As ObservableCollection(Of InputFile) = DirectCast(dtg.ItemsSource, ObservableCollection(Of InputFile))
+            For i As Integer = 0 To iFiles.Count - 1
+                If positionsToMove.Contains(i) Then
+                    Dim toBeMovedDown As InputFile = iFiles(i)
+                    iFiles.Insert(i, iFiles(i + 1))
+                    iFiles.RemoveAt(i + 1)
+                    iFiles.Insert(i + 1, toBeMovedDown)
+                    iFiles.RemoveAt(i + 2)
+                End If
+            Next
+
+            dtg.ItemsSource = Nothing
+            dtg.ItemsSource = iFiles
+            dtg.SelectedIndex = positionsToMove.First + 1 'Prevent losing the selected elements from altering elements order
+            dtg.Focus()
         End Sub
 
         Private Sub Btn_OpenNewModFileDir_Click(sender As Object, e As RoutedEventArgs)
