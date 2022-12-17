@@ -789,10 +789,9 @@ Namespace Views
                     Dim iFile As New InputFile(droppedFile)
 
                     'Skip invalid input files
-                    If Not VALID_EXTENSIONS_MODS.Contains(iFile.Extension) OrElse
-                        modFiles.Any(Function(f As InputFile) f.Name = iFile.Name AndAlso f.Directory = iFile.Directory) Then
-                        Continue For
-                    End If
+                    Dim validExtension As Boolean = VALID_EXTENSIONS_MODS.Contains(iFile.Extension)
+                    Dim sameFileExists As Boolean = modFiles.Any(Function(f As InputFile) f.Name = iFile.Name AndAlso f.Directory = iFile.Directory)
+                    If Not validExtension Or sameFileExists Then Continue For
 
                     modFiles.Add(iFile)
                 Next
