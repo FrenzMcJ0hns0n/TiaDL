@@ -64,24 +64,6 @@ Namespace Views
 #End Region
 
 
-#Region "GUI tabs management"
-
-        Private Sub FocusThisModTab(target As MODPRESET_TAB)
-            If Not GetActiveModTab() = target Then SetActiveModTab(target)
-        End Sub
-        Private Sub Tbi_ModsBasePresets_DragOver(sender As Object, e As DragEventArgs)
-            FocusThisModTab(MODPRESET_TAB.Base)
-        End Sub
-        Private Sub Tbi_ModsUserPresets_DragOver(sender As Object, e As DragEventArgs)
-            FocusThisModTab(MODPRESET_TAB.User)
-        End Sub
-        Private Sub Tbi_ModsNewPresets_DragOver(sender As Object, e As DragEventArgs)
-            FocusThisModTab(MODPRESET_TAB.AddNew)
-        End Sub
-
-#End Region
-
-
 #Region "Startup"
 
         Private Sub Window_Loaded(sender As Object, e As RoutedEventArgs)
