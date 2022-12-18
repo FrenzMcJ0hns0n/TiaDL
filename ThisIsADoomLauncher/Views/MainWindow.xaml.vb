@@ -430,22 +430,24 @@ Namespace Views
             Try
                 Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
 
-                Dim myTextBlock As New TextBlock With {.Margin = New Thickness(10)}
-                For Each pi As PropertyInfo In preset.GetType().GetProperties()
-                    myTextBlock.Inlines.Add(New Bold(New Run($"{pi.Name}")))
-                    myTextBlock.Inlines.Add(New Run($" : {pi.GetValue(preset)}{vbCrLf}"))
-                Next
+                DisplayPresetDetails(preset)
 
-                Dim myWindow As New Window With
-                {
-                    .Content = myTextBlock,
-                    .Height = 200,
-                    .Owner = Me,
-                    .Title = "User level preset",
-                    .Width = 600,
-                    .WindowStartupLocation = WindowStartupLocation.CenterOwner
-                }
-                myWindow.ShowDialog()
+                'Dim myTextBlock As New TextBlock With {.Margin = New Thickness(10)}
+                'For Each pi As PropertyInfo In preset.GetType().GetProperties()
+                '    myTextBlock.Inlines.Add(New Bold(New Run($"{pi.Name}")))
+                '    myTextBlock.Inlines.Add(New Run($" : {pi.GetValue(preset)}{vbCrLf}"))
+                'Next
+
+                'Dim myWindow As New Window With
+                '{
+                '    .Content = myTextBlock,
+                '    .Height = 200,
+                '    .Owner = Me,
+                '    .Title = "User level preset",
+                '    .Width = 600,
+                '    .WindowStartupLocation = WindowStartupLocation.CenterOwner
+                '}
+                'myWindow.ShowDialog()
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -453,11 +455,38 @@ Namespace Views
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Display the preset details in a dedicated window
+        ''' </summary>
+        ''' <param name="preset">Preset generic object : LevelPreset or ModPreset</param>
+        Private Sub DisplayPresetDetails(preset As Object)
+            Dim presetTypeName As String = preset.GetType().Name
+            Dim presetName As String = If(presetTypeName = "LevelPreset", DirectCast(preset, LevelPreset).Name, DirectCast(preset, ModPreset).Name)
+            Dim presetPict As String = If(presetTypeName = "LevelPreset", DirectCast(preset, LevelPreset).Pict, DirectCast(preset, ModPreset).Pict)
+            Dim presetType As String = If(presetTypeName = "LevelPreset", "Level preset", "Mod preset")
+
+            Dim presetProperties As New SortedDictionary(Of String, Object)
+            For Each pi As PropertyInfo In preset.GetType().GetProperties()
+                If pi.Name = "Name" Or pi.Name = "Pict" Then Continue For 'Exclude Name & Pict from Dictionary
+                presetProperties.Add(pi.Name, pi.GetValue(preset))
+            Next
+
+            Dim pdw As New PresetDetailsWindow With
+            {
+                .Owner = Me,
+                .PresetPictureSrc = New BitmapImage(New Uri(presetPict, UriKind.Relative)), 'TODO Display chosen image or default one
+                .PresetProperties = presetProperties,
+                .Title = $"{presetType} ""{presetName}""",
+                .WindowStartupLocation = WindowStartupLocation.CenterOwner
+            }
+            pdw.ShowDialog()
+        End Sub
+
         Private Sub Mitm_DeleteUserLevel_Click(sender As Object, e As RoutedEventArgs)
             Try
                 Dim lvw As ListView = Lvw_LevelsUserPresets
                 Dim selectedPreset As LevelPreset = DirectCast(lvw.SelectedItem, LevelPreset)
-                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want to delete preset ""{selectedPreset.Name}"" ?",
+                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want To delete preset ""{selectedPreset.Name}"" ?",
                                                               "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question)
                 If mbr = MessageBoxResult.Yes Then
                     Dim presets As List(Of LevelPreset) = DirectCast(lvw.ItemsSource, List(Of LevelPreset))
@@ -469,7 +498,7 @@ Namespace Views
                 End If
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+                WriteToLog($"{Date.Now} - Error In '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
         End Sub
 

@@ -112,6 +112,9 @@
     <Compile Include="Views\PortParamsWindow.xaml.vb">
       <DependentUpon>PortParamsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\PresetDetailsWindow.xaml.vb">
+      <DependentUpon>PresetDetailsWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -129,6 +132,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\PortParamsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PresetDetailsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

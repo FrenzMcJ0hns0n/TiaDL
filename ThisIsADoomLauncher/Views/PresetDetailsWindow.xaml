@@ -1,0 +1,73 @@
+﻿<Window x:Class="PresetDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ThisIsADoomLauncher"
+        mc:Ignorable="d"
+        
+        Title="[PRESET TYPE] details"
+        Height="360" Width="500"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterOwner"
+        
+        Loaded="Window_Loaded">
+    <!-- Width="720" -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="12"/>
+            <!--<ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="6"/>-->
+            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="12"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="12"/>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="6"/>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="12"/>
+        </Grid.RowDefinitions>
+
+        <!-- Grid.ColumnSpan="3" Source="{Binding}" -->
+        <Image x:Name="Img_PresetImage" Grid.Column="1"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+        <!-- Design #3 = DataGrid with ReadOnly=False ? To be able to edit Preset properties -->
+        <ListView x:Name="Lvw_Properties" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    
+                    <!-- Design #2 -->
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="Bold" Text="{Binding Key}" Width="40"/>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{} :  {0}">
+                                    <Binding Path="Value"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <!--<TextBlock Text="{Binding Value}"/>-->
+                    </StackPanel>
+
+                    <!-- Design #1
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <ContentPresenter>
+                            <ContentPresenter.Content>
+                                <TextBlock FontWeight="Bold" Text="{Binding Key}"/>
+                            </ContentPresenter.Content>
+                        </ContentPresenter>
+                        <ItemsControl ItemsSource="{Binding Value}" Margin="10 0 0 0">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>-->
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </Grid>
+</Window>
