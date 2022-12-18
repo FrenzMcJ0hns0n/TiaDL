@@ -108,64 +108,6 @@ Namespace Views
 #End Region
 
 
-#Region "Add new preset"
-
-        'Private Sub TextBox_NewPreset_Name_GotFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.GotFocus
-
-        '    If TextBox_NewPreset_Name.Text = "Enter preset name..." Then
-        '        TextBox_NewPreset_Name.Text = Nothing
-        '        TextBox_NewPreset_Name.ClearValue(FontStyleProperty)
-        '        TextBox_NewPreset_Name.ClearValue(ForegroundProperty)
-        '    End If
-
-        'End Sub
-
-        'Private Sub TextBox_NewPreset_Name_LostFocus(sender As Object, e As RoutedEventArgs) Handles TextBox_NewPreset_Name.LostFocus
-
-        '    If TextBox_NewPreset_Name.Text = Nothing Then
-        '        TextBox_NewPreset_Name.Text = "Enter preset name..."
-        '        TextBox_NewPreset_Name.FontStyle = FontStyles.Italic
-        '        TextBox_NewPreset_Name.Foreground = Brushes.DarkGray
-        '    End If
-
-        'End Sub
-
-#End Region
-
-
-#Region "To (re?)implement"
-
-        Private Sub CopyCommandToClipboard()
-            Try
-                Dim commandText As String = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
-                Clipboard.SetText(commandText)
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
-        Private Sub ExportCommandAsBat()
-            Try
-                Dim commandText As String = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
-
-                Dim now_formatted As String = Date.Now.ToString("yyyy-MM-dd_HH-mm-ss")
-                Dim batPath As String = Path.Combine(GetDirectoryPath(), now_formatted & "_command.bat")
-
-                Using writer As New StreamWriter(batPath, False, Encoding.Default)
-                    writer.WriteLine("@echo off")
-                    writer.WriteLine("start """" " & commandText)
-                End Using
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
-
-#End Region
-
-
 #Region "Events : Port"
 
         Private Sub Tbx_Port_PreviewDragOver(sender As Object, e As DragEventArgs)
