@@ -190,8 +190,7 @@
         </GroupBox>
 
         <!-- Levels -->
-        <!-- Drop="Gbx_Levels_Drop" PreviewDragOver="Gbx_Levels_PreviewDragOver" -->
-        <GroupBox Grid.Column="1" Grid.Row="3" Header="Levels">
+        <GroupBox AllowDrop="True" Grid.Column="1" Grid.Row="3" Header="Levels" Drop="Gbx_Levels_Drop" PreviewDragOver="Gbx_Levels_PreviewDragOver">
             <Grid Margin="8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="6.5*"/>
@@ -201,9 +200,9 @@
                     <RowDefinition Height="1*"/>
                     <RowDefinition Height="15*"/>
                 </Grid.RowDefinitions>
-                <TabControl x:Name="Tbc_Levels" AllowDrop="True" Grid.ColumnSpan="2" Grid.RowSpan="2" SelectionChanged="Tbc_Levels_SelectionChanged">
+                <TabControl x:Name="Tbc_Levels" Grid.ColumnSpan="2" Grid.RowSpan="2" SelectionChanged="Tbc_Levels_SelectionChanged">
 
-                    <TabItem x:Name="Tbi_LevelsBasePresets" Header="Base presets" DragOver="Tbi_LevelsBasePresets_DragOver">
+                    <TabItem x:Name="Tbi_LevelsBasePresets" Header="Base presets">
                         <Grid>
                             <ListView x:Name="Lvw_LevelsBasePresets" Margin="-3" SelectionChanged="Lvw_LevelsBasePresets_SelectionChanged">
                                 <ListView.ItemTemplate>
@@ -232,7 +231,7 @@
                         </Grid>
                     </TabItem>
                     
-                    <TabItem x:Name="Tbi_LevelsUserPresets" Header="User presets" DragOver="Tbi_LevelsUserPresets_DragOver">
+                    <TabItem x:Name="Tbi_LevelsUserPresets" Header="User presets">
                         <Grid>
                             <Label x:Name="Lbl_LevelsNoUserPresets" Style="{StaticResource Lbl_NoUserPresets}"/>
                             <ListView x:Name="Lvw_LevelsUserPresets" Margin="-3" SelectionChanged="Lvw_LevelsUserPresets_SelectionChanged" Visibility="Collapsed">
@@ -254,7 +253,7 @@
                         </Grid>
                     </TabItem>
                     
-                    <TabItem x:Name="Tbi_LevelsNewPresets" Header="Add new preset" DragOver="Tbi_LevelsNewPresets_DragOver" Drop="Tbi_LevelsNewPresets_Drop">
+                    <TabItem x:Name="Tbi_LevelsNewPresets" Header="Add new preset">
                         <Grid>
                             <Grid>
                                 <!-- TODO? Simplify definitions -->
@@ -337,11 +336,11 @@
         </GroupBox>
 
         <!-- Mods -->
-        <GroupBox Grid.Column="1" Grid.Row="5" Header="Mods">
+        <GroupBox AllowDrop="True" Grid.Column="1" Grid.Row="5" Header="Mods" Drop="Gbx_Mods_Drop" PreviewDragOver="Gbx_Mods_PreviewDragOver">
             <Grid Margin="8">
                 <TabControl x:Name="Tbc_Mods" AllowDrop="True" SelectionChanged="Tbc_Mods_SelectionChanged">
                     
-                    <TabItem x:Name="Tbi_ModsBasePresets" Header="Base presets" DragOver="Tbi_ModsBasePresets_DragOver">
+                    <TabItem x:Name="Tbi_ModsBasePresets" Header="Base presets">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="44*" />
@@ -374,7 +373,7 @@
                         </Grid>
                     </TabItem>
                     
-                    <TabItem x:Name="Tbi_ModsUserPresets" Header="User presets" DragOver="Tbi_ModsUserPresets_DragOver">
+                    <TabItem x:Name="Tbi_ModsUserPresets" Header="User presets">
                         <Grid>
                             <Label x:Name="Lbl_ModsNoUserPresets" Style="{StaticResource Lbl_NoUserPresets}"/>
                             <ListView x:Name="Lvw_ModsUserPresets" Margin="-3" SelectionChanged="Lvw_ModsUserPresets_SelectionChanged" Visibility="Collapsed">
@@ -397,7 +396,7 @@
                         </Grid>
                     </TabItem>
                     
-                    <TabItem x:Name="Tbi_ModsNewPresets" Header="Add new preset" DragOver="Tbi_ModsNewPresets_DragOver">
+                    <TabItem x:Name="Tbi_ModsNewPresets" Header="Add new preset">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="6"/>

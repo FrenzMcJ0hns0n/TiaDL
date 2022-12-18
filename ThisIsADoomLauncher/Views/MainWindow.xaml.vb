@@ -66,20 +66,6 @@ Namespace Views
 
 #Region "GUI tabs management"
 
-        Private Sub FocusThisLvlTab(target As LVLPRESET_TAB)
-            If Not GetActiveLvlTab() = target Then SetActiveLvlTab(target)
-        End Sub
-        Private Sub Tbi_LevelsBasePresets_DragOver(sender As Object, e As DragEventArgs)
-            FocusThisLvlTab(LVLPRESET_TAB.Base)
-        End Sub
-        Private Sub Tbi_LevelsUserPresets_DragOver(sender As Object, e As DragEventArgs)
-            FocusThisLvlTab(LVLPRESET_TAB.User)
-        End Sub
-        Private Sub Tbi_LevelsNewPresets_DragOver(sender As Object, e As DragEventArgs)
-            FocusThisLvlTab(LVLPRESET_TAB.AddNew)
-        End Sub
-
-
         Private Sub FocusThisModTab(target As MODPRESET_TAB)
             If Not GetActiveModTab() = target Then SetActiveModTab(target)
         End Sub
@@ -298,6 +284,38 @@ Namespace Views
 
 #Region "Events : Levels"
 
+        Private Sub Gbx_Levels_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        ''' <summary>
+        ''' Handle multiple file drops onto GroupBox "Levels"
+        ''' </summary>
+        Private Sub Gbx_Levels_Drop(sender As Object, e As DragEventArgs)
+            Try
+                'Accept files only
+                If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
+
+                Dim filePaths As String() = DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
+                Dim confirmedFiles As List(Of String) = OrderDroppedLevels(filePaths)
+                'Content of confirmedFiles depending on .Count :
+                '1 = { Iwad }
+                '2 = { Iwad, Maps }
+                '3 = { Iwad, Maps, Misc }
+                '4 = { Iwad, Maps, Misc, Pict }
+                If confirmedFiles.Count = 0 Then Return
+                SetActiveLvlTab(LVLPRESET_TAB.AddNew)
+                If confirmedFiles.Count > 0 Then FillTextBox(Tbx_NewLevelIwad, confirmedFiles(0))
+                If confirmedFiles.Count > 1 Then FillTextBox(Tbx_NewLevelMaps, confirmedFiles(1))
+                If confirmedFiles.Count > 2 Then FillTextBox(Tbx_NewLevelMisc, confirmedFiles(2))
+                If confirmedFiles.Count > 3 Then FillTextBox(Tbx_NewLevelPict, confirmedFiles(3))
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
         Private Sub Tbc_Levels_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Stkp_BaseLevelsSorting.Visibility = If(GetActiveLvlTab() = LVLPRESET_TAB.Base, Visibility.Visible, Visibility.Hidden)
 
@@ -502,33 +520,6 @@ Namespace Views
             End Try
         End Sub
 
-        ''' <summary>
-        ''' Handle multiple file drops onto "New Levels" TabItem itself
-        ''' </summary>
-        Private Sub Tbi_LevelsNewPresets_Drop(sender As Object, e As DragEventArgs)
-            Try
-                'Accept files only
-                If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
-
-                Dim filePaths As String() = DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
-                Dim confirmedFiles As List(Of String) = OrderDroppedLevels(filePaths)
-                'Content of confirmedFiles depending on .Count :
-                '1 = { Iwad }
-                '2 = { Iwad, Maps }
-                '3 = { Iwad, Maps, Misc }
-                '4 = { Iwad, Maps, Misc, Pict }
-                If confirmedFiles.Count = 0 Then Return
-                If confirmedFiles.Count > 0 Then FillTextBox(Tbx_NewLevelIwad, confirmedFiles(0))
-                If confirmedFiles.Count > 1 Then FillTextBox(Tbx_NewLevelMaps, confirmedFiles(1))
-                If confirmedFiles.Count > 2 Then FillTextBox(Tbx_NewLevelMisc, confirmedFiles(2))
-                If confirmedFiles.Count > 3 Then FillTextBox(Tbx_NewLevelPict, confirmedFiles(3))
-
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-            End Try
-        End Sub
-
         Private Sub TextBox_NewLevel_PreviewDragOver(sender As Object, e As DragEventArgs)
             e.Handled = True
         End Sub
@@ -680,6 +671,14 @@ Namespace Views
 
 #Region "Events - Mods"
 
+        Private Sub Gbx_Mods_PreviewDragOver(sender As Object, e As DragEventArgs)
+            e.Handled = True
+        End Sub
+
+        Private Sub Gbx_Mods_Drop(sender As Object, e As DragEventArgs)
+            HandleNewModFileDrop(e)
+        End Sub
+
         Private Sub Tbc_Mods_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
 
             Select Case GetActiveModTab()
@@ -803,7 +802,7 @@ Namespace Views
             Lbl_NewModFiles.Visibility = Visibility.Visible
         End Sub
 
-        Private Sub Grid_NewModFiles_Drop(sender As Object, e As DragEventArgs)
+        Private Sub HandleNewModFileDrop(e As DragEventArgs)
             Try
                 'Accept files only
                 If Not e.Data.GetDataPresent(DataFormats.FileDrop) Then Return
@@ -812,31 +811,36 @@ Namespace Views
                 If Dtg_NewModFiles.ItemsSource IsNot Nothing Then
                     modFiles = DirectCast(Dtg_NewModFiles.ItemsSource, ObservableCollection(Of InputFile))
                 End If
+                Dim previousCount As Integer = modFiles.Count
 
                 Dim droppedFiles() As String = DirectCast(e.Data.GetData(DataFormats.FileDrop), String())
                 For Each droppedFile As String In droppedFiles
                     Dim iFile As New InputFile(droppedFile)
 
                     'Skip invalid input files
-                    Dim validExtension As Boolean = VALID_EXTENSIONS_MODS.Contains(iFile.Extension)
-                    Dim sameFileExists As Boolean = modFiles.Any(Function(f As InputFile) f.Name = iFile.Name AndAlso f.Directory = iFile.Directory)
-                    If Not validExtension Or sameFileExists Then Continue For
+                    Dim IsValidExt As Boolean = VALID_EXTENSIONS_MODS.Contains(iFile.Extension)
+                    Dim IsSameFile As Boolean = modFiles.Any(Function(f As InputFile) f.Name = iFile.Name AndAlso f.Directory = iFile.Directory)
+                    If Not IsValidExt Or IsSameFile Then Continue For
 
                     modFiles.Add(iFile)
                 Next
 
-                If modFiles.Count > 0 Then
+                If modFiles.Count > previousCount Then
+                    SetActiveModTab(MODPRESET_TAB.AddNew)
                     Lbl_NewModFiles.Visibility = Visibility.Collapsed
                     Dtg_NewModFiles.Visibility = Visibility.Visible
                     Brd_NewModFiles.Visibility = Visibility.Visible
                 End If
 
                 Dtg_NewModFiles.ItemsSource = modFiles
-
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
+        End Sub
+
+        Private Sub Grid_NewModFiles_Drop(sender As Object, e As DragEventArgs)
+            HandleNewModFileDrop(e)
         End Sub
 
         Private Sub Grid_NewModFiles_PreviewDragOver(sender As Object, e As DragEventArgs)
