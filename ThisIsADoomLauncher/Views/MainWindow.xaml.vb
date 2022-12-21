@@ -330,12 +330,10 @@ Namespace Views
         Private Sub Lvw_LevelsBasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 Dim lp As LevelPreset = ReturnSelectedLevels()
-
                 TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
                 UpdateLevels_Summary(lp.Maps, lp.Misc)
                 UpdateCommand()
                 DecorateCommand()
-
                 e.Handled = True 'Prevent escalating up to "parent" event Tbc_Levels_SelectionChanged()
 
             Catch ex As Exception
@@ -348,17 +346,14 @@ Namespace Views
 
         Private Sub Lvw_LevelsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
-                'Safety fix. SelectedItem is not kept accross tabs, as the content of this one is updated everytime
-                'TODO? Improve. Use GetActiveLvlTab() ?
-                If Lvw_LevelsUserPresets.SelectedItem Is Nothing Then Return
-
-                Dim lp As LevelPreset = ReturnSelectedLevels()
-
-                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
-                UpdateLevels_Summary(lp.Maps, lp.Misc)
-                UpdateCommand()
-                DecorateCommand()
-
+                'Condition: event triggered by a click on Listview item
+                If Lvw_LevelsUserPresets.SelectedItem IsNot Nothing Then
+                    Dim lp As LevelPreset = ReturnSelectedLevels()
+                    TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
+                    UpdateLevels_Summary(lp.Maps, lp.Misc)
+                    UpdateCommand()
+                    DecorateCommand()
+                End If
                 e.Handled = True 'Prevent escalating up to "parent" event Tbc_Levels_SelectionChanged()
 
             Catch ex As Exception
