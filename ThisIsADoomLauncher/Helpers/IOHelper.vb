@@ -131,14 +131,12 @@ functionEnd:
     ''' <returns>JSON data as String</returns>
     Public Function GetJsonData(jsonFilepath As String) As String
         Dim jsonData As String = String.Empty
-
         Try
             jsonData = File.ReadAllText(jsonFilepath)
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {jsonFilepath}")
         End Try
-
         Return jsonData
     End Function
 

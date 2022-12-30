@@ -557,7 +557,7 @@ Namespace Views
                 Return
             End If
 
-            'Shortcut as saving fake data in order to complete quickly the management of user levels with JSON 
+            'TODO: Secure JSON operations and complete this part
             Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
             Dim jsonString As String = GetJsonData(jsonFilepath)
 
@@ -1493,7 +1493,7 @@ Namespace Views
                 Dim levelsPaths As List(Of String) = GetFullPathsFromStackPanelItems("Level")
                 Dim modsPaths As List(Of String) = GetFullPathsFromStackPanelItems("Mod")
 
-                Dim lastLaunched As New Setting(GetJsonFilepath("Settings")) With
+                Dim lastLaunched As New Setting() With
                 {
                     .Port = TextBox_Summary_Port.Text,
                     .PortParameters = GetPortParamsFromStackPanel(),
@@ -1502,7 +1502,7 @@ Namespace Views
                     .Misc = levelsPaths(1),
                     .Mods = modsPaths
                 }
-                lastLaunched.Save()
+                Serializer.SaveSettings(lastLaunched, GetJsonFilepath("Settings"))
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -1518,26 +1518,34 @@ Namespace Views
                 Dim settingsFilepath As String = GetJsonFilepath("Settings")
                 If Not File.Exists(settingsFilepath) Then Return
 
-                Dim persistedSettings As New Setting(settingsFilepath)
-                If Not persistedSettings.CanLoad() Then Return
+                Dim settingsData As String = GetJsonData(settingsFilepath)
+                If Not CanLoadJsonObject(settingsData) Then Return
 
-                persistedSettings.Load()
+                Dim loadingErrors As New List(Of String)
+
+                Dim persistedSettings As Setting = Serializer.LoadSettings(settingsData)
                 With persistedSettings
                     If File.Exists(.Port) Then
                         FillTextBox(Tbx_Port, .Port)
                         FillTextBox(TextBox_Summary_Port, .Port)
+                    Else
+                        loadingErrors.Add("Port: loaded file does not exist")
                     End If
-                    'TODO? Handle case of invalid .Port
-
                     UpdatePortParams(.PortParameters)
                     UpdatePortParams_Summary(.PortParameters)
-
-                    If File.Exists(.Iwad) Then TextBox_Summary_Iwad.Text = .Iwad
-                    'TODO? Handle case of invalid .Iwad
-
+                    If File.Exists(.Iwad) Then
+                        TextBox_Summary_Iwad.Text = .Iwad
+                    Else
+                        loadingErrors.Add("Iwad: loaded file does not exist")
+                    End If
                     UpdateLevels_Summary(.Maps, .Misc)
                     UpdateMods_Summary(.Mods)
                 End With
+
+                If loadingErrors.Count > 0 Then
+                    Dim errors As String = String.Join(vbCrLf & "-", loadingErrors)
+                    MessageBox.Show($"Error while loading settings :{vbCrLf & "-" & errors}", "Loading errors", MessageBoxButton.OK, MessageBoxImage.Error)
+                End If
 
                 UpdateCommand()
                 DecorateCommand()
