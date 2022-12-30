@@ -362,11 +362,20 @@ Namespace Views
             End Try
         End Sub
 
-        'TODO? Generate window with XAML
+
+        Private Sub Lvw_LevelsUserPresets_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs)
+            Try
+                Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
+                DisplayPresetDetails(preset)
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
         Private Sub Mitm_ViewUserLevel_Click(sender As Object, e As RoutedEventArgs)
             Try
                 Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
-
                 DisplayPresetDetails(preset)
 
                 'Dim myTextBlock As New TextBlock With {.Margin = New Thickness(10)}
@@ -385,7 +394,6 @@ Namespace Views
                 '    .WindowStartupLocation = WindowStartupLocation.CenterOwner
                 '}
                 'myWindow.ShowDialog()
-
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")

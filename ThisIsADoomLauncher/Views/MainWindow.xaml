@@ -234,7 +234,8 @@
                     <TabItem x:Name="Tbi_LevelsUserPresets" Header="User presets">
                         <Grid>
                             <Label x:Name="Lbl_LevelsNoUserPresets" Style="{StaticResource Lbl_NoUserPresets}"/>
-                            <ListView x:Name="Lvw_LevelsUserPresets" Margin="-3" SelectionChanged="Lvw_LevelsUserPresets_SelectionChanged" Visibility="Collapsed">
+                            <ListView x:Name="Lvw_LevelsUserPresets" Margin="-3" Visibility="Collapsed"
+                                      MouseDoubleClick="Lvw_LevelsUserPresets_MouseDoubleClick" SelectionChanged="Lvw_LevelsUserPresets_SelectionChanged">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
