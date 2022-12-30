@@ -6,19 +6,25 @@
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
         
-        Title="[PRESET TYPE] details"
-        Height="360" Width="500"
+        Title="Level preset - NAME"
+        Height="360" Width="640"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterOwner"
         
         Loaded="Window_Loaded">
-    <!-- Width="720" -->
+
+    <Window.Resources>
+        <Style x:Key="Dtg_Properties" TargetType="{x:Type DataGrid}">
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+            <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="12"/>
-            <!--<ColumnDefinition Width="20*"/>
-            <ColumnDefinition Width="6"/>-->
-            <ColumnDefinition Width="80*"/>
+            <ColumnDefinition Width="1*"/>
             <ColumnDefinition Width="12"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -29,45 +35,8 @@
             <RowDefinition Height="12"/>
         </Grid.RowDefinitions>
 
-        <!-- Grid.ColumnSpan="3" Source="{Binding}" -->
         <Image x:Name="Img_PresetImage" Grid.Column="1"  Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-
-        <!-- Design #3 = DataGrid with ReadOnly=False ? To be able to edit Preset properties -->
-        <ListView x:Name="Lvw_Properties" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding}">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    
-                    <!-- Design #2 -->
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock FontWeight="Bold" Text="{Binding Key}" Width="40"/>
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{} :  {0}">
-                                    <Binding Path="Value"/>
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                        <!--<TextBlock Text="{Binding Value}"/>-->
-                    </StackPanel>
-
-                    <!-- Design #1
-                    <StackPanel Orientation="Vertical" Margin="5">
-                        <ContentPresenter>
-                            <ContentPresenter.Content>
-                                <TextBlock FontWeight="Bold" Text="{Binding Key}"/>
-                            </ContentPresenter.Content>
-                        </ContentPresenter>
-                        <ItemsControl ItemsSource="{Binding Value}" Margin="10 0 0 0">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Horizontal"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>-->
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
+        <DataGrid x:Name="Dtg_Properties" Grid.Column="1" Grid.Row="3" ItemsSource="{Binding}" Style="{StaticResource Dtg_Properties}"/>
     </Grid>
+    
 </Window>

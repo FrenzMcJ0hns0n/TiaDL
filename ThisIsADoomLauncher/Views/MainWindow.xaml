@@ -377,7 +377,8 @@
                     <TabItem x:Name="Tbi_ModsUserPresets" Header="User presets">
                         <Grid>
                             <Label x:Name="Lbl_ModsNoUserPresets" Style="{StaticResource Lbl_NoUserPresets}"/>
-                            <ListView x:Name="Lvw_ModsUserPresets" Margin="-3" SelectionChanged="Lvw_ModsUserPresets_SelectionChanged" Visibility="Collapsed">
+                            <ListView x:Name="Lvw_ModsUserPresets" Margin="-3" Visibility="Collapsed"
+                                      MouseDoubleClick="Lvw_ModsUserPresets_MouseDoubleClick" SelectionChanged="Lvw_ModsUserPresets_SelectionChanged">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">

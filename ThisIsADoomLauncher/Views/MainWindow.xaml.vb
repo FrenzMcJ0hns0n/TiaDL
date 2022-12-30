@@ -413,6 +413,11 @@ Namespace Views
             Dim presetProperties As New SortedDictionary(Of String, Object)
             For Each pi As PropertyInfo In preset.GetType().GetProperties()
                 If pi.Name = "Name" Or pi.Name = "Pict" Then Continue For 'Exclude Name & Pict from Dictionary
+                If presetTypeName = "ModPreset" AndAlso pi.Name = "Files" Then
+                    Dim modFiles As List(Of String) = DirectCast(pi.GetValue(preset), List(Of String))
+                    presetProperties.Add(pi.Name, $"<{modFiles.Count} elements>")
+                    Continue For
+                End If
                 presetProperties.Add(pi.Name, pi.GetValue(preset))
             Next
 
@@ -697,9 +702,14 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub Lvw_ModsUserPresets_MouseDoubleClick(sender As Object, e As MouseButtonEventArgs)
+            Dim preset As ModPreset = DirectCast(Lvw_ModsUserPresets.SelectedItem, ModPreset)
+            DisplayPresetDetails(preset)
+        End Sub
+
         Private Sub Mitm_ViewUserMod_Click(sender As Object, e As RoutedEventArgs)
-            'TODO
-            MessageBox.Show("You clicked ""View details""")
+            Dim preset As ModPreset = DirectCast(Lvw_ModsUserPresets.SelectedItem, ModPreset)
+            DisplayPresetDetails(preset)
         End Sub
 
         Private Sub Mitm_DeleteUserMod_Click(sender As Object, e As RoutedEventArgs)
