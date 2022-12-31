@@ -30,6 +30,9 @@ Namespace Views
         Private Const ERR_MISSING_IWAD As String = "You need an Iwad as game base content"
         Private Const ERR_ONLY_IWAD As String = "You only submitted an ""Iwad"" file: at least a ""Maps"" file is required as well"
 
+        Private Const ERR_BAD_SETTINGS As String = "Unable to read app settings from local JSON file"
+        Private Const ERR_BAD_USER_DATA As String = "Unable to read user presets from local JSON file"
+
 #End Region
 
 
@@ -292,17 +295,11 @@ Namespace Views
         Private Sub PopulateUserLevels()
             Try
                 Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
-                If Not File.Exists(jsonFilepath) Then
-                    'TODO: Use constant
-                    MessageBox.Show("No local JSON file to load data from: use the ""Add new preset"" tab to create some", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Information)
-                    Return 'Early return
-                End If
+                If Not File.Exists(jsonFilepath) Then Return 'Early return
 
                 Dim jsonString As String = GetJsonData(jsonFilepath)
-
                 If Not CanLoadJsonArray(jsonString) Then
-                    'TODO: Use constant
-                    MessageBox.Show("Unable to read user level presets from local JSON file", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                    MessageBox.Show(ERR_BAD_USER_DATA, "Data error", MessageBoxButton.OK, MessageBoxImage.Error)
                     ShowNoUserLevels()
                     Return 'Early return
                 End If
@@ -342,8 +339,6 @@ Namespace Views
             End Try
         End Sub
 
-        'TODO? Factorize in common function?
-
         Private Sub Lvw_LevelsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
                 'Condition: event triggered by a click on Listview item
@@ -377,23 +372,6 @@ Namespace Views
             Try
                 Dim preset As LevelPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
                 DisplayPresetDetails(preset)
-
-                'Dim myTextBlock As New TextBlock With {.Margin = New Thickness(10)}
-                'For Each pi As PropertyInfo In preset.GetType().GetProperties()
-                '    myTextBlock.Inlines.Add(New Bold(New Run($"{pi.Name}")))
-                '    myTextBlock.Inlines.Add(New Run($" : {pi.GetValue(preset)}{vbCrLf}"))
-                'Next
-
-                'Dim myWindow As New Window With
-                '{
-                '    .Content = myTextBlock,
-                '    .Height = 200,
-                '    .Owner = Me,
-                '    .Title = "User level preset",
-                '    .Width = 600,
-                '    .WindowStartupLocation = WindowStartupLocation.CenterOwner
-                '}
-                'myWindow.ShowDialog()
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -565,21 +543,18 @@ Namespace Views
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
             If mapsInput = TBX_DROP_MAPS And miscInput = TBX_DROP_MISC Then
-                'TODO: Use string constant
-                MessageBox.Show("You only submitted an Iwad. Please select it from the ""Base presets"" tab instead", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show(ERR_ONLY_IWAD, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return
             End If
 
-            'TODO: Secure JSON operations and complete this part
             Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
             Dim jsonString As String = GetJsonData(jsonFilepath)
+            Dim hasUserData As Boolean = CanLoadJsonArray(jsonString)
 
-            Dim FAKENAME As String = $"Fake name (created on {Now:yyyy-MM-dd_HH-mm-ss})"
-
-            Dim currentLevels As List(Of LevelPreset) = LoadUserLevels(jsonString)
+            Dim currentLevels As List(Of LevelPreset) = If(hasUserData, LoadUserLevels(jsonString), New List(Of LevelPreset))
             currentLevels.Add(New LevelPreset With
             {
-                .Name = FAKENAME,
+                .Name = $"Fake name (created on {Now:yyyy-MM-dd_HH-mm-ss})",
                 .Iwad = iwadInput,
                 .Maps = mapsInput,
                 .Misc = If(miscInput = TBX_DROP_MISC, String.Empty, miscInput),
@@ -588,7 +563,7 @@ Namespace Views
                 .Pict = "" 'TODO: Manage this input
             })
             SaveUserLevels(currentLevels, jsonFilepath)
-            MessageBox.Show($"New user level preset ""{FAKENAME}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
+            MessageBox.Show($"New user level preset saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
         End Sub
 
         Private Sub Btn_NewLevelClearAll_Click(sender As Object, e As RoutedEventArgs)
@@ -629,16 +604,11 @@ Namespace Views
         Private Sub PopulateUserMods()
             Try
                 Dim jsonFilepath As String = GetJsonFilepath("UserMods")
-                If Not File.Exists(jsonFilepath) Then
-                    'TODO: Use constant
-                    MessageBox.Show("No local JSON file to load data from: use the ""Add new preset"" tab to create some", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Information)
-                    Return 'Early return
-                End If
+                If Not File.Exists(jsonFilepath) Then Return 'Early return
 
                 Dim jsonString As String = GetJsonData(jsonFilepath)
                 If Not CanLoadJsonArray(jsonString) Then
-                    'TODO: Use constant
-                    MessageBox.Show("Unable to read user mod presets from local JSON file", ERR_INVALID_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                    MessageBox.Show(ERR_BAD_USER_DATA, "Data error", MessageBoxButton.OK, MessageBoxImage.Error)
                     ShowNoUserMods()
                     Return 'Early return
                 End If
@@ -684,16 +654,13 @@ Namespace Views
 
         Private Sub Lvw_ModsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
-                'Safety fix. SelectedItem is not kept accross tabs, as the content of this one is updated everytime
-                'TODO? Improve
-                If Lvw_ModsUserPresets.SelectedItem Is Nothing Then Return
-
-                Dim mp As ModPreset = ReturnSelectedMods()
-
-                UpdateMods_Summary(mp.Files)
-                UpdateCommand()
-                DecorateCommand()
-
+                'Condition: event triggered by a click on Listview item
+                If Lvw_ModsUserPresets.SelectedItem IsNot Nothing Then
+                    Dim mp As ModPreset = ReturnSelectedMods()
+                    UpdateMods_Summary(mp.Files)
+                    UpdateCommand()
+                    DecorateCommand()
+                End If
                 e.Handled = True 'Prevent escalating up to "parent" event Tbc_Mods_SelectionChanged()
 
             Catch ex As Exception
@@ -716,7 +683,7 @@ Namespace Views
             Try
                 Dim lvw As ListView = Lvw_ModsUserPresets
                 Dim selectedPreset As ModPreset = DirectCast(lvw.SelectedItem, ModPreset)
-                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want to delete preset ""{selectedPreset.Name}"" ?",
+                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want to delete ""{selectedPreset.Name}"" ?",
                                                               "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question)
                 If mbr = MessageBoxResult.Yes Then
                     Dim presets As List(Of ModPreset) = DirectCast(lvw.ItemsSource, List(Of ModPreset))
@@ -921,7 +888,10 @@ Namespace Views
         End Sub
 
         Private Sub Btn_NewModTry_Click(sender As Object, e As RoutedEventArgs)
-            If Dtg_NewModFiles.ItemsSource Is Nothing Then Return
+            If Dtg_NewModFiles.ItemsSource Is Nothing Then
+                MessageBox.Show("Missing mod files", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
+                Return 'Early return
+            End If
 
             'Gather modFiles
             Dim modFiles As New List(Of String)
@@ -934,7 +904,6 @@ Namespace Views
         End Sub
 
         Private Sub Btn_NewModSave_Click(sender As Object, e As RoutedEventArgs)
-
             If Dtg_NewModFiles.ItemsSource Is Nothing Then
                 MessageBox.Show("Missing mod files", ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return 'Early return
@@ -965,14 +934,11 @@ Namespace Views
             })
             SaveUserMods(currentMods, jsonFilepath)
             MessageBox.Show($"New user mod preset ""{Tbx_NewModName.Text}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
-
         End Sub
 
         Private Sub Btn_NewModClearAll_Click(sender As Object, e As RoutedEventArgs)
-            'TODO: Use UnfillTextBox(Tbx, Placeholder) + Set placeholders
             Tbx_NewModName.Text = String.Empty
             Tbx_NewModDesc.Text = String.Empty
-
             Btn_NewModFilesClear_Click()
         End Sub
 
@@ -1095,7 +1061,6 @@ Namespace Views
         Private Function ExtractFileFullPath(tbx As TextBox) As String
             Dim directoryPath As String = tbx.Tag.ToString
             Dim filename As String = tbx.Text
-
             Return Path.Combine(directoryPath, filename)
         End Function
 
@@ -1107,14 +1072,12 @@ Namespace Views
         ''' <returns></returns>
         Private Function GetFullPathsFromStackPanelItems(target As String) As List(Of String)
             Dim fullPaths As New List(Of String)
-
             Try
                 Dim allTbxs As List(Of TextBox) = Stkp_SummaryFilesMods.Children.OfType(Of TextBox).ToList
 
                 If target = "Level" Then
                     'Build a List(Of String) of Length = 2, as {Maps, Misc}
                     Dim lvlTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.White).ToList
-
                     If lvlTbxs.Count > 0 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(0))) : Else fullPaths.Add(String.Empty) : End If
                     If lvlTbxs.Count > 1 Then : fullPaths.Add(ExtractFileFullPath(lvlTbxs(1))) : Else fullPaths.Add(String.Empty) : End If
                 End If
@@ -1122,7 +1085,6 @@ Namespace Views
                 If target = "Mod" Then
                     'Build a List(Of String) of Length = N, as {ModFile1, ModFile2, ModFile3, etc.}
                     Dim modTbxs As List(Of TextBox) = allTbxs.Where(Function(tbx) tbx.Background Is Brushes.LightGray).ToList
-
                     modTbxs.ForEach(Sub(tbx) fullPaths.Add(ExtractFileFullPath(tbx)))
                 End If
 
@@ -1130,7 +1092,6 @@ Namespace Views
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {target}")
             End Try
-
             Return fullPaths
         End Function
 
@@ -1319,13 +1280,9 @@ Namespace Views
 
         Private Sub FillRichTextBox_Command(content As String)
             Try
-                Dim para As New Paragraph()
-                para.Inlines.Add(content)
-
-                Dim flow As New FlowDocument()
-                flow.Blocks.Add(para)
-
-                Rtb_Command.Document = flow
+                Dim parag As New Paragraph() : parag.Inlines.Add(content)
+                Dim fd As New FlowDocument() : fd.Blocks.Add(parag)
+                Rtb_Command.Document = fd
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {content}")
@@ -1333,35 +1290,34 @@ Namespace Views
         End Sub
 
         ''' <summary>
-        ''' Update the "Command" Summary from the "Fields" Summary view
+        ''' Update command line from Summary fields
         ''' </summary>
         Private Sub UpdateCommand()
-            Dim command As String = String.Empty
+            Dim commandLine As New StringBuilder()
             Try
                 Dim port As String = TextBox_Summary_Port.Text
                 Dim iwad As String = TextBox_Summary_Iwad.Text
-
                 If port = String.Empty Or iwad = String.Empty Then
                     Rtb_Command.Document.Blocks.Clear() 'TODO? Display text about Missing Port & Iwad ?
                     Return
                 End If
 
-                command &= $"""{port}"""
+                commandLine.Append($"""{port}""")
 
                 'Add Port parameters to the command line
                 Dim paramTbxs As List(Of TextBox) = Stkp_SummaryPortParameters.Children.OfType(Of TextBox).ToList
-                paramTbxs.ForEach(Sub(tbx) command &= $" {tbx.Text}")
+                paramTbxs.ForEach(Sub(tbx) commandLine.Append($" {tbx.Text}"))
 
-                command &= $" -iwad ""{iwad}"""
+                commandLine.Append($" -iwad ""{iwad}""")
 
                 'Add Maps/Misc/Mods to the command line
                 Dim allTbxs As List(Of TextBox) = Stkp_SummaryFilesMods.Children.OfType(Of TextBox).ToList
-                allTbxs.ForEach(Sub(tbx) command &= $" -file ""{ExtractFileFullPath(tbx)}""")
+                allTbxs.ForEach(Sub(tbx) commandLine.Append($" -file ""{ExtractFileFullPath(tbx)}"""))
 
-                FillRichTextBox_Command(command)
+                FillRichTextBox_Command(commandLine.ToString)
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Command : {command}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Command : {commandLine}")
             End Try
         End Sub
 
@@ -1369,26 +1325,17 @@ Namespace Views
 
 
         Private Function ReturnSelectedLevels() As LevelPreset
-            Dim preset As LevelPreset = Nothing
-
+            Dim lvlPreset As LevelPreset = Nothing
             Try
                 Select Case GetActiveLvlTab()
-                    Case LVLPRESET_TAB.Base
-                        preset = DirectCast(Lvw_LevelsBasePresets.SelectedItem, LevelPreset)
-
-                    Case LVLPRESET_TAB.User
-                        preset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
-
-                    Case LVLPRESET_TAB.AddNew
-                        'TODO
-
+                    Case LVLPRESET_TAB.Base : lvlPreset = DirectCast(Lvw_LevelsBasePresets.SelectedItem, LevelPreset)
+                    Case LVLPRESET_TAB.User : lvlPreset = DirectCast(Lvw_LevelsUserPresets.SelectedItem, LevelPreset)
                 End Select
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
-
-            Return preset
+            Return lvlPreset
         End Function
 
         ''' <summary>
@@ -1436,26 +1383,17 @@ Namespace Views
         End Function
 
         Private Function ReturnSelectedMods() As ModPreset
-            Dim preset As ModPreset = Nothing
-
+            Dim modPreset As ModPreset = Nothing
             Try
                 Select Case GetActiveModTab()
-                    Case MODPRESET_TAB.Base
-                        preset = DirectCast(Lvw_ModsBasePresets.SelectedItem, ModPreset)
-
-                    Case MODPRESET_TAB.User
-                        preset = DirectCast(Lvw_ModsUserPresets.SelectedItem, ModPreset)
-
-                    Case MODPRESET_TAB.AddNew
-                        'TODO
-
+                    Case MODPRESET_TAB.Base : modPreset = DirectCast(Lvw_ModsBasePresets.SelectedItem, ModPreset)
+                    Case MODPRESET_TAB.User : modPreset = DirectCast(Lvw_ModsUserPresets.SelectedItem, ModPreset)
                 End Select
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
             End Try
-
-            Return preset
+            Return modPreset
         End Function
 
 
@@ -1485,15 +1423,13 @@ Namespace Views
         Private Sub LaunchGame()
             Try
                 Dim rtbText As String = New TextRange(Rtb_Command.Document.ContentStart, Rtb_Command.Document.ContentEnd).Text
-
                 Dim cmdExe As New ProcessStartInfo("cmd.exe") With
                 {
-                    .UseShellExecute = False,
+                    .Arguments = $"/c start """" {rtbText}",
                     .CreateNoWindow = True,
-                    .Arguments = $"/c start """" {rtbText}"
+                    .UseShellExecute = False
                 }
                 Process.Start(cmdExe)
-
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -1509,8 +1445,6 @@ Namespace Views
         Private Sub SaveSettings()
             Try
                 Dim levelsPaths As List(Of String) = GetFullPathsFromStackPanelItems("Level")
-                Dim modsPaths As List(Of String) = GetFullPathsFromStackPanelItems("Mod")
-
                 Dim lastLaunched As New Setting() With
                 {
                     .Port = TextBox_Summary_Port.Text,
@@ -1518,10 +1452,9 @@ Namespace Views
                     .Iwad = TextBox_Summary_Iwad.Text,
                     .Maps = levelsPaths(0),
                     .Misc = levelsPaths(1),
-                    .Mods = modsPaths
+                    .Mods = GetFullPathsFromStackPanelItems("Mod")
                 }
                 Serializer.SaveSettings(lastLaunched, GetJsonFilepath("Settings"))
-
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
@@ -1537,7 +1470,10 @@ Namespace Views
                 If Not File.Exists(settingsFilepath) Then Return
 
                 Dim settingsData As String = GetJsonData(settingsFilepath)
-                If Not CanLoadJsonObject(settingsData) Then Return
+                If Not CanLoadJsonObject(settingsData) Then
+                    MessageBox.Show(ERR_BAD_SETTINGS, "Data error", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Return
+                End If
 
                 Dim loadingErrors As New List(Of String)
 
@@ -1547,22 +1483,23 @@ Namespace Views
                         FillTextBox(Tbx_Port, .Port)
                         FillTextBox(TextBox_Summary_Port, .Port)
                     Else
-                        loadingErrors.Add("Port: loaded file does not exist")
+                        loadingErrors.Add("Port: specified file does not exist")
                     End If
                     UpdatePortParams(.PortParameters)
                     UpdatePortParams_Summary(.PortParameters)
                     If File.Exists(.Iwad) Then
                         TextBox_Summary_Iwad.Text = .Iwad
                     Else
-                        loadingErrors.Add("Iwad: loaded file does not exist")
+                        loadingErrors.Add("Iwad: specified file does not exist")
                     End If
                     UpdateLevels_Summary(.Maps, .Misc)
                     UpdateMods_Summary(.Mods)
                 End With
 
                 If loadingErrors.Count > 0 Then
-                    Dim errors As String = String.Join(vbCrLf & "-", loadingErrors)
-                    MessageBox.Show($"Error while loading settings :{vbCrLf & "-" & errors}", "Loading errors", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Dim errors As String = String.Join(vbCrLf & "- ", loadingErrors)
+                    MessageBox.Show($"Error while loading JSON settings :{vbCrLf & vbCrLf & "- " & errors}",
+                                    "Loading errors", MessageBoxButton.OK, MessageBoxImage.Error)
                 End If
 
                 UpdateCommand()
