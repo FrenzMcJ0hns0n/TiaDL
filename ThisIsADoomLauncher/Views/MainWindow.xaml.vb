@@ -838,8 +838,8 @@ Namespace Views
 
             Dim selectedItemsIdxs As New List(Of Integer)
             For i As Integer = 0 To selectedCount - 1
-                Dim index As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
-                selectedItemsIdxs.Add(index)
+                Dim position As Integer = dtg.Items.IndexOf(dtg.SelectedItems(i))
+                selectedItemsIdxs.Add(position)
             Next
 
             Dim directoriesPaths As New List(Of String)
