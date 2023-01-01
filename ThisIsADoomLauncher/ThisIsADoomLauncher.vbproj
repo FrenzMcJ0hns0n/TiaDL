@@ -217,15 +217,6 @@
     <Resource Include="Resources\Images\settings_darker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\play_darker.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\index.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\300x50_blackAndWhite_edit_def.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Resources\Config\" />
   </ItemGroup>
   <ItemGroup>
