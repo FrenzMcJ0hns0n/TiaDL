@@ -619,8 +619,12 @@ Namespace Views
                     Return 'Early return
                 End If
 
-                'Shorten desc to be displayed after preset name
-                modPresets.ForEach(Sub(mp As ModPreset) If mp.Desc.Length > 50 Then mp.Desc = mp.Desc.Substring(0, 49) & "...")
+                'Edit description to be displayed after preset name
+                For Each mp As ModPreset In modPresets
+                    If mp.Desc.Length > 50 Then mp.Desc = mp.Desc.Substring(0, 49) & "..."
+                    mp.Desc &= $" ({mp.Files.Count} mod files)"
+                Next
+
                 'Display
                 With Lvw_ModsUserPresets
                     .ItemsSource = modPresets

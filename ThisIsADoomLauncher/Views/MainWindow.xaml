@@ -208,10 +208,10 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ImgConverter}}">
+                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource LvlImgConverter}}">
                                                 <Image.ToolTip>
                                                     <StackPanel>
-                                                        <Image Height="128" Margin="0 1 0 4" Source="{Binding Pict,Converter={StaticResource ImgConverter}}"/>
+                                                        <Image Height="128" Margin="0 1 0 4" Source="{Binding Pict,Converter={StaticResource LvlImgConverter}}"/>
                                                         <TextBlock TextAlignment="Center">
                                                             <TextBlock.Text>
                                                                 <MultiBinding StringFormat="Year : {0}&#x0a;Type : {1}">
@@ -239,7 +239,7 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ImgConverter}}"/>
+                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource LvlImgConverter}}"/>
                                             <TextBlock FontSize="14" FontWeight="DemiBold" Margin="6 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
@@ -382,9 +382,9 @@
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ImgConverter}}"/>
-                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="6 0" Text="{Binding Name}" VerticalAlignment="Center"/>
-                                            <TextBlock FontSize="13" FontStyle="Italic" Foreground="DarkGray" Text="{Binding Desc}" VerticalAlignment="Center"/>
+                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ModImgConverter}}"/>
+                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="8 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="13" Foreground="DarkGray" Text="{Binding Desc}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>

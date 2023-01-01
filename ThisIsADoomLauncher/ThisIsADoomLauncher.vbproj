@@ -232,7 +232,7 @@
     <Resource Include="Resources\Images\Presets\Common\Blazkowicz_sprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Presets\icon_default.png" />
+    <Resource Include="Resources\Images\Presets\Lvl_default.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\doom_icon.jpg" />
@@ -254,6 +254,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\DE_DOOM_Zero_edit.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Presets\Mod_default.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
