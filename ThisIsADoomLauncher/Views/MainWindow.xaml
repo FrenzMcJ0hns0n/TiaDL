@@ -137,7 +137,17 @@
             <Setter Property="Orientation" Value="Horizontal"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        
+
+        <!-- ========================== -->
+        <!-- Styles resources - Options -->
+        <!-- ========================== -->
+
+        <Style x:Key="Btn_OptionsTemp" TargetType="{x:Type Button}">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="0 8"/>
+        </Style>
+
     </Window.Resources>
     
     
@@ -569,17 +579,17 @@
                 </Grid.RowDefinitions>
 
                 <StackPanel VerticalAlignment="Center">
-                    <Button Content="Help / About" Margin="4" Padding="0 8" Click="Button_OptionHelpAbout_Click"/>
+                    <Button Content="Help / About" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionHelpAbout_Click"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="2" VerticalAlignment="Center">
-                    <Button Content="Root directory" Margin="4" Padding="0 8" Click="Button_OptionOpenRootDir_Click"/>
-                    <Button Content="DoomWorld" IsEnabled="False" Margin="4" Padding="0 8"/>
+                    <Button Content="Root directory" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionOpenRootDir_Click"/>
+                    <Button Content="DoomWorld" IsEnabled="False" Style="{StaticResource Btn_OptionsTemp}"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="6" VerticalAlignment="Center">
-                    <Button Background="#d6e0f5" Content="Switch view &#128065;" Margin="4" Padding="0 8" Click="Button_OptionSwitchView_Click"/>
-                    <Button Background="#c6ecc6" Content="Save &amp; Play &#10148;" Margin="4" Padding="0 8" Click="Button_OptionSavePlay_Click"/>
+                    <Button Background="#d6e0f5" Content="Switch view &#128065;" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionSwitchView_Click"/>
+                    <Button Background="#c6ecc6" Content="Save &amp; Play &#10148;" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionSavePlay_Click"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
