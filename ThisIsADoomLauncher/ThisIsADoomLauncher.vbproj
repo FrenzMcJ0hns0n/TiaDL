@@ -104,6 +104,9 @@
     <Compile Include="Models\ModPreset.vb" />
     <Compile Include="Models\Preset.vb" />
     <Compile Include="Models\Setting.vb" />
+    <Compile Include="Views\CreatingWindowOnlyForThat.xaml.vb">
+      <DependentUpon>CreatingWindowOnlyForThat.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
@@ -115,6 +118,10 @@
     <Compile Include="Views\PresetDetailsWindow.xaml.vb">
       <DependentUpon>PresetDetailsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\CreatingWindowOnlyForThat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

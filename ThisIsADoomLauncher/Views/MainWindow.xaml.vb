@@ -414,7 +414,7 @@ Namespace Views
             Try
                 Dim lvw As ListView = Lvw_LevelsUserPresets
                 Dim selectedPreset As LevelPreset = DirectCast(lvw.SelectedItem, LevelPreset)
-                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want To delete preset ""{selectedPreset.Name}"" ?",
+                Dim mbr As MessageBoxResult = MessageBox.Show($"Delete level preset ""{selectedPreset.Name}"" ?",
                                                               "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question)
                 If mbr = MessageBoxResult.Yes Then
                     Dim presets As List(Of LevelPreset) = DirectCast(lvw.ItemsSource, List(Of LevelPreset))
@@ -551,10 +551,19 @@ Namespace Views
             Dim jsonString As String = GetJsonData(jsonFilepath)
             Dim hasUserData As Boolean = CanLoadJsonArray(jsonString)
 
+            Dim inputWindow As New CreatingWindowOnlyForThat With {.Owner = Me}
+            inputWindow.ShowDialog()
+            Dim presetName As String = inputWindow.Tbx_PresetName.Text
+            If String.IsNullOrEmpty(presetName) Then
+                'MessageBox.Show()
+                Return
+            End If
+
+
             Dim currentLevels As List(Of LevelPreset) = If(hasUserData, LoadUserLevels(jsonString), New List(Of LevelPreset))
             currentLevels.Add(New LevelPreset With
             {
-                .Name = $"Fake name (created on {Now:yyyy-MM-dd_HH-mm-ss})",
+                .Name = presetName,
                 .Iwad = iwadInput,
                 .Maps = mapsInput,
                 .Misc = If(miscInput = TBX_DROP_MISC, String.Empty, miscInput),
@@ -563,7 +572,7 @@ Namespace Views
                 .Pict = "" 'TODO: Manage this input
             })
             SaveUserLevels(currentLevels, jsonFilepath)
-            MessageBox.Show($"New user level preset saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
+            MessageBox.Show($"New user level preset ""{presetName}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
         End Sub
 
         Private Sub Btn_NewLevelClearAll_Click(sender As Object, e As RoutedEventArgs)
@@ -687,7 +696,7 @@ Namespace Views
             Try
                 Dim lvw As ListView = Lvw_ModsUserPresets
                 Dim selectedPreset As ModPreset = DirectCast(lvw.SelectedItem, ModPreset)
-                Dim mbr As MessageBoxResult = MessageBox.Show($"Do you really want to delete ""{selectedPreset.Name}"" ?",
+                Dim mbr As MessageBoxResult = MessageBox.Show($"Delete mod preset ""{selectedPreset.Name}"" ?",
                                                               "Delete preset", MessageBoxButton.YesNo, MessageBoxImage.Question)
                 If mbr = MessageBoxResult.Yes Then
                     Dim presets As List(Of ModPreset) = DirectCast(lvw.ItemsSource, List(Of ModPreset))

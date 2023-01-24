@@ -1,0 +1,36 @@
+﻿<Window x:Class="CreatingWindowOnlyForThat"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ThisIsADoomLauncher"
+        mc:Ignorable="d"
+        
+        Height="180" Width="360"
+        ResizeMode="NoResize"
+        Title="Preset name"
+        WindowStartupLocation="CenterOwner"
+        
+        Loaded="Window_Loaded">
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="16"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="16" />
+            <RowDefinition Height="4*" />
+            <RowDefinition Height="2*" />
+            <RowDefinition Height="16" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+            <Label Content="Name for this level preset :" HorizontalContentAlignment="Center"/>
+            <TextBox x:Name="Tbx_PresetName" Background="WhiteSmoke" MaxLength="40" VerticalAlignment="Stretch"/>
+        </StackPanel>
+
+        <Button Content="OK" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Center" Padding="10 4"  VerticalAlignment="Center" Click="Button_Click"/>
+    </Grid>
+</Window>
