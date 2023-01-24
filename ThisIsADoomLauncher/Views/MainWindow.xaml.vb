@@ -326,11 +326,14 @@ Namespace Views
 
         Private Sub Lvw_LevelsBasePresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
-                Dim lp As LevelPreset = ReturnSelectedLevels()
-                TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
-                UpdateLevels_Summary(lp.Maps, lp.Misc)
-                UpdateCommand()
-                DecorateCommand()
+                'Condition: A Listview item must be selected
+                If Lvw_LevelsBasePresets.SelectedItem IsNot Nothing Then
+                    Dim lp As LevelPreset = ReturnSelectedLevels()
+                    TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
+                    UpdateLevels_Summary(lp.Maps, lp.Misc)
+                    UpdateCommand()
+                    DecorateCommand()
+                End If
                 e.Handled = True 'Prevent escalating up to "parent" event Tbc_Levels_SelectionChanged()
 
             Catch ex As Exception
@@ -341,7 +344,7 @@ Namespace Views
 
         Private Sub Lvw_LevelsUserPresets_SelectionChanged(sender As Object, e As SelectionChangedEventArgs)
             Try
-                'Condition: event triggered by a click on Listview item
+                'Condition: A Listview item must be selected
                 If Lvw_LevelsUserPresets.SelectedItem IsNot Nothing Then
                     Dim lp As LevelPreset = ReturnSelectedLevels()
                     TextBox_Summary_Iwad.Text = GetFileAbsolutePath("Iwad", lp.Iwad)
