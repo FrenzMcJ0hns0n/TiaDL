@@ -1,4 +1,9 @@
-﻿Imports System.Net.Http
+﻿Imports System.IO
+Imports System.IO.Compression
+Imports System.Net.Http
+Imports System.Reflection
+Imports System.Web.Hosting
+Imports System.Windows.Shell
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 
@@ -23,6 +28,10 @@ Namespace Helpers.DoomWorld
 
                 Dim jsonObject = JObject.Parse(jsonResult)
 
+                If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                    Throw New ArgumentException($"Parent directory : {parentDirectory} is not correct")
+                End If
+
                 jsonObject.SelectToken("content.dir").ToList().ForEach(
                     Sub(directory) directories.Add(
                         New With {
@@ -40,8 +49,8 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="id"></param>
         ''' <returns></returns>
-        Public Shared Async Function GetLevel(id As String) As Task(Of Level)
-            Dim uriPath As String = "api.php?action=get&id=" + id
+        Public Shared Async Function GetLevel(id As Integer) As Task(Of Level)
+            Dim uriPath As String = String.Concat("api.php?action=get&id=", id)
             Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
             Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
             If response.IsSuccessStatusCode Then
@@ -54,7 +63,7 @@ Namespace Helpers.DoomWorld
 
                 Return New Level() With
                 {
-                    .Id = level.Item("id").ToString(),
+                    .Id = Integer.Parse(level.Item("id")),
                     .Idgamesurl = level.Item("idgamesurl").ToString()
                 }
             End If
@@ -63,16 +72,97 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Downloads a level and extracts it in the levels directory
+        ''' Get Level download links
         ''' </summary>
-        ''' <param name="idGamesUrl"></param>
+        ''' <param name="levelUrl">The level url</param>
         ''' <returns></returns>
-        Public Shared Async Function DownloadLevel(idGamesUrl As String) As Task(Of Level)
-            'TODO :
-            '- go to level url
-            '- scrap DL links
-            '- handle DL
-            '- extract zip in levels folder
+        Public Shared Async Function GetLevelDownloadLinks(levelUrl As String) As Task(Of List(Of String))
+            Dim downloadLinks As List(Of String)
+            Try
+
+                Dim requestUri As Uri = New Uri(levelUrl)
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
+
+                    downloadLinks = New List(Of String)
+
+                    Dim htmlResult As String = Await response.Content.ReadAsStringAsync()
+
+                    Dim html As HtmlAgilityPack.HtmlDocument = New HtmlAgilityPack.HtmlDocument
+                    html.LoadHtml(htmlResult)
+
+                    Dim htmlDocument As HtmlAgilityPack.HtmlNode = html.DocumentNode
+                    Dim dlUrls As HtmlAgilityPack.HtmlNodeCollection = htmlDocument.SelectNodes("/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li")
+
+                    For Each dlUrl As HtmlAgilityPack.HtmlNode In dlUrls
+                        downloadLinks.Add(dlUrl.SelectSingleNode("a").Attributes.FirstOrDefault(Function(a) a.Name = "href").Value)
+                    Next
+                End If
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {levelUrl}")
+            End Try
+
+            Return downloadLinks
+        End Function
+
+        ''' <summary>
+        ''' Downloads a level
+        ''' </summary>
+        ''' <param name="levelUrl">The level download url</param>
+        ''' <returns></returns>
+        Public Shared Async Function DownloadLevel(levelUrl As String) As Task(Of String)
+            Try
+                Dim requestUri As Uri = New Uri(levelUrl)
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+
+                Dim levelFileName As String = requestUri.Segments.Last()
+                Using fileStream As New FileStream(levelFileName, FileMode.OpenOrCreate)
+                    'HostingEnvironment.MapPath("~/lol") + requestUri.Segments.Last()
+                    Await response.Content.CopyToAsync(fileStream)
+                End Using
+
+                Return levelFileName
+            Catch ex As Exception
+
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Extracts Level's files from zip archive in a folder
+        ''' </summary>
+        ''' <param name="fileNameZip"></param>
+        ''' <returns></returns>
+        Public Shared Async Function ExtractLevelFromZip(directoryPath As String, fileNameZip As String) As Task(Of Integer)
+            Dim result As Integer = 0
+            Try
+                Dim levelZipUri As Uri = New Uri(String.Concat(directoryPath, "/", fileNameZip))
+
+                If Not System.IO.File.Exists(levelZipUri.AbsolutePath) Then
+                    Throw New FileNotFoundException
+                End If
+
+                Dim fileName As String = fileNameZip.Split("."c).First()
+
+                Dim fileNameFolderPathAfterExtraction As New Uri(String.Concat(directoryPath, "/", fileName))
+
+                If Directory.Exists(fileNameFolderPathAfterExtraction.AbsolutePath) Then
+                    Return result
+                End If
+
+                Await Task.Run(Sub()
+                                   System.IO.Compression.ZipFile.ExtractToDirectory(levelZipUri.AbsolutePath, fileNameFolderPathAfterExtraction.AbsolutePath)
+                               End Sub)
+                If Directory.Exists(fileNameFolderPathAfterExtraction.AbsolutePath) Then
+                    result = 1
+                End If
+            Catch ex As Exception
+                Dim s As String = ex.Message
+                result = -1
+            End Try
+
+            Return result
         End Function
     End Class
 End Namespace
