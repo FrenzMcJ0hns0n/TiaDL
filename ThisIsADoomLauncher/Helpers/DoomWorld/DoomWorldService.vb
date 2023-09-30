@@ -118,7 +118,6 @@ Namespace Helpers.DoomWorld
 
                 Dim levelFileName As String = requestUri.Segments.Last()
                 Using fileStream As New FileStream(levelFileName, FileMode.OpenOrCreate)
-                    'HostingEnvironment.MapPath("~/lol") + requestUri.Segments.Last()
                     Await response.Content.CopyToAsync(fileStream)
                 End Using
 
@@ -132,8 +131,8 @@ Namespace Helpers.DoomWorld
         ''' <summary>
         ''' Extracts Level's files from zip archive in a folder
         ''' </summary>
-        ''' <param name="fileNameZip"></param>
-        ''' <returns></returns>
+        ''' <param name="fileNameZip">filename.zip</param>
+        ''' <returns>1 if folder is created; 0 if folder already exists; -1 if error.</returns>
         Public Shared Async Function ExtractLevelFromZip(directoryPath As String, fileNameZip As String) As Task(Of Integer)
             Dim result As Integer = 0
             Try
@@ -164,5 +163,28 @@ Namespace Helpers.DoomWorld
 
             Return result
         End Function
+
+        Public Shared Async Function ExtractFiles(directoryName As String) As Task(Of Integer)
+            Dim result As Integer
+
+            Try
+                If Not Directory.Exists(directoryName) Then
+                    Throw New DirectoryNotFoundException
+                End If
+
+                Dim files As List(Of String) = Directory.EnumerateFiles(directoryName)
+
+                For Each file As String In files
+                    Dim filePath As New Uri(file)
+                    'TO DO
+                Next
+
+
+            Catch ex As Exception
+
+            End Try
+
+        End Function
+
     End Class
 End Namespace

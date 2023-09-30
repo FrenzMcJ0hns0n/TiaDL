@@ -100,4 +100,15 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
         Assert.AreEqual(1, downloadedFileName)
     End Sub
 
+    <TestMethod()> Public Sub ExtractFiles_OK()
+
+        Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
+
+        Dim task As Task(Of Integer) = DoomWorldService.ExtractFiles(directoryName.AbsolutePath)
+
+        Dim downloadedFileName = task.Result
+
+        Assert.AreEqual(1, downloadedFileName)
+    End Sub
+
 End Class
