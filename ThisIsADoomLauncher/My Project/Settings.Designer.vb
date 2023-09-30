@@ -14,7 +14,7 @@ Option Explicit On
 
 
 <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
- Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0"),  _
+ Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0"),  _
  Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
 Partial Friend NotInheritable Class MySettings
     Inherits Global.System.Configuration.ApplicationSettingsBase
@@ -54,54 +54,6 @@ Partial Friend NotInheritable Class MySettings
     End Property
     
     <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property SelectedPort() As String
-        Get
-            Return CType(Me("SelectedPort"),String)
-        End Get
-        Set
-            Me("SelectedPort") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property SelectedIwad() As String
-        Get
-            Return CType(Me("SelectedIwad"),String)
-        End Get
-        Set
-            Me("SelectedIwad") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property SelectedLevel() As String
-        Get
-            Return CType(Me("SelectedLevel"),String)
-        End Get
-        Set
-            Me("SelectedLevel") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-     Global.System.Configuration.DefaultSettingValueAttribute("")>  _
-    Public Property SelectedMisc() As String
-        Get
-            Return CType(Me("SelectedMisc"),String)
-        End Get
-        Set
-            Me("SelectedMisc") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
      Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
     Public Property DateTimeAtLaunch() As Date
         Get
@@ -109,28 +61,6 @@ Partial Friend NotInheritable Class MySettings
         End Get
         Set
             Me("DateTimeAtLaunch") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-    Public Property PortParameters() As Global.System.Collections.Specialized.StringCollection
-        Get
-            Return CType(Me("PortParameters"),Global.System.Collections.Specialized.StringCollection)
-        End Get
-        Set
-            Me("PortParameters") = value
-        End Set
-    End Property
-    
-    <Global.System.Configuration.UserScopedSettingAttribute(),  _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute()>  _
-    Public Property FilesMods() As Global.System.Collections.Specialized.StringCollection
-        Get
-            Return CType(Me("FilesMods"),Global.System.Collections.Specialized.StringCollection)
-        End Get
-        Set
-            Me("FilesMods") = value
         End Set
     End Property
 End Class

@@ -24,31 +24,32 @@ Friend Module General
     End Function
 
     ''' <summary>
-    ''' Sorts Presets (NOT TESTED YET)
+    ''' Sort list of LevelPreset objects based on selected criterion
     ''' </summary>
-    ''' <param name="presets">List of Preset</param>
-    ''' <param name="sortCriterion">Sorting type (Enum)</param>
+    ''' <param name="levelPresets">List of LevelPreset objects</param>
+    ''' <param name="criterion">LevelPreset property to use as sorting criterion</param>
+    ''' <param name="isAscending">Is sorting order ascending?</param>
     ''' <returns></returns>
-    Public Function SortPresets(presets As List(Of Preset), sortCriterion As SortCriterion, ascending As Boolean) As List(Of Preset)
-        Select Case sortCriterion
+    Public Function SortLevelPresets(levelPresets As List(Of LevelPreset), criterion As SortCriterion, isAscending As Boolean) As List(Of LevelPreset)
+        Select Case criterion
 
             Case SortCriterion.Name
-                Return If(ascending, presets.OrderBy(Function(preset) preset.Name), presets.OrderByDescending(Function(preset) preset.Name))
+                Return If(isAscending,
+                          levelPresets.OrderBy(Function(preset) preset.Name).ToList,
+                          levelPresets.OrderByDescending(Function(preset) preset.Name).ToList)
 
             Case SortCriterion.Year
-                If presets.GetType() IsNot GetType(List(Of LevelPreset)) Then
-                    Throw New NotSupportedException("Wrong type")
-                End If
-                Return If(ascending, presets.OrderBy(Function(preset As LevelPreset) preset.Year), presets.OrderByDescending(Function(preset As LevelPreset) preset.Year))
+                Return If(isAscending,
+                          levelPresets.OrderBy(Function(preset) preset.Year).ToList,
+                          levelPresets.OrderByDescending(Function(preset) preset.Year).ToList)
 
             Case SortCriterion.Type
-                If presets.GetType() IsNot GetType(List(Of LevelPreset)) Then
-                    Throw New NotSupportedException("Wrong type")
-                End If
-                Return If(ascending, presets.OrderBy(Function(preset As LevelPreset) preset.Type), presets.OrderByDescending(Function(preset As LevelPreset) preset.Type))
+                Return If(isAscending,
+                          levelPresets.OrderBy(Function(preset) preset.Type).ToList,
+                          levelPresets.OrderByDescending(Function(preset) preset.Type).ToList)
 
-            Case Else 'By default : no sort
-                Return presets
+            Case Else 'No sorting
+                Return levelPresets
 
         End Select
     End Function

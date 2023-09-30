@@ -3,7 +3,6 @@
 
 
         Public Property Name As String
-        Public Property Desc As String
         Public Property Pict As String
 
 

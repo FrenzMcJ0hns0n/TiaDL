@@ -1,0 +1,110 @@
+﻿<Window x:Class="PortParamsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ThisIsADoomLauncher"
+        mc:Ignorable="d"
+        
+        Title="Edit Port parameters"
+        Height="600" Width="320"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterOwner"
+        
+        Loaded="Window_Loaded">
+
+    <Window.Resources>
+
+        <Style x:Key="Rbtn_ParamsType" TargetType="{x:Type RadioButton}">
+            <Setter Property="GroupName" Value="ParamsType"/>
+            <Setter Property="Margin" Value="14 0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <!-- TODO: Handle Groupboxes activation from here
+            <EventSetter Event="Checked" Handler="SortBaseLevels"/>
+            <EventSetter Event="Unchecked" Handler="SortBaseLevels"/>
+            -->
+        </Style>
+
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="12" />
+            <RowDefinition Height="12*" />
+            <RowDefinition Height="12" />
+            <RowDefinition Height="38*" />
+            <RowDefinition Height="12" />
+            <RowDefinition Height="44*" />
+            <RowDefinition Height="12" />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="12" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="12" />
+            <ColumnDefinition Width="100*" />
+            <ColumnDefinition Width="12" />
+        </Grid.ColumnDefinitions>
+
+        <GroupBox Grid.Column="1" Grid.Row="1" Header="Type">
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <RadioButton Style="{StaticResource Rbtn_ParamsType}" x:Name="Rbtn_Predefined" Content="Predefined" IsChecked="True"/>
+                <RadioButton Style="{StaticResource Rbtn_ParamsType}" x:Name="Rbtn_Custom" Content="Custom" IsEnabled="False"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Parameters type : Predefined -->
+        <GroupBox Grid.Column="1" Grid.Row="3" Header="Predefined"> <!-- TODO v3+: Update to DataGrid -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="12" />
+                    <ColumnDefinition Width="65*" />
+                    <ColumnDefinition Width="3" />
+                    <ColumnDefinition Width="25*" />
+                    <ColumnDefinition Width="3" />
+                    <ColumnDefinition Width="10*" />
+                    <ColumnDefinition Width="12" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="12" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="3" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="12" />
+                </Grid.RowDefinitions>
+
+                <!-- Turbo -->
+                <CheckBox x:Name="Cbx_TurboEnabled" Content="Turbo" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <TextBox x:Name="Tbx_TurboValue" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Stretch" Text="100" VerticalAlignment="Center"/>
+                <Label x:Name="Lbl_TurboUnit" Grid.Column="5" Grid.Row="1" HorizontalAlignment="Left" Content="%" VerticalAlignment="Center"/>
+
+                <!-- No monsters -->
+                <CheckBox x:Name="Cbx_NoMonsters" Content="No monsters" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                <!-- No music -->
+                <CheckBox x:Name="Cbx_NoMusic" Content="No music" Grid.Column="1" Grid.Row="5" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+
+                <!-- No SFX -->
+                <CheckBox x:Name="Cbx_NoSFX" Content="No SFX" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                
+            </Grid>
+        </GroupBox>
+
+        <!-- Parameters type : Custom -->
+        <GroupBox Grid.Column="1" Grid.Row="5" Header="Custom" IsEnabled="False"> <!-- TODO v3+: Update to DataGrid -->
+            <Border BorderBrush="LightGray" BorderThickness="1" CornerRadius="3" Margin="12" SnapsToDevicePixels="True">
+                <TextBlock x:Name="Tbk_CustomParams" FontSize="11" Foreground="DarkGray" Padding="2" Text="-param value, -param2 value2, etc." TextWrapping="Wrap" 
+                           GotFocus="Tbk_CustomParams_GotFocus" LostFocus="Tbk_CustomParams_LostFocus"/>
+            </Border>
+        </GroupBox>
+
+        <Button x:Name="Btn_ApplyClose" Background="#c6ecc6" Content="Apply &amp; close" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" Padding="14 0"
+                Click="Btn_ApplyClose_Click"/>
+
+    </Grid>
+</Window>

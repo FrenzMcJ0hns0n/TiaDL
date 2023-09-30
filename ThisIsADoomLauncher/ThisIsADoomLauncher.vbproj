@@ -36,7 +36,8 @@
     <IncrementalBuild>true</IncrementalBuild>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>ThisIsADoomLauncher.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42024,42032,42036,42099</NoWarn>
+    <NoWarn>42024,42099</NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -48,7 +49,8 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>ThisIsADoomLauncher.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42024,42032,42036,42099</NoWarn>
+    <NoWarn>42024,42099</NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -57,10 +59,10 @@
     <OptionCompare>Binary</OptionCompare>
   </PropertyGroup>
   <PropertyGroup>
-    <OptionStrict>Off</OptionStrict>
+    <OptionStrict>On</OptionStrict>
   </PropertyGroup>
   <PropertyGroup>
-    <OptionInfer>On</OptionInfer>
+    <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
@@ -112,15 +114,30 @@
     <Compile Include="Helpers\DoomWorld\Level.vb" />
     <Compile Include="Helpers\DoomWorld\Review.vb" />
     <Compile Include="Helpers\General.vb" />
+    <Compile Include="Helpers\Serializer.vb" />
+    <Compile Include="Models\InputFile.vb" />
     <Compile Include="Models\LevelPreset.vb" />
     <Compile Include="Models\ModPreset.vb" />
     <Compile Include="Models\Preset.vb" />
     <Compile Include="Models\Setting.vb" />
+    <Compile Include="Views\CreatingWindowOnlyForThat.xaml.vb">
+      <DependentUpon>CreatingWindowOnlyForThat.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IOHelper.vb" />
     <Compile Include="Helpers\PresetsMethods.vb" />
+    <Compile Include="Views\PortParamsWindow.xaml.vb">
+      <DependentUpon>PortParamsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PresetDetailsWindow.xaml.vb">
+      <DependentUpon>PresetDetailsWindow.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\CreatingWindowOnlyForThat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -137,6 +154,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PortParamsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PresetDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />
@@ -215,23 +240,13 @@
     <Resource Include="Resources\Images\settings_darker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\play_darker.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\index.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\300x50_blackAndWhite_edit_def.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Models\DoomWorld\" />
     <Folder Include="Resources\Config\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\Blazkowicz_sprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Presets\icon_default.png" />
+    <Resource Include="Resources\Images\Presets\Lvl_default.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\doom_icon.jpg" />
@@ -253,6 +268,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\DE_DOOM_Zero_edit.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Presets\Mod_default.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

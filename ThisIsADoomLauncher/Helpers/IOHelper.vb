@@ -1,4 +1,5 @@
-﻿Imports System.IO
+﻿Imports System.Globalization
+Imports System.IO
 Imports System.Reflection
 Imports System.Text
 
@@ -48,7 +49,7 @@ Friend Module IOHelper
 
     'TODO: Figure out a way to handle wildcard * in "Wolf3D_*.pk3" (confirmed issue, as recursive search fails on that)
     ''' <summary>
-    ''' Get the absolute path of a file from its relative one within TiaDL project tree
+    ''' Get absolute path of a file within TiaDL project
     ''' </summary>
     ''' <param name="targetDir">One of the project directories: "Iwad", "Maps", "Misc", "Mods", "Port", or "" for any</param>
     ''' <param name="filename">The filename to get the absolute path of</param>
@@ -59,7 +60,7 @@ Friend Module IOHelper
         Try
             Dim targetDirectory As String = GetDirectoryPath(targetDir)
 
-            'Get file with targetName provided explicitly from caller
+            'Get file with targetDir provided explicitly by the caller
             If Not targetDir = String.Empty Then
                 absolutePath = Path.Combine(targetDirectory, filename)
                 GoTo functionEnd
@@ -83,6 +84,46 @@ functionEnd:
         Return absolutePath
     End Function
 
+
+    Public Function GetFileInfo_Directory(filepath As String) As String
+        Return New FileInfo(filepath).DirectoryName
+    End Function
+
+    Public Function GetFileInfo_Extension(filepath As String) As String
+        Return New FileInfo(filepath).Extension
+    End Function
+
+    Public Function GetFileInfo_Name(filepath As String, withExtension As Boolean) As String
+        Dim info As New FileInfo(filepath)
+        Return If(withExtension, info.Name, info.Name.Replace(info.Extension, String.Empty))
+    End Function
+
+    Public Function GetFileInfo_Size(filepath As String) As Long
+        Return New FileInfo(filepath).Length
+    End Function
+
+    Public Function GetFileInfo_Size2(filepath As String) As String
+        Dim units() As String = {"b", "Kb", "Mb", "Gb", "Tb"}
+        'Dim units As New List(Of String) From {"b", "Kb", "Mb", "Gb", "Tb"}
+        Dim pos As Integer = 0
+        Dim fLength As Double = New FileInfo(filepath).Length
+        While fLength >= 1024 AndAlso pos < units.Count
+            fLength /= 1024
+            pos += 1
+        End While
+        'Dim nfi As New NumberFormatInfo With {.NumberGroupSeparator = " ", .NumberDecimalDigits = 0}
+        Return String.Format("{0} {1}", fLength, units(pos))
+    End Function
+
+    ''' <summary>
+    ''' Get local CSV filepath by its name
+    ''' </summary>
+    ''' <param name="name">Name of the file (without extension)</param>
+    ''' <returns>Filepath as a String</returns>
+    Public Function GetCsvFilepath(name As String) As String
+        Return Path.Combine(GetDirectoryPath(), $"{name}.csv")
+    End Function
+
     ''' <summary>
     ''' Return the text found in the specified JSON file
     ''' </summary>
@@ -90,14 +131,12 @@ functionEnd:
     ''' <returns>JSON data as String</returns>
     Public Function GetJsonData(jsonFilepath As String) As String
         Dim jsonData As String = String.Empty
-
         Try
             jsonData = File.ReadAllText(jsonFilepath)
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {jsonFilepath}")
         End Try
-
         Return jsonData
     End Function
 
@@ -151,7 +190,6 @@ functionEnd:
 
     End Sub
 
-    'TODO: Use consistent names everywhere (Port, Iwad, Maps, Misc, Mods)
     ''' <summary>
     ''' Validate file as proper Doom content
     ''' </summary>
@@ -163,14 +201,11 @@ functionEnd:
             Dim extension As String = New FileInfo(filepath).Extension.ToLowerInvariant
 
             Select Case type
-                Case "Port" : If extension = ".exe" Then Return True 'TODO? Add other validation rules
-                Case "Iwad"
-                    Using reader As New BinaryReader(File.OpenRead(filepath))
-                        If extension = ".wad" AndAlso Encoding.Default.GetString(reader.ReadBytes(4)) = "IWAD" Then Return True
-                    End Using
-                Case "Maps" : If VALID_EXTENSIONS_MAPS.Contains(extension) Then Return True
-                Case "Misc" : If VALID_EXTENSIONS_MISC.Contains(extension) Then Return True
-                Case "Pict" : If VALID_EXTENSIONS_PICT.Contains(extension) Then Return True
+                Case "Port" : Return extension = ".exe" 'TODO? Add other validation rules
+                Case "Iwad" : Return extension = ".wad" AndAlso ValidateIwad(filepath)
+                Case "Maps" : Return VALID_EXTENSIONS_MAPS.Contains(extension) AndAlso Not ValidateIwad(filepath)
+                Case "Misc" : Return VALID_EXTENSIONS_MISC.Contains(extension)
+                Case "Pict" : Return VALID_EXTENSIONS_PICT.Contains(extension)
                 Case Else 'TODO?
             End Select
 
@@ -182,40 +217,23 @@ functionEnd:
         Return False
     End Function
 
-    'TODO: Use constants and maybe rewrite
     ''' <summary>
-    ''' Create file 'presets.csv' with some commented lines, if it does not exist
+    ''' Check if "filepath" corresponds to an Iwad
     ''' </summary>
-    ''' 
-    Public Sub WritePresetsFileHeader()
-        Try
-            Dim presetFile As String = Path.Combine(GetDirectoryPath(), "presets.csv")
-
-            Using writer As New StreamWriter(presetFile, True, Encoding.Default)
-                writer.WriteLine("# Lines starting with ""#"" are ignored by the program")
-                writer.WriteLine()
-                writer.WriteLine("# Preset pattern :")
-                writer.WriteLine("# <Preset Name>, <Iwad path> [,<Level path>] [,<Misc. path>]")
-                writer.WriteLine()
-                writer.WriteLine("# <Preset Name> and <Iwad path> are mandatory")
-                writer.WriteLine("# <Iwad path> : absolute path to .wad file")
-                writer.WriteLine("# <Level path> : absolute path to .wad/.pk3 file")
-                writer.WriteLine("# <Misc. path> : absolute path to .deh/.dex file")
-                writer.WriteLine()
-            End Using
-
-        Catch ex As Exception
-            Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-            WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
-        End Try
-    End Sub
+    ''' <param name="filepath"></param>
+    ''' <returns></returns>
+    Private Function ValidateIwad(filepath As String) As Boolean
+        Using reader As New BinaryReader(File.OpenRead(filepath))
+            Return Encoding.Default.GetString(reader.ReadBytes(4)) = "IWAD"
+        End Using
+    End Function
 
     ''' <summary>
     ''' Log content in file 'log.txt'
     ''' </summary>
     ''' 
     Public Sub WriteToLog(content As String)
-        Dim logfilePath = Path.Combine(GetDirectoryPath(), "log.txt")
+        Dim logfilePath As String = Path.Combine(GetDirectoryPath(), "log.txt")
 
         Using streamWriter As New StreamWriter(logfilePath, True)
             streamWriter.WriteLine(content)
