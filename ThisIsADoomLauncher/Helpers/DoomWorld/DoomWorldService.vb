@@ -164,7 +164,10 @@ Namespace Helpers.DoomWorld
             Return result
         End Function
 
-        Public Shared Async Function ExtractFiles(directoryName As String) As Task(Of Integer)
+        ' Probably move this method to another file : 
+        ' this file is DoomWorld only (read data, donwload DW mods).
+        ' Sorting and moving files can be generically done for any mod.
+        Public Async Function MoveFilesIntoDirectories(directoryName As String) As Task(Of Integer)
             Dim result As Integer
 
             Try
@@ -172,19 +175,53 @@ Namespace Helpers.DoomWorld
                     Throw New DirectoryNotFoundException
                 End If
 
-                Dim files As List(Of String) = Directory.EnumerateFiles(directoryName)
+                Dim files As List(Of String) = Directory.EnumerateFiles(directoryName).ToList
 
-                For Each file As String In files
-                    Dim filePath As New Uri(file)
-                    'TO DO
-                Next
-
+                Await Task.Run(Sub()
+                                   For Each file As String In files
+                                       MoveToFolder(file)
+                                   Next
+                                   result = files.Count
+                               End Sub)
 
             Catch ex As Exception
-
+                result = -1
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {directoryName}")
             End Try
 
+            Return result
         End Function
 
+        Private Sub MoveToFolder(currentFile As String)
+
+            ' !! TiaDL integration : replace method PROVISOIRE_GetFolder("*") by GetDirectoryPath("*")
+
+            Dim currentFileInfo As New FileInfo(currentFile)
+            Dim destinationDirectory As DirectoryInfo
+            If Constants.VALID_EXTENSIONS_MAPS.Contains(currentFileInfo.Extension) Then
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Maps"), currentFileInfo.Directory.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+            ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(currentFileInfo.Extension) Then
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Misc"), currentFileInfo.Directory.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+            ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(currentFileInfo.Extension) Then
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Mods"), currentFileInfo.Directory.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+            Else
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Pict"), currentFileInfo.Directory.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+            End If
+        End Sub
+
+        Private Function PROVISOIRE_GetFolder(folder As String) As String
+
+            Dim folderPath As String = Path.Combine("test", folder)
+            If Not (Directory.Exists(folderPath)) Then
+                Directory.CreateDirectory(folderPath)
+            End If
+
+            Return folderPath
+        End Function
     End Class
 End Namespace

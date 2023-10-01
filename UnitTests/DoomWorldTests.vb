@@ -100,15 +100,42 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
         Assert.AreEqual(1, downloadedFileName)
     End Sub
 
-    <TestMethod()> Public Sub ExtractFiles_OK()
+    <TestMethod()> Public Sub MoveFiles_OK()
 
-        Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
+        'Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
+        Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
+        'Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
 
-        Dim task As Task(Of Integer) = DoomWorldService.ExtractFiles(directoryName.AbsolutePath)
+        Dim _doomWorldService As New DoomWorldService()
+        Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
 
-        Dim downloadedFileName = task.Result
+        Dim nbMovedFiles = task.Result
 
-        Assert.AreEqual(1, downloadedFileName)
+        Assert.AreNotEqual(-1, nbMovedFiles)
+        Assert.AreNotEqual(0, nbMovedFiles)
     End Sub
 
+    '<TestMethod()> Public Sub MoveFiles_KO_NoChanges()
+
+    '    Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
+
+    '    Dim _doomWorldService As New DoomWorldService()
+    '    Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
+
+    '    Dim downloadedFileName = task.Result
+
+    '    Assert.AreEqual(0, downloadedFileName)
+    'End Sub
+
+    '<TestMethod()> Public Sub MoveFiles_KO_DirectoryNotFound()
+
+    '    Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
+
+    '    Dim _doomWorldService As New DoomWorldService()
+    '    Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
+
+    '    Dim downloadedFileName = task.Result
+
+    '    Assert.AreEqual(-1, downloadedFileName)
+    'End Sub
 End Class
