@@ -10,38 +10,39 @@ Imports Newtonsoft.Json.Linq
 Namespace Helpers.DoomWorld
     Public Class DoomWorldService
 
+        Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li"
+
         ''' <summary>
         ''' Get directories
         ''' </summary>
         ''' <param name="parentDirectory"> Parent directory. If empty, get root levels directories</param>
         ''' <returns></returns>
-        Public Shared Async Function GetDirectories(parentDirectory As String) As Task(Of List(Of Object))
-            Dim directories As List(Of Object) = New List(Of Object)
+        Public Async Function GetDirectories(Optional parentDirectory As String = "") As Task(Of List(Of String))
+            Dim directories As New List(Of String)
 
-            Dim uriPath As String = "api.php?action=getdirs&name=levels/"
-            Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, parentDirectory, "&out=json"))
-            Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-            If response.IsSuccessStatusCode Then
-                Dim folders As List(Of Object) = New List(Of Object)
+            Try
+                Dim uriPath As String = "api.php?action=getdirs&name=levels/"
+                Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, parentDirectory, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
+                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
-                Dim jsonResult As String = Await response.Content.ReadAsStringAsync()
+                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                        Throw New ArgumentException($"Parent directory : {parentDirectory} is not correct")
+                    End If
 
-                Dim jsonObject = JObject.Parse(jsonResult)
+                    jsonObject.SelectToken("content.dir").ToList().ForEach(
+                        Sub(directory) directories.Add(directory.Value(Of String)("name"))
+                    )
 
-                If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                    Throw New ArgumentException($"Parent directory : {parentDirectory} is not correct")
                 End If
 
-                jsonObject.SelectToken("content.dir").ToList().ForEach(
-                    Sub(directory) directories.Add(
-                        New With {
-                        .id = directory.Item("id"),
-                        .name = directory.Item("name")}))
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {parentDirectory}")
+            End Try
 
-
-            End If
             Return directories
-
         End Function
 
         ''' <summary>
@@ -49,7 +50,7 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="id"></param>
         ''' <returns></returns>
-        Public Shared Async Function GetLevel(id As Integer) As Task(Of Level)
+        Public Async Function GetLevel(id As Integer) As Task(Of Level)
             Dim uriPath As String = String.Concat("api.php?action=get&id=", id)
             Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
             Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
@@ -57,14 +58,14 @@ Namespace Helpers.DoomWorld
 
                 Dim jsonResult As String = Await response.Content.ReadAsStringAsync()
 
-                Dim jsonObject = JObject.Parse(jsonResult)
+                Dim jsonObject As JObject = JObject.Parse(jsonResult)
 
-                Dim level = jsonObject.SelectToken("content")
+                Dim level As JToken = jsonObject.SelectToken("content")
 
                 Return New Level() With
                 {
-                    .Id = Integer.Parse(level.Item("id")),
-                    .Idgamesurl = level.Item("idgamesurl").ToString()
+                    .Id = level.Value(Of Integer)("id"),
+                    .Idgamesurl = level.Value(Of String)("idgamesurl")
                 }
             End If
 
@@ -76,15 +77,13 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="levelUrl">The level url</param>
         ''' <returns></returns>
-        Public Shared Async Function GetLevelDownloadLinks(levelUrl As String) As Task(Of List(Of String))
-            Dim downloadLinks As List(Of String)
+        Public Async Function GetLevelDownloadLinks(levelUrl As String) As Task(Of List(Of String))
+            Dim downloadLinks As New List(Of String)
             Try
 
                 Dim requestUri As Uri = New Uri(levelUrl)
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
                 If response.IsSuccessStatusCode Then
-
-                    downloadLinks = New List(Of String)
 
                     Dim htmlResult As String = Await response.Content.ReadAsStringAsync()
 
@@ -92,7 +91,7 @@ Namespace Helpers.DoomWorld
                     html.LoadHtml(htmlResult)
 
                     Dim htmlDocument As HtmlAgilityPack.HtmlNode = html.DocumentNode
-                    Dim dlUrls As HtmlAgilityPack.HtmlNodeCollection = htmlDocument.SelectNodes("/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li")
+                    Dim dlUrls As HtmlAgilityPack.HtmlNodeCollection = htmlDocument.SelectNodes(XPATH_URL_NODES)
 
                     For Each dlUrl As HtmlAgilityPack.HtmlNode In dlUrls
                         downloadLinks.Add(dlUrl.SelectSingleNode("a").Attributes.FirstOrDefault(Function(a) a.Name = "href").Value)
@@ -111,7 +110,7 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="levelUrl">The level download url</param>
         ''' <returns></returns>
-        Public Shared Async Function DownloadLevel(levelUrl As String) As Task(Of String)
+        Public Async Function DownloadLevel(levelUrl As String) As Task(Of String)
             Try
                 Dim requestUri As Uri = New Uri(levelUrl)
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
@@ -122,9 +121,12 @@ Namespace Helpers.DoomWorld
                 End Using
 
                 Return levelFileName
-            Catch ex As Exception
 
-                Return False
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {levelUrl}")
+
+                Return Nothing
             End Try
         End Function
 
@@ -133,12 +135,12 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="fileNameZip">filename.zip</param>
         ''' <returns>1 if folder is created; 0 if folder already exists; -1 if error.</returns>
-        Public Shared Async Function ExtractLevelFromZip(directoryPath As String, fileNameZip As String) As Task(Of Integer)
+        Public Async Function ExtractLevelFromZip(directoryPath As String, fileNameZip As String) As Task(Of Integer)
             Dim result As Integer = 0
             Try
                 Dim levelZipUri As Uri = New Uri(String.Concat(directoryPath, "/", fileNameZip))
 
-                If Not System.IO.File.Exists(levelZipUri.AbsolutePath) Then
+                If Not File.Exists(levelZipUri.AbsolutePath) Then
                     Throw New FileNotFoundException
                 End If
 
@@ -157,7 +159,9 @@ Namespace Helpers.DoomWorld
                     result = 1
                 End If
             Catch ex As Exception
-                Dim s As String = ex.Message
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {directoryPath}, {fileNameZip}")
+
                 result = -1
             End Try
 
