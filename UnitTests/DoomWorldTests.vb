@@ -54,9 +54,9 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
         Dim id As Integer = 15156
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of Level) = _doomWorldService.GetLevel(id)
+        Dim task As Task(Of Models.Level) = _doomWorldService.GetLevel(id)
 
-        Dim level As Level = task.Result
+        Dim level As Models.Level = task.Result
 
         Assert.AreEqual(id, level.Id)
     End Sub
@@ -66,6 +66,17 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
     ''' </summary>
     <TestMethod()> Public Sub GetLevelDownloadLinksTest_OK()
         Dim url As String = "https://www.doomworld.com/idgames/levels/doom2/a-c/arch"
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim task As Task(Of List(Of String)) = _doomWorldService.GetLevelDownloadLinks(url)
+
+        Dim links As List(Of String) = task.Result
+
+        Assert.AreNotEqual(0, links.Count)
+    End Sub
+
+    <TestMethod()> Public Sub GetLevelDownloadLinksTest_idgamesurl_OK()
+        Dim url As String = "idgames://levels/doom2/Ports/megawads/gzp8glv2.zip"
 
         Dim _doomWorldService As New DoomWorldService()
         Dim task As Task(Of List(Of String)) = _doomWorldService.GetLevelDownloadLinks(url)
@@ -147,4 +158,63 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
 
     '    Assert.AreEqual(-1, downloadedFileName)
     'End Sub
+
+    <TestMethod()> Public Sub GetAllContentsTest_OK()
+
+        Dim noFolderPath As String = ""
+        Dim doomFolderPath As String = "doom/"
+        Dim a_cFolderPath As String = "doom/a-c/"
+
+
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim taskRienFolders As Task(Of List(Of Object)) = _doomWorldService.GetContent(noFolderPath)
+        Dim taskDoomFolders As Task(Of List(Of Object)) = _doomWorldService.GetContent(doomFolderPath)
+        Dim taskA_CFolders As Task(Of List(Of Object)) = _doomWorldService.GetContent(a_cFolderPath)
+
+        Dim folders1 = taskRienFolders.Result
+        Dim folders2 = taskDoomFolders.Result
+        Dim levelsList = taskA_CFolders.Result
+
+        Assert.AreNotEqual(0, folders1.Count)
+        Assert.AreNotEqual(0, folders2.Count)
+        Assert.AreNotEqual(0, levelsList.Count)
+    End Sub
+
+    <TestMethod()> Public Sub GetMirrorFTPTest_OK()
+
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim mirror As String = _doomWorldService.GetMirror(Models.Protocol.FTP, "germany")
+
+        Assert.AreNotEqual(String.Empty, mirror)
+    End Sub
+
+    <TestMethod()> Public Sub GetMirrorHTTPTest_OK()
+
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim mirror As String = _doomWorldService.GetMirror(Models.Protocol.HTTP, "germany")
+
+        Assert.AreNotEqual(String.Empty, mirror)
+    End Sub
+
+    <TestMethod()> Public Sub GetMirrorsFTPTest_OK()
+
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim mirrors As List(Of String) = _doomWorldService.GetMirrors(Models.Protocol.FTP)
+
+        Assert.AreNotEqual(0, mirrors.Count)
+    End Sub
+
+    <TestMethod()> Public Sub GetMirrorsHTTPTest_OK()
+
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim mirrors As List(Of String) = _doomWorldService.GetMirrors(Models.Protocol.HTTP)
+
+        Assert.AreNotEqual(0, mirrors.Count)
+    End Sub
+
 End Class
