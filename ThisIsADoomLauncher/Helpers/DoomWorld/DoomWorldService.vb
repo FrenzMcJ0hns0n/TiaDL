@@ -99,13 +99,9 @@ Namespace Helpers.DoomWorld
 
                 Dim jsonObject As JObject = JObject.Parse(jsonResult)
 
-                Dim level As JToken = jsonObject.SelectToken("content")
+                Dim jLevel As JToken = jsonObject.SelectToken("content")
 
-                Return New Models.Level() With
-                {
-                    .Id = level.Value(Of Integer)("id"),
-                    .Idgamesurl = level.Value(Of String)("idgamesurl")
-                }
+                Return CreateLevelFromJToken(jLevel)
             End If
 
             Return Nothing
@@ -189,10 +185,6 @@ Namespace Helpers.DoomWorld
                                           mirrors.Add(mirror.First.Value(Of String))
                                       End Sub)
 
-                ' if ping : 
-                ' - Dim p As System.Net.NetworkInformation.Ping = New Net.NetworkInformation.Ping
-                ' - Dim pingResult As System.Net.NetworkInformation.PingReply = Await p.SendPingAsync(mirror)
-
             Catch ex As Exception
                 mirrors = Nothing
 
@@ -201,40 +193,6 @@ Namespace Helpers.DoomWorld
             End Try
 
             Return mirrors
-        End Function
-
-
-        ''' <summary>
-        ''' Get Level download links. (OBSOLETE if GetMirrors()+level's idgamesurl can be set).
-        ''' </summary>
-        ''' <param name="levelUrl">The level url.</param>
-        ''' <returns>The Level's list of DL links.</returns>
-        Public Async Function GetLevelDownloadLinks(levelUrl As String) As Task(Of List(Of String))
-            Dim downloadLinks As New List(Of String)
-            Try
-
-                Dim requestUri As Uri = New Uri(levelUrl)
-                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-                If response.IsSuccessStatusCode Then
-
-                    Dim htmlResult As String = Await response.Content.ReadAsStringAsync()
-
-                    Dim html As HtmlAgilityPack.HtmlDocument = New HtmlAgilityPack.HtmlDocument
-                    html.LoadHtml(htmlResult)
-
-                    Dim htmlDocument As HtmlAgilityPack.HtmlNode = html.DocumentNode
-                    Dim dlUrls As HtmlAgilityPack.HtmlNodeCollection = htmlDocument.SelectNodes(XPATH_URL_NODES)
-
-                    For Each dlUrl As HtmlAgilityPack.HtmlNode In dlUrls
-                        downloadLinks.Add(dlUrl.SelectSingleNode("a").Attributes.FirstOrDefault(Function(a) a.Name = "href").Value)
-                    Next
-                End If
-            Catch ex As Exception
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {levelUrl}")
-            End Try
-
-            Return downloadLinks
         End Function
 
         ''' <summary>
@@ -409,6 +367,21 @@ Namespace Helpers.DoomWorld
             End If
 
             Return folderPath
+        End Function
+
+        Public Function GetLevelDownloadUrl(level As Models.Level) As String
+            Return String.Concat(level.Dir, level.Filename)
+        End Function
+
+        Private Function FormatLevelDLUri(idgamesurl As String) As String
+            Try
+                Return idgamesurl.Replace("idgames://", "")
+            Catch ex As Exception
+                Return Nothing
+
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {idgamesurl}")
+            End Try
         End Function
     End Class
 End Namespace

@@ -1,4 +1,5 @@
-﻿Imports System.Reflection
+﻿Imports System.Net.NetworkInformation
+Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
@@ -51,7 +52,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
     ''' Test get level from id
     ''' </summary>
     <TestMethod()> Public Sub GetLevelTest_OK()
-        Dim id As Integer = 15156
+        Dim id As Integer = 13024
 
         Dim _doomWorldService As New DoomWorldService()
         Dim task As Task(Of Models.Level) = _doomWorldService.GetLevel(id)
@@ -62,39 +63,51 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
     End Sub
 
     ''' <summary>
-    ''' Test get level download urls from the level idgames url
+    ''' Test download file from doomworld game url
     ''' </summary>
-    <TestMethod()> Public Sub GetLevelDownloadLinksTest_OK()
-        Dim url As String = "https://www.doomworld.com/idgames/levels/doom2/a-c/arch"
+    <TestMethod()> Public Sub DownloadLevel_1_CChest2_FromUrl_OK()
+        Dim url As String = "https://www.quaddicted.com/files/idgames/levels/doom2/Ports/megawads/cchest2.zip"
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of List(Of String)) = _doomWorldService.GetLevelDownloadLinks(url)
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevel(url)
 
-        Dim links As List(Of String) = task.Result
+        Dim downloadedFileName = task.Result
 
-        Assert.AreNotEqual(0, links.Count)
-    End Sub
-
-    <TestMethod()> Public Sub GetLevelDownloadLinksTest_idgamesurl_OK()
-        Dim url As String = "idgames://levels/doom2/Ports/megawads/gzp8glv2.zip"
-
-        Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of List(Of String)) = _doomWorldService.GetLevelDownloadLinks(url)
-
-        Dim links As List(Of String) = task.Result
-
-        Assert.AreNotEqual(0, links.Count)
+        Assert.IsNotNull(downloadedFileName)
     End Sub
 
     ''' <summary>
     ''' Test download file from doomworld game url
     ''' </summary>
-    <TestMethod()> Public Sub DownloadLevelFromUrl_OK()
-        'Dim url As String = "https://www.quaddicted.com/files/idgames/levels/doom2/a-c/arch.zip"
-        'Dim url As String = "https://www.quaddicted.com/files/idgames/levels/doom2/megawads/av.zip"
-        Dim url As String = "https://www.quaddicted.com/files/idgames/levels/doom2/Ports/megawads/cchest2.zip"
+    <TestMethod()> Public Sub DownloadLevel_2_Abyss_BuildUriFromLevel_OK()
 
         Dim _doomWorldService As New DoomWorldService()
+
+        Dim mirror As String = _doomWorldService.GetMirror("germany")
+        Dim levelAbyss As Models.Level = New Models.Level With {.Dir = "levels/doom/a-c/", .Filename = "abyss.zip"}
+        Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAbyss))
+
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevel(url)
+
+        Dim downloadedFileName = task.Result
+
+        Assert.IsNotNull(downloadedFileName)
+    End Sub
+
+    ''' <summary>
+    ''' Test download file from doomworld game url
+    ''' </summary>
+    <TestMethod()> Public Sub DownloadLevel_3_Alien_Vendetta_BuildUriFromID_OK()
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim levelId As Integer = 11790
+
+        Dim mirror As String = _doomWorldService.GetMirror("germany")
+        Dim taskLevelAV As Task(Of Models.Level) = _doomWorldService.GetLevel(levelId)
+        Dim levelAV As Models.Level = taskLevelAV.Result
+
+        Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAV))
+
         Dim task As Task(Of String) = _doomWorldService.DownloadLevel(url)
 
         Dim downloadedFileName = task.Result
@@ -159,7 +172,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
     '    Assert.AreEqual(-1, downloadedFileName)
     'End Sub
 
-    <TestMethod()> Public Sub GetAllContentsTest_OK()
+    <TestMethod()> Public Sub GetDirsAndFilesTest_OK()
 
         Dim noFolderPath As String = ""
         Dim doomFolderPath As String = "doom/"
@@ -187,7 +200,29 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
 
         Dim mirror As String = _doomWorldService.GetMirror("germany")
 
-        Assert.AreNotEqual(String.Empty, mirror)
+        Assert.IsFalse(String.IsNullOrWhiteSpace(mirror))
+    End Sub
+
+    ''' <summary>
+    ''' Test ping mirror.
+    ''' </summary>
+    <TestMethod()> Public Sub PingMirrorTest_OK()
+
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim mirror As String = _doomWorldService.GetMirror("germany")
+
+        Dim uri As New Uri(mirror)
+        'uri is not valid as is - not complete
+        'TODO ping from host ? uri host ? no ping ?
+
+        Dim p As New Net.NetworkInformation.Ping
+        Dim pingResult As Task(Of System.Net.NetworkInformation.PingReply) = p.SendPingAsync(mirror)
+
+        Dim pingReply As System.Net.NetworkInformation.PingReply = pingResult.Result
+
+        Assert.AreEqual(IPStatus.Success, pingReply.Status)
+
     End Sub
 
     <TestMethod()> Public Sub GetMirrorsTest_OK()
