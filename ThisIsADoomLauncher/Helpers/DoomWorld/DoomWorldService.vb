@@ -15,6 +15,11 @@ Namespace Helpers.DoomWorld
         Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li"
 
 
+        ''' <summary>
+        ''' Gets DoomWorld Directories or Levels. This method could replace both GetDirectories and GetLevel. (needs more testing).
+        ''' </summary>
+        ''' <param name="resourcePath">The resource URI path. (i.e. doom2/a-c/ for folders, or doom2/a-c/av for Level Alien Vendetta)</param>
+        ''' <returns>A list of Directories or Levels.</returns>
         Public Async Function GetContent(Optional resourcePath As String = "") As Task(Of List(Of Object))
 
             Dim returnItems As New List(Of Object)
@@ -47,9 +52,9 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Get directories
+        ''' Get DoomWorld levels directories.
         ''' </summary>
-        ''' <param name="parentDirectory"> Parent directory. If empty, get root levels directories</param>
+        ''' <param name="parentDirectory"> Parent directory. If empty, get root levels directories.</param>
         ''' <returns></returns>
         Public Async Function GetDirectories(Optional parentDirectory As String = "") As Task(Of List(Of String))
             Dim directories As New List(Of String)
@@ -80,10 +85,10 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Get all Level information
+        ''' Get all Level's information based on its ID.
         ''' </summary>
-        ''' <param name="id"></param>
-        ''' <returns></returns>
+        ''' <param name="id">Level id.</param>
+        ''' <returns>A Level</returns>
         Public Async Function GetLevel(id As Integer) As Task(Of Models.Level)
             Dim uriPath As String = String.Concat("api.php?action=get&id=", id)
             Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
@@ -106,9 +111,16 @@ Namespace Helpers.DoomWorld
             Return Nothing
         End Function
 
+        ''' <summary>
+        ''' Search Levels based on FILENAME only (for the moment).
+        ''' TODO : edit TYPE and SORT filters.
+        ''' </summary>
+        ''' <param name="searchText"></param>
+        ''' <returns>A list of Level.</returns>
         Public Async Function SearchLevels(searchText As String) As Task(Of List(Of Models.Level))
             Dim levels As List(Of Models.Level)
 
+            ' TODO : edit TYPE and SORT filters.
             Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=filename&sort=date")
             Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
             Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
@@ -134,11 +146,11 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Gets a mirror root URI from json file. It can be either FTP or HTTP.
+        ''' Gets a mirror base URI from json file from specified Protocol (it can be either FTP or HTTP).
         ''' </summary>
         ''' <param name="protocol">FTP or HTTP from Protocol (Enum).</param>
         ''' <param name="name">Name of prefered mirror.</param>
-        ''' <returns></returns>
+        ''' <returns>A mirror base URI.</returns>
         Public Function GetMirror(protocol As Helpers.DoomWorld.Models.Protocol, name As String) As String
             Dim mirror As String
             Try
@@ -162,6 +174,11 @@ Namespace Helpers.DoomWorld
             Return mirror
         End Function
 
+        ''' <summary>
+        ''' Gets all mirrors base URI from json file from specified Protocol (it can be either FTP or HTTP).
+        ''' </summary>
+        ''' <param name="protocol">FTP or HTTP from Protocol (Enum).</param>
+        ''' <returns>All mirrors base URI.</returns>
         Public Function GetMirrors(protocol As Helpers.DoomWorld.Models.Protocol) As List(Of String)
             Dim mirrors As List(Of String)
             Try
@@ -190,10 +207,10 @@ Namespace Helpers.DoomWorld
 
 
         ''' <summary>
-        ''' Get Level download links
+        ''' Get Level download links. (OBSOLETE if GetMirrors()+level's idgamesurl can be set).
         ''' </summary>
-        ''' <param name="levelUrl">The level url</param>
-        ''' <returns></returns>
+        ''' <param name="levelUrl">The level url.</param>
+        ''' <returns>The Level's list of DL links.</returns>
         Public Async Function GetLevelDownloadLinks(levelUrl As String) As Task(Of List(Of String))
             Dim downloadLinks As New List(Of String)
             Try
@@ -223,10 +240,10 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Downloads a level
+        ''' Downloads a .zip Level.
         ''' </summary>
-        ''' <param name="levelUrl">The level download url</param>
-        ''' <returns></returns>
+        ''' <param name="levelUrl">The level download url.</param>
+        ''' <returns>A .zip level archive.</returns>
         Public Async Function DownloadLevel(levelUrl As String) As Task(Of String)
             '
             ' Add level in a Doomworld registry file
@@ -252,7 +269,7 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Extracts Level's files from zip archive in a folder
+        ''' Extracts Level's files from zip archive in a folder.
         ''' </summary>
         ''' <param name="fileNameZip">filename.zip</param>
         ''' <returns>1 if folder is created; 0 if folder already exists; -1 if error.</returns>
@@ -289,10 +306,15 @@ Namespace Helpers.DoomWorld
             Return result
         End Function
 
-        ' Probably move this method to another file : 
-        ' this file is DoomWorld only (read data, donwload DW mods).
-        ' Sorting and moving files can be generically done for any mod.
+        ''' <summary>
+        ''' Move Level files in the matching directories.
+        ''' </summary>
+        ''' <param name="directoryName">Destination directory.</param>
+        ''' <returns></returns>
         Public Async Function MoveFilesIntoDirectories(directoryName As String) As Task(Of Integer)
+            ' Probably move this method to another file : 
+            ' this file is DoomWorld only (read data, donwload DW mods).
+            ' Sorting and moving files can be generically done for any mod.
             Dim result As Integer
 
             Try
@@ -318,6 +340,7 @@ Namespace Helpers.DoomWorld
             Return result
         End Function
 
+
         Private Sub MoveToFolder(currentFile As String)
 
             ' !! TiaDL integration : replace method PROVISOIRE_GetFolder("*") by GetDirectoryPath("*")
@@ -339,6 +362,11 @@ Namespace Helpers.DoomWorld
             End If
         End Sub
 
+        ''' <summary>
+        ''' Creates a Level object from a JToken level
+        ''' </summary>
+        ''' <param name="jLevel">JToken level.</param>
+        ''' <returns>A Level.</returns>
         Private Function CreateLevelFromJToken(jLevel As JToken) As Models.Level
             Return New Models.Level With {
                                                .Id = jLevel.Value(Of Integer)("id"),
@@ -358,6 +386,11 @@ Namespace Helpers.DoomWorld
                                                }
         End Function
 
+        ''' <summary>
+        ''' Creates a Folder object from a JToken Dir
+        ''' </summary>
+        ''' <param name="jFolder">JToken dir.</param>
+        ''' <returns>A Folder.</returns>
         Private Function CreateFolderFromJToken(jFolder As JToken) As Models.Folder
             Return New Models.Folder With {
                                                .Id = jFolder.Value(Of Integer)("id"),
@@ -365,6 +398,11 @@ Namespace Helpers.DoomWorld
                                                }
         End Function
 
+        ''' <summary>
+        ''' Temporary method to [create+]get destination folder for Level items.
+        ''' </summary>
+        ''' <param name="folder">Destination folder name.</param>
+        ''' <returns>Folder's path.</returns>
         Private Function PROVISOIRE_GetFolder(folder As String) As String
 
             Dim folderPath As String = Path.Combine("test", folder)
