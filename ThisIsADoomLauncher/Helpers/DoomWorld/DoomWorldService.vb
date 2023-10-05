@@ -2,15 +2,49 @@
 Imports System.IO.Compression
 Imports System.Net.Http
 Imports System.Reflection
+Imports System.Text
 Imports System.Web.Hosting
 Imports System.Windows.Shell
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
+Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
 Namespace Helpers.DoomWorld
     Public Class DoomWorldService
 
         Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li"
+
+
+        Public Async Function GetContent(Optional resourcePath As String = "") As Task(Of List(Of Object))
+
+            Dim returnItems As New List(Of Object)
+
+            Dim uriPath As String = String.Concat("api.php?action=getcontents&name=levels/", resourcePath)
+            Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+            Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+            If response.IsSuccessStatusCode Then
+
+                Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
+
+                If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                    Throw New ArgumentException($"Invalid path: {resourcePath} is not correct")
+                End If
+
+                If jsonObject.SelectToken("content.file") Is Nothing And jsonObject.SelectToken("dir") Is Nothing Then
+                    Throw New ArgumentException($"No results")
+                End If
+
+                jsonObject.SelectToken("content.dir")?.ToList().ForEach(
+                    Sub(jFolder) returnItems.Add(CreateFolderFromJToken(jFolder))
+                )
+
+                jsonObject.SelectToken("content.file")?.ToList().ForEach(
+                Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
+            )
+            End If
+
+            Return returnItems
+        End Function
 
         ''' <summary>
         ''' Get directories
