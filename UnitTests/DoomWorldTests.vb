@@ -181,38 +181,20 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
         Assert.AreNotEqual(0, levelsList.Count)
     End Sub
 
-    <TestMethod()> Public Sub GetMirrorFTPTest_OK()
+    <TestMethod()> Public Sub GetMirrorTest_OK()
 
         Dim _doomWorldService As New DoomWorldService()
 
-        Dim mirror As String = _doomWorldService.GetMirror(Models.Protocol.FTP, "germany")
+        Dim mirror As String = _doomWorldService.GetMirror("germany")
 
         Assert.AreNotEqual(String.Empty, mirror)
     End Sub
 
-    <TestMethod()> Public Sub GetMirrorHTTPTest_OK()
+    <TestMethod()> Public Sub GetMirrorsTest_OK()
 
         Dim _doomWorldService As New DoomWorldService()
 
-        Dim mirror As String = _doomWorldService.GetMirror(Models.Protocol.HTTP, "germany")
-
-        Assert.AreNotEqual(String.Empty, mirror)
-    End Sub
-
-    <TestMethod()> Public Sub GetMirrorsFTPTest_OK()
-
-        Dim _doomWorldService As New DoomWorldService()
-
-        Dim mirrors As List(Of String) = _doomWorldService.GetMirrors(Models.Protocol.FTP)
-
-        Assert.AreNotEqual(0, mirrors.Count)
-    End Sub
-
-    <TestMethod()> Public Sub GetMirrorsHTTPTest_OK()
-
-        Dim _doomWorldService As New DoomWorldService()
-
-        Dim mirrors As List(Of String) = _doomWorldService.GetMirrors(Models.Protocol.HTTP)
+        Dim mirrors As List(Of String) = _doomWorldService.GetMirrors()
 
         Assert.AreNotEqual(0, mirrors.Count)
     End Sub

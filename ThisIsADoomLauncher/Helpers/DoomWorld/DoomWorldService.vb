@@ -13,7 +13,7 @@ Namespace Helpers.DoomWorld
     Public Class DoomWorldService
 
         Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li"
-
+        Private Const HTTP As String = "HTTP"
 
         ''' <summary>
         ''' Gets DoomWorld Directories or Levels. This method could replace both GetDirectories and GetLevel. (needs more testing).
@@ -146,17 +146,16 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Gets a mirror base URI from json file from specified Protocol (it can be either FTP or HTTP).
+        ''' Gets a mirror base URI from json file.
         ''' </summary>
-        ''' <param name="protocol">FTP or HTTP from Protocol (Enum).</param>
         ''' <param name="name">Name of prefered mirror.</param>
         ''' <returns>A mirror base URI.</returns>
-        Public Function GetMirror(protocol As Helpers.DoomWorld.Models.Protocol, name As String) As String
+        Public Function GetMirror(name As String) As String
             Dim mirror As String
             Try
                 Dim jsonMirrors As JObject = JObject.Parse(File.ReadAllText("doomworld_mirrors.json"))
 
-                Dim mirrorToken As JToken = jsonMirrors.SelectToken($"{protocol.ToString()}.{name}")
+                Dim mirrorToken As JToken = jsonMirrors.SelectToken($"{HTTP}.{name}")
 
                 mirror = mirrorToken.Value(Of String)
 
@@ -168,23 +167,22 @@ Namespace Helpers.DoomWorld
                 mirror = String.Empty
 
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {protocol}, {name}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {name}")
             End Try
 
             Return mirror
         End Function
 
         ''' <summary>
-        ''' Gets all mirrors base URI from json file from specified Protocol (it can be either FTP or HTTP).
+        ''' Gets all mirrors base URI from json file.
         ''' </summary>
-        ''' <param name="protocol">FTP or HTTP from Protocol (Enum).</param>
         ''' <returns>All mirrors base URI.</returns>
-        Public Function GetMirrors(protocol As Helpers.DoomWorld.Models.Protocol) As List(Of String)
+        Public Function GetMirrors() As List(Of String)
             Dim mirrors As List(Of String)
             Try
                 Dim jsonMirrors As JObject = JObject.Parse(File.ReadAllText("doomworld_mirrors.json"))
 
-                Dim mirrorsTokens As List(Of JToken) = jsonMirrors.SelectToken($"{protocol.ToString()}").ToList()
+                Dim mirrorsTokens As List(Of JToken) = jsonMirrors.SelectToken(HTTP).ToList()
 
                 mirrors = New List(Of String)
                 mirrorsTokens.ForEach(Sub(mirror)
@@ -199,7 +197,7 @@ Namespace Helpers.DoomWorld
                 mirrors = Nothing
 
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {protocol}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : none")
             End Try
 
             Return mirrors

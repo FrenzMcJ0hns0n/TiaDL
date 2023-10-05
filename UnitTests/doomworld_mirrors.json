@@ -1,8 +1,4 @@
 ﻿{
-  "FTP": {
-    "germany": "ftp://mirrors.syringanetworks.net/idgames/",
-    "idaho": "ftp://ftp.fu-berlin.de/pc/games/idgames/"
-  },
   "HTTP": {
     "germany": "https://www.quaddicted.com/files/idgames/",
     "sweden": "https://ftpmirror1.infania.net/pub/idgames/",
