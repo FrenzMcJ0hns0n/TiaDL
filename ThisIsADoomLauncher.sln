@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32228.343
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ThisIsADoomLauncher", "ThisIsADoomLauncher\ThisIsADoomLauncher.vbproj", "{388C5188-426A-47EA-B067-B59B765DB784}"
 EndProject
@@ -10,7 +10,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "UnitTests", "UnitTests\UnitTests.vbproj", "{FDCB1433-6098-4D49-9567-0F392FFE4DEE}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ThisIsADoomLauncher.UnitTests", "UnitTests\ThisIsADoomLauncher.UnitTests.vbproj", "{FDCB1433-6098-4D49-9567-0F392FFE4DEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

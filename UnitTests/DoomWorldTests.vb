@@ -3,6 +3,7 @@ Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
+Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
 <TestClass()> Public Class DoomWorldTests
 
@@ -55,9 +56,9 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
         Dim id As Integer = 13024
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of Models.Level) = _doomWorldService.GetLevel(id)
+        Dim task As Task(Of Level) = _doomWorldService.GetLevel(id)
 
-        Dim level As Models.Level = task.Result
+        Dim level As Level = task.Result
 
         Assert.AreEqual(id, level.Id)
     End Sub
@@ -84,7 +85,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
         Dim _doomWorldService As New DoomWorldService()
 
         Dim mirror As String = _doomWorldService.GetMirror("germany")
-        Dim levelAbyss As Models.Level = New Models.Level With {.Dir = "levels/doom/a-c/", .Filename = "abyss.zip"}
+        Dim levelAbyss As Level = New Level With {.Dir = "levels/doom/a-c/", .Filename = "abyss.zip"}
         Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAbyss))
 
         Dim task As Task(Of String) = _doomWorldService.DownloadLevel(url)
@@ -103,8 +104,8 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
         Dim levelId As Integer = 11790
 
         Dim mirror As String = _doomWorldService.GetMirror("germany")
-        Dim taskLevelAV As Task(Of Models.Level) = _doomWorldService.GetLevel(levelId)
-        Dim levelAV As Models.Level = taskLevelAV.Result
+        Dim taskLevelAV As Task(Of Level) = _doomWorldService.GetLevel(levelId)
+        Dim levelAV As Level = taskLevelAV.Result
 
         Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAV))
 
