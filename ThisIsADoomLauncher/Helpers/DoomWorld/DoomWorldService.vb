@@ -227,20 +227,20 @@ Namespace Helpers.DoomWorld
         ''' <summary>
         ''' Extracts Level's files from zip archive in a folder.
         ''' </summary>
-        ''' <param name="fileNameZip">filename.zip</param>
+        ''' <param name="fileZipPath">path/filename.zip</param>
         ''' <returns>1 if folder is created; 0 if folder already exists; -1 if error.</returns>
-        Public Async Function ExtractLevelFromZip(directoryPath As String, fileNameZip As String) As Task(Of Integer)
+        Public Async Function ExtractLevelFromZip(fileZipPath As String) As Task(Of Integer)
             Dim result As Integer = 0
             Try
-                Dim levelZipUri As Uri = New Uri(String.Concat(directoryPath, "/", fileNameZip))
+                Dim levelZipUri As Uri = New Uri(fileZipPath)
 
                 If Not IO.File.Exists(levelZipUri.AbsolutePath) Then
                     Throw New FileNotFoundException
                 End If
 
-                Dim fileName As String = fileNameZip.Split("."c).First()
+                Dim fileName As String = IOHelper.GetFileInfo_Name(fileZipPath, False)
 
-                Dim fileNameFolderPathAfterExtraction As New Uri(String.Concat(directoryPath, "/", fileName))
+                Dim fileNameFolderPathAfterExtraction As New Uri(String.Concat(IOHelper.GetFileInfo_Directory(fileZipPath), "/", fileName))
 
                 If Directory.Exists(fileNameFolderPathAfterExtraction.AbsolutePath) Then
                     Return result
@@ -254,7 +254,7 @@ Namespace Helpers.DoomWorld
                 End If
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {directoryPath}, {fileNameZip}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileZipPath}")
 
                 result = -1
             End Try

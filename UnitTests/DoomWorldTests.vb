@@ -1,4 +1,5 @@
-﻿Imports System.Net.NetworkInformation
+﻿Imports System.IO
+Imports System.Net.NetworkInformation
 Imports System.Reflection
 Imports System.Text
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
@@ -121,24 +122,42 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     ''' </summary>
     <TestMethod()> Public Sub ExtractLevelFromZip_OK()
 
-        'Dim fileName As String = "/av.zip"
         Dim fileName As String = "/cchest2.zip"
-
         Dim directoryPath As String = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
 
+        ' /!\ Real case scenario : directoryPath wouldn't be needed because file ASBOLUTE PATH already has a directory path
+        Dim filePathUri As New Uri(String.Concat(directoryPath, fileName))
+
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of Integer) = _doomWorldService.ExtractLevelFromZip(directoryPath, fileName)
+        Dim task As Task(Of Integer) = _doomWorldService.ExtractLevelFromZip(filePathUri.AbsolutePath)
 
         Dim downloadedFileName = task.Result
 
         Assert.AreEqual(1, downloadedFileName)
     End Sub
 
+    <TestMethod()> Public Sub ExtractLevelFromZip_KO_AlreadyExists()
+
+        Dim fileName As String = "/cchest2.zip"
+        Dim alreadyExistDirectory As String = "cchest2"
+        Dim directoryPath As String = String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), alreadyExistDirectory)
+
+        ' /!\ Real case scenario : directoryPath wouldn't be needed because file ASBOLUTE PATH already has a directory path
+        Dim filePathUri As New Uri(String.Concat(directoryPath, fileName))
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim task As Task(Of Integer) = _doomWorldService.ExtractLevelFromZip(filePathUri.AbsolutePath)
+
+        Dim downloadedFileName = task.Result
+
+        Assert.AreEqual(0, downloadedFileName)
+    End Sub
+
     <TestMethod()> Public Sub MoveFiles_OK()
 
         'Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
-        Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
-        'Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
+        'Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
+        Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
 
         Dim _doomWorldService As New DoomWorldService()
         Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
