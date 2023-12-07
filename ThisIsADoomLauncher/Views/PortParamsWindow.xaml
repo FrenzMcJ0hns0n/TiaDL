@@ -103,7 +103,7 @@
             </Border>
         </GroupBox>
 
-        <Button x:Name="Btn_ApplyClose" Background="#c6ecc6" Content="Apply &amp; close" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" Padding="14 0"
+        <Button x:Name="Btn_ApplyClose" Background="#c6ecc6" Content="Apply &amp; Close" Grid.Column="1" Grid.Row="7" HorizontalAlignment="Center" Padding="14 0"
                 Click="Btn_ApplyClose_Click"/>
 
     </Grid>

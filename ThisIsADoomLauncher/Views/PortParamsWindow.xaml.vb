@@ -17,7 +17,7 @@
     End Sub
 
     Private Sub Tbk_CustomParams_GotFocus(sender As Object, e As RoutedEventArgs)
-        Tbk_CustomParams.ClearValue(TextBlock.ForegroundProperty)
+        Tbk_CustomParams.ClearValue(ForegroundProperty)
         Tbk_CustomParams.Text = String.Empty
     End Sub
 
@@ -61,12 +61,10 @@
 
         If Rbtn_Predefined.IsChecked Then
 
-            If Cbx_TurboEnabled.IsChecked Or Cbx_NoMonsters.IsChecked Then
-                If Cbx_TurboEnabled.IsChecked Then NewValuesDict.Add("turbo", Tbx_TurboValue.Text)
-                If Cbx_NoMonsters.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
-                If Cbx_NoMusic.IsChecked Then NewValuesDict.Add("nomusic", String.Empty)
-                If Cbx_NoSFX.IsChecked Then NewValuesDict.Add("nosfx", String.Empty)
-            End If
+            If Cbx_TurboEnabled.IsChecked Then NewValuesDict.Add("turbo", Tbx_TurboValue.Text)
+            If Cbx_NoMonsters.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
+            If Cbx_NoMusic.IsChecked Then NewValuesDict.Add("nomusic", String.Empty)
+            If Cbx_NoSFX.IsChecked Then NewValuesDict.Add("nosfx", String.Empty)
 
         ElseIf Rbtn_Custom.IsChecked Then
             'TODO
