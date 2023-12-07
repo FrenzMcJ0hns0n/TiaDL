@@ -173,8 +173,6 @@ Namespace Views
             If portParamsWindow.UserValidation Then
                 Dim oldParamsDict As Dictionary(Of String, String) = portParamsWindow.OldValuesDict
                 Dim newParamsDict As Dictionary(Of String, String) = If(portParamsWindow.NewValuesDict, New Dictionary(Of String, String))
-                Debug.Print("Old = '" & String.Join(",", oldParamsDict.Keys.ToList) & "'")
-                Debug.Print("New = '" & String.Join(",", newParamsDict.Keys.ToList) & "'")
                 Dim bothIdentical As Boolean = oldParamsDict.Count = newParamsDict.Count AndAlso Not oldParamsDict.Except(newParamsDict).Any()
                 If Not bothIdentical Then
                     UpdatePortParams(newParamsDict)

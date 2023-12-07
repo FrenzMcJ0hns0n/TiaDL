@@ -60,12 +60,10 @@
         NewValuesDict = New Dictionary(Of String, String)
 
         If Rbtn_Predefined.IsChecked Then
-
             If Cbx_TurboEnabled.IsChecked Then NewValuesDict.Add("turbo", Tbx_TurboValue.Text)
             If Cbx_NoMonsters.IsChecked Then NewValuesDict.Add("nomonsters", String.Empty)
             If Cbx_NoMusic.IsChecked Then NewValuesDict.Add("nomusic", String.Empty)
             If Cbx_NoSFX.IsChecked Then NewValuesDict.Add("nosfx", String.Empty)
-
         ElseIf Rbtn_Custom.IsChecked Then
             'TODO
         End If
