@@ -1,7 +1,5 @@
 ﻿Imports System.Net.NetworkInformation
 Imports System.Reflection
-Imports System.Text
-Imports Microsoft.VisualStudio.TestTools.UnitTesting
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
@@ -81,7 +79,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     ''' Test download file from doomworld game url
     ''' </summary>
     <TestMethod()> Public Sub DownloadLevel_2_Abyss_BuildUriFromLevel_OK()
-
         Dim _doomWorldService As New DoomWorldService()
 
         Dim mirror As String = _doomWorldService.GetMirror("germany")
@@ -99,7 +96,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     ''' Test download file from doomworld game url
     ''' </summary>
     <TestMethod()> Public Sub DownloadLevel_3_Alien_Vendetta_BuildUriFromID_OK()
-
         Dim _doomWorldService As New DoomWorldService()
         Dim levelId As Integer = 11790
 
@@ -120,11 +116,12 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     ''' Test download file from doomworld game url
     ''' </summary>
     <TestMethod()> Public Sub ExtractLevelFromZip_OK()
-
         'Dim fileName As String = "/av.zip"
         Dim fileName As String = "/cchest2.zip"
 
-        Dim directoryPath As String = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+        'TODO: Update
+        Dim directoryPath As String = IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+        'Dim directoryPath As String = Helpers.IOHelpers.GetDirectoryPath("") 'HOW TO USE IT?
 
         Dim _doomWorldService As New DoomWorldService()
         Dim task As Task(Of Integer) = _doomWorldService.ExtractLevelFromZip(directoryPath, fileName)
@@ -135,10 +132,9 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     End Sub
 
     <TestMethod()> Public Sub MoveFiles_OK()
-
-        'Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
-        Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
-        'Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
+        'Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
+        Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
+        'Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
 
         Dim _doomWorldService As New DoomWorldService()
         Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
@@ -150,7 +146,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     End Sub
 
     '<TestMethod()> Public Sub MoveFiles_KO_NoChanges()
-
     '    Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
 
     '    Dim _doomWorldService As New DoomWorldService()
@@ -162,7 +157,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     'End Sub
 
     '<TestMethod()> Public Sub MoveFiles_KO_DirectoryNotFound()
-
     '    Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
 
     '    Dim _doomWorldService As New DoomWorldService()
@@ -174,11 +168,9 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     'End Sub
 
     <TestMethod()> Public Sub GetDirsAndFilesTest_OK()
-
         Dim noFolderPath As String = ""
         Dim doomFolderPath As String = "doom/"
         Dim a_cFolderPath As String = "doom/a-c/"
-
 
         Dim _doomWorldService As New DoomWorldService()
 
@@ -196,7 +188,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     End Sub
 
     <TestMethod()> Public Sub GetMirrorTest_OK()
-
         Dim _doomWorldService As New DoomWorldService()
 
         Dim mirror As String = _doomWorldService.GetMirror("germany")
@@ -208,26 +199,19 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     ''' Test ping mirror.
     ''' </summary>
     <TestMethod()> Public Sub PingMirrorTest_OK()
-
         Dim _doomWorldService As New DoomWorldService()
 
         Dim mirror As String = _doomWorldService.GetMirror("germany")
+        Dim uri As New Uri(mirror) '=> Typically https://www.quaddicted.com/files/idgames/
 
-        Dim uri As New Uri(mirror)
-        'uri is not valid as is - not complete
-        'TODO ping from host ? uri host ? no ping ?
-
-        Dim p As New Net.NetworkInformation.Ping
-        Dim pingResult As Task(Of System.Net.NetworkInformation.PingReply) = p.SendPingAsync(mirror)
-
-        Dim pingReply As System.Net.NetworkInformation.PingReply = pingResult.Result
+        Dim p As New Ping
+        Dim pingResult As Task(Of PingReply) = p.SendPingAsync(uri.Host)
+        Dim pingReply As PingReply = pingResult.Result
 
         Assert.AreEqual(IPStatus.Success, pingReply.Status)
-
     End Sub
 
     <TestMethod()> Public Sub GetMirrorsTest_OK()
-
         Dim _doomWorldService As New DoomWorldService()
 
         Dim mirrors As List(Of String) = _doomWorldService.GetMirrors()
