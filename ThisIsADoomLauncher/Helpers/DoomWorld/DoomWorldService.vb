@@ -44,8 +44,8 @@ Namespace Helpers.DoomWorld
                 )
 
                 jsonObject.SelectToken("content.file")?.ToList().ForEach(
-                Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
-            )
+                    Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
+                )
             End If
 
             Return returnItems

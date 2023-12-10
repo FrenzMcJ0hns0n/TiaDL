@@ -53,7 +53,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     ''' Test get level from id
     ''' </summary>
     <TestMethod()> Public Sub GetLevelTest_OK()
-        Dim id As Integer = 13024
+        Dim id As Long = 13024
 
         Dim _doomWorldService As New DoomWorldService()
         Dim task As Task(Of Level) = _doomWorldService.GetLevel(id)
