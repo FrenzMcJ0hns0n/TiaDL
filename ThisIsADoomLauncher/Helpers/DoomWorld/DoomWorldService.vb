@@ -232,8 +232,6 @@ Namespace Helpers.DoomWorld
             Try
                 Dim levelZipUri As Uri = New Uri(fileZipPath)
 
-            Try
-                Dim levelZipUri As New Uri(String.Concat(directoryPath, "/", fileNameZip))
                 If Not File.Exists(levelZipUri.AbsolutePath) Then
                     Throw New FileNotFoundException
                 End If
@@ -247,8 +245,8 @@ Namespace Helpers.DoomWorld
                 End If
 
                 Await Task.Run(
-                    Sub() ZipFile.ExtractToDirectory(levelZipUri.AbsolutePath, fileNameFolderPathAfterExtraction.AbsolutePath)
-                )
+                Sub() ZipFile.ExtractToDirectory(levelZipUri.AbsolutePath, fileNameFolderPathAfterExtraction.AbsolutePath)
+            )
                 If Directory.Exists(fileNameFolderPathAfterExtraction.AbsolutePath) Then
                     result = 1
                 End If
