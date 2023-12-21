@@ -191,14 +191,17 @@ Namespace Views
         Private Sub UpdatePortParams(portParamsDict As Dictionary(Of String, String))
 
             If portParamsDict.Count > 0 Then
-                Tbx_PortParameters.ClearValue(TextBlock.ForegroundProperty)
+                Tbx_PortParameters.ClearValue(ForegroundProperty)
 
                 Dim parametersList As New List(Of String)
                 For Each kvp As KeyValuePair(Of String, String) In portParamsDict
                     parametersList.Add($"-{kvp.Key}" & If(kvp.Value.Length = 0, "", $" {kvp.Value}"))
                 Next
                 Tbx_PortParameters.ToolTip = String.Join(vbCrLf, parametersList)
+                Tbx_PortParameters.Background = Brushes.AliceBlue
             Else
+                Tbx_PortParameters.ClearValue(BackgroundProperty)
+
                 Tbx_PortParameters.Foreground = Brushes.Gray
                 Tbx_PortParameters.ToolTip = Nothing
             End If

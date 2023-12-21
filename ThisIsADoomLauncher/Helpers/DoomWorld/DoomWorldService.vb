@@ -12,7 +12,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 Namespace Helpers.DoomWorld
     Public Class DoomWorldService
 
-        Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li"
+        Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li" 'TO DELETE, RIGHT?
         Private Const HTTP As String = "HTTP"
 
         ''' <summary>
@@ -25,7 +25,7 @@ Namespace Helpers.DoomWorld
             Dim returnItems As New List(Of Object)
 
             Dim uriPath As String = String.Concat("api.php?action=getcontents&name=levels/", resourcePath)
-            Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
             Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
             If response.IsSuccessStatusCode Then
 
@@ -44,8 +44,8 @@ Namespace Helpers.DoomWorld
                 )
 
                 jsonObject.SelectToken("content.file")?.ToList().ForEach(
-                Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
-            )
+                    Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
+                )
             End If
 
             Return returnItems
@@ -61,7 +61,7 @@ Namespace Helpers.DoomWorld
 
             Try
                 Dim uriPath As String = "api.php?action=getdirs&name=levels/"
-                Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, parentDirectory, "&out=json"))
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, parentDirectory, "&out=json"))
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
                 If response.IsSuccessStatusCode Then
                     Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
@@ -91,7 +91,7 @@ Namespace Helpers.DoomWorld
         ''' <returns>A Level</returns>
         Public Async Function GetLevel(id As Integer) As Task(Of Models.Level)
             Dim uriPath As String = String.Concat("api.php?action=get&id=", id)
-            Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
             Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
             If response.IsSuccessStatusCode Then
 
@@ -118,7 +118,7 @@ Namespace Helpers.DoomWorld
 
             ' TODO : edit TYPE and SORT filters.
             Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=filename&sort=date")
-            Dim requestUri As Uri = New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
             Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
             If response.IsSuccessStatusCode Then
                 Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
@@ -130,10 +130,8 @@ Namespace Helpers.DoomWorld
                 levels = New List(Of Models.Level)
 
                 jsonObject.SelectToken("content.files").ToList().ForEach(
-                    Sub(jLevel)
-                        levels.Add(CreateLevelFromJToken(jLevel))
-                    End Sub
-                    )
+                    Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
+                )
 
                 Return levels
             End If
@@ -181,9 +179,9 @@ Namespace Helpers.DoomWorld
                 Dim mirrorsTokens As List(Of JToken) = jsonMirrors.SelectToken(HTTP).ToList()
 
                 mirrors = New List(Of String)
-                mirrorsTokens.ForEach(Sub(mirror)
-                                          mirrors.Add(mirror.First.Value(Of String))
-                                      End Sub)
+                mirrorsTokens.ForEach(
+                    Sub(mirror) mirrors.Add(mirror.First.Value(Of String))
+                )
 
             Catch ex As Exception
                 mirrors = Nothing
@@ -206,7 +204,7 @@ Namespace Helpers.DoomWorld
             ' it will be easier to display Name, show Install folder, (open folder ?), Uninstall...
             ' 
             Try
-                Dim requestUri As Uri = New Uri(levelUrl)
+                Dim requestUri As New Uri(levelUrl)
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
 
                 Dim levelFileName As String = requestUri.Segments.Last()
@@ -234,7 +232,9 @@ Namespace Helpers.DoomWorld
             Try
                 Dim levelZipUri As Uri = New Uri(fileZipPath)
 
-                If Not IO.File.Exists(levelZipUri.AbsolutePath) Then
+            Try
+                Dim levelZipUri As New Uri(String.Concat(directoryPath, "/", fileNameZip))
+                If Not File.Exists(levelZipUri.AbsolutePath) Then
                     Throw New FileNotFoundException
                 End If
 
@@ -246,9 +246,9 @@ Namespace Helpers.DoomWorld
                     Return result
                 End If
 
-                Await Task.Run(Sub()
-                                   System.IO.Compression.ZipFile.ExtractToDirectory(levelZipUri.AbsolutePath, fileNameFolderPathAfterExtraction.AbsolutePath)
-                               End Sub)
+                Await Task.Run(
+                    Sub() ZipFile.ExtractToDirectory(levelZipUri.AbsolutePath, fileNameFolderPathAfterExtraction.AbsolutePath)
+                )
                 If Directory.Exists(fileNameFolderPathAfterExtraction.AbsolutePath) Then
                     result = 1
                 End If
@@ -280,12 +280,14 @@ Namespace Helpers.DoomWorld
 
                 Dim files As List(Of String) = Directory.EnumerateFiles(directoryName).ToList
 
-                Await Task.Run(Sub()
-                                   For Each file As String In files
-                                       MoveToFolder(file)
-                                   Next
-                                   result = files.Count
-                               End Sub)
+                Await Task.Run(
+                    Sub()
+                        For Each file As String In files
+                            MoveToFolder(file)
+                        Next
+                        result = files.Count
+                    End Sub
+                )
 
             Catch ex As Exception
                 result = -1
@@ -296,7 +298,6 @@ Namespace Helpers.DoomWorld
             Return result
         End Function
 
-
         Private Sub MoveToFolder(currentFile As String)
 
             ' !! TiaDL integration : replace method PROVISOIRE_GetFolder("*") by GetDirectoryPath("*")
@@ -305,16 +306,16 @@ Namespace Helpers.DoomWorld
             Dim destinationDirectory As DirectoryInfo
             If Constants.VALID_EXTENSIONS_MAPS.Contains(currentFileInfo.Extension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Maps"), currentFileInfo.Directory.Name))
-                IO.File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(currentFileInfo.Extension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Misc"), currentFileInfo.Directory.Name))
-                IO.File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(currentFileInfo.Extension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Mods"), currentFileInfo.Directory.Name))
-                IO.File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             Else
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Pict"), currentFileInfo.Directory.Name))
-                IO.File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             End If
         End Sub
 
@@ -325,21 +326,21 @@ Namespace Helpers.DoomWorld
         ''' <returns>A Level.</returns>
         Private Function CreateLevelFromJToken(jLevel As JToken) As Models.Level
             Return New Models.Level With {
-                                               .Id = jLevel.Value(Of Integer)("id"),
-                                               .Title = jLevel.Value(Of String)("title"),
-                                               .Dir = jLevel.Value(Of String)("dir"),
-                                               .Filename = jLevel.Value(Of String)("filename"),
-                                               .Size = jLevel.Value(Of Long)("size"),
-                                               .Age = jLevel.Value(Of Long)("age"),
-                                               .ReleaseDate = jLevel.Value(Of String)("date"),
-                                               .Author = jLevel.Value(Of String)("author"),
-                                               .Email = jLevel.Value(Of String)("email"),
-                                               .Description = jLevel.Value(Of String)("description"),
-                                               .Rating = jLevel.Value(Of Decimal)("rating"),
-                                               .Votes = jLevel.Value(Of Integer)("votes"),
-                                               .Url = jLevel.Value(Of String)("url"),
-                                               .Idgamesurl = jLevel.Value(Of String)("idgamesurl")
-                                               }
+                .Id = jLevel.Value(Of Integer)("id"),
+                .Title = jLevel.Value(Of String)("title"),
+                .Dir = jLevel.Value(Of String)("dir"),
+                .Filename = jLevel.Value(Of String)("filename"),
+                .Size = jLevel.Value(Of Long)("size"),
+                .Age = jLevel.Value(Of Long)("age"),
+                .ReleaseDate = jLevel.Value(Of String)("date"),
+                .Author = jLevel.Value(Of String)("author"),
+                .Email = jLevel.Value(Of String)("email"),
+                .Description = jLevel.Value(Of String)("description"),
+                .Rating = jLevel.Value(Of Decimal)("rating"),
+                .Votes = jLevel.Value(Of Integer)("votes"),
+                .Url = jLevel.Value(Of String)("url"),
+                .Idgamesurl = jLevel.Value(Of String)("idgamesurl")
+            }
         End Function
 
         ''' <summary>
@@ -349,9 +350,9 @@ Namespace Helpers.DoomWorld
         ''' <returns>A Folder.</returns>
         Private Function CreateFolderFromJToken(jFolder As JToken) As Models.Folder
             Return New Models.Folder With {
-                                               .Id = jFolder.Value(Of Integer)("id"),
-                                               .Name = jFolder.Value(Of String)("name")
-                                               }
+                .Id = jFolder.Value(Of Integer)("id"),
+                .Name = jFolder.Value(Of String)("name")
+            }
         End Function
 
         ''' <summary>
@@ -383,5 +384,6 @@ Namespace Helpers.DoomWorld
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {idgamesurl}")
             End Try
         End Function
+
     End Class
 End Namespace
