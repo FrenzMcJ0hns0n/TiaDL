@@ -12,7 +12,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 Namespace Helpers.DoomWorld
     Public Class DoomWorldService
 
-        Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li" 'TO DELETE, RIGHT?
         Private Const HTTP As String = "HTTP"
 
         ''' <summary>
@@ -20,11 +19,11 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="resourcePath">The resource URI path. (i.e. doom2/a-c/ for folders, or doom2/a-c/av for Level Alien Vendetta)</param>
         ''' <returns>A list of Directories or Levels.</returns>
-        Public Async Function GetContent(Optional resourcePath As String = "") As Task(Of List(Of Object))
+        Public Async Function GetContent(Optional resourcePath As String = "levels/") As Task(Of List(Of Object))
 
             Dim returnItems As New List(Of Object)
 
-            Dim uriPath As String = String.Concat("api.php?action=getcontents&name=levels/", resourcePath)
+            Dim uriPath As String = String.Concat("api.php?action=getcontents&name=", resourcePath)
             Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
             Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
             If response.IsSuccessStatusCode Then
@@ -323,7 +322,7 @@ Namespace Helpers.DoomWorld
         ''' <param name="jLevel">JToken level.</param>
         ''' <returns>A Level.</returns>
         Private Function CreateLevelFromJToken(jLevel As JToken) As Models.Level
-            Return New Models.Level With {
+            Dim level As New Models.Level With {
                 .Id = jLevel.Value(Of Integer)("id"),
                 .Title = jLevel.Value(Of String)("title"),
                 .Dir = jLevel.Value(Of String)("dir"),
@@ -334,11 +333,22 @@ Namespace Helpers.DoomWorld
                 .Author = jLevel.Value(Of String)("author"),
                 .Email = jLevel.Value(Of String)("email"),
                 .Description = jLevel.Value(Of String)("description"),
+                .Bugs = jLevel.Value(Of String)("bugs"),
+                .Credits = jLevel.Value(Of String)("credits"),
+                .Base = jLevel.Value(Of String)("base"),
+                .Buildtime = jLevel.Value(Of String)("buildtime"),
+                .Editors = jLevel.Value(Of String)("editors"),
                 .Rating = jLevel.Value(Of Decimal)("rating"),
                 .Votes = jLevel.Value(Of Integer)("votes"),
                 .Url = jLevel.Value(Of String)("url"),
                 .Idgamesurl = jLevel.Value(Of String)("idgamesurl")
             }
+            'Sometimes level doesn't have a Title, so filename is given
+            If String.IsNullOrWhiteSpace(level.Title) Then
+                level.Title = jLevel.Value(Of String)("filename")
+            End If
+
+            Return level
         End Function
 
         ''' <summary>
