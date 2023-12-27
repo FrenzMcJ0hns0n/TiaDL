@@ -977,6 +977,17 @@ Namespace Views
             End Try
         End Sub
 
+        Private Sub Button_OptionDoomWorld_Click(sender As Object, e As RoutedEventArgs)
+            Try
+                Dim doomWorldWindow As New DoomWorldWindow() With {.Owner = Me}
+                doomWorldWindow.ShowDialog()
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
+            End Try
+        End Sub
+
         Private Sub Button_OptionOpenRootDir_Click(sender As Object, e As RoutedEventArgs)
             Process.Start(GetDirectoryPath())
         End Sub

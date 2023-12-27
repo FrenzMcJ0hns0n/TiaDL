@@ -1,0 +1,107 @@
+﻿<Window x:Class="Views.DoomWorldWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:ThisIsADoomLauncher.Helpers.Converters.DoomWorld"
+        xmlns:local="clr-namespace:ThisIsADoomLauncher"
+        mc:Ignorable="d"
+        
+        Title="DoomWorld" 
+        Height="650" Width="940"
+        
+        FontSize="14"
+        ResizeMode="CanMinimize"
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <converters:FileFolderConverter x:Key="ffDWConverter"/>
+            <converters:SelectedLevelConverter x:Key="SelectedLevelConverter"/>
+            <converters:ParentFolderConverter x:Key="ParentFolderConverter"/>
+        </ResourceDictionary>
+    </Window.Resources>
+    <!-- Container -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="6*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left column -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="11*"/>
+            </Grid.RowDefinitions>
+
+            <!-- DoomWorld header image -->
+            <Image Source="pack://application:,,,/Resources/Images/idgames_blue.jpg"
+                       Grid.Row="0" />
+            <!-- End DoomWorld header image -->
+
+            
+            <!-- Search area -->
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Left"
+                        Grid.Row="1">
+                
+                <!-- Up arrow -->
+                <Button Content="↑"
+                        x:Name="btnParentFolder"
+                        Margin="10,10,0,10"
+                        Padding="20,0"
+                        IsEnabled="{Binding ResourcePath, Converter={StaticResource ResourceKey=ParentFolderConverter}}"/>
+                <!-- / Up arrow -->
+                
+                <!-- Separator -->
+                <Border BorderThickness="0.2" 
+                        BorderBrush="Gray"
+                        Margin="10,3"/>
+                <!-- / Separator -->
+                <TextBlock Text="Search: " 
+                               VerticalAlignment="Center"/>
+                <TextBox x:Name="txtSearch"
+                             VerticalContentAlignment="Center"
+                             Width="100"
+                             Margin="10"/>
+                <ComboBox HorizontalAlignment="Right" 
+                          VerticalContentAlignment="Center" 
+                          Margin="1,10" 
+                          Padding="10,0" 
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Name"></ComboBoxItem>
+                    <ComboBoxItem Content="Date"></ComboBoxItem>
+                    <ComboBoxItem Content="Size"></ComboBoxItem>
+                    <ComboBoxItem Content="Author"></ComboBoxItem>
+                </ComboBox>
+            </StackPanel>
+            <!-- End Search area -->
+
+            <!-- Browse / results area -->
+            <ListView Grid.Row="3" 
+                      x:Name="lstResults" 
+                      ItemsSource="{Binding ContentsList}"
+                      BorderThickness="0,1,0,0">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=ffDWConverter}}"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <!-- End Browse / results area -->
+        </Grid>
+        <!-- End Left column -->
+
+        <!-- Right column-->
+
+        <Grid Grid.Column="1" Background="Transparent">
+            <Border BorderThickness="1,0,0,0" BorderBrush="#888888">
+                <ContentPresenter Content="{Binding SelectedLevel, Converter={StaticResource ResourceKey=SelectedLevelConverter}}"/>
+            </Border>
+        </Grid>
+
+        <!-- End Right column-->
+    </Grid>
+    <!-- End container -->
+</Window>

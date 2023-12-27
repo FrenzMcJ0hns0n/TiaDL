@@ -105,6 +105,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\Constants.vb" />
+    <Compile Include="Helpers\Converters\DoomWorld\FileFolderConverter.vb" />
+    <Compile Include="Helpers\Converters\DoomWorld\ParentFolderConverter.vb" />
+    <Compile Include="Helpers\Converters\DoomWorld\SelectedLevelConverter.vb" />
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldHttpClient.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldService.vb" />
@@ -118,8 +121,17 @@
     <Compile Include="Models\ModPreset.vb" />
     <Compile Include="Models\Preset.vb" />
     <Compile Include="Models\Setting.vb" />
+    <Compile Include="Views\UserControls\DoomWorld\LevelControl.xaml.vb">
+      <DependentUpon>LevelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\DoomWorld\FolderControl.xaml.vb">
+      <DependentUpon>FolderControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\CreatingWindowOnlyForThat.xaml.vb">
       <DependentUpon>CreatingWindowOnlyForThat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DoomWorldWindow.xaml.vb">
+      <DependentUpon>DoomWorldWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
@@ -132,7 +144,25 @@
     <Compile Include="Views\PresetDetailsWindow.xaml.vb">
       <DependentUpon>PresetDetailsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\UserControls\DoomWorld\NoSelectedLevel.xaml.vb">
+      <DependentUpon>NoSelectedLevel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\DoomWorld\SelectedLevel.xaml.vb">
+      <DependentUpon>SelectedLevel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\UserControls\DoomWorld\LevelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserControls\DoomWorld\FolderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\CreatingWindowOnlyForThat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DoomWorldWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -157,6 +187,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PresetDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\DoomWorld\NoSelectedLevel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\DoomWorld\SelectedLevel.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -269,6 +307,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Mod_default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\idgames_blue.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\baron_of_hell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\doomworld_dl.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
