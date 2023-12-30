@@ -115,7 +115,12 @@ Namespace Views
         End Sub
 
         Public Sub ButtonParentFolderClicked()
+            BackToParentDirectory()
+        End Sub
 
+        Private Async Sub BackToParentDirectory()
+            ResourcePath = Await _doomworldService.GetParentDirectory(ResourcePath)
+            ContentsList = Await _doomworldService.GetContent(ResourcePath)
         End Sub
 
         Private Sub HandleSelectedItem()

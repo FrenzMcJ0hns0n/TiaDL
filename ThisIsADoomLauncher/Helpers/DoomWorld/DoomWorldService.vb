@@ -23,50 +23,56 @@ Namespace Helpers.DoomWorld
 
             Dim returnItems As New List(Of Object)
 
-            Dim uriPath As String = String.Concat("api.php?action=getcontents&name=", resourcePath)
-            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
-            Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-            If response.IsSuccessStatusCode Then
+            Try
+                Dim uriPath As String = String.Concat("api.php?action=getcontents&name=", resourcePath)
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
 
-                Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
+                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
-                If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                    Throw New ArgumentException($"Invalid path: {resourcePath} is not correct")
+                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                        Throw New ArgumentException($"Invalid path: {resourcePath} is not correct")
+                    End If
+
+                    If jsonObject.SelectToken("content.file") Is Nothing And jsonObject.SelectToken("dir") Is Nothing Then
+                        Throw New ArgumentException($"No results")
+                    End If
+
+                    jsonObject.SelectToken("content.dir")?.ToList().ForEach(
+                        Sub(jFolder) returnItems.Add(CreateFolderFromJToken(jFolder))
+                    )
+
+                    jsonObject.SelectToken("content.file")?.ToList().ForEach(
+                        Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
+                    )
                 End If
 
-                If jsonObject.SelectToken("content.file") Is Nothing And jsonObject.SelectToken("dir") Is Nothing Then
-                    Throw New ArgumentException($"No results")
-                End If
 
-                jsonObject.SelectToken("content.dir")?.ToList().ForEach(
-                    Sub(jFolder) returnItems.Add(CreateFolderFromJToken(jFolder))
-                )
-
-                jsonObject.SelectToken("content.file")?.ToList().ForEach(
-                    Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
-                )
-            End If
-
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {resourcePath}")
+            End Try
             Return returnItems
         End Function
 
         ''' <summary>
         ''' Get DoomWorld levels directories.
         ''' </summary>
-        ''' <param name="parentDirectory"> Parent directory. If empty, get root levels directories.</param>
+        ''' <param name="currentDirectory"> Current directory. If empty, get root levels directories.</param>
         ''' <returns></returns>
-        Public Async Function GetDirectories(Optional parentDirectory As String = "") As Task(Of List(Of String))
+        Public Async Function GetDirectories(Optional currentDirectory As String = "") As Task(Of List(Of String))
             Dim directories As New List(Of String)
 
             Try
                 Dim uriPath As String = "api.php?action=getdirs&name=levels/"
-                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, parentDirectory, "&out=json"))
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, currentDirectory, "&out=json"))
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
                 If response.IsSuccessStatusCode Then
                     Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
                     If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                        Throw New ArgumentException($"Parent directory : {parentDirectory} is not correct")
+                        Throw New ArgumentException($"Parent directory : {currentDirectory} is not correct")
                     End If
 
                     jsonObject.SelectToken("content.dir").ToList().ForEach(
@@ -77,10 +83,45 @@ Namespace Helpers.DoomWorld
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {parentDirectory}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentDirectory}")
             End Try
 
             Return directories
+        End Function
+
+        ''' <summary>
+        ''' Get parent directory.
+        ''' </summary>
+        ''' <param name="currentDirectory"> Current directory.</param>
+        ''' <returns></returns>
+        Public Async Function GetParentDirectory(currentDirectory As String) As Task(Of String)
+            Dim directory As String = String.Empty
+
+            Try
+                Dim uriPath As String = "api.php?action=getparentdir&name="
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, currentDirectory, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
+                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
+
+                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                        Throw New ArgumentException($"Current directory : {currentDirectory} is not correct")
+                    End If
+
+                    Dim parentDirToken As JToken = jsonObject.SelectToken("content")
+
+                    directory = parentDirToken.Value(Of String)("name")
+
+                End If
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentDirectory}")
+
+                Return currentDirectory
+            End Try
+
+            Return directory
         End Function
 
         ''' <summary>

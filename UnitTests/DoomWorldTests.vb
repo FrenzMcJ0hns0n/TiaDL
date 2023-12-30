@@ -35,6 +35,48 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     End Sub
 
     ''' <summary>
+    ''' Test get parent directory OK
+    ''' </summary>
+    <TestMethod()> Public Sub GetParentDirectoriesTest_OK()
+        Dim currentDirectory As String = "levels/doom/a-c/"
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim task As Task(Of String) = _doomWorldService.GetParentDirectory(currentDirectory)
+
+        Dim result As String = task.Result
+
+        Assert.IsFalse(String.IsNullOrWhiteSpace(result))
+    End Sub
+
+    ''' <summary>
+    ''' Test get parent directory KO from empty path
+    ''' </summary>
+    <TestMethod()> Public Sub GetParentDirectoriesTest_KO_EmptyPath()
+        Dim currentDirectory As String = String.Empty
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim task As Task(Of String) = _doomWorldService.GetParentDirectory(currentDirectory)
+
+        Dim result As String = task.Result
+
+        Assert.IsTrue(String.IsNullOrWhiteSpace(result))
+    End Sub
+
+    ''' <summary>
+    ''' Test get parent directory KO from bad directory
+    ''' </summary>
+    <TestMethod()> Public Sub GetParentDirectoriesTest_KO_BadDirectory()
+        Dim currentDirectory As String = "/"
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim task As Task(Of String) = _doomWorldService.GetParentDirectory(currentDirectory)
+
+        Dim result As String = task.Result
+
+        Assert.IsTrue(String.IsNullOrWhiteSpace(result))
+    End Sub
+
+    ''' <summary>
     ''' Test get doom1 directories
     ''' </summary>
     <TestMethod()> Public Sub GetDirectoriesFromBaseGameTest_OK()
