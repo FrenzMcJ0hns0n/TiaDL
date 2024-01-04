@@ -94,8 +94,8 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="currentDirectory"> Current directory.</param>
         ''' <returns></returns>
-        Public Async Function GetParentDirectory(currentDirectory As String) As Task(Of String)
-            Dim directory As String = String.Empty
+        Public Async Function GetParentDirectory(currentDirectory As String) As Task(Of Folder)
+            Dim directory As Folder = Nothing
 
             Try
                 Dim uriPath As String = "api.php?action=getparentdir&name="
@@ -110,7 +110,10 @@ Namespace Helpers.DoomWorld
 
                     Dim parentDirToken As JToken = jsonObject.SelectToken("content")
 
-                    directory = parentDirToken.Value(Of String)("name")
+                    directory = New Folder With {
+                        .Id = parentDirToken.Value(Of Long)("id"),
+                        .Name = parentDirToken.Value(Of String)("name")
+                    }
 
                 End If
 
@@ -118,7 +121,7 @@ Namespace Helpers.DoomWorld
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentDirectory}")
 
-                Return currentDirectory
+                directory = Nothing
             End Try
 
             Return directory

@@ -15,7 +15,7 @@
         WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <ResourceDictionary>
-            <converters:FileFolderConverter x:Key="ffDWConverter"/>
+            <converters:FileFolderConverter x:Key="FileFolderConverter"/>
             <converters:SelectedLevelConverter x:Key="SelectedLevelConverter"/>
             <converters:ParentFolderConverter x:Key="ParentFolderConverter"/>
         </ResourceDictionary>
@@ -50,8 +50,7 @@
                 <Button Content="↑"
                         x:Name="btnParentFolder"
                         Margin="10,10,0,10"
-                        Padding="20,0"
-                        IsEnabled="{Binding ResourcePath, Converter={StaticResource ResourceKey=ParentFolderConverter}}"/>
+                        Padding="20,0"/>
                 <!-- / Up arrow -->
                 
                 <!-- Separator -->
@@ -65,12 +64,13 @@
                              VerticalContentAlignment="Center"
                              Width="100"
                              Margin="10"/>
-                <ComboBox HorizontalAlignment="Right" 
+                <ComboBox x:Name="cbbSorting"
+                          HorizontalAlignment="Right" 
                           VerticalContentAlignment="Center" 
                           Margin="1,10" 
                           Padding="10,0" 
                           SelectedIndex="0">
-                    <ComboBoxItem Content="Name"></ComboBoxItem>
+                    <ComboBoxItem Content="Filename"></ComboBoxItem>
                     <ComboBoxItem Content="Date"></ComboBoxItem>
                     <ComboBoxItem Content="Size"></ComboBoxItem>
                     <ComboBoxItem Content="Author"></ComboBoxItem>
@@ -81,11 +81,10 @@
             <!-- Browse / results area -->
             <ListView Grid.Row="3" 
                       x:Name="lstResults" 
-                      ItemsSource="{Binding ContentsList}"
                       BorderThickness="0,1,0,0">
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=ffDWConverter}}"/>
+                        <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
@@ -97,7 +96,7 @@
 
         <Grid Grid.Column="1" Background="Transparent">
             <Border BorderThickness="1,0,0,0" BorderBrush="#888888">
-                <ContentPresenter Content="{Binding SelectedLevel, Converter={StaticResource ResourceKey=SelectedLevelConverter}}"/>
+                <ContentPresenter x:Name="ctpDisplayLevel"/>
             </Border>
         </Grid>
 
