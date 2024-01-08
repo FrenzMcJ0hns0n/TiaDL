@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
+Imports System.Windows.Forms.VisualStyles
 Imports Microsoft.Win32
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
@@ -111,6 +112,10 @@ Namespace Views
             Dim cbb As ComboBox = CType(sender, ComboBox)
             If cbb.SelectedIndex <> -1 Then
                 _selectedSortingMode = DirectCast(cbb.SelectedItem, ComboBoxItem).Content.ToString()
+
+                If lstResults IsNot Nothing And lstResults?.Items IsNot Nothing And lstResults?.Items?.Count <> 0 Then
+                    Me.LoadResultsItemsSource(lstResults.Items.OfType(Of Object))
+                End If
             End If
         End Sub
 
