@@ -15,10 +15,11 @@ Namespace Helpers.DoomWorld
         Private Const HTTP As String = "HTTP"
 
         ''' <summary>
-        ''' Gets DoomWorld Directories or Levels. This method could replace both GetDirectories and GetLevel. (needs more testing).
+        ''' Gets DoomWorld Directories or Levels. 
+        ''' <br> This method can replace both GetDirectories and GetLevel. (but returns not all Level properties).</br>
         ''' </summary>
         ''' <param name="resourcePath">The resource URI path. (i.e. doom2/a-c/ for folders, or doom2/a-c/av for Level Alien Vendetta)</param>
-        ''' <returns>A list of Directories or Levels.</returns>
+        ''' <returns>A list of Object (Directories or Levels).</returns>
         Public Async Function GetContent(Optional resourcePath As String = "levels/") As Task(Of List(Of Object))
 
             Dim returnItems As New List(Of Object)

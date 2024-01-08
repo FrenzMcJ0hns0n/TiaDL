@@ -70,6 +70,7 @@
                           Margin="1,10" 
                           Padding="10,0" 
                           SelectedIndex="0">
+                    <ComboBoxItem Content="Title"></ComboBoxItem>
                     <ComboBoxItem Content="Filename"></ComboBoxItem>
                     <ComboBoxItem Content="Date"></ComboBoxItem>
                     <ComboBoxItem Content="Size"></ComboBoxItem>

@@ -41,11 +41,11 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim currentDirectory As String = "levels/doom/a-c/"
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of String) = _doomWorldService.GetParentDirectory(currentDirectory)
+        Dim task As Task(Of Folder) = _doomWorldService.GetParentDirectory(currentDirectory)
 
-        Dim result As String = task.Result
+        Dim result As Folder = task.Result
 
-        Assert.IsFalse(String.IsNullOrWhiteSpace(result))
+        Assert.IsFalse(String.IsNullOrWhiteSpace(result.Name))
     End Sub
 
     ''' <summary>
@@ -55,11 +55,11 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim currentDirectory As String = String.Empty
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of String) = _doomWorldService.GetParentDirectory(currentDirectory)
+        Dim task As Task(Of Folder) = _doomWorldService.GetParentDirectory(currentDirectory)
 
-        Dim result As String = task.Result
+        Dim result As Folder = task.Result
 
-        Assert.IsTrue(String.IsNullOrWhiteSpace(result))
+        Assert.IsFalse(String.IsNullOrWhiteSpace(result.Name))
     End Sub
 
     ''' <summary>
@@ -69,11 +69,11 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim currentDirectory As String = "/"
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of String) = _doomWorldService.GetParentDirectory(currentDirectory)
+        Dim task As Task(Of Folder) = _doomWorldService.GetParentDirectory(currentDirectory)
 
-        Dim result As String = task.Result
+        Dim result As Folder = task.Result
 
-        Assert.IsTrue(String.IsNullOrWhiteSpace(result))
+        Assert.IsFalse(String.IsNullOrWhiteSpace(result.Name))
     End Sub
 
     ''' <summary>

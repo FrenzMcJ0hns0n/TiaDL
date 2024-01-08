@@ -13,11 +13,6 @@ Namespace Helpers.Converters.DoomWorld
             ElseIf value.GetType() Is GetType(Helpers.DoomWorld.Models.Level) Then
                 Dim level As Helpers.DoomWorld.Models.Level = CType(value, Helpers.DoomWorld.Models.Level)
 
-                ''sometimes Title is empty -> replacing by Filename value
-                'If String.IsNullOrWhiteSpace(level.Title) Then
-                '    level.Title = level.Filename
-                'End If
-
                 Return New Views.UserControls.DoomWorld.LevelControl With {.DataContext = level}
 
             End If
