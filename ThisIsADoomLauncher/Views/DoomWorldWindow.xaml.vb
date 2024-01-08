@@ -73,7 +73,6 @@ Namespace Views
                         Return dwContents.OfType(Of Level).OrderBy(Function(levl)
                                                                        Return levl.Title
                                                                    End Function)
-
                     Case "Filename"
                         Return dwContents.OfType(Of Level).OrderBy(Function(levl)
                                                                        Return levl.Filename
@@ -81,7 +80,18 @@ Namespace Views
                     Case "ReleaseDate"
                         Return dwContents.OfType(Of Level).OrderBy(Function(levl)
                                                                        Return levl.ReleaseDate
-
+                                                                   End Function)
+                    Case "Rating"
+                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
+                                                                       Return levl.Rating
+                                                                   End Function)
+                    Case "Author"
+                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
+                                                                       Return levl.Author
+                                                                   End Function)
+                    Case "Size"
+                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
+                                                                       Return levl.Size
                                                                    End Function)
                     Case Else
                         Return dwContents

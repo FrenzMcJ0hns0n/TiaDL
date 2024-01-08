@@ -40,19 +40,19 @@
                        Grid.Row="0" />
             <!-- End DoomWorld header image -->
 
-            
+
             <!-- Search area -->
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left"
                         Grid.Row="1">
-                
+
                 <!-- Up arrow -->
                 <Button Content="↑"
                         x:Name="btnParentFolder"
                         Margin="10,10,0,10"
                         Padding="20,0"/>
                 <!-- / Up arrow -->
-                
+
                 <!-- Separator -->
                 <Border BorderThickness="0.2" 
                         BorderBrush="Gray"
@@ -72,9 +72,10 @@
                           SelectedIndex="0">
                     <ComboBoxItem Content="Title"></ComboBoxItem>
                     <ComboBoxItem Content="Filename"></ComboBoxItem>
-                    <ComboBoxItem Content="Date"></ComboBoxItem>
-                    <ComboBoxItem Content="Size"></ComboBoxItem>
+                    <ComboBoxItem Content="ReleaseDate"></ComboBoxItem>
+                    <ComboBoxItem Content="Rating"></ComboBoxItem>
                     <ComboBoxItem Content="Author"></ComboBoxItem>
+                    <ComboBoxItem Content="Size"></ComboBoxItem>
                 </ComboBox>
             </StackPanel>
             <!-- End Search area -->
