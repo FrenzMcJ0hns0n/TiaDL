@@ -47,6 +47,10 @@ Namespace Views
         ''' </summary>
         ''' <param name="dwContents"></param>
         Private Sub LoadResultsItemsSource(dwContents As IEnumerable(Of Object))
+            If dwContents Is Nothing Or dwContents.Count() = 0 Then
+                Return
+            End If
+
             'Sorting
             dwContents = SortContents(dwContents, _selectedSortingMode)
 
