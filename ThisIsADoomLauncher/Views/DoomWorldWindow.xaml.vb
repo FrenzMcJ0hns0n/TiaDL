@@ -68,40 +68,47 @@ Namespace Views
         Private Function SortContents(dwContents As IEnumerable(Of Object), selectedSortingMode As String) As IEnumerable(Of Object)
 
             If dwContents.FirstOrDefault().GetType = GetType(Helpers.DoomWorld.Models.Folder) Then
-                Return dwContents.OfType(Of Folder).OrderBy(Function(foldr)
-                                                                Return foldr.Name
-                                                            End Function)
-
+                Return SortFolders(dwContents.OfType(Of Folder))
             Else
-                Select Case selectedSortingMode
-                    Case "Title"
-                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
-                                                                       Return levl.Title
-                                                                   End Function)
-                    Case "Filename"
-                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
-                                                                       Return levl.Filename
-                                                                   End Function)
-                    Case "ReleaseDate"
-                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
-                                                                       Return levl.ReleaseDate
-                                                                   End Function)
-                    Case "Rating"
-                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
-                                                                       Return levl.Rating
-                                                                   End Function)
-                    Case "Author"
-                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
-                                                                       Return levl.Author
-                                                                   End Function)
-                    Case "Size"
-                        Return dwContents.OfType(Of Level).OrderBy(Function(levl)
-                                                                       Return levl.Size
-                                                                   End Function)
-                    Case Else
-                        Return dwContents
-                End Select
+                Return SortLevels(dwContents.OfType(Of Level), selectedSortingMode)
             End If
+        End Function
+
+        Private Function SortFolders(dwContents As IEnumerable(Of Folder)) As IEnumerable(Of Object)
+            Return dwContents.OrderBy(Function(foldr)
+                                          Return foldr.Name
+                                      End Function)
+        End Function
+
+        Private Function SortLevels(dwContents As IEnumerable(Of Level), selectedSortingMode As String) As IEnumerable(Of Object)
+            Select Case selectedSortingMode
+                Case "Title"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.Title
+                                              End Function)
+                Case "Filename"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.Filename
+                                              End Function)
+                Case "ReleaseDate"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.ReleaseDate
+                                              End Function)
+                Case "Rating"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.Rating
+                                              End Function)
+                Case "Author"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.Author
+                                              End Function)
+                Case "Size"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.Size
+                                              End Function)
+                Case Else
+                    Return dwContents
+            End Select
         End Function
 
         Private Sub lstResults_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lstResults.SelectionChanged
@@ -117,9 +124,24 @@ Namespace Views
             If cbb.SelectedIndex <> -1 Then
                 _selectedSortingMode = DirectCast(cbb.SelectedItem, ComboBoxItem).Content.ToString()
 
-                If lstResults IsNot Nothing And lstResults?.Items IsNot Nothing And lstResults?.Items?.Count <> 0 Then
-                    Me.LoadResultsItemsSource(lstResults.Items.OfType(Of Object))
-                End If
+                SortAndRefreshAllLists()
+            End If
+        End Sub
+
+        ''' <summary>
+        ''' Sort and refresh all lists after Combobox sorting option has changed.
+        ''' </summary>
+        Private Sub SortAndRefreshAllLists()
+            If lstResults IsNot Nothing And lstResults?.Items IsNot Nothing And lstResults?.Items?.Count <> 0 Then
+                Me.LoadResultsItemsSource(lstResults.Items.OfType(Of Object))
+            End If
+
+            If Lvw_SearchResults IsNot Nothing And Lvw_SearchResults?.Items IsNot Nothing And Lvw_SearchResults?.Items?.Count <> 0 Then
+                Lvw_SearchResults.ItemsSource = SortLevels(Lvw_SearchResults.Items.OfType(Of Level), _selectedSortingMode)
+            End If
+
+            If Lvw_InstalledResults IsNot Nothing And Lvw_InstalledResults?.Items IsNot Nothing And Lvw_InstalledResults?.Items?.Count <> 0 Then
+                Lvw_InstalledResults.ItemsSource = SortLevels(Lvw_InstalledResults.Items.OfType(Of Level), _selectedSortingMode)
             End If
         End Sub
 
@@ -198,183 +220,9 @@ Namespace Views
                 'Display no results
             End If
 
-            Lvw_SearchResults.ItemsSource = searchLevels
-            'Itemssource
-
+            '↓↓ WRONG : Use itemssource method to sort elements before set ItemsSource
+            Lvw_SearchResults.ItemsSource = SortLevels(searchLevels, _selectedSortingMode)
+            '↑↑ WRONG : Use itemssource method to sort elements before set ItemsSource
         End Sub
     End Class
-
-
-
-
-
-
-
-    Public Class DoomWorldWindowViewModel
-        Implements INotifyPropertyChanged
-
-        Public Event PropertyChanged As PropertyChangedEventHandler _
-        Implements INotifyPropertyChanged.PropertyChanged
-
-        Private Sub NotifyPropertyChanged(ByVal info As String)
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(info))
-        End Sub
-
-        'Private Properties 
-        Private _doomworldService As DoomWorldService
-
-        Private _resourcePath As String
-        Private _sortingModes As List(Of String)
-        Private _contentsList As List(Of Object)
-        Private _selectedSortingMode As String
-        Private _listViewSelectedItem As Object
-        Private _comboboxSortingSelectedItem As Object
-        Private _selectedLevel As Helpers.DoomWorld.Models.Level
-
-        'PropertyChange Properties 
-        Public Property ResourcePath() As String
-            Get
-                Return Me._resourcePath
-            End Get
-
-            Set(ByVal value As String)
-                If Not (value Is _resourcePath) Then
-                    Me._resourcePath = value
-                    NotifyPropertyChanged("ResourcePath")
-                End If
-            End Set
-        End Property
-
-        Public Property SortingModes() As List(Of String)
-            Get
-                Return Me._sortingModes
-            End Get
-
-            Set(ByVal value As List(Of String))
-                If Not (value Is _sortingModes) Then
-                    Me._sortingModes = value
-                    NotifyPropertyChanged("SortingModes")
-                End If
-            End Set
-        End Property
-
-        Public Property ContentsList() As List(Of Object)
-            Get
-                Return Me._contentsList
-            End Get
-
-            Set(ByVal value As List(Of Object))
-                If Not (value Is _contentsList) Then
-                    Me._contentsList = value
-                    NotifyPropertyChanged("ContentsList")
-                End If
-            End Set
-        End Property
-
-        Public Property SelectedLevel() As Helpers.DoomWorld.Models.Level
-            Get
-                Return Me._selectedLevel
-            End Get
-
-            Set(ByVal value As Helpers.DoomWorld.Models.Level)
-                If Not (value Is _selectedLevel) Then
-                    Me._selectedLevel = value
-                    NotifyPropertyChanged("SelectedLevel")
-                End If
-            End Set
-        End Property
-
-        Public Property SelectedSortingMode() As String
-            Get
-                Return Me._selectedSortingMode
-            End Get
-
-            Set(ByVal value As String)
-                If Not (value Is _selectedSortingMode) Then
-                    Me._selectedSortingMode = value
-                    NotifyPropertyChanged("SelectedSortingMode")
-                End If
-            End Set
-        End Property
-
-        Public Property ListViewSelectedItem() As Object
-            Get
-                Return Me._listViewSelectedItem
-            End Get
-
-            Set(ByVal value As Object)
-                If Not (value Is _listViewSelectedItem) And Not (value Is Nothing) Then
-                    Me._listViewSelectedItem = value
-                    Me.HandleSelectedItem()
-                End If
-            End Set
-        End Property
-
-        Public Property ComboboxSelectedItem() As Object
-            Get
-                Return Me._comboboxSortingSelectedItem
-            End Get
-
-            Set(ByVal value As Object)
-                If Not (value Is _comboboxSortingSelectedItem) And Not (value Is Nothing) Then
-                    Me._comboboxSortingSelectedItem = value
-                    SelectedSortingMode = CType(_comboboxSortingSelectedItem, String)
-                End If
-            End Set
-        End Property
-
-        Public Sub New()
-            SortingModes = New List(Of String) From {"filename", "title", "description"}
-            SelectedSortingMode = SortingModes.ElementAt(0)
-
-            _doomworldService = New DoomWorldService()
-
-            InitDoomWorldList()
-        End Sub
-
-        Private Async Sub InitDoomWorldList()
-            Try
-                ContentsList = Await _doomworldService.GetContent()
-            Catch ex As Exception
-                'catch ex
-                ContentsList = Nothing
-            End Try
-        End Sub
-
-        Public Sub ButtonParentFolderClicked()
-            BackToParentDirectory()
-        End Sub
-
-        Private Async Sub BackToParentDirectory()
-            'ResourcePath = Await _doomworldService.GetParentDirectory(ResourcePath)
-            ContentsList = Await _doomworldService.GetContent(ResourcePath)
-        End Sub
-
-        Private Sub HandleSelectedItem()
-
-            If ListViewSelectedItem.GetType() Is GetType(Helpers.DoomWorld.Models.Level) Then
-                Dim item As Helpers.DoomWorld.Models.Level = CType(ListViewSelectedItem, Helpers.DoomWorld.Models.Level)
-                GetLevel(item)
-            Else
-                Dim item As Helpers.DoomWorld.Models.Folder = CType(ListViewSelectedItem, Helpers.DoomWorld.Models.Folder)
-                ResourcePath = item.Name
-                ' + show path in UI
-                GetFolder(item)
-            End If
-        End Sub
-
-        Private Async Sub GetLevel(level As Helpers.DoomWorld.Models.Level)
-            'get in cache
-            ', if not : ↓↓
-            SelectedLevel = Await _doomworldService.GetLevel(Convert.ToInt32(level.Id))
-        End Sub
-
-        Private Async Sub GetFolder(folder As Helpers.DoomWorld.Models.Folder)
-            'get in cache
-            ', if not : ↓↓
-            ContentsList = Await _doomworldService.GetContent(folder.Name)
-        End Sub
-
-    End Class
-
 End Namespace

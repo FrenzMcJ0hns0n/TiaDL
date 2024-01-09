@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:converters="clr-namespace:ThisIsADoomLauncher.Helpers.Converters.DoomWorld"
+        xmlns:userControls="clr-namespace:ThisIsADoomLauncher.Views.UserControls.DoomWorld"
         xmlns:local="clr-namespace:ThisIsADoomLauncher"
         mc:Ignorable="d"
         
@@ -112,7 +113,11 @@
                         <ListView x:Name="Lvw_SearchResults"
                                   BorderThickness="0"
                                   Grid.Row="1">
-
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <userControls:LevelControl/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </Grid>
                 </TabItem>

@@ -173,7 +173,7 @@ Namespace Helpers.DoomWorld
 
                 levels = New List(Of Models.Level)
 
-                jsonObject.SelectToken("content.files").ToList().ForEach(
+                jsonObject.SelectToken("content.file").ToList().ForEach(
                     Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
                 )
 
