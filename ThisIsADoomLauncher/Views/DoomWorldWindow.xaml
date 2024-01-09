@@ -18,6 +18,13 @@
             <converters:FileFolderConverter x:Key="FileFolderConverter"/>
             <converters:SelectedLevelConverter x:Key="SelectedLevelConverter"/>
             <converters:ParentFolderConverter x:Key="ParentFolderConverter"/>
+
+            <Style x:Key="Rbtn_Sorting" TargetType="{x:Type RadioButton}">
+                <Setter Property="GroupName" Value="Sorting"/>
+                <Setter Property="IsEnabled" Value="False"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="IsEnabled" Value="False"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
     <!-- Container -->
@@ -40,17 +47,15 @@
                        Grid.Row="0" />
             <!-- End DoomWorld header image -->
 
-
-            <!-- Search area -->
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left"
                         Grid.Row="1">
 
                 <!-- Up arrow -->
                 <Button Content="↑"
-                        x:Name="btnParentFolder"
-                        Margin="10,10,0,10"
-                        Padding="20,0"/>
+                                    x:Name="Btn_ParentFolder"
+                                    Margin="10,10,0,10"
+                                    Padding="20,0"/>
                 <!-- / Up arrow -->
 
                 <!-- Separator -->
@@ -58,39 +63,66 @@
                         BorderBrush="Gray"
                         Margin="10,3"/>
                 <!-- / Separator -->
-                <TextBlock Text="Search: " 
-                               VerticalAlignment="Center"/>
-                <TextBox x:Name="txtSearch"
-                             VerticalContentAlignment="Center"
-                             Width="100"
-                             Margin="10"/>
-                <ComboBox x:Name="cbbSorting"
-                          HorizontalAlignment="Right" 
-                          VerticalContentAlignment="Center" 
-                          Margin="1,10" 
-                          Padding="10,0" 
-                          SelectedIndex="0">
-                    <ComboBoxItem Content="Title"></ComboBoxItem>
-                    <ComboBoxItem Content="Filename"></ComboBoxItem>
-                    <ComboBoxItem Content="ReleaseDate"></ComboBoxItem>
-                    <ComboBoxItem Content="Rating"></ComboBoxItem>
-                    <ComboBoxItem Content="Author"></ComboBoxItem>
-                    <ComboBoxItem Content="Size"></ComboBoxItem>
+                <TextBlock Text="Sort by : "
+                           VerticalAlignment="Center"/>
+                <ComboBox x:Name="Cbb_Sorting"
+                                      HorizontalAlignment="Right" 
+                                      VerticalContentAlignment="Center" 
+                                      Margin="1,10" 
+                                      Padding="10,0" 
+                                      SelectedIndex="0">
+                    <ComboBoxItem Content="Title"/>
+                    <ComboBoxItem Content="Filename"/>
+                    <ComboBoxItem Content="ReleaseDate"/>
+                    <ComboBoxItem Content="Rating"/>
+                    <ComboBoxItem Content="Author"/>
+                    <ComboBoxItem Content="Size"/>
                 </ComboBox>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortAsc" Content="Ascending" Margin="0 -2 0 0"/>
+                    <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortDesc" Content="Descending" Margin="9 -2 0 0"/>
+                </StackPanel>
             </StackPanel>
-            <!-- End Search area -->
 
-            <!-- Browse / results area -->
-            <ListView Grid.Row="3" 
-                      x:Name="lstResults" 
-                      BorderThickness="0,1,0,0">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <!-- End Browse / results area -->
+            <TabControl Grid.Row="2">
+                <TabItem x:Name="Tbi_DWBrowse" Header="Browse">
+                    <ListView x:Name="lstResults" 
+                              BorderThickness="0">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </TabItem>
+                <TabItem x:Name="Tbi_DWSearch" Header="Search">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="11*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Search: " 
+                                       VerticalAlignment="Center"/>
+                            <TextBox x:Name="Txt_DWSearchText"
+                                     VerticalContentAlignment="Center"
+                                     Width="100"
+                                     Margin="10"/>
+                        </StackPanel>
+                        <ListView x:Name="Lvw_SearchResults"
+                                  BorderThickness="0"
+                                  Grid.Row="1">
+
+                        </ListView>
+                    </Grid>
+                </TabItem>
+                <TabItem x:Name="Tbi_DWInstalled" Header="Installed">
+                    <ListView x:Name="Lvw_InstalledResults"
+                              BorderThickness="0">
+
+                    </ListView>
+                </TabItem>
+            </TabControl>
         </Grid>
         <!-- End Left column -->
 

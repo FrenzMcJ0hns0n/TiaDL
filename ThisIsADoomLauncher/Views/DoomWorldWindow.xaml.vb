@@ -112,7 +112,7 @@ Namespace Views
 
         End Sub
 
-        Private Sub cbbSorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles cbbSorting.SelectionChanged
+        Private Sub Cbb_Sorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Cbb_Sorting.SelectionChanged
             Dim cbb As ComboBox = CType(sender, ComboBox)
             If cbb.SelectedIndex <> -1 Then
                 _selectedSortingMode = DirectCast(cbb.SelectedItem, ComboBoxItem).Content.ToString()
@@ -123,7 +123,7 @@ Namespace Views
             End If
         End Sub
 
-        Private Sub btnParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles btnParentFolder.Click
+        Private Sub btnParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles Btn_ParentFolder.Click
             Me.BackToParentDirectory()
         End Sub
 
@@ -177,10 +177,30 @@ Namespace Views
         ''' <param name="resourcePath"></param>
         Private Sub ToggleParentFolderButtonEnabled(resourcePath As String)
             If String.IsNullOrWhiteSpace(resourcePath) Or resourcePath = "levels/" Then
-                btnParentFolder.IsEnabled = False
+                Btn_ParentFolder.IsEnabled = False
             Else
-                btnParentFolder.IsEnabled = True
+                Btn_ParentFolder.IsEnabled = True
             End If
+        End Sub
+
+        Private Sub Txt_DWSearchText_TextChanged(sender As Object, e As TextChangedEventArgs) Handles Txt_DWSearchText.TextChanged
+            Dim tbx As TextBox = CType(sender, TextBox)
+
+            If tbx.Text.Length >= 3 Then
+                Me.GetSearchResults(tbx.Text)
+            End If
+        End Sub
+
+        Private Async Sub GetSearchResults(searchText As String)
+
+            Dim searchLevels As List(Of Level) = Await _doomworldService.SearchLevels(searchText)
+            If searchLevels Is Nothing Or searchLevels.Count = 0 Then
+                'Display no results
+            End If
+
+            Lvw_SearchResults.ItemsSource = searchLevels
+            'Itemssource
+
         End Sub
     End Class
 
