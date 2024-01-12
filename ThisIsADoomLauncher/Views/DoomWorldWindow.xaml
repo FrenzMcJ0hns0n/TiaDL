@@ -107,7 +107,7 @@
                                        VerticalAlignment="Center"/>
                             <TextBox x:Name="Txt_DWSearchText"
                                      VerticalContentAlignment="Center"
-                                     Width="100"
+                                     Width="200"
                                      Margin="10"/>
                         </StackPanel>
                         <ListView x:Name="Lvw_SearchResults"

@@ -111,7 +111,7 @@ Namespace Views
             End Select
         End Function
 
-        Private Sub lstResults_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lstResults.SelectionChanged
+        Private Sub lstResults_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lstResults.SelectionChanged, Lvw_SearchResults.SelectionChanged
             Dim lst As ListView = CType(sender, ListView)
             If lst.SelectedIndex <> -1 Then
                 Me.HandleSelectedItem(lst.SelectedItem)
