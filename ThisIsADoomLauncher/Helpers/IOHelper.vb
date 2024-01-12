@@ -93,6 +93,11 @@ functionEnd:
         Return New FileInfo(filepath).Extension
     End Function
 
+    Public Function GetFileInfo_RemoveExtension(filepath As String) As String
+        Dim fInfo As New FileInfo(filepath)
+        Return fInfo.FullName.Replace(fInfo.Extension, String.Empty)
+    End Function
+
     Public Function GetFileInfo_Name(filepath As String, withExtension As Boolean) As String
         Dim info As New FileInfo(filepath)
         Return If(withExtension, info.Name, info.Name.Replace(info.Extension, String.Empty))
