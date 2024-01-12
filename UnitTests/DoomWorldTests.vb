@@ -111,7 +111,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim url As String = "https://www.quaddicted.com/files/idgames/levels/doom2/Ports/megawads/cchest2.zip"
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of String) = _doomWorldService.DownloadLevel(url)
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZipArchive(url)
 
         Dim downloadedFileName = task.Result
 
@@ -128,7 +128,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim levelAbyss As Level = New Level With {.Dir = "levels/doom/a-c/", .Filename = "abyss.zip"}
         Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAbyss))
 
-        Dim task As Task(Of String) = _doomWorldService.DownloadLevel(url)
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZipArchive(url)
 
         Dim downloadedFileName = task.Result
 
@@ -148,7 +148,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
         Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAV))
 
-        Dim task As Task(Of String) = _doomWorldService.DownloadLevel(url)
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZipArchive(url)
 
         Dim downloadedFileName = task.Result
 
@@ -160,35 +160,14 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     ''' </summary>
     <TestMethod()> Public Sub ExtractLevelFromZip_OK()
 
-        Dim fileName As String = "/cchest2.zip"
-        Dim directoryPath As String = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-
-        ' /!\ Real case scenario : directoryPath wouldn't be needed because file ASBOLUTE PATH already has a directory path
-        Dim filePathUri As New Uri(String.Concat(directoryPath, fileName))
+        Dim archiveName As String = Path.Combine(Directory.GetCurrentDirectory(), "cchest2.zip")
+        Dim dirNameResult As String = "cchest2"
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of Integer) = _doomWorldService.ExtractLevelFromZip(filePathUri.AbsolutePath)
+        Dim task As Task(Of DirectoryInfo) = _doomWorldService.ExtractLevelFromZip(archiveName)
 
-        Dim downloadedFileName = task.Result
-
-        Assert.AreEqual(1, downloadedFileName)
-    End Sub
-
-    <TestMethod()> Public Sub ExtractLevelFromZip_KO_AlreadyExists()
-
-        Dim fileName As String = "/cchest2.zip"
-        Dim alreadyExistDirectory As String = "cchest2"
-        Dim directoryPath As String = String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), alreadyExistDirectory)
-
-        ' /!\ Real case scenario : directoryPath wouldn't be needed because file ASBOLUTE PATH already has a directory path
-        Dim filePathUri As New Uri(String.Concat(directoryPath, fileName))
-
-        Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of Integer) = _doomWorldService.ExtractLevelFromZip(filePathUri.AbsolutePath)
-
-        Dim downloadedFileName = task.Result
-
-        Assert.AreEqual(0, downloadedFileName)
+        Dim extractedDir As DirectoryInfo = task.Result
+        Assert.AreEqual(dirNameResult, extractedDir.Name)
     End Sub
 
     <TestMethod()> Public Sub MoveFiles_OK()
@@ -204,28 +183,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Assert.AreNotEqual(-1, nbMovedFiles)
         Assert.AreNotEqual(0, nbMovedFiles)
     End Sub
-
-    '<TestMethod()> Public Sub MoveFiles_KO_NoChanges()
-    '    Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
-
-    '    Dim _doomWorldService As New DoomWorldService()
-    '    Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
-
-    '    Dim downloadedFileName = task.Result
-
-    '    Assert.AreEqual(0, downloadedFileName)
-    'End Sub
-
-    '<TestMethod()> Public Sub MoveFiles_KO_DirectoryNotFound()
-    '    Dim directoryName As New Uri(String.Concat(System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
-
-    '    Dim _doomWorldService As New DoomWorldService()
-    '    Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
-
-    '    Dim downloadedFileName = task.Result
-
-    '    Assert.AreEqual(-1, downloadedFileName)
-    'End Sub
 
     <TestMethod()> Public Sub GetDirsAndFilesTest_OK()
         Dim noFolderPath As String = ""
@@ -277,6 +234,25 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim mirrors As List(Of String) = _doomWorldService.GetMirrors()
 
         Assert.AreNotEqual(0, mirrors.Count)
+    End Sub
+
+    <TestMethod()> Public Sub DownloadLevelFullTest_OK()
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim lvl As Level = New Level With
+        {
+            .Filename = "cchest.zip",
+            .Dir = "levels/doom2/Ports/megawads/",
+            .Id = 12021,
+            .Idgamesurl = "idgames://levels/doom2/Ports/megawads/cchest.zip",
+            .Title = "The Community Chest Project",
+            .Url = "https://www.doomworld.com/idgames/levels/doom2/Ports/megawads/cchest"
+        }
+
+        Dim task As Task(Of Boolean) = _doomWorldService.DownloadLevelFull(lvl)
+        Dim res As Boolean = task.Result
+
+        Assert.AreEqual(True, res)
     End Sub
 
 End Class
