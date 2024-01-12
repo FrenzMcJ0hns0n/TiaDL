@@ -126,6 +126,7 @@
   <ItemGroup>
     <EmbeddedResource Include="doomworld_mirrors.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  <TargetPath>DoomWorld\doomworld_mirrors.json</TargetPath>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
