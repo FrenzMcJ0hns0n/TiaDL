@@ -120,6 +120,19 @@ functionEnd:
         Return String.Format("{0} {1}", fLength, units(pos))
     End Function
 
+    Public Function GetFileInfo_Size2(size As Long) As String
+        Dim units() As String = {"b", "Kb", "Mb", "Gb", "Tb"}
+        'Dim units As New List(Of String) From {"b", "Kb", "Mb", "Gb", "Tb"}
+        Dim pos As Integer = 0
+        Dim fLength As Double = size
+        While fLength >= 1024 AndAlso pos < units.Count
+            fLength /= 1024
+            pos += 1
+        End While
+        'Dim nfi As New NumberFormatInfo With {.NumberGroupSeparator = " ", .NumberDecimalDigits = 0}
+        Return String.Format("{0} {1}", Math.Round(fLength, 2), units(pos))
+    End Function
+
     ''' <summary>
     ''' Get local CSV filepath by its name
     ''' </summary>

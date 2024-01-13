@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:ThisIsADoomLauncher.Helpers.Converters.DoomWorld"
              xmlns:local="clr-namespace:ThisIsADoomLauncher">
     <UserControl.Resources>
         <ResourceDictionary>
+
+            <converters:LevelSizeConverter x:Key="LevelSizeConverter"/>
+
             <Style TargetType="Run" x:Key="RunBold">
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
@@ -44,7 +48,7 @@
                         </TextBlock>
                         <TextBlock>
                         <Run Text="Size :" Style="{StaticResource ResourceKey=RunBold}"/>
-                        <Run Text="{Binding Size}"/>
+                        <Run Text="{Binding Size, Converter={StaticResource ResourceKey=LevelSizeConverter}}"/>
                         </TextBlock>
                     </StackPanel>
                 </StackPanel>
