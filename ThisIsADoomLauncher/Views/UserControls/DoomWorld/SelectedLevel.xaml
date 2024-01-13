@@ -19,6 +19,10 @@
     <!-- Level selected : Level infos -->
     <ScrollViewer>
         <StackPanel Margin="20">
+            <TextBlock>
+                <Run Text="Dir:" Style="{StaticResource ResourceKey=RunBold}"/>
+                <Run Text="{Binding Dir}"/>
+            </TextBlock>
             <TextBlock Text="{Binding Title}" 
                        HorizontalAlignment="Center"
                        FontSize="20"
@@ -27,34 +31,11 @@
             <Border BorderBrush="#2986CC" BorderThickness="1" CornerRadius="7" Margin="20" Padding="15">
                 <StackPanel Orientation="Horizontal">
 
-                    <!--<Border CornerRadius="7" BorderThickness="1">
-                        <Button Margin="10,0"
-                            Height="75"
-                            Padding="15"
-                            Background="#2986CC">
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="pack://application:,,,/Resources/Images/doomworld_dl.png"/>
-                                <TextBlock Text="Download" Foreground="White" VerticalAlignment="Center"/>
-                            </StackPanel>
-                        </Button>
-                    </Border>-->
-
-                    <!--<TextBlock Margin="10,0"
-                                   Height="40"
-                                   Width="40">
-                        <Hyperlink TextDecorations="None">
-                            <Image Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
-                                   >
-                            </Image>
-                        </Hyperlink>
-                    </TextBlock>-->
-                    
                     <Image x:Name="Img_DownloadLevel" Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
                        Margin="10,0"
                        Height="25"
                        Width="25">
                     </Image>
-
 
                     <StackPanel Margin="20,0">
                         <TextBlock>
@@ -79,7 +60,7 @@
             </TextBlock>
             <TextBlock>
             <Run Text="Description:" Style="{StaticResource ResourceKey=RunBold}"/>
-            <Run Text="{Binding Description}" />
+            <Run Text="{Binding Description}"/>
             </TextBlock>
             <TextBlock>
             <Run Text="Credits:" Style="{StaticResource ResourceKey=RunBold}"/>
@@ -98,7 +79,7 @@
             <Run Text="{Binding Editors}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Iggamesurl:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Idgamesurl:" Style="{StaticResource ResourceKey=RunBold}"/>
             <Run Text="{Binding Idgamesurl}"/>
             </TextBlock>
             <TextBlock>
