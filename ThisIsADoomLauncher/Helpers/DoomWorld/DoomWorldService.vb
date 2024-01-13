@@ -195,7 +195,7 @@ Namespace Helpers.DoomWorld
         Public Function GetMirror(name As String) As String
             Dim mirror As String
             Try
-                Dim jsonMirrors As JObject = JObject.Parse(File.ReadAllText(DOOMWORLD_MIRRORS_FILE))
+                Dim jsonMirrors As JObject = JObject.Parse(File.ReadAllText(Path.Combine(IOHelper.GetDirectoryPath("DoomWorld"), DOOMWORLD_MIRRORS_FILE)))
 
                 Dim mirrorToken As JToken = jsonMirrors.SelectToken($"{HTTP}.{name}")
 
@@ -310,11 +310,8 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="directoryName">Destination directory.</param>
         ''' <returns></returns>
-        Public Async Function MoveFilesIntoDirectories(directoryName As String) As Task(Of Integer)
-            ' Probably move this method to another file : 
-            ' this file is DoomWorld only (read data, donwload DW mods).
-            ' Sorting and moving files can be generically done for any mod.
-            Dim result As Integer
+        Public Async Function MoveFilesIntoDirectories(directoryName As String) As Task(Of List(Of String))
+            Dim movedFiles As New List(Of String)
 
             Try
                 If Not Directory.Exists(directoryName) Then
@@ -326,39 +323,39 @@ Namespace Helpers.DoomWorld
                 Await Task.Run(
                     Sub()
                         For Each file As String In files
-                            MoveToFolder(file)
+                            movedFiles.Add(MoveToFolder(file))
                         Next
-                        result = files.Count
                     End Sub
                 )
 
             Catch ex As Exception
-                result = -1
+                movedFiles = Nothing
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {directoryName}")
             End Try
 
-            Return result
+            Return movedFiles
         End Function
 
-        Private Sub MoveToFolder(currentFile As String)
+        Private Function MoveToFolder(currentFile As String) As String
 
             Dim currentFileInfo As New FileInfo(currentFile)
             Dim destinationDirectory As DirectoryInfo
+
             If Constants.VALID_EXTENSIONS_MAPS.Contains(currentFileInfo.Extension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Maps"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(currentFileInfo.Extension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Misc"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(currentFileInfo.Extension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Mods"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             Else
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Pict"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
             End If
-        End Sub
+
+            Dim destFileName As String = Path.Combine(destinationDirectory.FullName, currentFileInfo.Name)
+            File.Move(currentFile, destFileName)
+            Return destFileName
+        End Function
 
         ''' <summary>
         ''' Creates a Level object from a JToken level
@@ -433,8 +430,8 @@ Namespace Helpers.DoomWorld
         ''' <returns>True if no error, false if something went wrong</returns>
         Public Async Function DownloadLevelFull(level As Models.Level) As Task(Of Boolean)
             Try
-                ' Get mirror -> TODO : get from /doomworld/doomworld_mirrors.json file or whatever location
-                Dim mirror As String = "https://www.quaddicted.com/files/idgames/"
+                ' Get mirror -> TODO : get from /DoomWorld/doomworld_mirrors.json file or whatever location
+                Dim mirror As String = Me.GetMirror("germany")
                 ' Get level download url
                 Dim dlUrl As String = String.Concat(mirror, Me.GetLevelDownloadUrl(level))
                 ' Get level zip
@@ -442,16 +439,16 @@ Namespace Helpers.DoomWorld
                 ' extract level
                 Dim extractedDirInfo As DirectoryInfo = Await Me.ExtractLevelFromZip(zipArchive)
 
-                ' TODO : create / write to json registry file
-                'Me.WriteLevelIntoRegistry(resDirInfo)
-
                 ' place files in corresponding folders
-                Dim resultMovedFiles As Integer = Await Me.MoveFilesIntoDirectories(extractedDirInfo.FullName)
+                Dim resultMovedFiles As List(Of String) = Await Me.MoveFilesIntoDirectories(extractedDirInfo.FullName)
 
-                If resultMovedFiles <> -1 Then
+                If resultMovedFiles IsNot Nothing Or resultMovedFiles?.Count > 0 Then
+
+                    ' TODO : create / write to json registry file
+                    'Me.WriteLevelIntoRegistry(resDirInfo)
 
                     'clean downloaded archive + extracted folder
-                    Me.CleanDownloadedContent(zipArchive, extractedDirInfo.FullName)
+                    Me.CleanUpDownloadedContent(zipArchive, extractedDirInfo.FullName)
 
                     Return True
                 End If
@@ -471,7 +468,7 @@ Namespace Helpers.DoomWorld
         ''' <param name="resDirInfo"></param>
         Private Sub WriteLevelIntoRegistry(resDirInfo As DirectoryInfo)
             ' TODO
-            Throw New NotImplementedException
+
         End Sub
 
         ''' <summary>
@@ -479,7 +476,7 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="zipArchive"></param>
         ''' <param name="extractedDir"></param>
-        Private Sub CleanDownloadedContent(zipArchive As String, extractedDir As String)
+        Private Sub CleanUpDownloadedContent(zipArchive As String, extractedDir As String)
             File.Delete(zipArchive)
             Directory.Delete(extractedDir, True)
         End Sub

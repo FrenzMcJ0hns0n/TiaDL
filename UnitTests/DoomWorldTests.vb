@@ -172,16 +172,16 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
     <TestMethod()> Public Sub MoveFiles_OK()
         'Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
-        Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
-        'Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
+        'Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
+        Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of Integer) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
+        Dim task As Task(Of List(Of String)) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
 
-        Dim nbMovedFiles = task.Result
+        Dim movedFiles = task.Result
 
-        Assert.AreNotEqual(-1, nbMovedFiles)
-        Assert.AreNotEqual(0, nbMovedFiles)
+        Assert.IsNotNull(movedFiles)
+        Assert.AreNotEqual(0, movedFiles.Count)
     End Sub
 
     <TestMethod()> Public Sub GetDirsAndFilesTest_OK()
