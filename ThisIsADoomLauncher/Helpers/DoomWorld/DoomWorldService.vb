@@ -337,15 +337,15 @@ Namespace Helpers.DoomWorld
         End Function
 
         Private Function MoveToFolder(currentFile As String) As String
-
             Dim currentFileInfo As New FileInfo(currentFile)
             Dim destinationDirectory As DirectoryInfo
+            Dim fileExtension As String = currentFileInfo.Extension.ToLower()
 
-            If Constants.VALID_EXTENSIONS_MAPS.Contains(currentFileInfo.Extension) Then
+            If Constants.VALID_EXTENSIONS_MAPS.Contains(fileExtension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Maps"), currentFileInfo.Directory.Name))
-            ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(currentFileInfo.Extension) Then
+            ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(fileExtension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Misc"), currentFileInfo.Directory.Name))
-            ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(currentFileInfo.Extension) Then
+            ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(fileExtension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Mods"), currentFileInfo.Directory.Name))
             Else
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Pict"), currentFileInfo.Directory.Name))
@@ -353,6 +353,7 @@ Namespace Helpers.DoomWorld
 
             Dim destFileName As String = Path.Combine(destinationDirectory.FullName, currentFileInfo.Name)
             File.Move(currentFile, destFileName)
+
             Return destFileName
         End Function
 
@@ -505,8 +506,7 @@ Namespace Helpers.DoomWorld
                 }
                 installedLevels.Add(instLevel)
 
-                Dim installedLevelsJson As String = JsonConvert.SerializeObject(installedLevels)
-                IOHelper.PersistJsonData(registryFilePath, installedLevelsJson)
+                Me.SaveRegistry(installedLevels, registryFilePath)
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -518,6 +518,17 @@ Namespace Helpers.DoomWorld
             Return 0
         End Function
 
+
+        ''' <summary>
+        ''' Serialize installed levels list and save it into the registry file.
+        ''' </summary>
+        ''' <param name="installedLevels"></param>
+        ''' <param name="registryFilePath"></param>
+        Private Sub SaveRegistry(installedLevels As List(Of InstalledLevel), registryFilePath As String)
+            Dim installedLevelsJson As String = JsonConvert.SerializeObject(installedLevels)
+            IOHelper.PersistJsonData(registryFilePath, installedLevelsJson)
+        End Sub
+
         ''' <summary>
         ''' Removes downloaded zip archive and extracted folder from the archive.
         ''' </summary>
@@ -527,5 +538,47 @@ Namespace Helpers.DoomWorld
             File.Delete(zipArchive)
             Directory.Delete(extractedDir, True)
         End Sub
+
+        ''' <summary>
+        ''' Deletes specified level from the computer and from the registry.
+        ''' </summary>
+        ''' <param name="level"></param>
+        Public Sub DeleteLevel(level As Models.Level)
+            Dim deletedDirs As Integer = 0
+            Try
+                Dim registryFilePath As String = Path.Combine(IOHelper.GetDirectoryPath("DoomWorld"), DOOMWORLD_REGISTRY_FILE)
+
+                Dim installedLevels As List(Of InstalledLevel) = Me.GetInstalledLevels(registryFilePath)
+                Dim levelToDelete As Models.InstalledLevel = installedLevels.Find(Function(instLvl)
+                                                                                      Return instLvl.Id = level.Id
+                                                                                  End Function)
+                Dim levelDirName As String = levelToDelete.DirectoryName
+
+                ' delete Level folder/files
+                Me.DeleteLevelDirectories(levelDirName)
+
+                ' delete Level from registry
+                installedLevels.Remove(levelToDelete)
+                Me.SaveRegistry(installedLevels, registryFilePath)
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {level}")
+            End Try
+        End Sub
+
+        Private Function DeleteLevelDirectories(levelDirName As String) As Integer
+            Dim nbDeletedDirs As Integer = 0
+            Dim dirArray As String() = {"Maps", "Misc", "Mods", "Pict"}
+
+            For index As Integer = 0 To dirArray.Count()
+                Dim subPath As String = Path.Combine(GetDirectoryPath(dirArray(index)), levelDirName)
+                If Directory.Exists(subPath) Then
+                    Directory.Delete(subPath, True)
+                    nbDeletedDirs += 1
+                End If
+            Next
+            Return nbDeletedDirs
+        End Function
     End Class
 End Namespace
