@@ -236,6 +236,45 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Assert.AreNotEqual(0, mirrors.Count)
     End Sub
 
+    <TestMethod()> Public Sub GetInstalledLevelsFromRegistryTest_OK()
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim registryFilePath As String = Path.Combine("DoomWorld", "doomworld_registry.json")
+
+        Dim installedLevels As List(Of Helpers.DoomWorld.Models.InstalledLevel) = _doomWorldService.GetInstalledLevels(registryFilePath)
+
+        Assert.AreNotEqual(0, installedLevels.Count)
+    End Sub
+
+    <TestMethod()> Public Sub GetInstalledLevelsFromRegistryTest_OK_Empty()
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim registryFilePath As String = Path.Combine("DoomWorld", "doomworld_registry_empty.json")
+
+        Dim installedLevels As List(Of Helpers.DoomWorld.Models.InstalledLevel) = _doomWorldService.GetInstalledLevels(registryFilePath)
+
+        Assert.AreEqual(0, installedLevels.Count)
+    End Sub
+
+    <TestMethod()> Public Sub WriteInstalledLevelIntoRegistryTest_OK()
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim lvl As Level = New Level With
+        {
+            .Filename = "cchest.zip",
+            .Dir = "levels/doom2/Ports/megawads/",
+            .Id = 12021,
+            .Idgamesurl = "idgames://levels/doom2/Ports/megawads/cchest.zip",
+            .Title = "The Community Chest Project",
+            .Url = "https://www.doomworld.com/idgames/levels/doom2/Ports/megawads/cchest"
+        }
+        Dim directoryName As String = "cchest"
+
+        Dim result As Integer = _doomWorldService.WriteLevelIntoRegistry(lvl, directoryName)
+
+        Assert.AreEqual(0, result)
+    End Sub
+
     <TestMethod()> Public Sub DownloadLevelFullTest_OK()
         Dim _doomWorldService As New DoomWorldService()
 

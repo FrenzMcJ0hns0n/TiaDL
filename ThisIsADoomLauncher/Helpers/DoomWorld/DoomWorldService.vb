@@ -14,7 +14,6 @@ Namespace Helpers.DoomWorld
 
         Private Const HTTP As String = "HTTP"
         Private Const DOOMWORLD_REGISTRY_FILE As String = "doomworld_registry.json"
-
         '↓ TODO : Get from a user file
         Private Const DOOMWORLD_MIRRORS_FILE As String = "doomworld_mirrors.json"
 
@@ -438,14 +437,12 @@ Namespace Helpers.DoomWorld
                 Dim zipArchive As String = Await Me.DownloadLevelZipArchive(dlUrl)
                 ' extract level
                 Dim extractedDirInfo As DirectoryInfo = Await Me.ExtractLevelFromZip(zipArchive)
-
                 ' place files in corresponding folders
                 Dim resultMovedFiles As List(Of String) = Await Me.MoveFilesIntoDirectories(extractedDirInfo.FullName)
 
                 If resultMovedFiles IsNot Nothing Or resultMovedFiles?.Count > 0 Then
-
                     ' TODO : create / write to json registry file
-                    'Me.WriteLevelIntoRegistry(resDirInfo)
+                    Me.WriteLevelIntoRegistry(level, extractedDirInfo.Name)
 
                     'clean downloaded archive + extracted folder
                     Me.CleanUpDownloadedContent(zipArchive, extractedDirInfo.FullName)
@@ -455,21 +452,71 @@ Namespace Helpers.DoomWorld
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {level}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Level: {level}")
             End Try
             'else ROLLBACK and return false
             Return False
         End Function
 
         ''' <summary>
-        ''' TODO : ' create / write to json registry file
+        ''' 
+        ''' </summary>
+        ''' <param name="registryFilePath"></param>
+        ''' <returns>List of levels if any. Nothing if not.</returns>
+        Public Function GetInstalledLevels(registryFilePath As String) As List(Of Models.InstalledLevel)
+            Dim installedLevels As List(Of Models.InstalledLevel)
+            Try
+                Dim registryContent As String = IOHelper.GetJsonData(registryFilePath)
+                installedLevels = JsonConvert.DeserializeObject(Of List(Of Models.InstalledLevel))(registryContent)
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {registryFilePath}")
+
+                installedLevels = Nothing
+            End Try
+
+            Return installedLevels
+        End Function
+
+        ''' <summary>
+        ''' create / write to json registry file
         ''' <br>for better finding/removing installed levels</br>
         ''' </summary>
-        ''' <param name="resDirInfo"></param>
-        Private Sub WriteLevelIntoRegistry(resDirInfo As DirectoryInfo)
-            ' TODO
+        ''' <param name="level"></param>
+        ''' <param name="directoryName"></param>
+        ''' <returns>0 if success, -1 if error</returns>
+        Public Function WriteLevelIntoRegistry(level As Models.Level, directoryName As String) As Integer
+            Try
+                Dim registryFilePath As String = Path.Combine(IOHelper.GetDirectoryPath("DoomWorld"), DOOMWORLD_REGISTRY_FILE)
 
-        End Sub
+                Dim installedLevels As List(Of Models.InstalledLevel) = Me.GetInstalledLevels(registryFilePath)
+
+                If installedLevels Is Nothing Then
+                    installedLevels = New List(Of InstalledLevel)
+                End If
+
+                Dim instLevel As New Models.InstalledLevel With
+                {
+                    .Title = level.Title,
+                    .Id = level.Id,
+                    .FileName = level.Filename,
+                    .DirectoryName = directoryName,
+                    .InstallDate = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")
+                }
+                installedLevels.Add(instLevel)
+
+                Dim installedLevelsJson As String = JsonConvert.SerializeObject(installedLevels)
+                IOHelper.PersistJsonData(registryFilePath, installedLevelsJson)
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Level: {level}, DirectoryPath: {directoryName}")
+
+                Return -1
+            End Try
+
+            Return 0
+        End Function
 
         ''' <summary>
         ''' Removes downloaded zip archive and extracted folder from the archive.

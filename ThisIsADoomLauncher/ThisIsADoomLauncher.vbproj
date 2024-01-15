@@ -113,6 +113,8 @@
     <Compile Include="Helpers\DoomWorld\DoomWorldHttpClient.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldService.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Folder.vb" />
+    <Compile Include="Helpers\DoomWorld\Models\InstalledLevel.vb" />
+    <Compile Include="Helpers\DoomWorld\Models\InstalledLevel2.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Level.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Review.vb" />
     <Compile Include="Helpers\General.vb" />
@@ -249,6 +251,10 @@
     <None Include="Helpers\DoomWorld\Misc\doomworld_mirrors.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>DoomWorld\doomworld_mirrors.json</TargetPath>
+    </None>
+    <None Include="Helpers\DoomWorld\Misc\doomworld_registry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>DoomWorld\doomworld_registry.json</TargetPath>
     </None>
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
