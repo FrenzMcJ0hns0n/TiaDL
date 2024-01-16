@@ -20,15 +20,44 @@ Namespace Views.UserControls.DoomWorld
             Dim imageControl As Image = CType(sender, Image)
             Dim levl As Level = CType(imageControl.DataContext, Level)
 
-            DownloadLevel(levl)
+            Me.DownloadLevel(levl)
         End Sub
 
         Private Async Sub DownloadLevel(levl As Level)
 
-            ' TODO : download level
-            ' display SUCCESS MESSAGE if success
-            ' display ERROR MESSAGE if error
+            Me.BeginUILevelDownload()
 
+            Dim result As Boolean = Await _doomWorldService.DownloadLevelFull(levl)
+
+            Me.EndUILevelDownload(result)
+
+        End Sub
+
+        ''' <summary>
+        ''' Show downloading UI.
+        ''' </summary>
+        Private Sub BeginUILevelDownload()
+            Stk_LevelDownload.Visibility = Visibility.Visible
+            Pgb_LevelDownload.IsIndeterminate = True
+            Txt_LevelDownload.Text = "Downloading..."
+        End Sub
+
+        ''' <summary>
+        ''' Show downloading UI result.
+        ''' </summary>
+        Private Sub EndUILevelDownload(result As Boolean)
+            Stk_LevelDownload.Visibility = Visibility.Visible
+
+            Pgb_LevelDownload.IsIndeterminate = False
+            Pgb_LevelDownload.Value = 100
+
+            If result Then
+                Txt_LevelDownload.Text = "Success!"
+                Img_DownloadLevel.Source = New BitmapImage(New Uri("pack://application:,,,/Resources/Images/doomworld_installed.png"))
+            Else
+                Pgb_LevelDownload.Foreground = Brushes.Red
+                Txt_LevelDownload.Text = "Level download failed"
+            End If
         End Sub
     End Class
 End Namespace

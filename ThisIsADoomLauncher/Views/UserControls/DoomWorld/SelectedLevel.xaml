@@ -33,24 +33,33 @@
                        FontWeight="Bold"/>
 
             <Border BorderBrush="#2986CC" BorderThickness="1" CornerRadius="7" Margin="20" Padding="15">
-                <StackPanel Orientation="Horizontal">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
 
-                    <Image x:Name="Img_DownloadLevel" Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
+                        <Image x:Name="Img_DownloadLevel" Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
                        Margin="10,0"
                        Height="25"
                        Width="25">
-                    </Image>
+                        </Image>
 
-                    <StackPanel Margin="20,0">
-                        <TextBlock>
+                        <StackPanel Margin="20,0">
+                            <TextBlock>
                         <Run Text="Filename :" Style="{StaticResource ResourceKey=RunBold}"/>
                         <Run Text="{Binding Filename}"/>
-                        </TextBlock>
-                        <TextBlock>
+                            </TextBlock>
+                            <TextBlock>
                         <Run Text="Size :" Style="{StaticResource ResourceKey=RunBold}"/>
                         <Run Text="{Binding Size, Converter={StaticResource ResourceKey=LevelSizeConverter}}"/>
-                        </TextBlock>
+                            </TextBlock>
+                        </StackPanel>
                     </StackPanel>
+                    <StackPanel x:Name="Stk_LevelDownload" 
+                                Margin="0,10" 
+                                Visibility="Collapsed">
+                        <ProgressBar x:Name="Pgb_LevelDownload" Margin="5"/>
+                        <TextBlock x:Name="Txt_LevelDownload" Text="Downloading..."/>
+                    </StackPanel>
+                    
                 </StackPanel>
             </Border>
 
