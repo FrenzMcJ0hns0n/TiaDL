@@ -112,6 +112,7 @@
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldHttpClient.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldService.vb" />
+    <Compile Include="Helpers\DoomWorld\DoomWorldContext.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Folder.vb" />
     <Compile Include="Helpers\DoomWorld\Models\InstalledLevel.vb" />
     <Compile Include="Helpers\DoomWorld\Models\InstalledLevel2.vb" />
@@ -327,6 +328,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\doomworld_dl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\doomworld_installed.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

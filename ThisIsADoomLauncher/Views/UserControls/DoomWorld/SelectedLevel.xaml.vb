@@ -53,7 +53,7 @@ Namespace Views.UserControls.DoomWorld
 
             If result Then
                 Txt_LevelDownload.Text = "Success!"
-                Img_DownloadLevel.Source = New BitmapImage(New Uri("pack://application:,,,/Resources/Images/doomworld_installed.png"))
+                Img_DownloadLevel.Source = New BitmapImage(New Uri("Resources\Images\doomworld_installed.png", UriKind.Relative))
             Else
                 Pgb_LevelDownload.Foreground = Brushes.Red
                 Txt_LevelDownload.Text = "Level download failed"
