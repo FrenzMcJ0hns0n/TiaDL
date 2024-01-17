@@ -20,6 +20,9 @@ Namespace Views
 
         End Sub
 
+        Public Function GetDWServiceInstance() As DoomWorldService
+            Return _doomworldService
+        End Function
         ''' <summary>
         ''' Initializes some UI custom elements.
         ''' </summary>
@@ -111,7 +114,7 @@ Namespace Views
             End Select
         End Function
 
-        Private Sub lstResults_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles lstResults.SelectionChanged, Lvw_SearchResults.SelectionChanged
+        Private Sub Lvw_BrowseResults_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Lvw_BrowseResults.SelectionChanged, Lvw_SearchResults.SelectionChanged
             Dim lst As ListView = CType(sender, ListView)
             If lst.SelectedIndex <> -1 Then
                 Me.HandleSelectedItem(lst.SelectedItem)
@@ -132,15 +135,15 @@ Namespace Views
         ''' Sort and refresh all lists after Combobox sorting option has changed.
         ''' </summary>
         Private Sub SortAndRefreshAllLists()
-            If lstResults IsNot Nothing And lstResults?.Items IsNot Nothing And lstResults?.Items?.Count <> 0 Then
-                Me.LoadResultsItemsSource(lstResults.Items.OfType(Of Object))
+            If Lvw_BrowseResults IsNot Nothing AndAlso Lvw_BrowseResults.Items IsNot Nothing AndAlso Lvw_BrowseResults.Items.Count <> 0 Then
+                Me.LoadResultsItemsSource(Lvw_BrowseResults.Items.OfType(Of Object))
             End If
 
-            If Lvw_SearchResults IsNot Nothing And Lvw_SearchResults?.Items IsNot Nothing And Lvw_SearchResults?.Items?.Count <> 0 Then
+            If Lvw_SearchResults IsNot Nothing AndAlso Lvw_SearchResults.Items IsNot Nothing AndAlso Lvw_SearchResults.Items.Count <> 0 Then
                 Lvw_SearchResults.ItemsSource = SortLevels(Lvw_SearchResults.Items.OfType(Of Level), _selectedSortingMode)
             End If
 
-            If Lvw_InstalledResults IsNot Nothing And Lvw_InstalledResults?.Items IsNot Nothing And Lvw_InstalledResults?.Items?.Count <> 0 Then
+            If Lvw_InstalledResults IsNot Nothing AndAlso Lvw_InstalledResults.Items IsNot Nothing AndAlso Lvw_InstalledResults.Items.Count <> 0 Then
                 Lvw_InstalledResults.ItemsSource = SortLevels(Lvw_InstalledResults.Items.OfType(Of Level), _selectedSortingMode)
             End If
         End Sub

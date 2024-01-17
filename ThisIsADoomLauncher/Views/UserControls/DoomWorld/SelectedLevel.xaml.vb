@@ -6,13 +6,15 @@ Namespace Views.UserControls.DoomWorld
     Public Class SelectedLevel
 
         Private _doomWorldService As DoomWorldService
+        Private _doomWorldWindow As Views.DoomWorldWindow
         Public Sub New()
 
             ' This call is required by the designer.
             InitializeComponent()
 
-            _doomWorldService = New DoomWorldService()
-            ' Add any initialization after the InitializeComponent() call.
+            _doomWorldWindow = Application.Current.Windows.OfType(Of Views.DoomWorldWindow).FirstOrDefault()
+
+            _doomWorldService = _doomWorldWindow.GetDWServiceInstance()
 
         End Sub
 
@@ -31,6 +33,11 @@ Namespace Views.UserControls.DoomWorld
 
             Me.EndUILevelDownload(result)
 
+            Me.AfterLevelInstalled()
+        End Sub
+
+        Private Sub AfterLevelInstalled()
+            _doomWorldWindow.AfterLevelInstalled()
         End Sub
 
         ''' <summary>
@@ -59,5 +66,6 @@ Namespace Views.UserControls.DoomWorld
                 Txt_LevelDownload.Text = "Level download failed"
             End If
         End Sub
+
     End Class
 End Namespace

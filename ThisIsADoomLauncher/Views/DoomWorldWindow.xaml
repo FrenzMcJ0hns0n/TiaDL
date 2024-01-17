@@ -98,7 +98,7 @@
 
             <TabControl Grid.Row="2">
                 <TabItem x:Name="Tbi_DWBrowse" Header="Browse">
-                    <ListView x:Name="lstResults" 
+                    <ListView x:Name="Lvw_BrowseResults" 
                               BorderThickness="0">
                         <ListView.ItemTemplate>
                             <DataTemplate>
