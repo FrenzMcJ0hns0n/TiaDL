@@ -9,7 +9,7 @@
         mc:Ignorable="d"
         
         Title="DoomWorld" 
-        Height="650" Width="940"
+        Height="720" Width="1080"
         
         FontSize="14"
         ResizeMode="CanMinimize"
@@ -19,6 +19,8 @@
             <converters:FileFolderConverter x:Key="FileFolderConverter"/>
             <converters:SelectedLevelConverter x:Key="SelectedLevelConverter"/>
             <converters:ParentFolderConverter x:Key="ParentFolderConverter"/>
+            
+            
 
             <Style x:Key="Rbtn_Sorting" TargetType="{x:Type RadioButton}">
                 <Setter Property="GroupName" Value="Sorting"/>
@@ -28,6 +30,7 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
+    
     <!-- Container -->
     <Grid>
         <Grid.ColumnDefinitions>
@@ -45,7 +48,8 @@
 
             <!-- DoomWorld header image -->
             <Image Source="pack://application:,,,/Resources/Images/idgames_blue.jpg"
-                       Grid.Row="0" />
+                   Stretch="Fill"
+                   Grid.Row="0" />
             <!-- End DoomWorld header image -->
 
             <StackPanel Orientation="Horizontal" 
@@ -54,9 +58,9 @@
 
                 <!-- Up arrow -->
                 <Button Content="↑"
-                                    x:Name="Btn_ParentFolder"
-                                    Margin="10,10,0,10"
-                                    Padding="20,0"/>
+                        x:Name="Btn_ParentFolder"
+                        Margin="10,10,0,10"
+                        Padding="20,0"/>
                 <!-- / Up arrow -->
 
                 <!-- Separator -->
@@ -64,14 +68,15 @@
                         BorderBrush="Gray"
                         Margin="10,3"/>
                 <!-- / Separator -->
+
                 <TextBlock Text="Sort by : "
                            VerticalAlignment="Center"/>
                 <ComboBox x:Name="Cbb_Sorting"
-                                      HorizontalAlignment="Right" 
-                                      VerticalContentAlignment="Center" 
-                                      Margin="1,10" 
-                                      Padding="10,0" 
-                                      SelectedIndex="0">
+                          HorizontalAlignment="Right" 
+                          VerticalContentAlignment="Center" 
+                          Margin="1,10" 
+                          Padding="10,0" 
+                          SelectedIndex="0">
                     <ComboBoxItem Content="Title"/>
                     <ComboBoxItem Content="Filename"/>
                     <ComboBoxItem Content="ReleaseDate"/>
@@ -79,6 +84,12 @@
                     <ComboBoxItem Content="Author"/>
                     <ComboBoxItem Content="Size"/>
                 </ComboBox>
+
+                <!-- Invisible separator -->
+                <Border BorderThickness="0"
+                        Margin="10,3"/>
+                <!-- / Invisible separator -->
+
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                     <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortAsc" Content="Ascending" Margin="0 -2 0 0"/>
                     <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortDesc" Content="Descending" Margin="9 -2 0 0"/>

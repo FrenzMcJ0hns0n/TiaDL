@@ -15,7 +15,7 @@
             </Style>
 
             <Style TargetType="TextBlock">
-                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Margin" Value="8"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
         </ResourceDictionary>
@@ -32,14 +32,14 @@
                        FontSize="20"
                        FontWeight="Bold"/>
 
-            <Border BorderBrush="#2986CC" BorderThickness="1" CornerRadius="7" Margin="20" Padding="15">
+            <Border BorderBrush="#2986CC" BorderThickness="1" CornerRadius="7" Margin="25" Padding="15">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
 
                         <Image x:Name="Img_DownloadLevel" Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
-                       Margin="10,0"
-                       Height="25"
-                       Width="25">
+                               Margin="10,0"
+                               Height="25"
+                               Width="25">
                         </Image>
 
                         <StackPanel Margin="20,0">
@@ -59,7 +59,7 @@
                         <ProgressBar x:Name="Pgb_LevelDownload" Margin="5"/>
                         <TextBlock x:Name="Txt_LevelDownload" Text="Downloading..."/>
                     </StackPanel>
-                    
+
                 </StackPanel>
             </Border>
 
