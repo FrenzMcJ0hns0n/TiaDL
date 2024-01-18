@@ -11,34 +11,38 @@ Namespace Views
         Private _doomworldService As New DoomWorldService()
         Private _resourcePath As String
         Private _selectedSortingMode As String
+        Private _installedLevels As List(Of InstalledLevel)
 
         Public Sub New()
             InitializeComponent()
 
             InitUI()
-            InitDoomWorldList()
-
         End Sub
 
         Public Function GetDWServiceInstance() As DoomWorldService
             Return _doomworldService
         End Function
+
         ''' <summary>
         ''' Initializes some UI custom elements.
         ''' </summary>
         Private Sub InitUI()
             ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.NoSelectedLevel
             Me.ToggleParentFolderButtonEnabled(_resourcePath)
+
+            InitLists()
         End Sub
 
         ''' <summary>
         ''' First initialize elements from DoomWorld API.
         ''' Then prepare results to be displayed as ItemsSource
         ''' </summary>
-        Private Async Sub InitDoomWorldList()
+        Private Async Sub InitLists()
             Try
                 Dim dwContents As IEnumerable(Of Object) = Await _doomworldService.GetContent()
                 LoadResultsItemsSource(dwContents)
+                LoadInstalledLevelsItemsSource()
+
             Catch ex As Exception
                 'catch ex
 
@@ -57,7 +61,22 @@ Namespace Views
             'Sorting
             dwContents = SortContents(dwContents, _selectedSortingMode)
 
-            lstResults.ItemsSource = dwContents
+            Lvw_BrowseResults.ItemsSource = dwContents
+        End Sub
+
+        ''' <summary>
+        ''' Sorts DoomWorld installed levels and sets as ItemsSource.
+        ''' </summary>
+        Private Sub LoadInstalledLevelsItemsSource()
+            _installedLevels = _doomworldService.GetInstalledLevels(Path.Combine("DoomWorld", "doomworld_registry.json"))
+            If _installedLevels Is Nothing OrElse _installedLevels.Count() = 0 Then
+                Return
+            End If
+
+            'Sorting
+            '_installedLevels = SortLevels(_installedLevels, _selectedSortingMode)
+
+            Lvw_InstalledResults.ItemsSource = _installedLevels
         End Sub
 
         ''' <summary>
@@ -114,7 +133,11 @@ Namespace Views
             End Select
         End Function
 
-        Private Sub Lvw_BrowseResults_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Lvw_BrowseResults.SelectionChanged, Lvw_SearchResults.SelectionChanged
+        Private Sub btnParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles Btn_ParentFolder.Click
+            Me.BackToParentDirectory()
+        End Sub
+
+        Private Sub Lvw_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Lvw_BrowseResults.SelectionChanged, Lvw_SearchResults.SelectionChanged, Lvw_InstalledResults.SelectionChanged
             Dim lst As ListView = CType(sender, ListView)
             If lst.SelectedIndex <> -1 Then
                 Me.HandleSelectedItem(lst.SelectedItem)
@@ -148,9 +171,6 @@ Namespace Views
             End If
         End Sub
 
-        Private Sub btnParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles Btn_ParentFolder.Click
-            Me.BackToParentDirectory()
-        End Sub
 
         ''' <summary>
         ''' Defines if SelectedItem is Folder or Level, and acts accordingly
@@ -161,6 +181,12 @@ Namespace Views
             If selectedItem.GetType() Is GetType(Helpers.DoomWorld.Models.Level) Then
                 Dim item As Helpers.DoomWorld.Models.Level = CType(selectedItem, Helpers.DoomWorld.Models.Level)
                 GetLevel(item)
+
+            ElseIf selectedItem.GetType() Is GetType(Helpers.DoomWorld.Models.InstalledLevel) Then
+                Dim item As Helpers.DoomWorld.Models.InstalledLevel = CType(selectedItem, Helpers.DoomWorld.Models.InstalledLevel)
+                Dim level As New Level() With {.Id = item.Id}
+                GetLevel(level)
+
             Else
                 Dim item As Helpers.DoomWorld.Models.Folder = CType(selectedItem, Helpers.DoomWorld.Models.Folder)
                 _resourcePath = item.Name
@@ -220,12 +246,32 @@ Namespace Views
 
             Dim searchLevels As List(Of Level) = Await _doomworldService.SearchLevels(searchText)
             If searchLevels Is Nothing OrElse searchLevels.Count = 0 Then
-                'Display no results view ?
+                ' TODO : Display no results view ?
                 Return
             End If
 
             Lvw_SearchResults.ItemsSource = SortLevels(searchLevels, _selectedSortingMode)
         End Sub
+
+
+        Public Sub AfterLevelInstalled()
+            ' TODO : add level installed icon tick in Lvw_BrowseList ?
+            ' -> CType(Lvw_BrowseResults.SelectedItem, Level).Installed = True
+
+            Lvw_BrowseResults.Items.Refresh()
+            Me.LoadInstalledLevelsItemsSource()
         End Sub
+
+        ''' <summary>
+        ''' Check if level in installed.
+        ''' Should be in DoomWorldService. Not a proper way to do. But works for now so "child" SelectedLevel.xaml can call this function.
+        ''' </summary>
+        ''' <param name="id"></param>
+        ''' <returns></returns>
+        Public Function CheckIsInstalledLevel(id As Long) As Boolean
+            Return _installedLevels.Exists(Function(lvl)
+                                               Return lvl.Id = id
+                                           End Function)
+        End Function
     End Class
 End Namespace
