@@ -5,8 +5,11 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 Namespace Views.UserControls.DoomWorld
     Public Class SelectedLevel
 
+        Private Const DOOMWORLD_INSTALLED_IMAGE As String = "/Resources/Images/doomworld_installed.png"
+
         Private _doomWorldService As DoomWorldService
         Private _doomWorldWindow As Views.DoomWorldWindow
+        Private _currentLevel As Level
         Public Sub New()
 
             ' This call is required by the designer.
@@ -18,11 +21,29 @@ Namespace Views.UserControls.DoomWorld
 
         End Sub
 
-        Private Sub Img_DownloadLevel_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Img_DownloadLevel.MouseDown
-            Dim imageControl As Image = CType(sender, Image)
-            Dim levl As Level = CType(imageControl.DataContext, Level)
+        Private Sub Usc_SelectedLevel_Loaded(sender As Object, e As RoutedEventArgs)
+            _currentLevel = CType(Me.DataContext, Level)
 
-            Me.DownloadLevel(levl)
+            If _doomWorldWindow.CheckIsInstalledLevel(_currentLevel.Id) Then
+                Img_DownloadLevel.Source = New BitmapImage(New Uri(DOOMWORLD_INSTALLED_IMAGE, UriKind.Relative))
+                RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
+            End If
+        End Sub
+
+        Private Sub InitLevel()
+            Try
+
+
+            Catch ex As Exception
+                Return
+            End Try
+        End Sub
+
+        Private Sub Img_DownloadLevel_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Img_DownloadLevel.MouseDown
+            'Dim imageControl As Image = CType(sender, Image)
+            'Dim levl As Level = CType(imageControl.DataContext, Level)
+
+            Me.DownloadLevel(_currentLevel)
         End Sub
 
         Private Async Sub DownloadLevel(levl As Level)
@@ -60,12 +81,11 @@ Namespace Views.UserControls.DoomWorld
 
             If result Then
                 Txt_LevelDownload.Text = "Success!"
-                Img_DownloadLevel.Source = New BitmapImage(New Uri("Resources\Images\doomworld_installed.png", UriKind.Relative))
+                Img_DownloadLevel.Source = New BitmapImage(New Uri(DOOMWORLD_INSTALLED_IMAGE, UriKind.Relative))
             Else
                 Pgb_LevelDownload.Foreground = Brushes.Red
                 Txt_LevelDownload.Text = "Level download failed"
             End If
         End Sub
-
     End Class
 End Namespace
