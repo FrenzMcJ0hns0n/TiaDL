@@ -163,26 +163,31 @@ Namespace Helpers.DoomWorld
         Public Async Function SearchLevels(searchText As String) As Task(Of List(Of Models.Level))
             Dim levels As List(Of Models.Level)
 
-            ' TODO : edit TYPE and SORT filters.
-            Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=filename&sort=date")
-            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
-            Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-            If response.IsSuccessStatusCode Then
-                Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
+            Try
+                ' TODO : edit TYPE and SORT filters.
+                Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=filename&sort=date")
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
+                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
-                If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                    Throw New ArgumentException($"Search text : {searchText} returned no results")
+                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                        Throw New ArgumentException($"Search text : {searchText} returned no results")
+                    End If
+
+                    levels = New List(Of Models.Level)
+
+                    jsonObject.SelectToken("content.file").ToList().ForEach(
+                        Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
+                    )
+
+                    Return levels
                 End If
 
-                levels = New List(Of Models.Level)
-
-                jsonObject.SelectToken("content.file").ToList().ForEach(
-                    Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
-                )
-
-                Return levels
-            End If
-
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {searchText}")
+            End Try
             Return Nothing
         End Function
 

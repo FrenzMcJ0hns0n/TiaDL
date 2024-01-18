@@ -219,13 +219,13 @@ Namespace Views
         Private Async Sub GetSearchResults(searchText As String)
 
             Dim searchLevels As List(Of Level) = Await _doomworldService.SearchLevels(searchText)
-            If searchLevels Is Nothing Or searchLevels.Count = 0 Then
-                'Display no results
+            If searchLevels Is Nothing OrElse searchLevels.Count = 0 Then
+                'Display no results view ?
+                Return
             End If
 
-            '↓↓ WRONG : Use itemssource method to sort elements before set ItemsSource
             Lvw_SearchResults.ItemsSource = SortLevels(searchLevels, _selectedSortingMode)
-            '↑↑ WRONG : Use itemssource method to sort elements before set ItemsSource
+        End Sub
         End Sub
     End Class
 End Namespace
