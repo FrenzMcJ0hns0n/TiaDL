@@ -28,9 +28,14 @@ Namespace Views
         ''' </summary>
         Private Sub InitUI()
             ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.NoSelectedLevel
-            Me.ToggleParentFolderButtonEnabled(_resourcePath)
 
             InitLists()
+            UpdateDirPathUI(_resourcePath)
+        End Sub
+
+        Private Sub UpdateDirPathUI(resourcePath As String)
+            Txt_BrowseDirPath.Text = resourcePath
+            Me.ToggleParentFolderButtonEnabled(_resourcePath)
         End Sub
 
         ''' <summary>
@@ -213,7 +218,7 @@ Namespace Views
             Dim dwContent As List(Of Object) = Await _doomworldService.GetContent(_resourcePath)
             LoadResultsItemsSource(dwContent)
 
-            Me.ToggleParentFolderButtonEnabled(_resourcePath)
+            Me.UpdateDirPathUI(_resourcePath)
         End Sub
 
         Private Async Sub BackToParentDirectory()

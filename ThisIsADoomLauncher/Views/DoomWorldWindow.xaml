@@ -19,8 +19,6 @@
             <converters:FileFolderConverter x:Key="FileFolderConverter"/>
             <converters:SelectedLevelConverter x:Key="SelectedLevelConverter"/>
             <converters:ParentFolderConverter x:Key="ParentFolderConverter"/>
-            
-            
 
             <Style x:Key="Rbtn_Sorting" TargetType="{x:Type RadioButton}">
                 <Setter Property="GroupName" Value="Sorting"/>
@@ -30,7 +28,7 @@
             </Style>
         </ResourceDictionary>
     </Window.Resources>
-    
+
     <!-- Container -->
     <Grid>
         <Grid.ColumnDefinitions>
@@ -55,19 +53,6 @@
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Left"
                         Grid.Row="1">
-
-                <!-- Up arrow -->
-                <Button Content="↑"
-                        x:Name="Btn_ParentFolder"
-                        Margin="10,10,0,10"
-                        Padding="20,0"/>
-                <!-- / Up arrow -->
-
-                <!-- Separator -->
-                <Border BorderThickness="0.2" 
-                        BorderBrush="Gray"
-                        Margin="10,3"/>
-                <!-- / Separator -->
 
                 <TextBlock Text="Sort by : "
                            VerticalAlignment="Center"/>
@@ -98,14 +83,42 @@
 
             <TabControl Grid.Row="2">
                 <TabItem x:Name="Tbi_DWBrowse" Header="Browse">
-                    <ListView x:Name="Lvw_BrowseResults" 
-                              BorderThickness="0">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Border BorderBrush="#888888" 
+                                Grid.Row="0" 
+                                BorderThickness="0,1">
+                            <StackPanel Orientation="Horizontal">
+                                <!-- Up arrow -->
+                                <Button Content="↑"
+                                    x:Name="Btn_ParentFolder"
+                                    Margin="10,10,0,10"
+                                    Padding="10,0"/>
+                                <!-- / Up arrow -->
+
+                                <!-- Separator -->
+                                <Border BorderThickness="0.2" 
+                                    BorderBrush="Gray"
+                                    Margin="10,3"/>
+                                <TextBlock x:Name="Txt_BrowseDirPath"
+                                           VerticalAlignment="Center">
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <!-- / Separator -->
+                        <ListView x:Name="Lvw_BrowseResults" 
+                                  Grid.Row="1"
+                                  BorderThickness="0">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
                 </TabItem>
                 <TabItem x:Name="Tbi_DWSearch" Header="Search">
                     <Grid>
