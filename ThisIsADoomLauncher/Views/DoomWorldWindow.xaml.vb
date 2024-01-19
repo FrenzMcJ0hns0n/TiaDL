@@ -286,9 +286,13 @@ Namespace Views
         ''' <param name="id"></param>
         ''' <returns></returns>
         Public Function CheckIsInstalledLevel(id As Long) As Boolean
-            Return _installedLevels.Exists(Function(lvl)
-                                               Return lvl.Id = id
-                                           End Function)
+            If _installedLevels IsNot Nothing Then
+                Return _installedLevels.Exists(Function(lvl)
+                                                   Return lvl.Id = id
+                                               End Function)
+            End If
+
+            Return False
         End Function
     End Class
 End Namespace

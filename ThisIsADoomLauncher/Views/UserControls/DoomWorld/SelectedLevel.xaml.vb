@@ -25,8 +25,7 @@ Namespace Views.UserControls.DoomWorld
             _currentLevel = CType(Me.DataContext, Level)
 
             If _doomWorldWindow.CheckIsInstalledLevel(_currentLevel.Id) Then
-                Img_DownloadLevel.Source = New BitmapImage(New Uri(DOOMWORLD_INSTALLED_IMAGE, UriKind.Relative))
-                RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
+                Me.RefreshUIInstalledLevel()
             End If
         End Sub
 
@@ -40,9 +39,6 @@ Namespace Views.UserControls.DoomWorld
         End Sub
 
         Private Sub Img_DownloadLevel_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Img_DownloadLevel.MouseDown
-            'Dim imageControl As Image = CType(sender, Image)
-            'Dim levl As Level = CType(imageControl.DataContext, Level)
-
             Me.DownloadLevel(_currentLevel)
         End Sub
 
@@ -81,11 +77,16 @@ Namespace Views.UserControls.DoomWorld
 
             If result Then
                 Txt_LevelDownload.Text = "Success!"
-                Img_DownloadLevel.Source = New BitmapImage(New Uri(DOOMWORLD_INSTALLED_IMAGE, UriKind.Relative))
+                Me.RefreshUIInstalledLevel()
             Else
                 Pgb_LevelDownload.Foreground = Brushes.Red
                 Txt_LevelDownload.Text = "Level download failed"
             End If
+        End Sub
+
+        Private Sub RefreshUIInstalledLevel()
+            Img_DownloadLevel.Source = New BitmapImage(New Uri(DOOMWORLD_INSTALLED_IMAGE, UriKind.Relative))
+            RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
         End Sub
     End Class
 End Namespace
