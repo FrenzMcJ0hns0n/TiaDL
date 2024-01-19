@@ -78,9 +78,6 @@ Namespace Views
                 Return
             End If
 
-            'Sorting
-            '_installedLevels = SortLevels(_installedLevels, _selectedSortingMode)
-
             Lvw_InstalledResults.ItemsSource = _installedLevels
         End Sub
 
@@ -138,6 +135,21 @@ Namespace Views
             End Select
         End Function
 
+        Private Function SortInstalledLevels(dwContents As IEnumerable(Of InstalledLevel), selectedSortingMode As String) As IEnumerable(Of Object)
+            Select Case selectedSortingMode
+                Case "Title"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.Title
+                                              End Function)
+                Case "Filename"
+                    Return dwContents.OrderBy(Function(levl)
+                                                  Return levl.FileName
+                                              End Function)
+                Case Else
+                    Return dwContents
+            End Select
+        End Function
+
         Private Sub btnParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles Btn_ParentFolder.Click
             Me.BackToParentDirectory()
         End Sub
@@ -172,7 +184,7 @@ Namespace Views
             End If
 
             If Lvw_InstalledResults IsNot Nothing AndAlso Lvw_InstalledResults.Items IsNot Nothing AndAlso Lvw_InstalledResults.Items.Count <> 0 Then
-                Lvw_InstalledResults.ItemsSource = SortLevels(Lvw_InstalledResults.Items.OfType(Of Level), _selectedSortingMode)
+                Lvw_InstalledResults.ItemsSource = SortInstalledLevels(Lvw_InstalledResults.Items.OfType(Of InstalledLevel), _selectedSortingMode)
             End If
         End Sub
 
