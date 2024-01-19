@@ -37,12 +37,12 @@
                     <StackPanel Orientation="Horizontal">
 
                         <Image x:Name="Img_DownloadLevel" Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
-                               Margin="10,0"
-                               Height="25"
-                               Width="25">
+                               Margin="15,0"
+                               Height="35"
+                               Width="35">
                         </Image>
 
-                        <StackPanel Margin="20,0">
+                        <StackPanel Margin="10,0">
                             <TextBlock>
                         <Run Text="Filename :" Style="{StaticResource ResourceKey=RunBold}"/>
                         <Run Text="{Binding Filename}"/>
