@@ -9,7 +9,7 @@ Namespace Views
     Public Class DoomWorldWindow
 
         Private _doomworldService As New DoomWorldService()
-        Private _resourcePath As String
+        Private _resourcePath As String = "levels/"
         Private _selectedSortingMode As String
         Private _installedLevels As List(Of InstalledLevel)
 

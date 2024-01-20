@@ -103,8 +103,9 @@
                                 <Border BorderThickness="0.2" 
                                     BorderBrush="Gray"
                                     Margin="10,3"/>
-                                <TextBlock x:Name="Txt_BrowseDirPath"
-                                           VerticalAlignment="Center">
+                                <TextBlock VerticalAlignment="Center">
+                                    <Run Text="Dir: "/>
+                                    <Run x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
                                 </TextBlock>
                             </StackPanel>
                         </Border>
