@@ -5,8 +5,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 Namespace Views.UserControls.DoomWorld
     Public Class SelectedLevel
 
-        Private Const DOOMWORLD_INSTALLED_IMAGE As String = "/Resources/Images/doomworld_installed.png"
-
         Private _doomWorldService As DoomWorldService
         Private _doomWorldWindow As Views.DoomWorldWindow
         Private _currentLevel As Level
@@ -21,21 +19,17 @@ Namespace Views.UserControls.DoomWorld
 
         End Sub
 
+        ''' <summary>
+        ''' Used to get DataContext (Level) when the view has finished loading.
+        ''' </summary>
+        ''' <param name="sender"></param>
+        ''' <param name="e"></param>
         Private Sub Usc_SelectedLevel_Loaded(sender As Object, e As RoutedEventArgs)
             _currentLevel = CType(Me.DataContext, Level)
 
             If _doomWorldWindow.CheckIsInstalledLevel(_currentLevel.Id) Then
-                Me.RefreshUIInstalledLevel()
+                Me.UpdateUIInstalledLevel()
             End If
-        End Sub
-
-        Private Sub InitLevel()
-            Try
-
-
-            Catch ex As Exception
-                Return
-            End Try
         End Sub
 
         Private Sub Img_DownloadLevel_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Img_DownloadLevel.MouseDown
@@ -77,15 +71,15 @@ Namespace Views.UserControls.DoomWorld
 
             If result Then
                 Txt_LevelDownload.Text = "Success!"
-                Me.RefreshUIInstalledLevel()
+                Me.UpdateUIInstalledLevel()
             Else
                 Pgb_LevelDownload.Foreground = Brushes.Red
                 Txt_LevelDownload.Text = "Level download failed"
             End If
         End Sub
 
-        Private Sub RefreshUIInstalledLevel()
-            Img_DownloadLevel.Source = New BitmapImage(New Uri(DOOMWORLD_INSTALLED_IMAGE, UriKind.Relative))
+        Private Sub UpdateUIInstalledLevel()
+            Img_DownloadLevel.Source = New BitmapImage(New Uri("/Resources/Images/doomworld_installed.png", UriKind.Relative))
             RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
         End Sub
     End Class
