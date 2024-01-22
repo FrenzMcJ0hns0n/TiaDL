@@ -584,7 +584,7 @@
 
                 <StackPanel Grid.Row="2" VerticalAlignment="Center">
                     <Button Content="Root directory" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionOpenRootDir_Click"/>
-                    <Button Content="DoomWorld" IsEnabled="False" Style="{StaticResource Btn_OptionsTemp}"/>
+                    <Button Content="DoomWorld" IsEnabled="True" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionDoomWorld_Click"/>
                 </StackPanel>
 
                 <StackPanel Grid.Row="6" VerticalAlignment="Center">

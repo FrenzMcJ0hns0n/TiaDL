@@ -12,62 +12,71 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 Namespace Helpers.DoomWorld
     Public Class DoomWorldService
 
-        Private Const XPATH_URL_NODES As String = "/html/body/table/tr[2]/td/table/tr/td[2]/table/tr/td/ul[1]/li" 'TO DELETE, RIGHT?
         Private Const HTTP As String = "HTTP"
+        Private Const DOOMWORLD_REGISTRY_FILE As String = "doomworld_registry.json"
+        '↓ TODO : Get from a user file
+        Private Const DOOMWORLD_MIRRORS_FILE As String = "doomworld_mirrors.json"
 
         ''' <summary>
-        ''' Gets DoomWorld Directories or Levels. This method could replace both GetDirectories and GetLevel. (needs more testing).
+        ''' Gets DoomWorld Directories or Levels. 
+        ''' <br> This method can replace both GetDirectories and GetLevel. (but returns not all Level properties).</br>
         ''' </summary>
         ''' <param name="resourcePath">The resource URI path. (i.e. doom2/a-c/ for folders, or doom2/a-c/av for Level Alien Vendetta)</param>
-        ''' <returns>A list of Directories or Levels.</returns>
-        Public Async Function GetContent(Optional resourcePath As String = "") As Task(Of List(Of Object))
+        ''' <returns>A list of Object (Directories or Levels).</returns>
+        Public Async Function GetContent(Optional resourcePath As String = "levels/") As Task(Of List(Of Object))
 
             Dim returnItems As New List(Of Object)
 
-            Dim uriPath As String = String.Concat("api.php?action=getcontents&name=levels/", resourcePath)
-            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
-            Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-            If response.IsSuccessStatusCode Then
+            Try
+                Dim uriPath As String = String.Concat("api.php?action=getcontents&name=", resourcePath)
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
 
-                Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
+                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
-                If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                    Throw New ArgumentException($"Invalid path: {resourcePath} is not correct")
+                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                        Throw New ArgumentException($"Invalid path: {resourcePath} is not correct")
+                    End If
+
+                    If jsonObject.SelectToken("content.file") Is Nothing And jsonObject.SelectToken("dir") Is Nothing Then
+                        Throw New ArgumentException($"No results")
+                    End If
+
+                    jsonObject.SelectToken("content.dir")?.ToList().ForEach(
+                        Sub(jFolder) returnItems.Add(CreateFolderFromJToken(jFolder))
+                    )
+
+                    jsonObject.SelectToken("content.file")?.ToList().ForEach(
+                        Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
+                    )
                 End If
 
-                If jsonObject.SelectToken("content.file") Is Nothing And jsonObject.SelectToken("dir") Is Nothing Then
-                    Throw New ArgumentException($"No results")
-                End If
 
-                jsonObject.SelectToken("content.dir")?.ToList().ForEach(
-                    Sub(jFolder) returnItems.Add(CreateFolderFromJToken(jFolder))
-                )
-
-                jsonObject.SelectToken("content.file")?.ToList().ForEach(
-                    Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
-                )
-            End If
-
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {resourcePath}")
+            End Try
             Return returnItems
         End Function
 
         ''' <summary>
         ''' Get DoomWorld levels directories.
         ''' </summary>
-        ''' <param name="parentDirectory"> Parent directory. If empty, get root levels directories.</param>
+        ''' <param name="currentDirectory"> Current directory. If empty, get root levels directories.</param>
         ''' <returns></returns>
-        Public Async Function GetDirectories(Optional parentDirectory As String = "") As Task(Of List(Of String))
+        Public Async Function GetDirectories(Optional currentDirectory As String = "") As Task(Of List(Of String))
             Dim directories As New List(Of String)
 
             Try
                 Dim uriPath As String = "api.php?action=getdirs&name=levels/"
-                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, parentDirectory, "&out=json"))
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, currentDirectory, "&out=json"))
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
                 If response.IsSuccessStatusCode Then
                     Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
                     If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                        Throw New ArgumentException($"Parent directory : {parentDirectory} is not correct")
+                        Throw New ArgumentException($"Parent directory : {currentDirectory} is not correct")
                     End If
 
                     jsonObject.SelectToken("content.dir").ToList().ForEach(
@@ -78,10 +87,48 @@ Namespace Helpers.DoomWorld
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {parentDirectory}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentDirectory}")
             End Try
 
             Return directories
+        End Function
+
+        ''' <summary>
+        ''' Get parent directory.
+        ''' </summary>
+        ''' <param name="currentDirectory"> Current directory.</param>
+        ''' <returns></returns>
+        Public Async Function GetParentDirectory(currentDirectory As String) As Task(Of Folder)
+            Dim directory As Folder = Nothing
+
+            Try
+                Dim uriPath As String = "api.php?action=getparentdir&name="
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, currentDirectory, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
+                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
+
+                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                        Throw New ArgumentException($"Current directory : {currentDirectory} is not correct")
+                    End If
+
+                    Dim parentDirToken As JToken = jsonObject.SelectToken("content")
+
+                    directory = New Folder With {
+                        .Id = parentDirToken.Value(Of Long)("id"),
+                        .Name = parentDirToken.Value(Of String)("name")
+                    }
+
+                End If
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentDirectory}")
+
+                directory = Nothing
+            End Try
+
+            Return directory
         End Function
 
         ''' <summary>
@@ -116,26 +163,31 @@ Namespace Helpers.DoomWorld
         Public Async Function SearchLevels(searchText As String) As Task(Of List(Of Models.Level))
             Dim levels As List(Of Models.Level)
 
-            ' TODO : edit TYPE and SORT filters.
-            Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=filename&sort=date")
-            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
-            Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-            If response.IsSuccessStatusCode Then
-                Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
+            Try
+                ' TODO : edit TYPE and SORT filters.
+                Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=filename&sort=date")
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
+                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
-                If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                    Throw New ArgumentException($"Search text : {searchText} returned no results")
+                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                        Throw New ArgumentException($"Search text : {searchText} returned no results")
+                    End If
+
+                    levels = New List(Of Models.Level)
+
+                    jsonObject.SelectToken("content.file").ToList().ForEach(
+                        Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
+                    )
+
+                    Return levels
                 End If
 
-                levels = New List(Of Models.Level)
-
-                jsonObject.SelectToken("content.files").ToList().ForEach(
-                    Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
-                )
-
-                Return levels
-            End If
-
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {searchText}")
+            End Try
             Return Nothing
         End Function
 
@@ -147,7 +199,7 @@ Namespace Helpers.DoomWorld
         Public Function GetMirror(name As String) As String
             Dim mirror As String
             Try
-                Dim jsonMirrors As JObject = JObject.Parse(File.ReadAllText("doomworld_mirrors.json"))
+                Dim jsonMirrors As JObject = JObject.Parse(File.ReadAllText(Path.Combine(IOHelper.GetDirectoryPath("DoomWorld"), DOOMWORLD_MIRRORS_FILE)))
 
                 Dim mirrorToken As JToken = jsonMirrors.SelectToken($"{HTTP}.{name}")
 
@@ -197,12 +249,13 @@ Namespace Helpers.DoomWorld
         ''' Downloads a .zip Level.
         ''' </summary>
         ''' <param name="levelUrl">The level download url.</param>
-        ''' <returns>A .zip level archive.</returns>
-        Public Async Function DownloadLevel(levelUrl As String) As Task(Of String)
+        ''' <returns>The .zip level archive path</returns>
+        Public Async Function DownloadLevelZipArchive(levelUrl As String) As Task(Of String)
             '
             ' Add level in a Doomworld registry file
             ' it will be easier to display Name, show Install folder, (open folder ?), Uninstall...
             ' 
+            Dim zipArchivePath As String
             Try
                 Dim requestUri As New Uri(levelUrl)
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
@@ -210,52 +263,50 @@ Namespace Helpers.DoomWorld
                 Dim levelFileName As String = requestUri.Segments.Last()
                 Using fileStream As New FileStream(levelFileName, FileMode.OpenOrCreate)
                     Await response.Content.CopyToAsync(fileStream)
+                    zipArchivePath = fileStream.Name
                 End Using
 
-                Return levelFileName
-
+                Return zipArchivePath
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {levelUrl}")
 
-                Return Nothing
+                zipArchivePath = Nothing
             End Try
+
+            Return zipArchivePath
         End Function
 
         ''' <summary>
         ''' Extracts Level's files from zip archive in a folder.
         ''' </summary>
-        ''' <param name="fileNameZip">filename.zip</param>
-        ''' <returns>1 if folder is created; 0 if folder already exists; -1 if error.</returns>
-        Public Async Function ExtractLevelFromZip(directoryPath As String, fileNameZip As String) As Task(Of Integer)
-            Dim result As Integer = 0
-
+        ''' <param name="fileZipPath">path/filename.zip</param>
+        ''' <returns>DirectoryInfo if exists, else Nothing</returns>
+        Public Async Function ExtractLevelFromZip(fileZipPath As String) As Task(Of DirectoryInfo)
             Try
-                Dim levelZipUri As New Uri(String.Concat(directoryPath, "/", fileNameZip))
-                If Not File.Exists(levelZipUri.AbsolutePath) Then
+
+                If Not File.Exists(fileZipPath) Then
                     Throw New FileNotFoundException
                 End If
 
-                Dim fileName As String = fileNameZip.Split("."c).First()
-                Dim fileNameFolderPathAfterExtraction As New Uri(String.Concat(directoryPath, "/", fileName))
-                If Directory.Exists(fileNameFolderPathAfterExtraction.AbsolutePath) Then
-                    Return result
+                Dim extractDirectory As String = IOHelper.GetFileInfo_RemoveExtension(fileZipPath)
+
+                If Directory.Exists(extractDirectory) Then
+                    Directory.Delete(extractDirectory)
                 End If
 
                 Await Task.Run(
-                    Sub() ZipFile.ExtractToDirectory(levelZipUri.AbsolutePath, fileNameFolderPathAfterExtraction.AbsolutePath)
-                )
-                If Directory.Exists(fileNameFolderPathAfterExtraction.AbsolutePath) Then
-                    result = 1
+                                Sub() ZipFile.ExtractToDirectory(fileZipPath, extractDirectory)
+                              )
+                If Directory.Exists(extractDirectory) Then
+                    Return New DirectoryInfo(extractDirectory)
                 End If
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {directoryPath}, {fileNameZip}")
-
-                result = -1
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {fileZipPath}")
             End Try
 
-            Return result
+            Return Nothing
         End Function
 
         ''' <summary>
@@ -263,11 +314,8 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="directoryName">Destination directory.</param>
         ''' <returns></returns>
-        Public Async Function MoveFilesIntoDirectories(directoryName As String) As Task(Of Integer)
-            ' Probably move this method to another file : 
-            ' this file is DoomWorld only (read data, donwload DW mods).
-            ' Sorting and moving files can be generically done for any mod.
-            Dim result As Integer
+        Public Async Function MoveFilesIntoDirectories(directoryName As String) As Task(Of List(Of String))
+            Dim movedFiles As New List(Of String)
 
             Try
                 If Not Directory.Exists(directoryName) Then
@@ -279,41 +327,40 @@ Namespace Helpers.DoomWorld
                 Await Task.Run(
                     Sub()
                         For Each file As String In files
-                            MoveToFolder(file)
+                            movedFiles.Add(MoveToFolder(file))
                         Next
-                        result = files.Count
                     End Sub
                 )
 
             Catch ex As Exception
-                result = -1
+                movedFiles = Nothing
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {directoryName}")
             End Try
 
-            Return result
+            Return movedFiles
         End Function
 
-        Private Sub MoveToFolder(currentFile As String)
-
-            ' !! TiaDL integration : replace method PROVISOIRE_GetFolder("*") by GetDirectoryPath("*")
-
+        Private Function MoveToFolder(currentFile As String) As String
             Dim currentFileInfo As New FileInfo(currentFile)
             Dim destinationDirectory As DirectoryInfo
-            If Constants.VALID_EXTENSIONS_MAPS.Contains(currentFileInfo.Extension) Then
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Maps"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
-            ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(currentFileInfo.Extension) Then
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Misc"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
-            ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(currentFileInfo.Extension) Then
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Mods"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+            Dim fileExtension As String = currentFileInfo.Extension.ToLower()
+
+            If Constants.VALID_EXTENSIONS_MAPS.Contains(fileExtension) Then
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Maps"), currentFileInfo.Directory.Name))
+            ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(fileExtension) Then
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Misc"), currentFileInfo.Directory.Name))
+            ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(fileExtension) Then
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Mods"), currentFileInfo.Directory.Name))
             Else
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(PROVISOIRE_GetFolder("Pict"), currentFileInfo.Directory.Name))
-                File.Move(currentFile, Path.Combine(destinationDirectory.FullName, currentFileInfo.Name))
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Pict"), currentFileInfo.Directory.Name))
             End If
-        End Sub
+
+            Dim destFileName As String = Path.Combine(destinationDirectory.FullName, currentFileInfo.Name)
+            File.Move(currentFile, destFileName)
+
+            Return destFileName
+        End Function
 
         ''' <summary>
         ''' Creates a Level object from a JToken level
@@ -321,7 +368,7 @@ Namespace Helpers.DoomWorld
         ''' <param name="jLevel">JToken level.</param>
         ''' <returns>A Level.</returns>
         Private Function CreateLevelFromJToken(jLevel As JToken) As Models.Level
-            Return New Models.Level With {
+            Dim level As New Models.Level With {
                 .Id = jLevel.Value(Of Integer)("id"),
                 .Title = jLevel.Value(Of String)("title"),
                 .Dir = jLevel.Value(Of String)("dir"),
@@ -332,11 +379,18 @@ Namespace Helpers.DoomWorld
                 .Author = jLevel.Value(Of String)("author"),
                 .Email = jLevel.Value(Of String)("email"),
                 .Description = jLevel.Value(Of String)("description"),
+                .Bugs = jLevel.Value(Of String)("bugs"),
+                .Credits = jLevel.Value(Of String)("credits"),
+                .Base = jLevel.Value(Of String)("base"),
+                .Buildtime = jLevel.Value(Of String)("buildtime"),
+                .Editors = jLevel.Value(Of String)("editors"),
                 .Rating = jLevel.Value(Of Decimal)("rating"),
                 .Votes = jLevel.Value(Of Integer)("votes"),
                 .Url = jLevel.Value(Of String)("url"),
                 .Idgamesurl = jLevel.Value(Of String)("idgamesurl")
             }
+
+            Return level
         End Function
 
         ''' <summary>
@@ -351,23 +405,16 @@ Namespace Helpers.DoomWorld
             }
         End Function
 
-        ''' <summary>
-        ''' Temporary method to [create+]get destination folder for Level items.
-        ''' </summary>
-        ''' <param name="folder">Destination folder name.</param>
-        ''' <returns>Folder's path.</returns>
-        Private Function PROVISOIRE_GetFolder(folder As String) As String
-
-            Dim folderPath As String = Path.Combine("test", folder)
-            If Not (Directory.Exists(folderPath)) Then
-                Directory.CreateDirectory(folderPath)
-            End If
-
-            Return folderPath
-        End Function
-
         Public Function GetLevelDownloadUrl(level As Models.Level) As String
-            Return String.Concat(level.Dir, level.Filename)
+            Try
+                Return String.Concat(level.Dir, level.Filename)
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {level}")
+
+                Return String.Empty
+            End Try
+
         End Function
 
         Private Function FormatLevelDLUri(idgamesurl As String) As String
@@ -381,5 +428,162 @@ Namespace Helpers.DoomWorld
             End Try
         End Function
 
+        ''' <summary>
+        ''' Full process of downloading Level.
+        ''' </summary>
+        ''' <param name="level"></param>
+        ''' <returns>True if no error, false if something went wrong</returns>
+        Public Async Function DownloadLevelFull(level As Models.Level) As Task(Of Boolean)
+            Try
+                ' Get mirror -> TODO : get from /DoomWorld/doomworld_mirrors.json file or whatever location
+                Dim mirror As String = Me.GetMirror("germany")
+                ' Get level download url
+                Dim dlUrl As String = String.Concat(mirror, Me.GetLevelDownloadUrl(level))
+                ' Get level zip
+                Dim zipArchive As String = Await Me.DownloadLevelZipArchive(dlUrl)
+                ' extract level
+                Dim extractedDirInfo As DirectoryInfo = Await Me.ExtractLevelFromZip(zipArchive)
+                ' place files in corresponding folders
+                Dim resultMovedFiles As List(Of String) = Await Me.MoveFilesIntoDirectories(extractedDirInfo.FullName)
+
+                If resultMovedFiles IsNot Nothing Or resultMovedFiles?.Count > 0 Then
+                    ' TODO : create / write to json registry file
+                    Me.WriteLevelIntoRegistry(level, extractedDirInfo.Name)
+
+                    'clean downloaded archive + extracted folder
+                    Me.CleanUpDownloadedContent(zipArchive, extractedDirInfo.FullName)
+
+                    Return True
+                End If
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Level: {level}")
+            End Try
+            'else ROLLBACK and return false
+            Return False
+        End Function
+
+        ''' <summary>
+        ''' 
+        ''' </summary>
+        ''' <param name="registryFilePath"></param>
+        ''' <returns>List of levels if any. Nothing if not.</returns>
+        Public Function GetInstalledLevels(registryFilePath As String) As List(Of Models.InstalledLevel)
+            Dim installedLevels As List(Of Models.InstalledLevel)
+            Try
+                Dim registryContent As String = IOHelper.GetJsonData(registryFilePath)
+                installedLevels = JsonConvert.DeserializeObject(Of List(Of Models.InstalledLevel))(registryContent)
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {registryFilePath}")
+
+                installedLevels = Nothing
+            End Try
+
+            Return installedLevels
+        End Function
+
+        ''' <summary>
+        ''' create / write to json registry file
+        ''' <br>for better finding/removing installed levels</br>
+        ''' </summary>
+        ''' <param name="level"></param>
+        ''' <param name="directoryName"></param>
+        ''' <returns>0 if success, -1 if error</returns>
+        Public Function WriteLevelIntoRegistry(level As Models.Level, directoryName As String) As Integer
+            Try
+                Dim registryFilePath As String = Path.Combine(IOHelper.GetDirectoryPath("DoomWorld"), DOOMWORLD_REGISTRY_FILE)
+
+                Dim installedLevels As List(Of Models.InstalledLevel) = Me.GetInstalledLevels(registryFilePath)
+
+                If installedLevels Is Nothing Then
+                    installedLevels = New List(Of InstalledLevel)
+                End If
+
+                Dim instLevel As New Models.InstalledLevel With
+                {
+                    .Title = level.Title,
+                    .Id = level.Id,
+                    .FileName = level.Filename,
+                    .DirectoryName = directoryName,
+                    .InstallDate = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")
+                }
+                installedLevels.Add(instLevel)
+
+                Me.SaveRegistry(installedLevels, registryFilePath)
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Level: {level}, DirectoryPath: {directoryName}")
+
+                Return -1
+            End Try
+
+            Return 0
+        End Function
+
+
+        ''' <summary>
+        ''' Serialize installed levels list and save it into the registry file.
+        ''' </summary>
+        ''' <param name="installedLevels"></param>
+        ''' <param name="registryFilePath"></param>
+        Private Sub SaveRegistry(installedLevels As List(Of InstalledLevel), registryFilePath As String)
+            Dim installedLevelsJson As String = JsonConvert.SerializeObject(installedLevels)
+            IOHelper.PersistJsonData(registryFilePath, installedLevelsJson)
+        End Sub
+
+        ''' <summary>
+        ''' Removes downloaded zip archive and extracted folder from the archive.
+        ''' </summary>
+        ''' <param name="zipArchive"></param>
+        ''' <param name="extractedDir"></param>
+        Private Sub CleanUpDownloadedContent(zipArchive As String, extractedDir As String)
+            File.Delete(zipArchive)
+            Directory.Delete(extractedDir, True)
+        End Sub
+
+        ''' <summary>
+        ''' Deletes specified level from the computer and from the registry.
+        ''' </summary>
+        ''' <param name="level"></param>
+        Public Sub DeleteLevel(level As Models.Level)
+            Dim deletedDirs As Integer = 0
+            Try
+                Dim registryFilePath As String = Path.Combine(IOHelper.GetDirectoryPath("DoomWorld"), DOOMWORLD_REGISTRY_FILE)
+
+                Dim installedLevels As List(Of InstalledLevel) = Me.GetInstalledLevels(registryFilePath)
+                Dim levelToDelete As Models.InstalledLevel = installedLevels.Find(Function(instLvl)
+                                                                                      Return instLvl.Id = level.Id
+                                                                                  End Function)
+                Dim levelDirName As String = levelToDelete.DirectoryName
+
+                ' delete Level folder/files
+                Me.DeleteLevelDirectories(levelDirName)
+
+                ' delete Level from registry
+                installedLevels.Remove(levelToDelete)
+                Me.SaveRegistry(installedLevels, registryFilePath)
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {level}")
+            End Try
+        End Sub
+
+        Private Function DeleteLevelDirectories(levelDirName As String) As Integer
+            Dim nbDeletedDirs As Integer = 0
+            Dim dirArray As String() = {"Maps", "Misc", "Mods", "Pict"}
+
+            For index As Integer = 0 To dirArray.Count()
+                Dim subPath As String = Path.Combine(GetDirectoryPath(dirArray(index)), levelDirName)
+                If Directory.Exists(subPath) Then
+                    Directory.Delete(subPath, True)
+                    nbDeletedDirs += 1
+                End If
+            Next
+            Return nbDeletedDirs
+        End Function
     End Class
 End Namespace
