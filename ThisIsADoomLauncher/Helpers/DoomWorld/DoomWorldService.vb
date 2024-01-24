@@ -585,5 +585,15 @@ Namespace Helpers.DoomWorld
             Next
             Return nbDeletedDirs
         End Function
+
+        Public Sub OpenInBrowser(currentLevel As Level)
+            Try
+                Process.Start(currentLevel.Url)
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentLevel}")
+            End Try
+        End Sub
     End Class
 End Namespace

@@ -82,5 +82,9 @@ Namespace Views.UserControls.DoomWorld
             Img_DownloadLevel.Source = New BitmapImage(New Uri("/Resources/Images/doomworld_installed.png", UriKind.Relative))
             RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
         End Sub
+
+        Private Sub Img_OpenBrowser_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Img_OpenBrowser.MouseDown
+            _doomWorldService.OpenInBrowser(_currentLevel)
+        End Sub
     End Class
 End Namespace

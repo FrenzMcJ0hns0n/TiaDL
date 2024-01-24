@@ -330,5 +330,8 @@
   <ItemGroup>
     <Resource Include="Resources\Images\doomworld_installed.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\open_external.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

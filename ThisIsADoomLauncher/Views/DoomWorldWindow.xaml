@@ -51,15 +51,17 @@
             <!-- End DoomWorld header image -->
 
             <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Stretch"
                         Grid.Row="1">
 
                 <TextBlock Text="Sort by : "
+                           Margin="7,5"
                            VerticalAlignment="Center"/>
                 <ComboBox x:Name="Cbb_Sorting"
                           HorizontalAlignment="Right" 
                           VerticalContentAlignment="Center" 
-                          Margin="1,10" 
+                          BorderThickness="0.7"
+                          Margin="0,15" 
                           Padding="10,0" 
                           SelectedIndex="0">
                     <ComboBoxItem Content="Title"/>
