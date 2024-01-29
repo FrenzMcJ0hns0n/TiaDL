@@ -6,7 +6,9 @@
              xmlns:local="clr-namespace:ThisIsADoomLauncher">
     <ContentControl Margin="10">
         <StackPanel>
-            <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+            <TextBlock Text="{Binding Title}" 
+                       FontWeight="Bold" 
+                       FontSize="16"/>
             <TextBlock Text="{Binding Filename}"/>
             <Rectangle Height="10" Visibility="Hidden"/>
             <TextBlock Text="{Binding ReleaseDate}"/>

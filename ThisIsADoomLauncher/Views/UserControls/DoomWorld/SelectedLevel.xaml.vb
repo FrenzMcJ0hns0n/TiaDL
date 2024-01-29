@@ -80,6 +80,7 @@ Namespace Views.UserControls.DoomWorld
 
         Private Sub UpdateUIInstalledLevel()
             Img_DownloadLevel.Source = New BitmapImage(New Uri("/Resources/Images/doomworld_installed.png", UriKind.Relative))
+            Txt_DownloadLevel.Text = "Downloaded"
             RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
         End Sub
 

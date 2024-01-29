@@ -10,11 +10,11 @@
 
             <converters:LevelSizeConverter x:Key="LevelSizeConverter"/>
 
-            <Style TargetType="Run" x:Key="RunBold">
+            <Style TargetType="Run" x:Key="RunBoldStyle">
                 <Setter Property="FontWeight" Value="Bold"/>
             </Style>
 
-            <Style TargetType="TextBlock" x:Key="TextAction">
+            <Style TargetType="TextBlock" x:Key="TextActionStyle">
                 <Setter Property="FontSize" Value="14"/>
                 <Setter Property="Margin" Value="5"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
@@ -24,13 +24,18 @@
                 <Setter Property="Margin" Value="8"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
             </Style>
+
+            <Style TargetType="Image" x:Key="ImgActionStyle">
+                <Setter Property="Height" Value="35"/>
+                <Setter Property="Width" Value="35"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <!-- Level selected : Level infos -->
     <ScrollViewer>
         <StackPanel Margin="20">
             <TextBlock>
-                <Run Text="Dir:" Style="{StaticResource ResourceKey=RunBold}"/>
+                <Run Text="Dir:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
                 <Run Text="{Binding Dir}"/>
             </TextBlock>
             <TextBlock Text="{Binding Title}" 
@@ -43,11 +48,11 @@
                 <StackPanel HorizontalAlignment="Center">
                     <StackPanel HorizontalAlignment="Center">
                         <TextBlock HorizontalAlignment="Center">
-                        <Run Text="Filename :" Style="{StaticResource ResourceKey=RunBold}"/>
+                        <Run Text="Filename :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
                         <Run Text="{Binding Filename}"/>
                         </TextBlock>
                         <TextBlock HorizontalAlignment="Center">
-                        <Run Text="Size :" Style="{StaticResource ResourceKey=RunBold}"/>
+                        <Run Text="Size :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
                         <Run Text="{Binding Size, Converter={StaticResource ResourceKey=LevelSizeConverter}}"/>
                         </TextBlock>
                     </StackPanel>
@@ -55,11 +60,15 @@
                     <!-- Download / Delete -->
                     <StackPanel Orientation="Horizontal" Margin="0,15">
                         <StackPanel Orientation="Horizontal">
-                            <Image x:Name="Img_DownloadLevel" Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
-                                   Height="40"
-                                   Width="40">
+                            <Image x:Name="Img_DownloadLevel" 
+                                   Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
+                                   Height="30"
+                                   Width="30">
                             </Image>
-                            <TextBlock Text="Download" Style="{StaticResource ResourceKey=TextAction}"/>
+                            <TextBlock x:Name="Txt_DownloadLevel" 
+                                       Text="Download" 
+                                       Style="{StaticResource ResourceKey=TextActionStyle}"/>
+
                         </StackPanel>
 
                         <!-- Separator -->
@@ -68,10 +77,10 @@
                         <!-- Open in browser -->
                         <StackPanel Orientation="Horizontal">
                             <Image x:Name="Img_OpenBrowser" Source="pack://application:,,,/Resources/Images/open_external.png"
-                                   Height="40"
-                                   Width="40">
+                                   Height="30"
+                                   Width="30">
                             </Image>
-                            <TextBlock Text="Open in browser" Style="{StaticResource ResourceKey=TextAction}"/>
+                            <TextBlock Text="Open in browser" Style="{StaticResource ResourceKey=TextActionStyle}"/>
                         </StackPanel>
 
                     </StackPanel>
@@ -86,47 +95,47 @@
             </Border>
 
             <TextBlock>
-            <Run Text="Release date:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Release date:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding ReleaseDate}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Author:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Author:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Author}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Description:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Description:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Description}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Credits:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Credits:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Credits}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Base:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Base:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Base}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Build time:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Build time:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Buildtime}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Editors:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Editors:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Editors}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Idgamesurl:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Idgamesurl:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Idgamesurl}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Bugs:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Bugs:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Bugs}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Ratings:" Style="{StaticResource ResourceKey=RunBold}"/>
-            <Run Text="{Binding Ratings}"/>
+            <Run Text="Ratings:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Rating}"/>
             </TextBlock>
             <TextBlock>
-            <Run Text="Text file:" Style="{StaticResource ResourceKey=RunBold}"/>
+            <Run Text="Text file:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Textfile}"/>
             </TextBlock>
         </StackPanel>

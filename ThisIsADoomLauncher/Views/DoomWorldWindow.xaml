@@ -90,28 +90,26 @@
                     </StackPanel>
                 </StackPanel>
 
-                <TabControl Grid.Row="2" BorderThickness="0">
-                    <TabItem x:Name="Tbi_DWBrowse" Header="Browse">
+                <TabControl Grid.Row="2">
+                    <TabItem x:Name="Tbi_DWBrowse" 
+                             Header="Browse">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <Border BorderBrush="#888888" 
-                                Grid.Row="0" 
-                                BorderThickness="0,0.5">
+                                    Grid.Row="0"
+                                    BorderThickness="0,0,0,0.7">
                                 <StackPanel Orientation="Horizontal">
                                     <!-- Up arrow -->
                                     <Button Content="↑"
-                                    x:Name="Btn_ParentFolder"
-                                    Margin="10,10,0,10"
-                                    Padding="10,0"/>
+                                            BorderThickness="0.7"
+                                            x:Name="Btn_ParentFolder"
+                                            Margin="10"
+                                            Padding="10,3"/>
                                     <!-- / Up arrow -->
 
-                                    <!-- Separator -->
-                                    <Border BorderThickness="0.2" 
-                                    BorderBrush="Gray"
-                                    Margin="10,3"/>
                                     <TextBlock VerticalAlignment="Center">
                                     <Run Text="Dir: "/>
                                     <Run x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
@@ -120,8 +118,8 @@
                             </Border>
                             <!-- / Separator -->
                             <ListView x:Name="Lvw_BrowseResults" 
-                                  Grid.Row="1"
-                                  BorderThickness="0">
+                                      Grid.Row="1"
+                                      BorderThickness="0">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
