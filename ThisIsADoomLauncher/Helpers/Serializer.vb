@@ -52,7 +52,8 @@ Friend Module Serializer
     Public Function LoadUserMods(jsonString As String) As List(Of ModPreset)
         Dim userMods As New List(Of ModPreset)
         Try
-            userMods = JsonConvert.DeserializeObject(Of List(Of ModPreset))(jsonString)
+            Dim newMods As List(Of ModPreset) = JsonConvert.DeserializeObject(Of List(Of ModPreset))(jsonString)
+            If newMods IsNot Nothing Then newMods.ForEach(Sub(m) userMods.Add(m))
         Catch ex As Exception
             Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
             WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}")
