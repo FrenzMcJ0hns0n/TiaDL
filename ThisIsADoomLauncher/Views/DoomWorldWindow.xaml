@@ -155,16 +155,16 @@
                     </TabItem>
                     <TabItem x:Name="Tbi_DWInstalled" Header="Installed">
                         <ListView x:Name="Lvw_InstalledResults"
-                              BorderThickness="0">
+                                  BorderThickness="0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Margin="10">
+                                    <StackPanel Grid.Column="0" Margin="10">
                                         <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
                                         <TextBlock Text="{Binding FileName}"/>
                                         <Rectangle Height="10" Visibility="Hidden"/>
                                         <TextBlock>
-                                        <Run Text="Installed on :"/>
-                                        <Run Text="{Binding InstallDate}"/>
+                                            <Run Text="Installed on :"/>
+                                            <Run Text="{Binding InstallDate}"/>
                                         </TextBlock>
                                     </StackPanel>
                                 </DataTemplate>

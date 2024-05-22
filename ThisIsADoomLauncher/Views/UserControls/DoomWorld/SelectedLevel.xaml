@@ -29,6 +29,12 @@
                 <Setter Property="Height" Value="35"/>
                 <Setter Property="Width" Value="35"/>
             </Style>
+
+            <Style TargetType="Button" x:Key="OptionButtonStyle">
+                <Setter Property="Margin" Value="15"/>
+                <Setter Property="Padding" Value="15"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
     <!-- Level selected : Level infos -->
@@ -40,57 +46,72 @@
             </TextBlock>
             <TextBlock Text="{Binding Title}" 
                        HorizontalAlignment="Center"
-                       FontSize="20"
+                       FontSize="22"
                        FontWeight="Bold"/>
 
             <Border BorderBrush="#2986CC" BorderThickness="1" CornerRadius="7" Margin="25" Padding="15">
                 <!-- Level info -->
-                <StackPanel HorizontalAlignment="Center">
-                    <StackPanel HorizontalAlignment="Center">
-                        <TextBlock HorizontalAlignment="Center">
-                        <Run Text="Filename :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
-                        <Run Text="{Binding Filename}"/>
-                        </TextBlock>
-                        <TextBlock HorizontalAlignment="Center">
-                        <Run Text="Size :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
-                        <Run Text="{Binding Size, Converter={StaticResource ResourceKey=LevelSizeConverter}}"/>
-                        </TextBlock>
-                    </StackPanel>
-
-                    <!-- Download / Delete -->
-                    <StackPanel Orientation="Horizontal" Margin="0,15">
-                        <StackPanel Orientation="Horizontal">
-                            <Image x:Name="Img_DownloadLevel" 
-                                   Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
-                                   Height="30"
-                                   Width="30">
-                            </Image>
-                            <TextBlock x:Name="Txt_DownloadLevel" 
-                                       Text="Download" 
-                                       Style="{StaticResource ResourceKey=TextActionStyle}"/>
-
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Download icon + label -->
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Margin="15">
+                            <StackPanel>
+                                <Image x:Name="Img_DownloadLevel"
+                                       Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
+                                       Height="30"
+                                       Width="30">
+                                </Image>
+                                <TextBlock x:Name="Txt_DownloadLevel" 
+                                           Text="Download" 
+                                           Style="{StaticResource ResourceKey=TextActionStyle}"/>
+                            </StackPanel>
                         </StackPanel>
 
-                        <!-- Separator -->
-                        <Border Background="Transparent" Width="120" HorizontalAlignment="Stretch"></Border>
-
-                        <!-- Open in browser -->
-                        <StackPanel Orientation="Horizontal">
-                            <Image x:Name="Img_OpenBrowser" Source="pack://application:,,,/Resources/Images/open_external.png"
-                                   Height="30"
-                                   Width="30">
-                            </Image>
-                            <TextBlock Text="Open in browser" Style="{StaticResource ResourceKey=TextActionStyle}"/>
+                        <!-- / Download icon + label -->
+                        <StackPanel Grid.Column="2">
+                            <!-- Filename -->
+                            <TextBlock>
+                                <Run Text="Filename :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+                                <Run Text="{Binding Filename}"/>
+                            </TextBlock>
+                            <!-- Size -->
+                            <TextBlock>
+                                <Run Text="Size :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+                                <Run Text="{Binding Size, Converter={StaticResource ResourceKey=LevelSizeConverter}}"/>
+                            </TextBlock>
+                            <!-- Url -->
+                            <TextBlock>
+                                <Hyperlink NavigateUri="{Binding Url}" Click="Url_OpenBrowser_Click">
+                                    <Run Text="Open in browser"/>
+                                </Hyperlink>
+                            </TextBlock>
                         </StackPanel>
+                    </Grid>
 
-                    </StackPanel>
+                    <Button x:Name="Btn_LevelOptions"
+                            Margin="20,10"
+                            Click="Btn_LevelOptions_Click">
+                    </Button>
+
+                    <!-- Download progress -->
                     <StackPanel x:Name="Stk_LevelDownload" 
                                 Margin="0,10" 
                                 Visibility="Collapsed">
                         <ProgressBar x:Name="Pgb_LevelDownload" Margin="5"/>
                         <TextBlock x:Name="Txt_LevelDownload" Text="Downloading..."/>
                     </StackPanel>
+                    <!-- / Download progress -->
 
+                    <!-- Options -->
+                    <StackPanel x:Name="Stk_LevelOptions" Orientation="Horizontal" HorizontalAlignment="Center">
+                        <Button Content="Create preset" Click="Btn_CreatePresetLevel_Click" Style="{StaticResource ResourceKey=OptionButtonStyle}"/>
+                        <Button Content="Delete level" Click="Btn_DeleteLevel_Click" Style="{StaticResource ResourceKey=OptionButtonStyle}"/>
+                    </StackPanel>
+                    <!-- / Options -->
                 </StackPanel>
             </Border>
 
