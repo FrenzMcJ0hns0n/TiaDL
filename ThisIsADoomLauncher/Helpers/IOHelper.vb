@@ -33,7 +33,7 @@ Friend Module IOHelper
     ''' <param name="subDirName">Target. Leave unfilled () or empty ("") to get the project root directory</param>
     ''' <returns></returns>
     Public Function GetDirectoryPath(Optional subDirName As String = "") As String
-        Dim directoryPath As String = Path.GetDirectoryName(Assembly.GetExecutingAssembly.Location)
+        Dim directoryPath As String = Path.GetDirectoryName(Assembly.GetEntryAssembly.Location)
 
         Try
             Dim combinedPath As String = Path.Combine(directoryPath, subDirName)
