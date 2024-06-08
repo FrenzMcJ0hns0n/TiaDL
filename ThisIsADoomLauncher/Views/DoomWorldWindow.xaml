@@ -26,6 +26,12 @@
                 <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="IsEnabled" Value="False"/>
             </Style>
+
+            <Style x:Key="Brd_BorderStyle" TargetType="Border">
+                <Setter Property="BorderBrush" Value="LightGray"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="CornerRadius" Value="2"/>
+            </Style>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -37,144 +43,146 @@
         </Grid.ColumnDefinitions>
 
         <!-- Left column -->
-        <Grid Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="11*"/>
-            </Grid.RowDefinitions>
+        <Border Style="{StaticResource ResourceKey=Brd_BorderStyle}" Margin="16,16,8,16">
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="11*"/>
+                </Grid.RowDefinitions>
 
-            <!-- DoomWorld header image -->
-            <Image Source="pack://application:,,,/Resources/Images/idgames_blue.jpg"
+                <!-- DoomWorld header image -->
+                <Image Source="pack://application:,,,/Resources/Images/idgames_blue.jpg"
                    Stretch="Fill"
                    Grid.Row="0" />
-            <!-- End DoomWorld header image -->
+                <!-- End DoomWorld header image -->
 
-            <StackPanel Orientation="Horizontal" 
-                        HorizontalAlignment="Left"
+                <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Stretch"
                         Grid.Row="1">
 
-                <TextBlock Text="Sort by : "
+                    <TextBlock Text="Sort by : "
+                           Margin="7,5"
                            VerticalAlignment="Center"/>
-                <ComboBox x:Name="Cbb_Sorting"
+                    <ComboBox x:Name="Cbb_Sorting"
                           HorizontalAlignment="Right" 
                           VerticalContentAlignment="Center" 
-                          Margin="1,10" 
+                          BorderThickness="0.7"
+                          Margin="0,15" 
                           Padding="10,0" 
                           SelectedIndex="0">
-                    <ComboBoxItem Content="Title"/>
-                    <ComboBoxItem Content="Filename"/>
-                    <ComboBoxItem Content="ReleaseDate"/>
-                    <ComboBoxItem Content="Rating"/>
-                    <ComboBoxItem Content="Author"/>
-                    <ComboBoxItem Content="Size"/>
-                </ComboBox>
+                        <ComboBoxItem Content="Title"/>
+                        <ComboBoxItem Content="Filename"/>
+                        <ComboBoxItem Content="ReleaseDate"/>
+                        <ComboBoxItem Content="Rating"/>
+                        <ComboBoxItem Content="Author"/>
+                        <ComboBoxItem Content="Size"/>
+                    </ComboBox>
 
-                <!-- Invisible separator -->
-                <Border BorderThickness="0"
+                    <!-- Invisible separator -->
+                    <Border BorderThickness="0"
                         Margin="10,3"/>
-                <!-- / Invisible separator -->
+                    <!-- / Invisible separator -->
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortAsc" Content="Ascending" Margin="0 -2 0 0"/>
-                    <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortDesc" Content="Descending" Margin="9 -2 0 0"/>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortAsc" Content="Ascending" Margin="0 -2 0 0"/>
+                        <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortDesc" Content="Descending" Margin="9 -2 0 0"/>
+                    </StackPanel>
                 </StackPanel>
-            </StackPanel>
 
-            <TabControl Grid.Row="2">
-                <TabItem x:Name="Tbi_DWBrowse" Header="Browse">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Border BorderBrush="#888888" 
-                                Grid.Row="0" 
-                                BorderThickness="0,1">
-                            <StackPanel Orientation="Horizontal">
-                                <!-- Up arrow -->
-                                <Button Content="↑"
-                                    x:Name="Btn_ParentFolder"
-                                    Margin="10,10,0,10"
-                                    Padding="10,0"/>
-                                <!-- / Up arrow -->
+                <TabControl Grid.Row="2">
+                    <TabItem x:Name="Tbi_DWBrowse" 
+                             Header="Browse">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Border BorderBrush="#888888" 
+                                    Grid.Row="0"
+                                    BorderThickness="0,0,0,0.7">
+                                <StackPanel Orientation="Horizontal">
+                                    <!-- Up arrow -->
+                                    <Button Content="↑"
+                                            BorderThickness="0.7"
+                                            x:Name="Btn_ParentFolder"
+                                            Margin="10"
+                                            Padding="10,3"/>
+                                    <!-- / Up arrow -->
 
-                                <!-- Separator -->
-                                <Border BorderThickness="0.2" 
-                                    BorderBrush="Gray"
-                                    Margin="10,3"/>
-                                <TextBlock VerticalAlignment="Center">
+                                    <TextBlock VerticalAlignment="Center">
                                     <Run Text="Dir: "/>
                                     <Run x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
-                                </TextBlock>
-                            </StackPanel>
-                        </Border>
-                        <!-- / Separator -->
-                        <ListView x:Name="Lvw_BrowseResults" 
-                                  Grid.Row="1"
-                                  BorderThickness="0">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                </TabItem>
-                <TabItem x:Name="Tbi_DWSearch" Header="Search">
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="11*"/>
-                        </Grid.RowDefinitions>
-                        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Text="Search: " 
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                            <!-- / Separator -->
+                            <ListView x:Name="Lvw_BrowseResults" 
+                                      Grid.Row="1"
+                                      BorderThickness="0">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="Tbi_DWSearch" Header="Search">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="11*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <TextBlock Text="Search: " 
                                        VerticalAlignment="Center"/>
-                            <TextBox x:Name="Txt_DWSearchText"
+                                <TextBox x:Name="Txt_DWSearchText"
                                      VerticalContentAlignment="Center"
                                      Width="200"
                                      Margin="10"/>
-                        </StackPanel>
-                        <ListView x:Name="Lvw_SearchResults"
+                            </StackPanel>
+                            <ListView x:Name="Lvw_SearchResults"
                                   BorderThickness="0"
                                   Grid.Row="1">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <userControls:LevelControl/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="Tbi_DWInstalled" Header="Installed">
+                        <ListView x:Name="Lvw_InstalledResults"
+                                  BorderThickness="0">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
-                                    <userControls:LevelControl/>
+                                    <StackPanel Grid.Column="0" Margin="10">
+                                        <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding FileName}"/>
+                                        <Rectangle Height="10" Visibility="Hidden"/>
+                                        <TextBlock>
+                                            <Run Text="Installed on :"/>
+                                            <Run Text="{Binding InstallDate}"/>
+                                        </TextBlock>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
-                    </Grid>
-                </TabItem>
-                <TabItem x:Name="Tbi_DWInstalled" Header="Installed">
-                    <ListView x:Name="Lvw_InstalledResults"
-                              BorderThickness="0">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Margin="10">
-                                    <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
-                                    <TextBlock Text="{Binding FileName}"/>
-                                    <Rectangle Height="10" Visibility="Hidden"/>
-                                    <TextBlock>
-                                        <Run Text="Installed on :"/>
-                                        <Run Text="{Binding InstallDate}"/>
-                                    </TextBlock>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </TabItem>
-            </TabControl>
-        </Grid>
+                    </TabItem>
+                </TabControl>
+            </Grid>
+        </Border>
         <!-- End Left column -->
 
         <!-- Right column-->
 
-        <Grid Grid.Column="1" Background="Transparent">
-            <Border BorderThickness="1,0,0,0" BorderBrush="#888888">
+        <Border Grid.Column="1" Style="{StaticResource ResourceKey=Brd_BorderStyle}"  Margin="8,16,16,16">
+            <Grid  Background="Transparent">
                 <ContentPresenter x:Name="ctpDisplayLevel"/>
-            </Border>
-        </Grid>
+            </Grid>
+        </Border>
 
         <!-- End Right column-->
     </Grid>

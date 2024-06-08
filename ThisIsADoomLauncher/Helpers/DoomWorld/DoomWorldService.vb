@@ -352,8 +352,10 @@ Namespace Helpers.DoomWorld
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Misc"), currentFileInfo.Directory.Name))
             ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(fileExtension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Mods"), currentFileInfo.Directory.Name))
-            Else
+            ElseIf Constants.VALID_EXTENSIONS_PICT.Contains(fileExtension) Then
                 destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Pict"), currentFileInfo.Directory.Name))
+            Else
+                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Othr"), currentFileInfo.Directory.Name))
             End If
 
             Dim destFileName As String = Path.Combine(destinationDirectory.FullName, currentFileInfo.Name)
@@ -585,5 +587,15 @@ Namespace Helpers.DoomWorld
             Next
             Return nbDeletedDirs
         End Function
+
+        Public Sub OpenInBrowser(currentLevel As Level)
+            Try
+                Process.Start(currentLevel.Url)
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentLevel}")
+            End Try
+        End Sub
     End Class
 End Namespace

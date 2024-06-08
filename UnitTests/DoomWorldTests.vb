@@ -294,4 +294,21 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Assert.AreEqual(True, res)
     End Sub
 
+    <TestMethod()> Public Sub OpenInBrowser_OK()
+        Dim _doomWorldService As New DoomWorldService()
+
+        Dim lvl As Level = New Level With
+        {
+            .Filename = "cchest.zip",
+            .Dir = "levels/doom2/Ports/megawads/",
+            .Id = 12021,
+            .Idgamesurl = "idgames://levels/doom2/Ports/megawads/cchest.zip",
+            .Title = "The Community Chest Project",
+            .Url = "https://www.doomworld.com/idgames/levels/doom2/Ports/megawads/cchest"
+        }
+
+        _doomWorldService.OpenInBrowser(lvl)
+
+    End Sub
+
 End Class
