@@ -53,4 +53,20 @@ Friend Module General
 
         End Select
     End Function
+
+    ''' <summary>
+    ''' Create a new preset in the list user's presets (or in a new list if none exists).
+    ''' </summary>
+    ''' <param name="presetToCreate"></param>
+    Public Sub CreateNewPreset(presetToCreate As LevelPreset)
+
+        Dim jsonFilepath As String = GetJsonFilepath("UserLevels")
+        Dim jsonString As String = GetJsonData(jsonFilepath)
+        Dim hasUserData As Boolean = CanLoadJsonArray(jsonString)
+
+        Dim currentLevels As List(Of LevelPreset) = If(hasUserData, LoadUserLevels(jsonString), New List(Of LevelPreset))
+
+        currentLevels.Add(presetToCreate)
+        SaveUserLevels(currentLevels, jsonFilepath)
+    End Sub
 End Module

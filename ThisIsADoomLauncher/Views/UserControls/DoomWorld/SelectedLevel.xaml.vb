@@ -2,6 +2,7 @@
 Imports System.IO
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
+Imports ThisIsADoomLauncher.Models
 
 Namespace Views.UserControls.DoomWorld
     Public Class SelectedLevel
@@ -108,6 +109,25 @@ Namespace Views.UserControls.DoomWorld
         End Sub
 
         Private Sub Btn_CreatePresetLevel_Click(sender As Object, e As RoutedEventArgs)
+
+            ' TO BE CONTINUED !
+
+            Dim presetName As String = _currentLevel.Title
+            Dim iwadInput As String = If(_currentLevel.Dir.Contains("/doom/"), "doom.wad", "doom2.wad")
+            Dim mapsInput As String = "" 'TODO
+            Dim miscInput As String = "" 'TODO
+
+            Dim presetToCreate As LevelPreset = New LevelPreset With
+            {
+                .Name = String.Concat("Quick_", presetName),
+                .Iwad = iwadInput,
+                .Maps = mapsInput,
+                .Misc = miscInput,
+                .Type = If(iwadInput.ToLowerInvariant.Contains("doom2.wad"), "Doom 2", "Doom 1"),
+                .Year = Now.Year,
+                .Pict = "" 'TODO: Manage this input
+            }
+            General.CreateNewPreset(presetToCreate)
 
         End Sub
 

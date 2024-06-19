@@ -565,9 +565,7 @@ Namespace Views
                 Return
             End If
 
-
-            Dim currentLevels As List(Of LevelPreset) = If(hasUserData, LoadUserLevels(jsonString), New List(Of LevelPreset))
-            currentLevels.Add(New LevelPreset With
+            Dim presetToCreate As LevelPreset = New LevelPreset With
             {
                 .Name = presetName,
                 .Iwad = iwadInput,
@@ -576,8 +574,10 @@ Namespace Views
                 .Type = If(iwadInput.ToLowerInvariant.Contains("doom2.wad"), "Doom 2", "Doom 1"),
                 .Year = Now.Year,
                 .Pict = "" 'TODO: Manage this input
-            })
-            SaveUserLevels(currentLevels, jsonFilepath)
+            }
+
+            General.CreateNewPreset(presetToCreate)
+
             MessageBox.Show($"New user level preset ""{presetName}"" saved", "Saving OK", MessageBoxButton.OK, MessageBoxImage.Information)
         End Sub
 
