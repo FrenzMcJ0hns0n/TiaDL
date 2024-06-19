@@ -144,7 +144,7 @@ Namespace Helpers.DoomWorld
 
                 Dim jsonResult As String = Await response.Content.ReadAsStringAsync()
 
-                Dim jsonObject As JObject = JObject.Parse(jsonResult)
+                Dim jsonObject As JObject = JObject.Parse(Helpers.DoomWorld.HtmlCleaner.HtmlToPlainText(jsonResult))
 
                 Dim jLevel As JToken = jsonObject.SelectToken("content")
 

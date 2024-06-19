@@ -112,6 +112,7 @@
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldHttpClient.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldService.vb" />
+    <Compile Include="Helpers\DoomWorld\HtmlCleaner.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Folder.vb" />
     <Compile Include="Helpers\DoomWorld\Models\InstalledLevel.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Level.vb" />
