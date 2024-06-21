@@ -509,7 +509,7 @@ Namespace Helpers.DoomWorld
                     .Id = level.Id,
                     .FileName = level.Filename,
                     .DirectoryName = directoryName,
-                    .InstallDate = DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss")
+                    .InstallDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
                 }
                 installedLevels.Add(instLevel)
 
