@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.IO
+Imports System.Reflection
 Imports System.Windows.Forms.VisualStyles
 Imports Microsoft.Win32
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
@@ -10,7 +11,7 @@ Namespace Views
 
         Private _doomworldService As New DoomWorldService()
         Private _resourcePath As String = "levels/"
-        Private _selectedSortingMode As String
+        Private _selectedSortingCriterion As String
         Private _installedLevels As List(Of InstalledLevel)
 
         Public Sub New()
@@ -64,7 +65,7 @@ Namespace Views
             End If
 
             'Sorting
-            dwContents = SortContents(dwContents, _selectedSortingMode)
+            dwContents = SortContents(dwContents, _selectedSortingCriterion)
 
             Lvw_BrowseResults.ItemsSource = dwContents
         End Sub
@@ -87,64 +88,112 @@ Namespace Views
         ''' <br>Level : Title, Filename, ReleaseDate...</br>
         ''' </summary>
         ''' <param name="dwContents"></param>
-        ''' <param name="selectedSortingMode"></param>
+        ''' <param name="selectedSortingCriterion"></param>
         ''' <returns></returns>
-        Private Function SortContents(dwContents As IEnumerable(Of Object), selectedSortingMode As String) As IEnumerable(Of Object)
+        Private Function SortContents(dwContents As IEnumerable(Of Object), selectedSortingCriterion As String, Optional ascending As Boolean = True) As IEnumerable(Of Object)
 
             If dwContents.FirstOrDefault().GetType = GetType(Helpers.DoomWorld.Models.Folder) Then
-                Return SortFolders(dwContents.OfType(Of Folder))
+                Return SortFolders(dwContents.OfType(Of Folder), ascending)
             Else
-                Return SortLevels(dwContents.OfType(Of Level), selectedSortingMode)
+                Return SortLevels(dwContents.OfType(Of Level), selectedSortingCriterion, ascending)
             End If
         End Function
 
-        Private Function SortFolders(dwContents As IEnumerable(Of Folder)) As IEnumerable(Of Object)
-            Return dwContents.OrderBy(Function(foldr)
-                                          Return foldr.Name
-                                      End Function)
+        ''' <summary>
+        ''' Sort folders
+        ''' </summary>
+        ''' <param name="dwContents">List of Folders</param>
+        ''' <param name="isAscending">Is ascending</param>
+        ''' <returns></returns>
+        Private Function SortFolders(dwContents As IEnumerable(Of Folder), Optional isAscending As Boolean = True) As IEnumerable(Of Object)
+            Return If(isAscending, dwContents.OrderBy(Function(foldr)
+                                                          Return foldr.Name
+                                                      End Function),
+                                 dwContents.OrderByDescending(Function(foldr)
+                                                                  Return foldr.Name
+                                                              End Function))
         End Function
 
-        Private Function SortLevels(dwContents As IEnumerable(Of Level), selectedSortingMode As String) As IEnumerable(Of Object)
-            Select Case selectedSortingMode
+        ''' <summary>
+        ''' Sort levels regarding sorting criterion and direction.
+        ''' </summary>
+        ''' <param name="dwContents">List of Levels</param>
+        ''' <param name="selectedSortingCriterion">Sorting criterion</param>
+        ''' <param name="isAscending">Is ascending</param>
+        ''' <returns></returns>
+        Private Function SortLevels(dwContents As IEnumerable(Of Level), selectedSortingCriterion As String, Optional isAscending As Boolean = True) As IEnumerable(Of Object)
+            Select Case selectedSortingCriterion
                 Case "Title"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.Title
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.Title
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.Title
+                                                                        End Function))
                 Case "Filename"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.Filename
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.Filename
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.Filename
+                                                                        End Function))
                 Case "ReleaseDate"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.ReleaseDate
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.ReleaseDate
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.ReleaseDate
+                                                                        End Function))
                 Case "Rating"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.Rating
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.Rating
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.Rating
+                                                                        End Function))
                 Case "Author"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.Author
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.Author
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.Author
+                                                                        End Function))
                 Case "Size"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.Size
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.Size
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.Size
+                                                                        End Function))
                 Case Else
                     Return dwContents
             End Select
         End Function
 
-        Private Function SortInstalledLevels(dwContents As IEnumerable(Of InstalledLevel), selectedSortingMode As String) As IEnumerable(Of Object)
-            Select Case selectedSortingMode
+        ''' <summary>
+        ''' Sort installed levels regarding sorting criterion and direction.
+        ''' </summary>
+        ''' <param name="dwContents">List of Levels</param>
+        ''' <param name="selectedSortingCriterion">Sorting criterion</param>
+        ''' <param name="isAscending">Is ascending</param>
+        ''' <returns></returns>
+        Private Function SortInstalledLevels(dwContents As IEnumerable(Of InstalledLevel), selectedSortingCriterion As String, Optional isAscending As Boolean = True) As IEnumerable(Of Object)
+            Select Case selectedSortingCriterion
                 Case "Title"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.Title
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.Title
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.Title
+                                                                        End Function))
+
                 Case "Filename"
-                    Return dwContents.OrderBy(Function(levl)
-                                                  Return levl.FileName
-                                              End Function)
+                    Return If(isAscending, dwContents.OrderBy(Function(levl)
+                                                                  Return levl.FileName
+                                                              End Function),
+                                           dwContents.OrderByDescending(Function(levl)
+                                                                            Return levl.FileName
+                                                                        End Function))
                 Case Else
                     Return dwContents
             End Select
@@ -165,7 +214,7 @@ Namespace Views
         Private Sub Cbb_Sorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Cbb_Sorting.SelectionChanged
             Dim cbb As ComboBox = CType(sender, ComboBox)
             If cbb.SelectedIndex <> -1 Then
-                _selectedSortingMode = DirectCast(cbb.SelectedItem, ComboBoxItem).Content.ToString()
+                _selectedSortingCriterion = DirectCast(cbb.SelectedItem, ComboBoxItem).Content.ToString()
 
                 SortAndRefreshAllLists()
             End If
@@ -180,11 +229,11 @@ Namespace Views
             End If
 
             If Lvw_SearchResults IsNot Nothing AndAlso Lvw_SearchResults.Items IsNot Nothing AndAlso Lvw_SearchResults.Items.Count <> 0 Then
-                Lvw_SearchResults.ItemsSource = SortLevels(Lvw_SearchResults.Items.OfType(Of Level), _selectedSortingMode)
+                Lvw_SearchResults.ItemsSource = SortLevels(Lvw_SearchResults.Items.OfType(Of Level), _selectedSortingCriterion)
             End If
 
             If Lvw_InstalledResults IsNot Nothing AndAlso Lvw_InstalledResults.Items IsNot Nothing AndAlso Lvw_InstalledResults.Items.Count <> 0 Then
-                Lvw_InstalledResults.ItemsSource = SortInstalledLevels(Lvw_InstalledResults.Items.OfType(Of InstalledLevel), _selectedSortingMode)
+                Lvw_InstalledResults.ItemsSource = SortInstalledLevels(Lvw_InstalledResults.Items.OfType(Of InstalledLevel), _selectedSortingCriterion)
             End If
         End Sub
 
@@ -267,7 +316,7 @@ Namespace Views
                 Return
             End If
 
-            Lvw_SearchResults.ItemsSource = SortLevels(searchLevels, _selectedSortingMode)
+            Lvw_SearchResults.ItemsSource = SortLevels(searchLevels, _selectedSortingCriterion)
         End Sub
 
 
@@ -294,5 +343,45 @@ Namespace Views
 
             Return False
         End Function
+
+        ''' <summary>
+        ''' Event raised when a sorting RadioButton is checked (Ascending, Descending)
+        ''' </summary>
+        ''' <param name="sender"></param>
+        ''' <param name="e"></param>
+        Private Sub Rbtn_Sort_Checked(sender As Object, e As RoutedEventArgs)
+            Try
+                Dim tabItem As TabItem = CType(Tbc_DWItems.SelectedItem, TabItem)
+
+                Dim isAscending As Boolean = CBool(Rbtn_SortAsc.IsChecked)
+
+                Select Case tabItem.Name
+                    Case Tbi_DWBrowse.Name
+                        Lvw_BrowseResults.ItemsSource = SortContents(Lvw_BrowseResults.Items.OfType(Of Object),
+                                     DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
+                    Case Tbi_DWSearch.Name
+                        Lvw_SearchResults.ItemsSource = SortLevels(Lvw_SearchResults.Items.OfType(Of Level),
+                                   DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
+                    Case Else 'Tbi_DWInstalled.Name
+                        Lvw_InstalledResults.ItemsSource = SortInstalledLevels(Lvw_InstalledResults.Items.OfType(Of InstalledLevel),
+                                   DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
+                End Select
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {sender},{e}")
+            End Try
+
+        End Sub
+
+        ''' <summary>
+        ''' Waits for TabControl to be loaded before adding event on RadioButtons
+        ''' </summary>
+        ''' <param name="sender"></param>
+        ''' <param name="e"></param>
+        Private Sub Tbc_DWItems_Loaded(sender As Object, e As RoutedEventArgs)
+            AddHandler Rbtn_SortAsc.Checked, Sub(radioButtonSender, radioButtonEventArgs) Rbtn_Sort_Checked(radioButtonSender, radioButtonEventArgs)
+            AddHandler Rbtn_SortDesc.Checked, Sub(radioButtonSender, radioButtonEventArgs) Rbtn_Sort_Checked(radioButtonSender, radioButtonEventArgs)
+        End Sub
     End Class
 End Namespace

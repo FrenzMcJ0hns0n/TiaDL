@@ -22,9 +22,7 @@
 
             <Style x:Key="Rbtn_Sorting" TargetType="{x:Type RadioButton}">
                 <Setter Property="GroupName" Value="Sorting"/>
-                <Setter Property="IsEnabled" Value="False"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
-                <Setter Property="IsEnabled" Value="False"/>
             </Style>
 
             <Style x:Key="Brd_BorderStyle" TargetType="Border">
@@ -85,12 +83,12 @@
                     <!-- / Invisible separator -->
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortAsc" Content="Ascending" Margin="0 -2 0 0"/>
-                        <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortDesc" Content="Descending" Margin="9 -2 0 0"/>
+                        <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortAsc" IsChecked="True" Content="Ascending" VerticalContentAlignment="Center" Margin="0 -2 0 0"/>
+                        <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortDesc" Content="Descending" VerticalContentAlignment="Center" Margin="9 -2 0 0"/>
                     </StackPanel>
                 </StackPanel>
 
-                <TabControl Grid.Row="2">
+                <TabControl Grid.Row="2" x:Name="Tbc_DWItems" Loaded="Tbc_DWItems_Loaded">
                     <TabItem x:Name="Tbi_DWBrowse" 
                              Header="Browse">
                         <Grid>
