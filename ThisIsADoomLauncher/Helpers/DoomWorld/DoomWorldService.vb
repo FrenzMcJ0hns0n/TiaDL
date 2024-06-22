@@ -532,7 +532,7 @@ Namespace Helpers.DoomWorld
         ''' <param name="installedLevels"></param>
         ''' <param name="registryFilePath"></param>
         Private Sub SaveRegistry(installedLevels As List(Of InstalledLevel), registryFilePath As String)
-            Dim installedLevelsJson As String = JsonConvert.SerializeObject(installedLevels)
+            Dim installedLevelsJson As String = JsonConvert.SerializeObject(installedLevels, Formatting.Indented)
             IOHelper.PersistJsonData(registryFilePath, installedLevelsJson)
         End Sub
 
