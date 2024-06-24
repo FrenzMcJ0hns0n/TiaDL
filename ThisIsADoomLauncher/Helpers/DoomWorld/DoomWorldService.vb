@@ -588,10 +588,31 @@ Namespace Helpers.DoomWorld
             Return nbDeletedDirs
         End Function
 
+        ''' Open Level's DoomWorld page.
         Public Sub OpenInBrowser(currentLevel As Level)
             Try
                 Process.Start(currentLevel.Url)
 
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentLevel}")
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Open installed Level directory in file exlorer.
+        ''' </summary>
+        ''' <param name="currentLevel"></param>
+        ''' <remarks>- Throws exception if folder not found. -> (TODO : inform user)</remarks>
+        Public Sub OpenInFileExplorer(currentLevel As Level)
+            Try
+                Dim registryFilePath As String = Path.Combine("DoomWorld", "doomworld_registry.json")
+                Dim installdLevel As InstalledLevel = GetInstalledLevels(registryFilePath).Find(Function(instlldLvl)
+                                                                                                    Return instlldLvl.FileName = currentLevel.Filename
+                                                                                                End Function)
+                Dim installedLevelDirPath As String = Path.Combine(GetDirectoryPath(), installdLevel.DirectoryName)
+
+                Process.Start(installedLevelDirPath)
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentLevel}")

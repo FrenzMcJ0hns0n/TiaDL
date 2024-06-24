@@ -165,6 +165,8 @@ Namespace Views.UserControls.DoomWorld
         Private Sub ShowLevelOptions()
             Stk_LevelOptions.Visibility = Visibility.Visible
             Btn_LevelOptions.Content = "Options ▲"
+        Private Sub OpenFileExplorer_Click(sender As Object, e As RoutedEventArgs)
+            _doomWorldService.OpenInFileExplorer(_currentLevel)
         End Sub
     End Class
 End Namespace

@@ -83,10 +83,16 @@
                                 <Run Text="Size :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
                                 <Run Text="{Binding Size, Converter={StaticResource ResourceKey=LevelSizeConverter}}"/>
                             </TextBlock>
-                            <!-- Url -->
+                            <!-- Open in browser -->
                             <TextBlock>
                                 <Hyperlink NavigateUri="{Binding Url}" Click="Url_OpenBrowser_Click">
                                     <Run Text="Open in browser"/>
+                                </Hyperlink>
+                            </TextBlock>
+                            <!-- Open in file explorer -->
+                            <TextBlock>
+                                <Hyperlink Click="OpenFileExplorer_Click">
+                                    <Run Text="Open in file explorer"/>
                                 </Hyperlink>
                             </TextBlock>
                         </StackPanel>
