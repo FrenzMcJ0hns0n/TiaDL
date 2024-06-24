@@ -97,12 +97,6 @@
                             </TextBlock>
                         </StackPanel>
                     </Grid>
-
-                    <Button x:Name="Btn_LevelOptions"
-                            Margin="20,10"
-                            Click="Btn_LevelOptions_Click">
-                    </Button>
-
                     <!-- Download progress -->
                     <StackPanel x:Name="Stk_LevelDownload" 
                                 Margin="0,10" 
@@ -111,13 +105,6 @@
                         <TextBlock x:Name="Txt_LevelDownload" Text="Downloading..."/>
                     </StackPanel>
                     <!-- / Download progress -->
-
-                    <!-- Options -->
-                    <StackPanel x:Name="Stk_LevelOptions" Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button Content="Create preset" Click="Btn_CreatePresetLevel_Click" Style="{StaticResource ResourceKey=OptionButtonStyle}"/>
-                        <Button Content="Delete level" Click="Btn_DeleteLevel_Click" Style="{StaticResource ResourceKey=OptionButtonStyle}"/>
-                    </StackPanel>
-                    <!-- / Options -->
                 </StackPanel>
             </Border>
 

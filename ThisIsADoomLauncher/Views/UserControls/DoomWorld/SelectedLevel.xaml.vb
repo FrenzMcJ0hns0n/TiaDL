@@ -15,8 +15,6 @@ Namespace Views.UserControls.DoomWorld
             ' This call is required by the designer.
             InitializeComponent()
 
-            Me.DisableLevelOptions()
-
             _doomWorldWindow = Application.Current.Windows.OfType(Of Views.DoomWorldWindow).FirstOrDefault()
 
             _doomWorldService = _doomWorldWindow.GetDWServiceInstance()
@@ -87,25 +85,10 @@ Namespace Views.UserControls.DoomWorld
             Txt_DownloadLevel.Text = "Downloaded"
             RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
 
-            Me.EnableInstalledLevelOptions()
         End Sub
-
-        'Private Sub Img_OpenBrowser_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Img_OpenBrowser.MouseDown
-        '    _doomWorldService.OpenInBrowser(_currentLevel)
-        'End Sub
 
         Private Sub Url_OpenBrowser_Click(sender As Object, e As RoutedEventArgs)
             _doomWorldService.OpenInBrowser(_currentLevel)
-        End Sub
-
-        Private Sub Btn_LevelOptions_Click(sender As Object, e As RoutedEventArgs)
-            If Stk_LevelOptions.Visibility = Visibility.Visible Then
-                Me.CollapseLevelOptions()
-
-            Else
-                Me.ShowLevelOptions()
-            End If
-
         End Sub
 
         Private Sub Btn_CreatePresetLevel_Click(sender As Object, e As RoutedEventArgs)
@@ -135,36 +118,6 @@ Namespace Views.UserControls.DoomWorld
 
         End Sub
 
-        ''' <summary>
-        ''' Shows level options 
-        ''' </summary>
-        Private Sub EnableInstalledLevelOptions()
-            Btn_LevelOptions.Visibility = Visibility.Visible
-            Me.CollapseLevelOptions()
-        End Sub
-
-        ''' <summary>
-        ''' 
-        ''' </summary>
-        Private Sub DisableLevelOptions()
-            Stk_LevelOptions.Visibility = Visibility.Collapsed
-            Btn_LevelOptions.Visibility = Visibility.Collapsed
-        End Sub
-
-        ''' <summary>
-        ''' 
-        ''' </summary>
-        Private Sub CollapseLevelOptions()
-            Stk_LevelOptions.Visibility = Visibility.Collapsed
-            Btn_LevelOptions.Content = "Options ▼"
-        End Sub
-
-        ''' <summary>
-        ''' 
-        ''' </summary>
-        Private Sub ShowLevelOptions()
-            Stk_LevelOptions.Visibility = Visibility.Visible
-            Btn_LevelOptions.Content = "Options ▲"
         Private Sub OpenFileExplorer_Click(sender As Object, e As RoutedEventArgs)
             _doomWorldService.OpenInFileExplorer(_currentLevel)
         End Sub
