@@ -15,6 +15,8 @@ Namespace Views.UserControls.DoomWorld
             ' This call is required by the designer.
             InitializeComponent()
 
+            Txt_OpenFileExplorer.Visibility = Visibility.Collapsed
+
             _doomWorldWindow = Application.Current.Windows.OfType(Of Views.DoomWorldWindow).FirstOrDefault()
 
             _doomWorldService = _doomWorldWindow.GetDWServiceInstance()
@@ -84,6 +86,8 @@ Namespace Views.UserControls.DoomWorld
             Img_DownloadLevel.Source = New BitmapImage(New Uri("/Resources/Images/doomworld_installed.png", UriKind.Relative))
             Txt_DownloadLevel.Text = "Downloaded"
             RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
+
+            Txt_OpenFileExplorer.Visibility = Visibility.Visible
 
         End Sub
 

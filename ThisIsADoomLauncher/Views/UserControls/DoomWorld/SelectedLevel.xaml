@@ -90,7 +90,7 @@
                                 </Hyperlink>
                             </TextBlock>
                             <!-- Open in file explorer -->
-                            <TextBlock>
+                            <TextBlock x:Name="Txt_OpenFileExplorer">
                                 <Hyperlink Click="OpenFileExplorer_Click">
                                     <Run Text="Open in file explorer"/>
                                 </Hyperlink>
