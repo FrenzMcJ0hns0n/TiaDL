@@ -111,7 +111,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim url As String = "https://www.quaddicted.com/files/idgames/levels/doom2/Ports/megawads/cchest2.zip"
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZipArchive(url)
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZip(url, "DoomWorld/Downloads")
 
         Dim downloadedFileName = task.Result
 
@@ -128,7 +128,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Dim levelAbyss As Level = New Level With {.Dir = "levels/doom/a-c/", .Filename = "abyss.zip"}
         Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAbyss))
 
-        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZipArchive(url)
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZip(url, "DoomWorld/Downloads")
 
         Dim downloadedFileName = task.Result
 
@@ -148,7 +148,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
         Dim url As String = String.Concat(mirror, _doomWorldService.GetLevelDownloadUrl(levelAV))
 
-        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZipArchive(url)
+        Dim task As Task(Of String) = _doomWorldService.DownloadLevelZip(url, "DoomWorld/Downloads")
 
         Dim downloadedFileName = task.Result
 
@@ -280,12 +280,12 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
         Dim lvl As Level = New Level With
         {
-            .Filename = "cchest.zip",
-            .Dir = "levels/doom2/Ports/megawads/",
-            .Id = 12021,
-            .Idgamesurl = "idgames://levels/doom2/Ports/megawads/cchest.zip",
-            .Title = "The Community Chest Project",
-            .Url = "https://www.doomworld.com/idgames/levels/doom2/Ports/megawads/cchest"
+            .Filename = "castle1.zip",
+            .Dir = "levels/doom/a-c/",
+            .Id = 17635,
+            .Idgamesurl = "idgames://levels/doom/a-c/castle1.zip",
+            .Title = "CASTEL OF DOOM",
+            .Url = "https://www.doomworld.com/idgames/levels/doom/a-c/castle1"
         }
 
         Dim task As Task(Of Boolean) = _doomWorldService.DownloadLevelFull(lvl)

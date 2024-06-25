@@ -122,8 +122,24 @@ Namespace Views.UserControls.DoomWorld
 
         End Sub
 
-        Private Sub OpenFileExplorer_Click(sender As Object, e As RoutedEventArgs)
-            _doomWorldService.OpenInFileExplorer(_currentLevel)
+        Private Sub Txt_OpenFileExplorer_Click(sender As Object, e As RoutedEventArgs)
+            Try
+                _doomWorldService.OpenInFileExplorer(_currentLevel)
+            Catch ex As Exception
+                Dim errDirectoryResult As MessageBoxResult = MessageBox.Show("Le dossier est introuvable." +
+                                            Environment.NewLine +
+                                            "Peut-être a-t-il été déplacé ou supprimé." +
+                                            Environment.NewLine +
+                                            Environment.NewLine +
+                                            "Voulez-vous le supprimer de cette liste ?",
+                                            "Dossier introuvable",
+                                            MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No)
+
+                If errDirectoryResult = MessageBoxResult.Yes Then
+                    ' TODO : Delete InstalledLevel
+                End If
+            End Try
+
         End Sub
     End Class
 End Namespace

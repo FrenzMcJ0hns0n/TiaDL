@@ -250,7 +250,7 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="levelUrl">The level download url.</param>
         ''' <returns>The .zip level archive path</returns>
-        Public Async Function DownloadLevelZipArchive(levelUrl As String) As Task(Of String)
+        Public Async Function DownloadLevelZip(levelUrl As String, downloadsDirectory As String) As Task(Of String)
             '
             ' Add level in a Doomworld registry file
             ' it will be easier to display Name, show Install folder, (open folder ?), Uninstall...
@@ -261,7 +261,7 @@ Namespace Helpers.DoomWorld
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
 
                 Dim levelFileName As String = requestUri.Segments.Last()
-                Using fileStream As New FileStream(levelFileName, FileMode.OpenOrCreate)
+                Using fileStream As New FileStream(Path.Combine(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
                     Await response.Content.CopyToAsync(fileStream)
                     zipArchivePath = fileStream.Name
                 End Using
@@ -292,7 +292,7 @@ Namespace Helpers.DoomWorld
                 Dim extractDirectory As String = IOHelper.GetFileInfo_RemoveExtension(fileZipPath)
 
                 If Directory.Exists(extractDirectory) Then
-                    Directory.Delete(extractDirectory)
+                    Directory.Delete(extractDirectory, recursive:=True)
                 End If
 
                 Await Task.Run(
@@ -431,29 +431,28 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Full process of downloading Level.
-        ''' </summary>
+        ''' Full process of downloading Level, and extract it in a "Downloads directory" (see TODO).
+        ''' ''' </summary>
         ''' <param name="level"></param>
+        ''' <param name="downloadsDirectory">TODO : Get downloadsDirectory from a Settings file (My.Settings ?)</param>
         ''' <returns>True if no error, false if something went wrong</returns>
-        Public Async Function DownloadLevelFull(level As Models.Level) As Task(Of Boolean)
+        Public Async Function DownloadLevelFull(level As Models.Level, Optional downloadsDirectory As String = "DoomWorld/Downloads") As Task(Of Boolean)
             Try
                 ' Get mirror -> TODO : get from /DoomWorld/doomworld_mirrors.json file or whatever location
                 Dim mirror As String = Me.GetMirror("germany")
                 ' Get level download url
                 Dim dlUrl As String = String.Concat(mirror, Me.GetLevelDownloadUrl(level))
                 ' Get level zip
-                Dim zipArchive As String = Await Me.DownloadLevelZipArchive(dlUrl)
+                Dim zipArchivePath As String = Await Me.DownloadLevelZip(dlUrl, downloadsDirectory)
                 ' extract level
-                Dim extractedDirInfo As DirectoryInfo = Await Me.ExtractLevelFromZip(zipArchive)
-                ' place files in corresponding folders
-                Dim resultMovedFiles As List(Of String) = Await Me.MoveFilesIntoDirectories(extractedDirInfo.FullName)
+                Dim extractedDirInfo As DirectoryInfo = Await Me.ExtractLevelFromZip(zipArchivePath)
 
-                If resultMovedFiles IsNot Nothing Or resultMovedFiles?.Count > 0 Then
+                If extractedDirInfo.Exists Then
                     ' TODO : create / write to json registry file
-                    Me.WriteLevelIntoRegistry(level, extractedDirInfo.Name)
+                    Me.WriteLevelIntoRegistry(level, extractedDirInfo.FullName)
 
                     'clean downloaded archive + extracted folder
-                    Me.CleanUpDownloadedContent(zipArchive, extractedDirInfo.FullName)
+                    Me.CleanUpZipArchive(zipArchivePath)
 
                     Return True
                 End If
@@ -541,9 +540,8 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="zipArchive"></param>
         ''' <param name="extractedDir"></param>
-        Private Sub CleanUpDownloadedContent(zipArchive As String, extractedDir As String)
+        Private Sub CleanUpZipArchive(zipArchive As String)
             File.Delete(zipArchive)
-            Directory.Delete(extractedDir, True)
         End Sub
 
         ''' <summary>
@@ -616,6 +614,8 @@ Namespace Helpers.DoomWorld
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {currentLevel}")
+
+                Throw
             End Try
         End Sub
     End Class
