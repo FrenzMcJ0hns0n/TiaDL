@@ -261,7 +261,12 @@ Namespace Helpers.DoomWorld
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
 
                 Dim levelFileName As String = requestUri.Segments.Last()
-                Using fileStream As New FileStream(Path.Combine(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
+
+                If Not Directory.Exists(downloadsDirectory) Then
+                    Directory.CreateDirectory(downloadsDirectory)
+                End If
+
+                Using fileStream As New FileStream(String.Concat(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
                     Await response.Content.CopyToAsync(fileStream)
                     zipArchivePath = fileStream.Name
                 End Using
@@ -436,7 +441,7 @@ Namespace Helpers.DoomWorld
         ''' <param name="level"></param>
         ''' <param name="downloadsDirectory">TODO : Get downloadsDirectory from a Settings file (My.Settings ?)</param>
         ''' <returns>True if no error, false if something went wrong</returns>
-        Public Async Function DownloadLevelFull(level As Models.Level, Optional downloadsDirectory As String = "DoomWorld/Downloads") As Task(Of Boolean)
+        Public Async Function DownloadLevelFull(level As Models.Level, Optional downloadsDirectory As String = "DoomWorld/Downloads/") As Task(Of Boolean)
             Try
                 ' Get mirror -> TODO : get from /DoomWorld/doomworld_mirrors.json file or whatever location
                 Dim mirror As String = Me.GetMirror("germany")
