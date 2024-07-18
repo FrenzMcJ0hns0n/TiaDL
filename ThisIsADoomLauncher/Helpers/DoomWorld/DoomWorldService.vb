@@ -165,25 +165,42 @@ Namespace Helpers.DoomWorld
 
             Try
                 ' TODO : edit TYPE and SORT filters.
-                Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=filename&sort=date")
+                Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=title")
                 Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
                 Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
                 If response.IsSuccessStatusCode Then
                     Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
 
-                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
+                    If jsonObject.SelectToken("warning") IsNot Nothing Then
+
+                        If jsonObject.SelectToken("warning.type").Value(Of String) = "Limit Reached" Then
+                            Throw New OverflowException("Search query returned too many results.")
+                        End If
+
+                    ElseIf jsonObject.SelectToken("error") IsNot Nothing Then
                         Throw New ArgumentException($"Search text : {searchText} returned no results")
                     End If
 
+
                     levels = New List(Of Models.Level)
 
-                    jsonObject.SelectToken("content.file").ToList().ForEach(
+                    Dim listResultLevels As List(Of JToken) = jsonObject.SelectToken("content.file").ToList()
+
+                    If listResultLevels.FirstOrDefault().GetType() Is GetType(JObject) Then
+                        listResultLevels.ForEach(
                         Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
                     )
+
+                    Else
+                        Dim resultLevel As JToken = jsonObject.SelectToken("content.file")
+                        levels.Add(CreateLevelFromJToken(resultLevel))
+                    End If
 
                     Return levels
                 End If
 
+            Catch ex As OverflowException
+                Throw
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {searchText}")
