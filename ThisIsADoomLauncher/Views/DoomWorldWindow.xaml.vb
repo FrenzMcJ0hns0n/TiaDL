@@ -1,4 +1,6 @@
-﻿Imports System.ComponentModel
+﻿Imports System.Collections.Specialized
+Imports System.ComponentModel
+Imports System.Drawing
 Imports System.IO
 Imports System.Reflection
 Imports System.Windows.Forms.VisualStyles
@@ -12,12 +14,16 @@ Namespace Views
         Private _doomworldService As New DoomWorldService()
         Private _resourcePath As String = "levels/"
         Private _selectedSortingCriterion As String
-        Private _installedLevels As List(Of InstalledLevel)
+
+        Private _lstBrowseResults As List(Of Object)
+        Private _lstSearchResults As List(Of Level)
+        Private _lstInstalledLevelsResults As List(Of InstalledLevel)
 
         Public Sub New()
             InitializeComponent()
 
             InitUI()
+
         End Sub
 
         Public Function GetDWServiceInstance() As DoomWorldService
@@ -32,6 +38,7 @@ Namespace Views
 
             InitLists()
             UpdateDirPathUI(_resourcePath)
+
         End Sub
 
         Private Sub UpdateDirPathUI(resourcePath As String)
@@ -45,11 +52,12 @@ Namespace Views
         ''' </summary>
         Private Async Sub InitLists()
             Try
-                Dim dwContents As IEnumerable(Of Object) = Await _doomworldService.GetContent()
-                LoadResultsItemsSource(dwContents)
+                _lstBrowseResults = Await _doomworldService.GetContent()
+                LoadResultsItemsSource(_lstBrowseResults)
                 LoadInstalledLevelsItemsSource()
 
             Catch ex As Exception
+                Dim x As String = ex.Message
                 'catch ex
 
             End Try
@@ -61,6 +69,8 @@ Namespace Views
         ''' <param name="dwContents"></param>
         Private Sub LoadResultsItemsSource(dwContents As IEnumerable(Of Object))
             If dwContents Is Nothing Or dwContents.Count() = 0 Then
+                Me.SetTxtResultText("0 results", Txt_Lvw_BrowseResults_Count)
+
                 Return
             End If
 
@@ -68,18 +78,22 @@ Namespace Views
             dwContents = SortContents(dwContents, _selectedSortingCriterion)
 
             Lvw_BrowseResults.ItemsSource = dwContents
+            Me.SetTxtResultText($"{dwContents.Count().ToString()} results", Txt_Lvw_BrowseResults_Count)
         End Sub
 
         ''' <summary>
         ''' Sorts DoomWorld installed levels and sets as ItemsSource.
         ''' </summary>
         Private Sub LoadInstalledLevelsItemsSource()
-            _installedLevels = _doomworldService.GetInstalledLevels(Path.Combine("DoomWorld", "doomworld_registry.json"))
-            If _installedLevels Is Nothing OrElse _installedLevels.Count() = 0 Then
+            _lstInstalledLevelsResults = _doomworldService.GetInstalledLevels(Path.Combine("DoomWorld", "doomworld_registry.json"))
+            If _lstInstalledLevelsResults Is Nothing OrElse _lstInstalledLevelsResults.Count() = 0 Then
+                Me.SetTxtResultText($"0 results", Txt_Lvw_InstalledResults_Count)
+
                 Return
             End If
 
-            Lvw_InstalledResults.ItemsSource = _installedLevels
+            Lvw_InstalledResults.ItemsSource = _lstInstalledLevelsResults
+            Me.SetTxtResultText($"{_lstInstalledLevelsResults.Count.ToString()} results", Txt_Lvw_InstalledResults_Count)
         End Sub
 
         ''' <summary>
@@ -91,6 +105,9 @@ Namespace Views
         ''' <param name="selectedSortingCriterion"></param>
         ''' <returns></returns>
         Private Function SortContents(dwContents As IEnumerable(Of Object), selectedSortingCriterion As String, Optional ascending As Boolean = True) As IEnumerable(Of Object)
+            If dwContents Is Nothing OrElse dwContents.Count() = 0 Then
+                Return dwContents
+            End If
 
             If dwContents.FirstOrDefault().GetType = GetType(Helpers.DoomWorld.Models.Folder) Then
                 Return SortFolders(dwContents.OfType(Of Folder), ascending)
@@ -199,12 +216,12 @@ Namespace Views
             End Select
         End Function
 
-        Private Sub btnParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles Btn_ParentFolder.Click
+        Private Sub Btn_ParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles Btn_ParentFolder.Click
             Me.BackToParentDirectory()
         End Sub
 
         Private Sub Lvw_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Lvw_BrowseResults.SelectionChanged, Lvw_SearchResults.SelectionChanged, Lvw_InstalledResults.SelectionChanged
-            Dim lst As ListView = CType(sender, ListView)
+            Dim lst As ListView = DirectCast(sender, ListView)
             If lst.SelectedIndex <> -1 Then
                 Me.HandleSelectedItem(lst.SelectedItem)
             End If
@@ -212,7 +229,7 @@ Namespace Views
         End Sub
 
         Private Sub Cbb_Sorting_SelectionChanged(sender As Object, e As SelectionChangedEventArgs) Handles Cbb_Sorting.SelectionChanged
-            Dim cbb As ComboBox = CType(sender, ComboBox)
+            Dim cbb As ComboBox = DirectCast(sender, ComboBox)
             If cbb.SelectedIndex <> -1 Then
                 _selectedSortingCriterion = DirectCast(cbb.SelectedItem, ComboBoxItem).Content.ToString()
 
@@ -224,8 +241,8 @@ Namespace Views
         ''' Sort and refresh all lists after Combobox sorting option has changed.
         ''' </summary>
         Private Sub SortAndRefreshAllLists()
-            If Lvw_BrowseResults IsNot Nothing AndAlso Lvw_BrowseResults.Items IsNot Nothing AndAlso Lvw_BrowseResults.Items.Count <> 0 Then
-                Me.LoadResultsItemsSource(Lvw_BrowseResults.Items.OfType(Of Object))
+            If _lstBrowseResults IsNot Nothing AndAlso _lstBrowseResults.Count <> 0 Then
+                Me.LoadResultsItemsSource(_lstBrowseResults)
             End If
 
             If Lvw_SearchResults IsNot Nothing AndAlso Lvw_SearchResults.Items IsNot Nothing AndAlso Lvw_SearchResults.Items.Count <> 0 Then
@@ -276,8 +293,8 @@ Namespace Views
         ''' <param name="folder"></param>
         Private Async Sub GetFolder(folder As Helpers.DoomWorld.Models.Folder)
             _resourcePath = folder.Name
-            Dim dwContent As List(Of Object) = Await _doomworldService.GetContent(_resourcePath)
-            LoadResultsItemsSource(dwContent)
+            _lstBrowseResults = Await _doomworldService.GetContent(_resourcePath)
+            LoadResultsItemsSource(_lstBrowseResults)
 
             Me.UpdateDirPathUI(_resourcePath)
         End Sub
@@ -300,23 +317,23 @@ Namespace Views
             End If
         End Sub
 
-        Private Sub Txt_DWSearchText_TextChanged(sender As Object, e As TextChangedEventArgs) Handles Txt_DWSearchText.TextChanged
-            Dim tbx As TextBox = CType(sender, TextBox)
-
-            If tbx.Text.Length >= 3 Then
-                Me.GetSearchResults(tbx.Text)
-            End If
-        End Sub
-
         Private Async Sub GetSearchResults(searchText As String)
+            Try
+                _lstSearchResults = Await _doomworldService.SearchLevels(searchText)
+                If _lstSearchResults Is Nothing OrElse _lstSearchResults.Count = 0 Then
+                    ' TODO : Display no results view ?
+                    Return
+                End If
 
-            Dim searchLevels As List(Of Level) = Await _doomworldService.SearchLevels(searchText)
-            If searchLevels Is Nothing OrElse searchLevels.Count = 0 Then
-                ' TODO : Display no results view ?
-                Return
-            End If
+                Lvw_SearchResults.ItemsSource = SortLevels(_lstSearchResults, _selectedSortingCriterion)
+                Me.SetTxtResultText($"{_lstSearchResults.Count.ToString()} results", Txt_Lvw_SearchResults_Count)
+            Catch ex As OverflowException
+                _lstSearchResults = New List(Of Level)
+                Me.SetTxtResultText("Error : Too many results (100 max)", Txt_Lvw_SearchResults_Count, True)
+                Lvw_SearchResults.ItemsSource = SortLevels(_lstSearchResults, _selectedSortingCriterion)
+            Catch ex As Exception
 
-            Lvw_SearchResults.ItemsSource = SortLevels(searchLevels, _selectedSortingCriterion)
+            End Try
         End Sub
 
 
@@ -335,10 +352,10 @@ Namespace Views
         ''' <param name="id"></param>
         ''' <returns></returns>
         Public Function CheckIsInstalledLevel(id As Long) As Boolean
-            If _installedLevels IsNot Nothing Then
-                Return _installedLevels.Exists(Function(lvl)
-                                                   Return lvl.Id = id
-                                               End Function)
+            If _lstInstalledLevelsResults IsNot Nothing Then
+                Return _lstInstalledLevelsResults.Exists(Function(lvl)
+                                                             Return lvl.Id = id
+                                                         End Function)
             End If
 
             Return False
@@ -357,14 +374,17 @@ Namespace Views
 
                 Select Case tabItem.Name
                     Case Tbi_DWBrowse.Name
-                        Lvw_BrowseResults.ItemsSource = SortContents(Lvw_BrowseResults.Items.OfType(Of Object),
+                        Lvw_BrowseResults.ItemsSource = SortContents(_lstBrowseResults,
                                      DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
+                        SetTxtResultText($"{_lstBrowseResults.Count().ToString()} results", Txt_Lvw_BrowseResults_Count)
                     Case Tbi_DWSearch.Name
                         Lvw_SearchResults.ItemsSource = SortLevels(Lvw_SearchResults.Items.OfType(Of Level),
                                    DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
+                        SetTxtResultText($"{_lstSearchResults.Count().ToString()} results", Txt_Lvw_SearchResults_Count)
                     Case Else 'Tbi_DWInstalled.Name
                         Lvw_InstalledResults.ItemsSource = SortInstalledLevels(Lvw_InstalledResults.Items.OfType(Of InstalledLevel),
                                    DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
+                        SetTxtResultText($"{_lstInstalledLevelsResults.Count().ToString()} results", Txt_Lvw_InstalledResults_Count)
                 End Select
 
             Catch ex As Exception
@@ -382,6 +402,25 @@ Namespace Views
         Private Sub Tbc_DWItems_Loaded(sender As Object, e As RoutedEventArgs)
             AddHandler Rbtn_SortAsc.Checked, Sub(radioButtonSender, radioButtonEventArgs) Rbtn_Sort_Checked(radioButtonSender, radioButtonEventArgs)
             AddHandler Rbtn_SortDesc.Checked, Sub(radioButtonSender, radioButtonEventArgs) Rbtn_Sort_Checked(radioButtonSender, radioButtonEventArgs)
+        End Sub
+
+        Private Sub Txt_DWSearchText_KeyDown(sender As Object, e As KeyEventArgs)
+            If e.Key = Key.Return Then
+                If Txt_DWSearchText.Text.Length >= 3 Then
+                    Me.GetSearchResults(Txt_DWSearchText.Text)
+                End If
+            End If
+        End Sub
+
+        Private Sub Btn_DWSearch_Click(sender As Object, e As RoutedEventArgs)
+            If Txt_DWSearchText.Text.Length >= 3 Then
+                Me.GetSearchResults(Txt_DWSearchText.Text)
+            End If
+        End Sub
+
+        Private Sub SetTxtResultText(text As String, txtControl As TextBlock, Optional isError As Boolean = False)
+            txtControl.Text = text
+            txtControl.Foreground = If(isError, Windows.Media.Brushes.Red, Windows.Media.Brushes.Black)
         End Sub
     End Class
 End Namespace

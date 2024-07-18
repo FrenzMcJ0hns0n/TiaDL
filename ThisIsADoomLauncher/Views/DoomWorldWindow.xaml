@@ -109,21 +109,33 @@
                                     <!-- / Up arrow -->
 
                                     <TextBlock VerticalAlignment="Center">
-                                    <Run Text="Dir: "/>
-                                    <Run x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
+                                            <Run Text="Dir: "/>
+                                            <Run x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
                                     </TextBlock>
+
                                 </StackPanel>
                             </Border>
                             <!-- / Separator -->
-                            <ListView x:Name="Lvw_BrowseResults" 
-                                      Grid.Row="1"
-                                      BorderThickness="0">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Name="Txt_Lvw_BrowseResults_Count" 
+                                           Grid.Row="0"
+                                           FontWeight="SemiBold"
+                                           HorizontalAlignment="Center"
+                                           Margin="2">
+                                </TextBlock>
+                                <ListView Grid.Row="1" x:Name="Lvw_BrowseResults"                                       
+                                          BorderThickness="0">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
                         </Grid>
                     </TabItem>
                     <TabItem x:Name="Tbi_DWSearch" Header="Search">
@@ -133,41 +145,67 @@
                                 <RowDefinition Height="11*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <TextBlock Text="Search: " 
-                                       VerticalAlignment="Center"/>
                                 <TextBox x:Name="Txt_DWSearchText"
                                      VerticalContentAlignment="Center"
                                      Width="200"
-                                     Margin="10"/>
+                                     Margin="10" KeyDown="Txt_DWSearchText_KeyDown"/>
+                                <Button x:Name="Btn_DWSearch" 
+                                        Content="Search"
+                                        Margin="0,10"
+                                        Padding="5,0" Click="Btn_DWSearch_Click"/>
                             </StackPanel>
-                            <ListView x:Name="Lvw_SearchResults"
-                                  BorderThickness="0"
-                                  Grid.Row="1">
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock x:Name="Txt_Lvw_SearchResults_Count" 
+                                           Grid.Row="0" 
+                                           FontWeight="SemiBold"
+                                           HorizontalAlignment="Center"
+                                           Margin="2"/>
+                                <ListView Grid.Row="1" 
+                                          x:Name="Lvw_SearchResults"
+                                          BorderThickness="0">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <userControls:LevelControl/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+                        </Grid>
+                    </TabItem>
+                    <TabItem x:Name="Tbi_DWInstalled" Header="Installed">
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock x:Name="Txt_Lvw_InstalledResults_Count"
+                                       Grid.Row="0" 
+                                       FontWeight="SemiBold"
+                                       HorizontalAlignment="Center"
+                                       Margin="2">
+                            </TextBlock>
+                            <ListView Grid.Row="1" 
+                                      x:Name="Lvw_InstalledResults"
+                                      BorderThickness="0">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <userControls:LevelControl/>
+                                        <StackPanel Grid.Column="0" Margin="10">
+                                            <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding FileName}"/>
+                                            <Rectangle Height="10" Visibility="Hidden"/>
+                                            <TextBlock>
+                                            <Run Text="Installed on :"/>
+                                            <Run Text="{Binding InstallDate}"/>
+                                            </TextBlock>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
                         </Grid>
-                    </TabItem>
-                    <TabItem x:Name="Tbi_DWInstalled" Header="Installed">
-                        <ListView x:Name="Lvw_InstalledResults"
-                                  BorderThickness="0">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Grid.Column="0" Margin="10">
-                                        <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
-                                        <TextBlock Text="{Binding FileName}"/>
-                                        <Rectangle Height="10" Visibility="Hidden"/>
-                                        <TextBlock>
-                                            <Run Text="Installed on :"/>
-                                            <Run Text="{Binding InstallDate}"/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
                     </TabItem>
                 </TabControl>
             </Grid>
