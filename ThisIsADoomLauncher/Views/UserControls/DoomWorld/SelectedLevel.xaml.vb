@@ -140,7 +140,9 @@ Namespace Views.UserControls.DoomWorld
                                             MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No)
 
                 If errDirectoryResult = MessageBoxResult.Yes Then
-                    ' TODO : Delete InstalledLevel
+                    _doomWorldService.DeleteLevel(_currentLevel)
+
+                    _doomWorldWindow.AfterDeletedLevel()
                 End If
             End Try
 

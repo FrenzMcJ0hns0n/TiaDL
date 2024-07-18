@@ -422,5 +422,14 @@ Namespace Views
             txtControl.Text = text
             txtControl.Foreground = If(isError, Windows.Media.Brushes.Red, Windows.Media.Brushes.Black)
         End Sub
+
+        ''' <summary>
+        ''' Refresh UI after deleting a level
+        ''' </summary>
+        Public Sub AfterDeletedLevel()
+            ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.NoSelectedLevel
+            Me.LoadInstalledLevelsItemsSource()
+        End Sub
+
     End Class
 End Namespace

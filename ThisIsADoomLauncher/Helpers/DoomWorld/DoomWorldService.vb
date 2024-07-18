@@ -584,10 +584,8 @@ Namespace Helpers.DoomWorld
                 Dim levelToDelete As Models.InstalledLevel = installedLevels.Find(Function(instLvl)
                                                                                       Return instLvl.Id = level.Id
                                                                                   End Function)
-                Dim levelDirName As String = levelToDelete.DirectoryName
-
                 ' delete Level folder/files
-                Me.DeleteLevelDirectories(levelDirName)
+                Me.DeleteLevelDirectory(levelToDelete.DirectoryName)
 
                 ' delete Level from registry
                 installedLevels.Remove(levelToDelete)
@@ -599,19 +597,21 @@ Namespace Helpers.DoomWorld
             End Try
         End Sub
 
-        Private Function DeleteLevelDirectories(levelDirName As String) As Integer
-            Dim nbDeletedDirs As Integer = 0
-            Dim dirArray As String() = {"Maps", "Misc", "Mods", "Pict"}
-
-            For index As Integer = 0 To dirArray.Count()
-                Dim subPath As String = Path.Combine(GetDirectoryPath(dirArray(index)), levelDirName)
-                If Directory.Exists(subPath) Then
-                    Directory.Delete(subPath, True)
-                    nbDeletedDirs += 1
+        ''' <summary>
+        ''' Delete the level directory.
+        ''' </summary>
+        ''' <param name="levelDirName"></param>
+        Private Sub DeleteLevelDirectory(levelDirName As String)
+            Try
+                If Directory.Exists(levelDirName) Then
+                    Directory.Delete(levelDirName, True)
                 End If
-            Next
-            Return nbDeletedDirs
-        End Function
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {levelDirName}")
+            End Try
+
+        End Sub
 
         ''' Open Level's DoomWorld page.
         Public Sub OpenInBrowser(currentLevel As Level)
