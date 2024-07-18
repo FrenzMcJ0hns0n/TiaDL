@@ -31,6 +31,10 @@ Namespace Views.UserControls.DoomWorld
         Private Sub Usc_SelectedLevel_Loaded(sender As Object, e As RoutedEventArgs)
             _currentLevel = CType(Me.DataContext, Level)
 
+            If _currentLevel Is Nothing Then
+                Return
+            End If
+
             If _doomWorldWindow.CheckIsInstalledLevel(_currentLevel.Id) Then
                 Me.UpdateUIInstalledLevel()
             End If

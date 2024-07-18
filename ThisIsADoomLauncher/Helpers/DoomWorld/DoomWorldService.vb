@@ -137,21 +137,29 @@ Namespace Helpers.DoomWorld
         ''' <param name="id">Level id.</param>
         ''' <returns>A Level</returns>
         Public Async Function GetLevel(id As Integer) As Task(Of Models.Level)
-            Dim uriPath As String = String.Concat("api.php?action=get&id=", id)
-            Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
-            Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-            If response.IsSuccessStatusCode Then
+            Try
+                Dim uriPath As String = String.Concat("api.php?action=get&id=", id)
+                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
+                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
+                If response.IsSuccessStatusCode Then
 
-                Dim jsonResult As String = Await response.Content.ReadAsStringAsync()
+                    Dim jsonResult As String = Await response.Content.ReadAsStringAsync()
 
-                Dim jsonObject As JObject = JObject.Parse(Helpers.DoomWorld.HtmlCleaner.HtmlToPlainText(jsonResult))
+                    Dim jsonObject As JObject = JObject.Parse(Helpers.DoomWorld.HtmlCleaner.HtmlToPlainText(jsonResult))
 
-                Dim jLevel As JToken = jsonObject.SelectToken("content")
+                    Dim jLevel As JToken = jsonObject.SelectToken("content")
 
-                Return CreateLevelFromJToken(jLevel)
-            End If
+                    Return CreateLevelFromJToken(jLevel)
+                End If
 
-            Return Nothing
+                Return Nothing
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {id}")
+
+                Return Nothing
+            End Try
         End Function
 
         ''' <summary>
@@ -268,10 +276,7 @@ Namespace Helpers.DoomWorld
         ''' <param name="levelUrl">The level download url.</param>
         ''' <returns>The .zip level archive path</returns>
         Public Async Function DownloadLevelZip(levelUrl As String, downloadsDirectory As String) As Task(Of String)
-            '
-            ' Add level in a Doomworld registry file
-            ' it will be easier to display Name, show Install folder, (open folder ?), Uninstall...
-            ' 
+
             Dim zipArchivePath As String
             Try
                 Dim requestUri As New Uri(levelUrl)
@@ -283,7 +288,7 @@ Namespace Helpers.DoomWorld
                     Directory.CreateDirectory(downloadsDirectory)
                 End If
 
-                Using fileStream As New FileStream(String.Concat(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
+                Using fileStream As New FileStream(Path.Combine(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
                     Await response.Content.CopyToAsync(fileStream)
                     zipArchivePath = fileStream.Name
                 End Using
