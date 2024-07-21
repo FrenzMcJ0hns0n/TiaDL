@@ -11,8 +11,6 @@ Namespace Views.UserControls.DoomWorld
         Private _doomWorldWindow As Views.DoomWorldWindow
         Private _currentLevel As Level
         Public Sub New()
-
-            ' This call is required by the designer.
             InitializeComponent()
 
             Txt_OpenFileExplorer.Visibility = Visibility.Collapsed
@@ -20,7 +18,6 @@ Namespace Views.UserControls.DoomWorld
             _doomWorldWindow = Application.Current.Windows.OfType(Of Views.DoomWorldWindow).FirstOrDefault()
 
             _doomWorldService = _doomWorldWindow.GetDWServiceInstance()
-
         End Sub
 
         ''' <summary>
