@@ -108,7 +108,6 @@
     <Compile Include="Helpers\Converters\DoomWorld\FileFolderConverter.vb" />
     <Compile Include="Helpers\Converters\DoomWorld\LevelSizeConverter.vb" />
     <Compile Include="Helpers\Converters\DoomWorld\ParentFolderConverter.vb" />
-    <Compile Include="Helpers\Converters\DoomWorld\SelectedLevelConverter.vb" />
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldHttpClient.vb" />
     <Compile Include="Helpers\DoomWorld\DoomWorldService.vb" />

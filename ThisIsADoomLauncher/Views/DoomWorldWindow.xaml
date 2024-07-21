@@ -17,7 +17,6 @@
     <Window.Resources>
         <ResourceDictionary>
             <converters:FileFolderConverter x:Key="FileFolderConverter"/>
-            <converters:SelectedLevelConverter x:Key="SelectedLevelConverter"/>
             <converters:ParentFolderConverter x:Key="ParentFolderConverter"/>
 
             <Style x:Key="Rbtn_Sorting" TargetType="{x:Type RadioButton}">
