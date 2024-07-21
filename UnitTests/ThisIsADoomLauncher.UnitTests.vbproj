@@ -126,9 +126,9 @@
   <ItemGroup>
     <None Include="doomworld_mirrors.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  <TargetPath>DoomWorld\doomworld_mirrors.json</TargetPath>
+      <TargetPath>DoomWorld\doomworld_mirrors.json</TargetPath>
     </None>
-	<None Include="doomworld_registry.json">
+    <None Include="doomworld_registry.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <TargetPath>DoomWorld\doomworld_registry.json</TargetPath>
     </None>

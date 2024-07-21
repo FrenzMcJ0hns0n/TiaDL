@@ -337,61 +337,6 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Move Level files in the matching directories.
-        ''' </summary>
-        ''' <param name="directoryName">Destination directory.</param>
-        ''' <returns></returns>
-        Public Async Function MoveFilesIntoDirectories(directoryName As String) As Task(Of List(Of String))
-            Dim movedFiles As New List(Of String)
-
-            Try
-                If Not Directory.Exists(directoryName) Then
-                    Throw New DirectoryNotFoundException
-                End If
-
-                Dim files As List(Of String) = Directory.EnumerateFiles(directoryName).ToList
-
-                Await Task.Run(
-                    Sub()
-                        For Each file As String In files
-                            movedFiles.Add(MoveToFolder(file))
-                        Next
-                    End Sub
-                )
-
-            Catch ex As Exception
-                movedFiles = Nothing
-                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {directoryName}")
-            End Try
-
-            Return movedFiles
-        End Function
-
-        Private Function MoveToFolder(currentFile As String) As String
-            Dim currentFileInfo As New FileInfo(currentFile)
-            Dim destinationDirectory As DirectoryInfo
-            Dim fileExtension As String = currentFileInfo.Extension.ToLower()
-
-            If Constants.VALID_EXTENSIONS_MAPS.Contains(fileExtension) Then
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Maps"), currentFileInfo.Directory.Name))
-            ElseIf Constants.VALID_EXTENSIONS_MISC.Contains(fileExtension) Then
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Misc"), currentFileInfo.Directory.Name))
-            ElseIf Constants.VALID_EXTENSIONS_MODS.Contains(fileExtension) Then
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Mods"), currentFileInfo.Directory.Name))
-            ElseIf Constants.VALID_EXTENSIONS_PICT.Contains(fileExtension) Then
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Pict"), currentFileInfo.Directory.Name))
-            Else
-                destinationDirectory = Directory.CreateDirectory(Path.Combine(GetDirectoryPath("Othr"), currentFileInfo.Directory.Name))
-            End If
-
-            Dim destFileName As String = Path.Combine(destinationDirectory.FullName, currentFileInfo.Name)
-            File.Move(currentFile, destFileName)
-
-            Return destFileName
-        End Function
-
-        ''' <summary>
         ''' Creates a Level object from a JToken level
         ''' </summary>
         ''' <param name="jLevel">JToken level.</param>

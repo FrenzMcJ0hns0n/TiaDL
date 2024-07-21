@@ -19,6 +19,17 @@ Namespace Views
         Private _lstSearchResults As List(Of Level)
         Private _lstInstalledLevelsResults As List(Of InstalledLevel)
 
+        Private _selectedLevel As ThisIsADoomLauncher.Helpers.DoomWorld.Models.Level
+        Public Property SelectedLevel() As ThisIsADoomLauncher.Helpers.DoomWorld.Models.Level
+            Get
+                Return _selectedLevel
+            End Get
+            Set(ByVal value As ThisIsADoomLauncher.Helpers.DoomWorld.Models.Level)
+                _selectedLevel = value
+                Me.ToggleDisplayLevelContent()
+            End Set
+        End Property
+
         Public Sub New()
             InitializeComponent()
 
@@ -34,7 +45,8 @@ Namespace Views
         ''' Initializes some UI custom elements.
         ''' </summary>
         Private Sub InitUI()
-            ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.NoSelectedLevel
+
+            SelectedLevel = Nothing
 
             InitLists()
             UpdateDirPathUI(_resourcePath)
@@ -216,7 +228,7 @@ Namespace Views
             End Select
         End Function
 
-        Private Sub Btn_ParentFolder_Click(sender As Object, e As RoutedEventArgs) Handles Btn_ParentFolder.Click
+        Private Sub Btn_ParentFolder_Click(sender As Object, e As RoutedEventArgs)
             Me.BackToParentDirectory()
         End Sub
 
@@ -262,16 +274,16 @@ Namespace Views
         Private Sub HandleSelectedItem(selectedItem As Object)
 
             If selectedItem.GetType() Is GetType(Helpers.DoomWorld.Models.Level) Then
-                Dim item As Helpers.DoomWorld.Models.Level = CType(selectedItem, Helpers.DoomWorld.Models.Level)
+                Dim item As Helpers.DoomWorld.Models.Level = DirectCast(selectedItem, Helpers.DoomWorld.Models.Level)
                 GetLevel(item)
 
             ElseIf selectedItem.GetType() Is GetType(Helpers.DoomWorld.Models.InstalledLevel) Then
-                Dim item As Helpers.DoomWorld.Models.InstalledLevel = CType(selectedItem, Helpers.DoomWorld.Models.InstalledLevel)
+                Dim item As Helpers.DoomWorld.Models.InstalledLevel = DirectCast(selectedItem, Helpers.DoomWorld.Models.InstalledLevel)
                 Dim level As New Level() With {.Id = item.Id}
                 GetLevel(level)
 
             Else
-                Dim item As Helpers.DoomWorld.Models.Folder = CType(selectedItem, Helpers.DoomWorld.Models.Folder)
+                Dim item As Helpers.DoomWorld.Models.Folder = DirectCast(selectedItem, Helpers.DoomWorld.Models.Folder)
                 _resourcePath = item.Name
                 ' + show path in UI
                 GetFolder(item)
@@ -283,8 +295,7 @@ Namespace Views
         ''' </summary>
         ''' <param name="level"></param>
         Private Async Sub GetLevel(level As Helpers.DoomWorld.Models.Level)
-            Dim selectedLevel As Helpers.DoomWorld.Models.Level = Await _doomworldService.GetLevel(Convert.ToInt32(level.Id))
-            ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.SelectedLevel With {.DataContext = selectedLevel}
+            SelectedLevel = Await _doomworldService.GetLevel(Convert.ToInt32(level.Id))
         End Sub
 
         ''' <summary>
@@ -321,7 +332,7 @@ Namespace Views
             Try
                 _lstSearchResults = Await _doomworldService.SearchLevels(searchText)
                 If _lstSearchResults Is Nothing OrElse _lstSearchResults.Count = 0 Then
-                    ' TODO : Display no results view ?
+
                     Return
                 End If
 
@@ -336,11 +347,10 @@ Namespace Views
             End Try
         End Sub
 
-
+        ''' <summary>
+        ''' UI code 
+        ''' </summary>
         Public Sub AfterLevelInstalled()
-            ' TODO : add level installed icon tick in Lvw_BrowseList ?
-            ' -> CType(Lvw_BrowseResults.SelectedItem, Level).Installed = True
-
             Lvw_BrowseResults.Items.Refresh()
             Me.LoadInstalledLevelsItemsSource()
         End Sub
@@ -426,9 +436,23 @@ Namespace Views
         ''' <summary>
         ''' Refresh UI after deleting a level
         ''' </summary>
-        Public Sub AfterDeletedLevel()
-            ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.NoSelectedLevel
+        Public Sub AfterLevelDeleted()
+            SelectedLevel = Nothing
+
             Me.LoadInstalledLevelsItemsSource()
+        End Sub
+
+        ''' <summary>
+        ''' Displays (or not) the Level information on the right side when SelectedLevel is set.
+        ''' </summary>
+        Private Sub ToggleDisplayLevelContent()
+            If ctpDisplayLevel IsNot Nothing Then
+                If _selectedLevel IsNot Nothing Then
+                    ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.SelectedLevel With {.DataContext = SelectedLevel}
+                Else
+                    ctpDisplayLevel.Content = New Views.UserControls.DoomWorld.NoSelectedLevel
+                End If
+            End If
         End Sub
 
     End Class

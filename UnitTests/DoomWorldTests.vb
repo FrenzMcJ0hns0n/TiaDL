@@ -170,20 +170,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         Assert.AreEqual(dirNameResult, extractedDir.Name)
     End Sub
 
-    <TestMethod()> Public Sub MoveFiles_OK()
-        'Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/av"))
-        'Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/jpcp"))
-        Dim directoryName As New Uri(String.Concat(IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), "/cchest2"))
-
-        Dim _doomWorldService As New DoomWorldService()
-        Dim task As Task(Of List(Of String)) = _doomWorldService.MoveFilesIntoDirectories(directoryName.AbsolutePath)
-
-        Dim movedFiles = task.Result
-
-        Assert.IsNotNull(movedFiles)
-        Assert.AreNotEqual(0, movedFiles.Count)
-    End Sub
-
     <TestMethod()> Public Sub GetDirsAndFilesTest_OK()
         Dim noFolderPath As String = ""
         Dim doomFolderPath As String = "doom/"
@@ -308,7 +294,6 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         }
 
         _doomWorldService.OpenInBrowser(lvl)
-
     End Sub
 
 End Class

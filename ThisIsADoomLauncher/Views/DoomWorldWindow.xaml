@@ -62,12 +62,12 @@
                            Margin="7,5"
                            VerticalAlignment="Center"/>
                     <ComboBox x:Name="Cbb_Sorting"
-                          HorizontalAlignment="Right" 
-                          VerticalContentAlignment="Center" 
-                          BorderThickness="0.7"
-                          Margin="0,15" 
-                          Padding="10,0" 
-                          SelectedIndex="0">
+                              HorizontalAlignment="Right" 
+                              VerticalContentAlignment="Center" 
+                              BorderThickness="0.7"
+                              Margin="0,15" 
+                              Padding="10,0" 
+                              SelectedIndex="0">
                         <ComboBoxItem Content="Title"/>
                         <ComboBoxItem Content="Filename"/>
                         <ComboBoxItem Content="ReleaseDate"/>
@@ -104,7 +104,8 @@
                                             BorderThickness="0.7"
                                             x:Name="Btn_ParentFolder"
                                             Margin="10"
-                                            Padding="10,3"/>
+                                            Padding="10,3"
+                                            Click="Btn_ParentFolder_Click"/>
                                     <!-- / Up arrow -->
 
                                     <TextBlock VerticalAlignment="Center">
