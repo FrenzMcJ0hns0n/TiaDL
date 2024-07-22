@@ -8,13 +8,9 @@ Namespace Helpers.DoomWorld
         Private Shared _instance As HttpClient
 
         Public Shared Function GetInstance() As HttpClient
-            If _instance Is Nothing Then
-                _instance = New HttpClient()
-                _instance.BaseAddress = New Uri(BASE_URL)
-            End If
+            If _instance Is Nothing Then _instance = New HttpClient()
             Return _instance
         End Function
-
 
     End Class
 End Namespace

@@ -23,41 +23,39 @@ Namespace Helpers.DoomWorld
         ''' </summary>
         ''' <param name="resourcePath">The resource URI path. (i.e. doom2/a-c/ for folders, or doom2/a-c/av for Level Alien Vendetta)</param>
         ''' <returns>A list of Object (Directories or Levels).</returns>
-        Public Async Function GetContent(Optional resourcePath As String = "levels/") As Task(Of List(Of Object))
-
-            Dim returnItems As New List(Of Object)
+        Public Async Function GetContents(Optional resourcePath As String = "levels/") As Task(Of List(Of Object))
+            Dim contents As New List(Of Object)
 
             Try
-                Dim uriPath As String = String.Concat("api.php?action=getcontents&name=", resourcePath)
-                Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
-                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-                If response.IsSuccessStatusCode Then
+                Dim action As String = "getcontents"
+                Dim params As New List(Of String) From {$"name={resourcePath}"}
+                Dim apiRequest As New ApiRequestManager(action, params)
+                Dim jsonObject As JObject = Await apiRequest.FetchResponse()
 
-                    Dim jsonObject As JObject = JObject.Parse(Await response.Content.ReadAsStringAsync())
-
-                    If jsonObject.SelectToken("warning") IsNot Nothing Or jsonObject.SelectToken("error") IsNot Nothing Then
-                        Throw New ArgumentException($"Invalid path: {resourcePath} is not correct")
+                With jsonObject
+                    If .SelectToken("warning") IsNot Nothing Then : Throw New Exception($"Warning: { .SelectToken("warning.message") }")
+                    ElseIf .SelectToken("error") IsNot Nothing Then : Throw New Exception($"Error: { .SelectToken("error.message") }")
                     End If
 
-                    If jsonObject.SelectToken("content.file") Is Nothing And jsonObject.SelectToken("dir") Is Nothing Then
-                        Throw New ArgumentException($"No results")
+                    If .SelectToken("content.file") Is Nothing AndAlso .SelectToken("content.dir") Is Nothing Then
+                        Throw New Exception($"No contents returned for name ""{resourcePath}""")
                     End If
 
-                    jsonObject.SelectToken("content.dir")?.ToList().ForEach(
-                        Sub(jFolder) returnItems.Add(CreateFolderFromJToken(jFolder))
+                    .SelectToken("content.dir")?.ToList().ForEach(
+                        Sub(jFolder) contents.Add(CreateFolderFromJToken(jFolder))
                     )
 
-                    jsonObject.SelectToken("content.file")?.ToList().ForEach(
-                        Sub(jLevel) returnItems.Add(CreateLevelFromJToken(jLevel))
+                    .SelectToken("content.file")?.ToList().ForEach(
+                        Sub(jLevel) contents.Add(CreateLevelFromJToken(jLevel))
                     )
-                End If
-
+                End With
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {resourcePath}")
             End Try
-            Return returnItems
+
+            Return contents
         End Function
 
         ''' <summary>

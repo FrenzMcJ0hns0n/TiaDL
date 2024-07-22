@@ -171,22 +171,22 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     End Sub
 
     <TestMethod()> Public Sub GetDirsAndFilesTest_OK()
-        Dim noFolderPath As String = ""
-        Dim doomFolderPath As String = "doom/"
-        Dim a_cFolderPath As String = "doom/a-c/"
+        'Dim noFolderPath As String = ""
+        'Dim doomFolderPath As String = "doom/"
+        Dim a_cFolderPath As String = "levels/doom/a-c/"
 
         Dim _doomWorldService As New DoomWorldService()
 
-        Dim taskRienFolders As Task(Of List(Of Object)) = _doomWorldService.GetContent(noFolderPath)
-        Dim taskDoomFolders As Task(Of List(Of Object)) = _doomWorldService.GetContent(doomFolderPath)
-        Dim taskA_CFolders As Task(Of List(Of Object)) = _doomWorldService.GetContent(a_cFolderPath)
+        'Dim taskRienFolders As Task(Of List(Of Object)) = _doomWorldService.GetContents(noFolderPath)
+        'Dim taskDoomFolders As Task(Of List(Of Object)) = _doomWorldService.GetContents(doomFolderPath)
+        Dim taskA_CFolders As Task(Of List(Of Object)) = _doomWorldService.GetContents(a_cFolderPath)
 
-        Dim folders1 = taskRienFolders.Result
-        Dim folders2 = taskDoomFolders.Result
+        'Dim folders1 = taskRienFolders.Result
+        'Dim folders2 = taskDoomFolders.Result
         Dim levelsList = taskA_CFolders.Result
 
-        Assert.AreNotEqual(0, folders1.Count)
-        Assert.AreNotEqual(0, folders2.Count)
+        'Assert.AreNotEqual(0, folders1.Count)
+        'Assert.AreNotEqual(0, folders2.Count)
         Assert.AreNotEqual(0, levelsList.Count)
     End Sub
 

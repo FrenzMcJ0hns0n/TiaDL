@@ -62,7 +62,7 @@ Namespace Views
         ''' </summary>
         Private Async Sub InitLists()
             Try
-                _lstBrowseResults = Await _doomworldService.GetContent()
+                _lstBrowseResults = Await _doomworldService.GetContents()
                 LoadResultsItemsSource(_lstBrowseResults)
                 LoadInstalledLevelsItemsSource()
 
@@ -301,7 +301,7 @@ Namespace Views
         ''' <param name="folder"></param>
         Private Async Sub GetFolder(folder As Helpers.DoomWorld.Models.Folder)
             _resourcePath = folder.Name
-            _lstBrowseResults = Await _doomworldService.GetContent(_resourcePath)
+            _lstBrowseResults = Await _doomworldService.GetContents(_resourcePath)
             LoadResultsItemsSource(_lstBrowseResults)
 
             Me.UpdateDirPathUI(_resourcePath)

@@ -1,5 +1,6 @@
 ﻿Imports System.Net.Http
 Imports System.Reflection
+Imports Newtonsoft.Json.Linq
 
 Namespace Helpers.DoomWorld
     Public Class ApiRequestManager
@@ -53,7 +54,10 @@ Namespace Helpers.DoomWorld
             Me.Action = action
             Me.Parameters = parameters
 
-            Debug.Print("Initialized ApiRequestManager object successfully")
+
+            Debug.Print("Initialized ApiRequestManager object successfully with:")
+            Debug.Print("Action = " & Me.Action)
+            Debug.Print("Parameters = " & GetFormattedParams())
         End Sub
 
         '===========================================================================
@@ -64,35 +68,36 @@ Namespace Helpers.DoomWorld
         End Function
 
         Private Function GetUriString() As String
-            Return $"{BASE_URL}?{Action}&{GetFormattedParams()}&{FORMAT}"
+            Return $"{BASE_URL}?action={Action}&{GetFormattedParams()}&{FORMAT}"
         End Function
 
-        'TODO someday?
+        ''TODO someday?
         'Private Sub WriteLogLineNowUTC(message As String)
         '    _logs.Append($"{Date.NowUTC} (UTC) - {message}{Environment.NewLine}")
         'End Sub
+        ''Example:
+        'Me.WriteLogLineNowUTC(String.Format("Preparing request with action '{0}' and parameters '{1}'...", Me.Action, Join(Me.Parameters, ","))
 
         '===========================================================================
         ' Public methods
         '===========================================================================
 
-        Public Async Function Execute(action As String, parameters As List(Of String)) As Task(Of String)
-            Dim strResponse As String = Nothing
+        Public Async Function FetchResponse() As Task(Of JObject)
+            Dim jsonResponse As JObject = Nothing
 
             Try
-                'Me.WriteLogLineNowUTC(String.Format("Preparing request with action '{0}' and parameters '{1}'...", Me.Action, Join(Me.Parameters, ","))
                 UriString = GetUriString()
                 _response = Await DoomWorldHttpClient.GetInstance().GetAsync(New Uri(UriString))
 
                 If Not _response.IsSuccessStatusCode Then Throw New Exception($"Status code ({_response.StatusCode}) was not Success.")
 
-                strResponse = Await _response.Content.ReadAsStringAsync()
+                jsonResponse = JObject.Parse(Await _response.Content.ReadAsStringAsync())
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : action={action}, parameters={parameters}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : action={Action}, parameters={Parameters}")
             End Try
 
-            Return strResponse
+            Return jsonResponse
         End Function
 
     End Class
