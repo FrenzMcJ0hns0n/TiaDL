@@ -82,7 +82,7 @@ Namespace Helpers.DoomWorld
         ' Public methods
         '===========================================================================
 
-        Public Async Function FetchResponse() As Task(Of JObject)
+        Public Async Function FetchJsonResponse() As Task(Of JObject)
             Dim jsonResponse As JObject = Nothing
 
             Try
@@ -98,6 +98,24 @@ Namespace Helpers.DoomWorld
             End Try
 
             Return jsonResponse
+        End Function
+
+        Public Async Function FetchStringResponse() As Task(Of String)
+            Dim strResponse As String = Nothing
+
+            Try
+                UriString = GetUriString()
+                _response = Await DoomWorldHttpClient.GetInstance().GetAsync(New Uri(UriString))
+
+                If Not _response.IsSuccessStatusCode Then Throw New Exception($"Status code ({_response.StatusCode}) was not Success.")
+
+                strResponse = Await _response.Content.ReadAsStringAsync()
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : action={Action}, parameters={Parameters}")
+            End Try
+
+            Return strResponse
         End Function
 
     End Class
