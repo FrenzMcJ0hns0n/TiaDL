@@ -109,12 +109,12 @@
             </Border>
 
             <TextBlock>
-            <Run Text="Release date:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
-            <Run Text="{Binding ReleaseDate}"/>
-            </TextBlock>
-            <TextBlock>
             <Run Text="Author:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
             <Run Text="{Binding Author}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Release date:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding ReleaseDate}"/>
             </TextBlock>
             <TextBlock>
             <Run Text="Description:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>

@@ -9,10 +9,10 @@
             <TextBlock Text="{Binding Title}" 
                        FontWeight="Bold" 
                        FontSize="16"/>
-            <TextBlock Text="{Binding Filename}"/>
+            <TextBlock Text="{Binding Author}"/>
             <Rectangle Height="10" Visibility="Hidden"/>
             <TextBlock Text="{Binding ReleaseDate}"/>
-            <TextBlock Text="{Binding Author}"/>
+            <TextBlock Text="{Binding Filename}"/>
         </StackPanel>
     </ContentControl>
 </UserControl>
