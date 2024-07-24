@@ -152,7 +152,7 @@
                                 <Button x:Name="Btn_DWSearch" 
                                         Content="Search"
                                         Margin="0,10"
-                                        Padding="5,0" Click="Btn_DWSearch_Click"/>
+                                        Padding="8,0" Click="Btn_DWSearch_Click"/>
                             </StackPanel>
                             <Grid Grid.Row="1">
                                 <Grid.RowDefinitions>

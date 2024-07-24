@@ -104,14 +104,11 @@ Namespace Views.UserControls.DoomWorld
             Try
                 _doomWorldService.OpenInFileExplorer(_currentLevel)
             Catch ex As Exception
-                Dim errDirectoryResult As MessageBoxResult = MessageBox.Show("Le dossier est introuvable." +
-                                            Environment.NewLine +
-                                            "Peut-être a-t-il été déplacé ou supprimé." +
-                                            Environment.NewLine +
-                                            Environment.NewLine +
-                                            "Voulez-vous le supprimer de cette liste ?",
-                                            "Dossier introuvable",
-                                            MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No)
+                Dim errDirectoryResult As MessageBoxResult = MessageBox.Show(
+                    $"This folder cannot be found.{vbCrLf}Maybe it was moved or deleted.{vbCrLf}{vbCrLf}Remove it from the list?",
+                    "Folder not found",
+                    MessageBoxButton.YesNo, MessageBoxImage.Error, MessageBoxResult.No
+                )
 
                 If errDirectoryResult = MessageBoxResult.Yes Then
                     _doomWorldService.DeleteLevel(_currentLevel)
