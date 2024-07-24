@@ -150,13 +150,11 @@ Namespace Helpers.DoomWorld
                 Dim jsonObject As JObject = JObject.Parse(Helpers.DoomWorld.HtmlCleaner.HtmlToPlainText(strResponse))
                 Dim jLevel As JToken = jsonObject.SelectToken("content")
                 level = CreateLevelFromJToken(jLevel)
-
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {id}")
-
-                Return level
             End Try
+            Return level
         End Function
 
         ''' <summary>
