@@ -59,7 +59,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
         Dim result As Folder = task.Result
 
-        Assert.IsFalse(String.IsNullOrWhiteSpace(result.Name))
+        Assert.IsNull(result)
     End Sub
 
     ''' <summary>
@@ -73,7 +73,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
         Dim result As Folder = task.Result
 
-        Assert.IsFalse(String.IsNullOrWhiteSpace(result.Name))
+        Assert.IsNull(result)
     End Sub
 
     ''' <summary>

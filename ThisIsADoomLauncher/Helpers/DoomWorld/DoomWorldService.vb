@@ -104,7 +104,7 @@ Namespace Helpers.DoomWorld
 
             Try
                 Dim action As String = "getparentdir"
-                Dim params As New List(Of String) From {$"name=levels/{currentDirectory}"}
+                Dim params As New List(Of String) From {$"name={currentDirectory}"}
                 Dim apiRequest As New ApiRequestManager(action, params)
                 Dim jsonResponse As JObject = Await apiRequest.FetchJsonResponse()
 
