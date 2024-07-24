@@ -175,7 +175,12 @@ Namespace Helpers.DoomWorld
                 'Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
 
                 With jsonResponse
-                    If .SelectToken("warning") IsNot Nothing Then : Throw New Exception($"Warning: { .SelectToken("warning.message") }")
+                    If .SelectToken("warning") IsNot Nothing Then
+                        If .SelectToken("warning.type").Value(Of String) = "Limit Reached" Then
+                            Throw New OverflowException("Search query returned too many results.")
+                        End If
+                        Throw New Exception($"Warning: { .SelectToken("warning.message") }")
+
                     ElseIf .SelectToken("error") IsNot Nothing Then : Throw New Exception($"Error: { .SelectToken("error.message") }")
                     End If
 
@@ -195,6 +200,7 @@ Namespace Helpers.DoomWorld
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {searchText}")
+                Throw
             End Try
 
             Return levels
