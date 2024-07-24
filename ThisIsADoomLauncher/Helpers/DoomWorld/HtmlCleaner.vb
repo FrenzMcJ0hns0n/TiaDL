@@ -27,8 +27,8 @@ Namespace Helpers.DoomWorld
                 text = System.Net.WebUtility.HtmlDecode(text)
                 'Remove tag whitespace/line breaks
                 text = tagWhiteSpaceRegex.Replace(text, "><")
-                'Replace <br /> with line breaks
-                text = lineBreakRegex.Replace(text, Environment.NewLine)
+                'Remove <br> leftover tags
+                text = lineBreakRegex.Replace(text, String.Empty)
                 'Strip formatting
                 text = stripFormattingRegex.Replace(text, String.Empty)
 
