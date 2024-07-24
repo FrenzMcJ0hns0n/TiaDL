@@ -128,7 +128,7 @@
                                            Margin="2">
                                 </TextBlock>
                                 <ListView Grid.Row="1" x:Name="Lvw_BrowseResults"                                       
-                                          BorderThickness="0">
+                                          BorderThickness="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <ContentPresenter Content="{Binding .,Converter={StaticResource ResourceKey=FileFolderConverter}}"/>
@@ -166,7 +166,7 @@
                                            Margin="2"/>
                                 <ListView Grid.Row="1" 
                                           x:Name="Lvw_SearchResults"
-                                          BorderThickness="0">
+                                          BorderThickness="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
                                             <userControls:LevelControl/>
@@ -190,7 +190,7 @@
                             </TextBlock>
                             <ListView Grid.Row="1" 
                                       x:Name="Lvw_InstalledResults"
-                                      BorderThickness="0">
+                                      BorderThickness="1">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Grid.Column="0" Margin="10">
