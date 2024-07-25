@@ -390,9 +390,10 @@ Namespace Views
         ''' <param name="preset">Preset generic object : LevelPreset or ModPreset</param>
         Private Sub DisplayPresetDetails(preset As Object)
             Dim presetTypeName As String = preset.GetType().Name
+            Dim presetType As String = If(presetTypeName = "LevelPreset", "Level preset", "Mod preset")
             Dim presetName As String = If(presetTypeName = "LevelPreset", DirectCast(preset, LevelPreset).Name, DirectCast(preset, ModPreset).Name)
             Dim presetPict As String = If(presetTypeName = "LevelPreset", DirectCast(preset, LevelPreset).Pict, DirectCast(preset, ModPreset).Pict)
-            Dim presetType As String = If(presetTypeName = "LevelPreset", "Level preset", "Mod preset")
+            If presetPict = String.Empty Then presetPict = "pack://application:,,,/Resources/Images/Presets/Lvl_default.png"
 
             Dim presetProperties As New SortedDictionary(Of String, Object)
             For Each pi As PropertyInfo In preset.GetType().GetProperties()
@@ -408,7 +409,7 @@ Namespace Views
             Dim pdw As New PresetDetailsWindow With
             {
                 .Owner = Me,
-                .PresetPictureSrc = New BitmapImage(New Uri(presetPict, UriKind.Relative)), 'TODO Display chosen image or default one
+                .PresetPictureSrc = New BitmapImage(New Uri(presetPict, UriKind.RelativeOrAbsolute)),
                 .PresetProperties = presetProperties,
                 .Title = $"{presetType} ""{presetName}""",
                 .WindowStartupLocation = WindowStartupLocation.CenterOwner

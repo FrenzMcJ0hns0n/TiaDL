@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         
         Title="Level preset - NAME"
-        Height="360" Width="640"
+        Height="360" Width="720"
         ResizeMode="CanMinimize"
         WindowStartupLocation="CenterOwner"
         
