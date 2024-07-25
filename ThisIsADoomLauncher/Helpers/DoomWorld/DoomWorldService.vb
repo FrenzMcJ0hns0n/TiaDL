@@ -158,8 +158,8 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Search Levels based on FILENAME only (for the moment).
-        ''' TODO : edit TYPE and SORT filters.
+        ''' Search Levels
+        ''' TODO: Set "type" as function input param
         ''' </summary>
         ''' <param name="searchText"></param>
         ''' <returns>A list of Level.</returns>
@@ -168,7 +168,7 @@ Namespace Helpers.DoomWorld
 
             Try
                 Dim action As String = "search"
-                Dim params As New List(Of String) From {$"query={searchText}", "type=title"} 'TODO: Set 'type' as function input param
+                Dim params As New List(Of String) From {$"query={searchText}", "type=title"}
                 Dim apiRequest As New ApiRequestManager(action, params)
                 Dim jsonResponse As JObject = Await apiRequest.FetchJsonResponse()
                 'Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=title")
