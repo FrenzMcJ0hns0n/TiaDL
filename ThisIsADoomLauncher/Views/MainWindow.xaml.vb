@@ -388,7 +388,7 @@ Namespace Views
         ''' Display the preset details in a dedicated window
         ''' </summary>
         ''' <param name="preset">Preset generic object : LevelPreset or ModPreset</param>
-        Private Sub DisplayPresetDetails(preset As Object)
+        Private Sub DisplayPresetDetails(preset As Preset)
             Dim presetTypeName As String = preset.GetType().Name
             Dim presetType As String = If(presetTypeName = "LevelPreset", "Level preset", "Mod preset")
             Dim presetName As String = If(presetTypeName = "LevelPreset", DirectCast(preset, LevelPreset).Name, DirectCast(preset, ModPreset).Name)
@@ -396,14 +396,25 @@ Namespace Views
             If presetPict = String.Empty Then presetPict = "pack://application:,,,/Resources/Images/Presets/Lvl_default.png"
 
             Dim presetProperties As New SortedDictionary(Of String, Object)
-            For Each pi As PropertyInfo In preset.GetType().GetProperties()
-                If pi.Name = "Name" Or pi.Name = "Pict" Then Continue For 'Exclude Name & Pict from Dictionary
-                If presetTypeName = "ModPreset" AndAlso pi.Name = "Files" Then
-                    Dim modFiles As List(Of String) = DirectCast(pi.GetValue(preset), List(Of String))
-                    presetProperties.Add(pi.Name, $"<{modFiles.Count} elements>")
+
+            'TODO: Clean this big mess and come up with smthg better 
+            For Each propInfo As PropertyInfo In preset.GetType().GetProperties()
+
+                'Exclude these properties from the Dictionary
+                Dim excludedProperties As New List(Of String) From {"FilesTotalResult", "Name", "Pict", "ShortDesc"}
+                If excludedProperties.Contains(propInfo.Name) Then Continue For
+
+                'Apply special treatment for mod files
+                If presetTypeName = "ModPreset" AndAlso propInfo.Name = "Files" Then
+                    Dim modFiles As List(Of String) = DirectCast(propInfo.GetValue(preset), List(Of String))
+                    For idx As Integer = 0 To modFiles.Count - 1
+                        presetProperties.Add($"File {idx + 1}", $"{modFiles(idx)}")
+                    Next
                     Continue For
                 End If
-                presetProperties.Add(pi.Name, pi.GetValue(preset))
+
+                'Handle other normal properties
+                presetProperties.Add(propInfo.Name, propInfo.GetValue(preset))
             Next
 
             Dim pdw As New PresetDetailsWindow With
@@ -634,12 +645,6 @@ Namespace Views
                     ShowNoUserMods()
                     Return 'Early return
                 End If
-
-                'Edit description to be displayed after preset name
-                For Each mp As ModPreset In modPresets
-                    If mp.Desc.Length > 50 Then mp.Desc = mp.Desc.Substring(0, 49) & "..."
-                    mp.Desc &= $" ({mp.Files.Count} mod files)"
-                Next
 
                 'Display
                 With Lvw_ModsUserPresets

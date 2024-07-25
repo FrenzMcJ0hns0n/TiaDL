@@ -393,8 +393,9 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ModImgConverter}}"/>
-                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="8 0" Text="{Binding Name}" VerticalAlignment="Center"/>
-                                            <TextBlock FontSize="13" Foreground="DarkGray" Text="{Binding Desc}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="8 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="11" Foreground="DimGray" FontStyle="Italic" Margin="12 0 0 0" Text="{Binding ShortDesc}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="11" Margin="12 0 0 0" Text="{Binding FilesTotalResult}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
