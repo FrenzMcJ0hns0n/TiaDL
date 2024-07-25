@@ -159,16 +159,16 @@ Namespace Helpers.DoomWorld
 
         ''' <summary>
         ''' Search Levels
-        ''' TODO: Set "type" as function input param
         ''' </summary>
-        ''' <param name="searchText"></param>
-        ''' <returns>A list of Level.</returns>
-        Public Async Function SearchLevels(searchText As String) As Task(Of List(Of Models.Level))
+        ''' <param name="searchText">The query string to use</param>
+        ''' <param name="searchType">The type of search</param>
+        ''' <returns>A list of Levels</returns>
+        Public Async Function SearchLevels(searchText As String, Optional searchType As String = "title") As Task(Of List(Of Models.Level))
             Dim levels As New List(Of Models.Level)
 
             Try
                 Dim action As String = "search"
-                Dim params As New List(Of String) From {$"query={searchText}", "type=title"}
+                Dim params As New List(Of String) From {$"query={searchText}", $"type={searchType}"}
                 Dim apiRequest As New ApiRequestManager(action, params)
                 Dim jsonResponse As JObject = Await apiRequest.FetchJsonResponse()
                 'Dim uriPath As String = String.Concat("api.php?action=search&query=", searchText, "&type=title")
@@ -186,7 +186,7 @@ Namespace Helpers.DoomWorld
 
                     'If the 1st element is of type JObject, then we have a list of Level entities
                     'TODO: Create a Boolean for clearness AND/OR Use more specialized Newtonsoft methods
-                    Dim listResultLevels As List(Of JToken) = .SelectToken("content.file").ToList() 'listResultLevels
+                    Dim listResultLevels As List(Of JToken) = .SelectToken("content.file").ToList()
                     If listResultLevels.FirstOrDefault().GetType() Is GetType(JObject) Then
                         listResultLevels.ForEach(
                             Sub(jLevel) levels.Add(CreateLevelFromJToken(jLevel))
