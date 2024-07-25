@@ -89,7 +89,7 @@ Namespace Views.UserControls.DoomWorld
             RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
 
             Txt_OpenFileExplorer.Visibility = Visibility.Visible
-
+            Stk_DownloadLevel.ClearValue(StackPanel.CursorProperty) 'Reset cursor icon (Hand) to default
         End Sub
 
         Private Sub Url_OpenBrowser_Click(sender As Object, e As RoutedEventArgs)
