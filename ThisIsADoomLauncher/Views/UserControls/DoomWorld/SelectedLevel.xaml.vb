@@ -41,6 +41,10 @@ Namespace Views.UserControls.DoomWorld
             Me.DownloadLevel(_currentLevel)
         End Sub
 
+        Private Sub Txt_DownloadLevel_MouseDown(sender As Object, e As MouseButtonEventArgs) Handles Txt_DownloadLevel.MouseDown
+            Me.DownloadLevel(_currentLevel)
+        End Sub
+
         Private Async Sub DownloadLevel(levl As Level)
 
             Me.BeginUILevelDownload()
@@ -87,6 +91,7 @@ Namespace Views.UserControls.DoomWorld
             Img_DownloadLevel.Source = New BitmapImage(New Uri("/Resources/Images/doomworld_installed.png", UriKind.Relative))
             Txt_DownloadLevel.Text = "Downloaded"
             RemoveHandler Img_DownloadLevel.MouseDown, AddressOf Img_DownloadLevel_MouseDown
+            RemoveHandler Txt_DownloadLevel.MouseDown, AddressOf Txt_DownloadLevel_MouseDown
 
             Txt_OpenFileExplorer.Visibility = Visibility.Visible
             Stk_DownloadLevel.ClearValue(StackPanel.CursorProperty) 'Reset cursor icon (Hand) to default
@@ -118,5 +123,7 @@ Namespace Views.UserControls.DoomWorld
             End Try
 
         End Sub
+
+
     End Class
 End Namespace

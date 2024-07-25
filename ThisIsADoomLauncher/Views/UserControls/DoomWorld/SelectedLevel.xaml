@@ -16,7 +16,7 @@
 
             <Style TargetType="TextBlock" x:Key="TextActionStyle">
                 <Setter Property="FontSize" Value="14"/>
-                <Setter Property="Padding" Value="4"/>
+                <Setter Property="Padding" Value="0,4,0,0"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
 
@@ -62,10 +62,9 @@
                             <StackPanel>
                                 <Image x:Name="Img_DownloadLevel"
                                        Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
-                                       Height="30"
-                                       Width="30">
+                                       Height="30" Width="30">
                                 </Image>
-                                <TextBlock x:Name="Txt_DownloadLevel" 
+                                <TextBlock x:Name="Txt_DownloadLevel"
                                            Text="Download" 
                                            Style="{StaticResource ResourceKey=TextActionStyle}"/>
                             </StackPanel>
