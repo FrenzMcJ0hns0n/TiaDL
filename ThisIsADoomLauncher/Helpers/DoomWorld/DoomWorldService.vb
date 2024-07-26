@@ -473,13 +473,6 @@ Namespace Helpers.DoomWorld
             IOHelper.PersistJsonData(registryFilePath, installedLevelsJson)
         End Sub
 
-        ''' <summary>
-        ''' Removes downloaded zip archive and extracted folder from the archive.
-        ''' </summary>
-        ''' <param name="zipArchive"></param>
-        Private Sub CleanUpZipArchive(zipArchive As String)
-            File.Delete(zipArchive)
-        End Sub
 
         ''' <summary>
         ''' Deletes specified level from the computer and from the registry.
