@@ -1,7 +1,6 @@
 ﻿Imports System.IO
 Imports System.Net.Http
 Imports System.Reflection
-Imports System.Security.Cryptography
 
 Namespace Helpers.DoomWorld
     Public Class RequestManager
@@ -61,7 +60,7 @@ Namespace Helpers.DoomWorld
             Return String.Join("&", Params)
         End Function
 
-        Private Function GetUriString() As String
+        Private Function GetApiRequestUriString() As String
             Return $"{BASE_URL}?action={Action}&{GetFormattedParams()}&{FORMAT}"
         End Function
 
@@ -81,19 +80,20 @@ Namespace Helpers.DoomWorld
                     Throw New Exception($"Both 'Action' and 'Params' are required in order to perform API requests.")
                 End If
 
-                UriString = GetUriString()
+                UriString = GetApiRequestUriString()
                 Debug.Print($"[RequestManager::FetchResponse] Call URI '{UriString}'")
-                _response = Await DoomWorldHttpClient.GetInstance().GetAsync(New Uri(UriString))
+                _response = Await DoomWorldHttpClient.GetInstance().GetAsync(UriString)
 
                 If Not _response.IsSuccessStatusCode Then
-                    Throw New Exception($"API response status code ({_response.StatusCode}) was not Success.")
+                    Debug.Print($"[RequestManager::FetchResponse] Response status code = {Convert.ToInt32(_response.StatusCode)}")
+                    Throw New Exception($"API response status code ({Convert.ToInt32(_response.StatusCode)}) was not Success.")
                 End If
 
                 strResponse = Await _response.Content.ReadAsStringAsync()
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}Properties : action={Action}, parameters={Params}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
             End Try
 
             Return strResponse
@@ -114,6 +114,11 @@ Namespace Helpers.DoomWorld
                 Debug.Print($"[RequestManager::DownloadZipGetPath] Call URI '{UriString}'")
                 _response = Await DoomWorldHttpClient.GetInstance().GetAsync(UriString)
 
+                If Not _response.IsSuccessStatusCode Then
+                    Debug.Print($"[RequestManager::DownloadZipGetPath] Response status code = {Convert.ToInt32(_response.StatusCode)}")
+                    Throw New Exception($"API response status code ({Convert.ToInt32(_response.StatusCode)}) was not Success.")
+                End If
+
                 Dim levelFileName As String = New Uri(UriString).Segments.Last()
                 Using fileStream As New FileStream(Path.Combine(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
                     Await _response.Content.CopyToAsync(fileStream)
@@ -122,7 +127,7 @@ Namespace Helpers.DoomWorld
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}Properties : action={Action}, parameters={Params}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
             End Try
 
             Return zipArchivePath

@@ -49,7 +49,7 @@ Namespace Views.UserControls.DoomWorld
 
             Me.BeginUILevelDownload()
 
-            Dim result As Boolean = Await _doomWorldService.DownloadLevelFull(levl)
+            Dim result As Boolean = Await _doomWorldService.DownloadExtractLevel(levl)
 
             Me.EndUILevelDownload(result)
 

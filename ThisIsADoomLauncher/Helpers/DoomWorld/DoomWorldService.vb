@@ -363,23 +363,20 @@ Namespace Helpers.DoomWorld
         ''' Full process of downloading Level, and extract it in a "Downloads directory".
         ''' </summary>
         ''' <param name="level"></param>
-        ''' <param name="downloadsDirectory"></param>
+        ''' <param name="destinationPath"></param>
         ''' <returns>True if no error, false if something went wrong</returns>
-        Public Async Function DownloadLevelFull(level As Models.Level, Optional downloadsDirectory As String = "DoomWorld/Downloads/") As Task(Of Boolean)
+        Public Async Function DownloadExtractLevel(level As Models.Level, Optional destinationPath As String = "DoomWorld/Downloads/") As Task(Of Boolean)
             Try
-                'Get mirror -> TODO: Get dynamically
+                'Get mirror -> TODO: Get dynamically from "favorite" mirror (that's another TODO)
                 Dim mirror As String = Me.GetMirror("germany")
 
-                'Get level download URL
+                'Download ZIP file from URL
                 Dim downloadUrl As String = String.Concat(mirror, Me.GetLevelDownloadUrl(level))
-
-                'Get level zip
                 Dim request As New RequestManager() With {.UriString = downloadUrl}
-                Dim zipArchivePath As String = Await request.DownloadZipGetPath(downloadsDirectory)
+                Dim zipArchivePath As String = Await request.DownloadZipGetPath(destinationPath)
 
                 'Extract level
                 Dim extractedDirInfo As DirectoryInfo = Await Me.ExtractLevelFromZip(zipArchivePath)
-
                 If extractedDirInfo.Exists Then
                     Me.WriteLevelIntoRegistry(level, extractedDirInfo.FullName)
                     File.Delete(zipArchivePath)
@@ -388,8 +385,9 @@ Namespace Helpers.DoomWorld
                 End If
 
             Catch ex As Exception
+                'Sometimes "currentMethodName" is not "DownloadLevelFull" TODO: Investigate and maybe write better code
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : Level: {level}")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}' (DownloadLevelFull){vbCrLf} Exception : {ex}")
             End Try
 
             Return False

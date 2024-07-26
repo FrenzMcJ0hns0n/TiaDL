@@ -274,7 +274,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
             .Url = "https://www.doomworld.com/idgames/levels/doom/a-c/castle1"
         }
 
-        Dim task As Task(Of Boolean) = _doomWorldService.DownloadLevelFull(lvl)
+        Dim task As Task(Of Boolean) = _doomWorldService.DownloadExtractLevel(lvl)
         Dim res As Boolean = task.Result
 
         Assert.AreEqual(True, res)
