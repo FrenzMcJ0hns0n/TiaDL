@@ -252,20 +252,8 @@ Namespace Helpers.DoomWorld
             Dim zipArchivePath As String = Nothing
 
             Try
-                'TODO? Use RequestManager to download files (using property Uri)
-                Dim requestUri As New Uri(levelUrl)
-                Dim response As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance().GetAsync(requestUri)
-
-                Dim levelFileName As String = requestUri.Segments.Last()
-
-                If Not Directory.Exists(downloadsDirectory) Then
-                    Directory.CreateDirectory(downloadsDirectory)
-                End If
-
-                Using fileStream As New FileStream(Path.Combine(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
-                    Await response.Content.CopyToAsync(fileStream)
-                    zipArchivePath = fileStream.Name
-                End Using
+                Dim request As New RequestManager() With {.UriString = levelUrl}
+                zipArchivePath = Await request.DownloadZipGetPath(downloadsDirectory)
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
@@ -372,20 +360,24 @@ Namespace Helpers.DoomWorld
         End Function
 
         ''' <summary>
-        ''' Full process of downloading Level, and extract it in a "Downloads directory" (see TODO).
-        ''' ''' </summary>
+        ''' Full process of downloading Level, and extract it in a "Downloads directory".
+        ''' </summary>
         ''' <param name="level"></param>
-        ''' <param name="downloadsDirectory">TODO : Get downloadsDirectory from a Settings file (My.Settings ?)</param>
+        ''' <param name="downloadsDirectory"></param>
         ''' <returns>True if no error, false if something went wrong</returns>
         Public Async Function DownloadLevelFull(level As Models.Level, Optional downloadsDirectory As String = "DoomWorld/Downloads/") As Task(Of Boolean)
             Try
-                ' Get mirror -> TODO : get from /DoomWorld/doomworld_mirrors.json file or whatever location
+                'Get mirror -> TODO: Get dynamically
                 Dim mirror As String = Me.GetMirror("germany")
-                ' Get level download url
-                Dim dlUrl As String = String.Concat(mirror, Me.GetLevelDownloadUrl(level))
-                ' Get level zip
-                Dim zipArchivePath As String = Await Me.DownloadLevelZip(dlUrl, downloadsDirectory)
-                ' extract level
+
+                'Get level download URL
+                Dim downloadUrl As String = String.Concat(mirror, Me.GetLevelDownloadUrl(level))
+
+                'Get level zip
+                Dim request As New RequestManager() With {.UriString = downloadUrl}
+                Dim zipArchivePath As String = Await request.DownloadZipGetPath(downloadsDirectory)
+
+                'Extract level
                 Dim extractedDirInfo As DirectoryInfo = Await Me.ExtractLevelFromZip(zipArchivePath)
 
                 If extractedDirInfo.Exists Then

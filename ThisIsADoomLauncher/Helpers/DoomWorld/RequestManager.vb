@@ -1,5 +1,7 @@
-﻿Imports System.Net.Http
+﻿Imports System.IO
+Imports System.Net.Http
 Imports System.Reflection
+Imports System.Security.Cryptography
 
 Namespace Helpers.DoomWorld
     Public Class RequestManager
@@ -95,6 +97,35 @@ Namespace Helpers.DoomWorld
             End Try
 
             Return strResponse
+        End Function
+
+        ''' <summary>
+        ''' This method downloads a file from a remote server (mirror).
+        ''' Property 'UriString' is required as it designates the URL to download from
+        ''' </summary>
+        ''' <param name="downloadsDirectory"></param>
+        ''' <returns></returns>
+        Public Async Function DownloadZipGetPath(downloadsDirectory As String) As Task(Of String)
+            Dim zipArchivePath As String = Nothing
+
+            Try
+                If UriString = Nothing Then Throw New Exception("'UriString' is required in order to download files.")
+
+                Debug.Print($"[RequestManager::DownloadZipGetPath] Call URI '{UriString}'")
+                _response = Await DoomWorldHttpClient.GetInstance().GetAsync(UriString)
+
+                Dim levelFileName As String = New Uri(UriString).Segments.Last()
+                Using fileStream As New FileStream(Path.Combine(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
+                    Await _response.Content.CopyToAsync(fileStream)
+                    zipArchivePath = fileStream.Name
+                End Using
+
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}Properties : action={Action}, parameters={Params}")
+            End Try
+
+            Return zipArchivePath
         End Function
 
     End Class
