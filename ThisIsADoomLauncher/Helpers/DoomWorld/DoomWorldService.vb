@@ -435,6 +435,7 @@ Namespace Helpers.DoomWorld
                 {
                     .Title = level.Title,
                     .Id = level.Id,
+                    .Author = level.Author,
                     .FileName = level.Filename,
                     .DirectoryName = directoryName, 'TODO? Add this as a Property in the Models.Level entity
                     .InstallDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")

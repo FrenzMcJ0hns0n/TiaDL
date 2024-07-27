@@ -195,7 +195,7 @@
                                     <DataTemplate>
                                         <StackPanel Grid.Column="0" Margin="10">
                                             <TextBlock Text="{Binding Title}" FontWeight="Bold"/>
-                                            <TextBlock Text="{Binding FileName}"/>
+                                            <TextBlock Text="{Binding Author}"/>
                                             <Rectangle Height="10" Visibility="Hidden"/>
                                             <TextBlock>
                                             <Run Text="Installed on :"/>
