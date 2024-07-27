@@ -393,7 +393,13 @@ Namespace Views
             Dim presetType As String = If(presetTypeName = "LevelPreset", "Level preset", "Mod preset")
             Dim presetName As String = If(presetTypeName = "LevelPreset", DirectCast(preset, LevelPreset).Name, DirectCast(preset, ModPreset).Name)
             Dim presetPict As String = If(presetTypeName = "LevelPreset", DirectCast(preset, LevelPreset).Pict, DirectCast(preset, ModPreset).Pict)
-            If presetPict = String.Empty Then presetPict = "pack://application:,,,/Resources/Images/Presets/Lvl_default.png"
+            If presetPict = String.Empty Then
+                If presetTypeName = "LevelPreset" Then
+                    presetPict = "pack://application:,,,/Resources/Images/Presets/Lvl_default.png"
+                Else
+                    presetPict = "pack://application:,,,/Resources/Images/Presets/Mod_default.png"
+                End If
+            End If
 
             Dim presetProperties As New SortedDictionary(Of String, Object)
 
