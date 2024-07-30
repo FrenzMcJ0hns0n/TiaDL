@@ -338,7 +338,8 @@ Namespace Helpers.DoomWorld
                 .Rating = jLevel.Value(Of Decimal)("rating"),
                 .Votes = jLevel.Value(Of Integer)("votes"),
                 .Url = jLevel.Value(Of String)("url"),
-                .Idgamesurl = jLevel.Value(Of String)("idgamesurl")
+                .Idgamesurl = jLevel.Value(Of String)("idgamesurl"),
+                .Textfile = jLevel.Value(Of String)("textfile")
             }
 
             Return level
