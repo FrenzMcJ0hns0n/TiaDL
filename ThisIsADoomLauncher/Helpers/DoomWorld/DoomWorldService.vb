@@ -147,7 +147,7 @@ Namespace Helpers.DoomWorld
 
                 'Dim uriPath As String = String.Concat("api.php?action=get&id=", id)
                 'Dim requestUri As New Uri(String.Concat(DoomWorldHttpClient.BASE_URL, uriPath, "&out=json"))
-                Dim jsonObject As JObject = JObject.Parse(Helpers.DoomWorld.HtmlCleaner.HtmlToPlainText(strResponse))
+                Dim jsonObject As JObject = JObject.Parse(Helpers.DoomWorld.HtmlCleaner.ReplaceHtmlLineBreaks(strResponse))
                 Dim jLevel As JToken = jsonObject.SelectToken("content")
                 level = CreateLevelFromJToken(jLevel)
             Catch ex As Exception

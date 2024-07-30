@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Net.NetworkInformation
 Imports System.Reflection
+Imports System.Text.RegularExpressions
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
@@ -295,5 +296,4 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
         _doomWorldService.OpenInBrowser(lvl)
     End Sub
-
 End Class

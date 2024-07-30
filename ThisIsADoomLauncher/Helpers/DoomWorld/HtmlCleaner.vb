@@ -5,31 +5,23 @@ Namespace Helpers.DoomWorld
     Public Class HtmlCleaner
 
         ''' <summary>
-        ''' Cleans html leftovers tags (b, br...)
+        ''' Cleans html leftovers linebreaks tags (br, \n) and surrounding white spaces.<br/>
+        ''' If 2 or more at once -> replace with 2 line breaks.<br/>
+        ''' If 1 -> replace with 1 line break.
         ''' </summary>
         ''' <param name="html"></param>
         ''' <returns></returns>
-        Public Shared Function HtmlToPlainText(html As String) As String
+        Public Shared Function ReplaceHtmlLineBreaks(html As String) As String
+            Const manyLineBreaks As String = "(\s{0,}(\\n|<(br|BR)\s{0,}\/{0,}>)\s{0,}){2,}"
+            Const singleLineBreak As String = "\s{0,}(\\n|<(br|BR)\s{0,}\/{0,}>)\s{0,}"
+
             Dim text As String = html
-
-            Const tagWhiteSpace As String = "(>|$)(\W|\n|\r)+<" 'matches one Or more (white space Or line breaks) between '>' and '<'
-            Const stripFormatting As String = "<[^>]*(>|$)" 'match any character between '<' and '>', even when end tag is missing
-            Const lineBreak As String = "<(br|BR)\s{0,1}\/{0,1}>\s{0,1}" 'matches: <br>,<br/>,<br />,<BR>,<BR/>,<BR />,"<br> ","<BR> "
-
-            Dim lineBreakRegex As New Regex(lineBreak, RegexOptions.Multiline)
-            Dim stripFormattingRegex As New Regex(stripFormatting, RegexOptions.Multiline)
-            Dim tagWhiteSpaceRegex As New Regex(tagWhiteSpace, RegexOptions.Multiline)
+            Dim manyLinesBreakRegex As New Regex(manyLineBreaks, RegexOptions.Multiline)
+            Dim singleLineBreakRegex As New Regex(singleLineBreak, RegexOptions.Multiline)
 
             Try
-                'Decode html specific characters
-                text = System.Net.WebUtility.HtmlDecode(text)
-                'Remove tag whitespace/line breaks
-                text = tagWhiteSpaceRegex.Replace(text, "><")
-                'Remove <br> leftover tags
-                text = lineBreakRegex.Replace(text, String.Empty)
-                'Strip formatting
-                text = stripFormattingRegex.Replace(text, String.Empty)
-
+                text = manyLinesBreakRegex.Replace(text, String.Concat(Environment.NewLine, Environment.NewLine))
+                text = singleLineBreakRegex.Replace(text, Environment.NewLine)
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {html}")
