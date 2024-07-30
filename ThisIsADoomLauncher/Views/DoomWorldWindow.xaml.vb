@@ -1,10 +1,5 @@
-﻿Imports System.Collections.Specialized
-Imports System.ComponentModel
-Imports System.Drawing
-Imports System.IO
+﻿Imports System.IO
 Imports System.Reflection
-Imports System.Windows.Forms.VisualStyles
-Imports Microsoft.Win32
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
@@ -24,7 +19,7 @@ Namespace Views
             Get
                 Return _selectedLevel
             End Get
-            Set(ByVal value As ThisIsADoomLauncher.Helpers.DoomWorld.Models.Level)
+            Set(value As ThisIsADoomLauncher.Helpers.DoomWorld.Models.Level)
                 _selectedLevel = value
                 Me.ToggleDisplayLevelContent()
             End Set
@@ -68,7 +63,7 @@ Namespace Views
 
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
-                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : none")
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
 
             End Try
         End Sub
@@ -87,7 +82,7 @@ Namespace Views
             contents = SortContents(contents, _selectedSortingCriterion)
 
             Lvw_BrowseResults.ItemsSource = contents
-            Me.SetTxtResultText($"{contents.Count().ToString()} results", Txt_Lvw_BrowseResults_Count)
+            Me.SetTxtResultText($"{contents.Count} results", Txt_Lvw_BrowseResults_Count)
         End Sub
 
         ''' <summary>
@@ -102,7 +97,7 @@ Namespace Views
             End If
 
             Lvw_InstalledResults.ItemsSource = _lstInstalledLevelsResults
-            Me.SetTxtResultText($"{_lstInstalledLevelsResults.Count.ToString()} results", Txt_Lvw_InstalledResults_Count)
+            Me.SetTxtResultText($"{_lstInstalledLevelsResults.Count} results", Txt_Lvw_InstalledResults_Count)
         End Sub
 
         ''' <summary>
@@ -132,12 +127,10 @@ Namespace Views
         ''' <param name="isAscending">Is ascending</param>
         ''' <returns></returns>
         Private Function SortFolders(contents As IEnumerable(Of Folder), Optional isAscending As Boolean = True) As IEnumerable(Of Object)
-            Return If(isAscending, contents.OrderBy(Function(foldr)
-                                                        Return foldr.Name
-                                                    End Function),
-                                 contents.OrderByDescending(Function(foldr)
-                                                                Return foldr.Name
-                                                            End Function))
+            Return If(isAscending,
+                contents.OrderBy(Function(foldr) foldr.Name),
+                contents.OrderByDescending(Function(foldr) foldr.Name)
+            )
         End Function
 
         ''' <summary>
@@ -150,47 +143,35 @@ Namespace Views
         Private Function SortLevels(contents As IEnumerable(Of Level), selectedSortingCriterion As String, Optional isAscending As Boolean = True) As IEnumerable(Of Object)
             Select Case selectedSortingCriterion
                 Case "Title"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.Title
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.Title
-                                                                      End Function))
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.Title),
+                        contents.OrderByDescending(Function(levl) levl.Title)
+                    )
                 Case "Filename"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.Filename
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.Filename
-                                                                      End Function))
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.Filename),
+                        contents.OrderByDescending(Function(levl) levl.Filename)
+                    )
                 Case "ReleaseDate"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.ReleaseDate
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.ReleaseDate
-                                                                      End Function))
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.ReleaseDate),
+                        contents.OrderByDescending(Function(levl) levl.ReleaseDate)
+                    )
                 Case "Rating"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.Rating
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.Rating
-                                                                      End Function))
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.Rating),
+                        contents.OrderByDescending(Function(levl) levl.Rating)
+                    )
                 Case "Author"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.Author
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.Author
-                                                                      End Function))
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.Author),
+                        contents.OrderByDescending(Function(levl) levl.Author)
+                    )
                 Case "Size"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.Size
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.Size
-                                                                      End Function))
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.Size),
+                        contents.OrderByDescending(Function(levl) levl.Size)
+                    )
                 Case Else
                     Return contents
             End Select
@@ -206,20 +187,15 @@ Namespace Views
         Private Function SortInstalledLevels(contents As IEnumerable(Of InstalledLevel), selectedSortingCriterion As String, Optional isAscending As Boolean = True) As IEnumerable(Of Object)
             Select Case selectedSortingCriterion
                 Case "Title"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.Title
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.Title
-                                                                      End Function))
-
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.Title),
+                        contents.OrderByDescending(Function(levl) levl.Title)
+                    )
                 Case "Filename"
-                    Return If(isAscending, contents.OrderBy(Function(levl)
-                                                                Return levl.FileName
-                                                            End Function),
-                                           contents.OrderByDescending(Function(levl)
-                                                                          Return levl.FileName
-                                                                      End Function))
+                    Return If(isAscending,
+                        contents.OrderBy(Function(levl) levl.FileName),
+                        contents.OrderByDescending(Function(levl) levl.FileName)
+                    )
                 Case Else
                     Return contents
             End Select
@@ -321,7 +297,7 @@ Namespace Views
         ''' </summary>
         ''' <param name="resourcePath"></param>
         Private Sub ToggleParentFolderButtonEnabled(resourcePath As String)
-            If String.IsNullOrWhiteSpace(resourcePath) Or resourcePath = "levels/" Then
+            If String.IsNullOrWhiteSpace(resourcePath) OrElse resourcePath = "levels/" Then
                 Btn_ParentFolder.IsEnabled = False
             Else
                 Btn_ParentFolder.IsEnabled = True
@@ -336,12 +312,11 @@ Namespace Views
             Try
                 _lstSearchResults = Await _doomworldService.SearchLevels(searchText)
                 If _lstSearchResults Is Nothing OrElse _lstSearchResults.Count = 0 Then
-
                     Return
                 End If
 
                 Lvw_SearchResults.ItemsSource = SortLevels(_lstSearchResults, _selectedSortingCriterion)
-                Me.SetTxtResultText($"{_lstSearchResults.Count.ToString()} results", Txt_Lvw_SearchResults_Count)
+                Me.SetTxtResultText($"{_lstSearchResults.Count} results", Txt_Lvw_SearchResults_Count)
             Catch ex As OverflowException
                 _lstSearchResults = New List(Of Level)
                 Me.SetTxtResultText("Error : Too many results (100 max)", Txt_Lvw_SearchResults_Count, True)
@@ -367,9 +342,7 @@ Namespace Views
         ''' <returns></returns>
         Public Function CheckIsInstalledLevel(id As Long) As Boolean
             If _lstInstalledLevelsResults IsNot Nothing Then
-                Return _lstInstalledLevelsResults.Exists(Function(lvl)
-                                                             Return lvl.Id = id
-                                                         End Function)
+                Return _lstInstalledLevelsResults.Exists(Function(lvl) lvl.Id = id)
             End If
 
             Return False
@@ -390,15 +363,17 @@ Namespace Views
                     Case Tbi_DWBrowse.Name
                         Lvw_BrowseResults.ItemsSource = SortContents(_lstBrowseResults,
                                      DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
-                        SetTxtResultText($"{_lstBrowseResults.Count().ToString()} results", Txt_Lvw_BrowseResults_Count)
+                        SetTxtResultText($"{_lstBrowseResults.Count} results", Txt_Lvw_BrowseResults_Count)
+
                     Case Tbi_DWSearch.Name
                         Lvw_SearchResults.ItemsSource = SortLevels(Lvw_SearchResults.Items.OfType(Of Level),
                                    DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
-                        SetTxtResultText($"{_lstSearchResults.Count().ToString()} results", Txt_Lvw_SearchResults_Count)
-                    Case Else 'Tbi_DWInstalled.Name
+                        SetTxtResultText($"{_lstSearchResults.Count} results", Txt_Lvw_SearchResults_Count)
+
+                    Case Tbi_DWInstalled.Name
                         Lvw_InstalledResults.ItemsSource = SortInstalledLevels(Lvw_InstalledResults.Items.OfType(Of InstalledLevel),
                                    DirectCast(Cbb_Sorting.SelectedItem, ComboBoxItem).Content.ToString(), isAscending)
-                        SetTxtResultText($"{_lstInstalledLevelsResults.Count().ToString()} results", Txt_Lvw_InstalledResults_Count)
+                        SetTxtResultText($"{_lstInstalledLevelsResults.Count} results", Txt_Lvw_InstalledResults_Count)
                 End Select
 
             Catch ex As Exception
@@ -424,10 +399,8 @@ Namespace Views
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         Private Sub Txt_DWSearchText_KeyDown(sender As Object, e As KeyEventArgs)
-            If e.Key = Key.Return Then
-                If Txt_DWSearchText.Text.Length >= 3 Then
-                    Me.GetSearchResults(Txt_DWSearchText.Text)
-                End If
+            If e.Key = Key.Return AndAlso Txt_DWSearchText.Text.Length >= 3 Then
+                Me.GetSearchResults(Txt_DWSearchText.Text)
             End If
         End Sub
 

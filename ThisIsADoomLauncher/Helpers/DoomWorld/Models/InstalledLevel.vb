@@ -2,6 +2,7 @@
     Public Class InstalledLevel
         Public Property Title As String
         Public Property Id As Long
+        Public Property Author As String
         Public Property FileName As String
         Public Property InstallDate As String
         Public Property DirectoryName As String

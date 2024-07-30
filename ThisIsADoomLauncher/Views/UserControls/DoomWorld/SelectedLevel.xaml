@@ -16,7 +16,7 @@
 
             <Style TargetType="TextBlock" x:Key="TextActionStyle">
                 <Setter Property="FontSize" Value="14"/>
-                <Setter Property="Padding" Value="4"/>
+                <Setter Property="Padding" Value="0,4,0,0"/>
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
 
@@ -58,14 +58,13 @@
                             <ColumnDefinition Width="4*"/>
                         </Grid.ColumnDefinitions>
                         <!-- Download icon + label -->
-                        <StackPanel Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Margin="16" Cursor="Hand">
+                        <StackPanel x:Name="Stk_DownloadLevel" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Margin="16" Cursor="Hand">
                             <StackPanel>
                                 <Image x:Name="Img_DownloadLevel"
                                        Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
-                                       Height="30"
-                                       Width="30">
+                                       Height="30" Width="30">
                                 </Image>
-                                <TextBlock x:Name="Txt_DownloadLevel" 
+                                <TextBlock x:Name="Txt_DownloadLevel"
                                            Text="Download" 
                                            Style="{StaticResource ResourceKey=TextActionStyle}"/>
                             </StackPanel>
