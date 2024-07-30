@@ -90,7 +90,7 @@ Namespace Views
         ''' </summary>
         Private Sub LoadInstalledLevelsItemsSource()
             _lstInstalledLevelsResults = _doomworldService.GetInstalledLevels(Path.Combine("DoomWorld", "doomworld_registry.json"))
-            If _lstInstalledLevelsResults Is Nothing OrElse _lstInstalledLevelsResults.Count() = 0 Then
+            If _lstInstalledLevelsResults Is Nothing Then
                 Me.SetTxtResultText($"0 results", Txt_Lvw_InstalledResults_Count)
 
                 Return
