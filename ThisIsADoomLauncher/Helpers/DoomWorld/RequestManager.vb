@@ -120,6 +120,11 @@ Namespace Helpers.DoomWorld
                 End If
 
                 Dim levelFileName As String = New Uri(UriString).Segments.Last()
+
+                If Not Directory.Exists(downloadsDirectory) Then
+                    Directory.CreateDirectory(downloadsDirectory)
+                End If
+
                 Using fileStream As New FileStream(Path.Combine(downloadsDirectory, levelFileName), FileMode.OpenOrCreate)
                     Await _response.Content.CopyToAsync(fileStream)
                     zipArchivePath = fileStream.Name
