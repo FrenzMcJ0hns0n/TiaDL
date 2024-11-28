@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>ThisIsADoomLauncher</RootNamespace>
     <AssemblyName>ThisIsADoomLauncher</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <MyType>Custom</MyType>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
@@ -25,6 +25,7 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,7 +36,8 @@
     <IncrementalBuild>true</IncrementalBuild>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>ThisIsADoomLauncher.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <NoWarn>42024,42099</NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -47,7 +49,8 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>ThisIsADoomLauncher.xml</DocumentationFile>
-    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
+    <NoWarn>42024,42099</NoWarn>
+    <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -56,17 +59,31 @@
     <OptionCompare>Binary</OptionCompare>
   </PropertyGroup>
   <PropertyGroup>
-    <OptionStrict>Off</OptionStrict>
+    <OptionStrict>On</OptionStrict>
   </PropertyGroup>
   <PropertyGroup>
-    <OptionInfer>On</OptionInfer>
+    <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.2.2.7\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\MSTest.TestFramework.2.2.7\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Schema, Version=3.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Schema.3.0.14\lib\net45\Newtonsoft.Json.Schema.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -87,18 +104,71 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="CLI\CliMethods.vb" />
+    <Compile Include="Helpers\Constants.vb" />
+    <Compile Include="Helpers\Converters\DoomWorld\FileFolderConverter.vb" />
+    <Compile Include="Helpers\Converters\DoomWorld\LevelSizeConverter.vb" />
+    <Compile Include="Helpers\Converters\DoomWorld\ParentFolderConverter.vb" />
     <Compile Include="Helpers\Converters\ImagePathConverter.vb" />
-    <Compile Include="Helpers\Serialization.vb" />
+    <Compile Include="Helpers\DoomWorld\RequestManager.vb" />
+    <Compile Include="Helpers\DoomWorld\DoomWorldHttpClient.vb" />
+    <Compile Include="Helpers\DoomWorld\DoomWorldService.vb" />
+    <Compile Include="Helpers\DoomWorld\HtmlCleaner.vb" />
+    <Compile Include="Helpers\DoomWorld\Models\Folder.vb" />
+    <Compile Include="Helpers\DoomWorld\Models\InstalledLevel.vb" />
+    <Compile Include="Helpers\DoomWorld\Models\Level.vb" />
+    <Compile Include="Helpers\DoomWorld\Models\Review.vb" />
+    <Compile Include="Helpers\General.vb" />
+    <Compile Include="Helpers\Serializer.vb" />
+    <Compile Include="Models\InputFile.vb" />
     <Compile Include="Models\LevelPreset.vb" />
     <Compile Include="Models\ModPreset.vb" />
+    <Compile Include="Models\Preset.vb" />
+    <Compile Include="Models\Setting.vb" />
+    <Compile Include="Views\UserControls\DoomWorld\LevelControl.xaml.vb">
+      <DependentUpon>LevelControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\DoomWorld\FolderControl.xaml.vb">
+      <DependentUpon>FolderControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreatingWindowOnlyForThat.xaml.vb">
+      <DependentUpon>CreatingWindowOnlyForThat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DoomWorldWindow.xaml.vb">
+      <DependentUpon>DoomWorldWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HelpWindow.xaml.vb">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\IOHelper.vb" />
-    <Compile Include="Common\IOMethods.vb" />
-    <Compile Include="Presets\PresetsMethods.vb" />
-    <Compile Include="Common\Utils.vb" />
+    <Compile Include="Helpers\PresetsMethods.vb" />
+    <Compile Include="Views\PortParamsWindow.xaml.vb">
+      <DependentUpon>PortParamsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PresetDetailsWindow.xaml.vb">
+      <DependentUpon>PresetDetailsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\DoomWorld\NoSelectedLevel.xaml.vb">
+      <DependentUpon>NoSelectedLevel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UserControls\DoomWorld\SelectedLevel.xaml.vb">
+      <DependentUpon>SelectedLevel.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Views\UserControls\DoomWorld\LevelControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UserControls\DoomWorld\FolderControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreatingWindowOnlyForThat.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DoomWorldWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -115,6 +185,22 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\PortParamsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PresetDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\DoomWorld\NoSelectedLevel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UserControls\DoomWorld\SelectedLevel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />
@@ -159,12 +245,25 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
+    <None Include="Helpers\DoomWorld\Misc\doomworld_mirrors.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>DoomWorld\doomworld_mirrors.json</TargetPath>
+    </None>
+    <None Include="Helpers\DoomWorld\Misc\doomworld_registry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>DoomWorld\doomworld_registry.json</TargetPath>
+    </None>
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <EmbeddedResource Include="Resources\base_presets_Levels.csv" />
+    <None Include="packages.config" />
     <None Include="Resources\base_presets_Mods.csv" />
+    <None Include="Resources\SettingSchema.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -188,22 +287,13 @@
     <Resource Include="Resources\Images\settings_darker.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\play_darker.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\index.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\300x50_blackAndWhite_edit_def.gif" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Resources\Config\" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\Blazkowicz_sprite.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Presets\icon_default.png" />
+    <Resource Include="Resources\Images\Presets\Lvl_default.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\doom_icon.jpg" />
@@ -225,6 +315,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Images\Presets\Common\DE_DOOM_Zero_edit.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\Presets\Mod_default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\idgames_blue.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\baron_of_hell.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\doomworld_dl.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\doomworld_installed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\open_external.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

@@ -7,838 +7,593 @@
         mc:Ignorable="d"
         
         Title="This is a Doom Launcher v3" 
-        Width="1200" Height="884" 
+        Width="1200" Height="840" 
         ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
 
+    <Window.Resources>
+
+        <!-- ========================= -->
+        <!-- Styles resources - Common -->
+        <!-- ========================= -->
+
+        <!-- TODO: Same for Browse.../Clear buttons -->
+        
+        <Style x:Key="Tbx_Dropable" TargetType="{x:Type TextBox}">
+            <Setter Property="AllowDrop" Value="True"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="FontStyle" Value="Italic"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Lbl_NoUserPresets" TargetType="{x:Type Label}">
+            <Setter Property="Content" Value="No user presets found"/>
+            <Setter Property="Foreground" Value="Gray"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- ======================= -->
+        <!-- Styles resources - Port -->
+        <!-- ======================= -->
+
+        <Style x:Key="Tbx_Port" TargetType="{x:Type TextBox}" BasedOn="{StaticResource Tbx_Dropable}">
+            <Setter Property="Text" Value="Drop port executable... (GZDoom, Zandronum, etc.)"/>
+            <EventSetter Event="Drop" Handler="Tbx_Port_Drop"/>
+            <EventSetter Event="PreviewDragOver" Handler="Tbx_Port_PreviewDragOver"/>
+        </Style>
+        
+        <!-- ========================= -->
+        <!-- Styles resources - Levels -->
+        <!-- ========================= -->
+        
+        <Style x:Key="Rbtn_Sorting" TargetType="{x:Type RadioButton}">
+            <Setter Property="GroupName" Value="Sorting"/>
+            <Setter Property="IsEnabled" Value="False"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <EventSetter Event="Checked" Handler="SortBaseLevels"/>
+            <EventSetter Event="Unchecked" Handler="SortBaseLevels"/>
+        </Style>
+
+        <Style x:Key="Lbl_NewLevel" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Tbx_NewLevel" TargetType="{x:Type TextBox}" BasedOn="{StaticResource Tbx_Dropable}">
+            <EventSetter Event="Drop" Handler="TextBox_NewLevel_Drop"/>
+            <EventSetter Event="PreviewDragOver" Handler="TextBox_NewLevel_PreviewDragOver"/>
+        </Style>
+        
+        <Style x:Key="Btn_NewLevelBrowse" TargetType="{x:Type Button}">
+            <Setter Property="Content" Value="Browse..."/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <EventSetter Event="Click" Handler="Btn_NewLevelBrowse_Click"/>
+        </Style>
+        
+        <Style x:Key="Btn_NewLevelClear" TargetType="{x:Type Button}">
+            <Setter Property="Content" Value="Clear &#x21ba;"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+            <EventSetter Event="Click" Handler="Btn_NewLevelClear_Click"/>
+        </Style>
+
+        <Style x:Key="Btn_NewLevelActions" TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Margin" Value="4 0"/>
+            <Setter Property="Width" Value="120"/>
+        </Style>
+
+        <!-- ======================= -->
+        <!-- Styles resources - Mods -->
+        <!-- ======================= -->
+
+        <Style x:Key="Brd_NewModFileSideControls" TargetType="{x:Type Border}">
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="2"/>
+            <Setter Property="Margin" Value="2"/>
+        </Style>
+
+        <Style x:Key="Btn_NewModFileSideControls" TargetType="{x:Type Button}">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Height" Value="22"/>
+            <!--<Setter Property="Padding" Value="2"/>-->
+        </Style>
+        
+        <Style x:Key="Btn_NewModActions" TargetType="{x:Type Button}">
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="3 0"/>
+            <Setter Property="Width" Value="84"/>
+        </Style>
+
+        <!-- ========================== -->
+        <!-- Styles resources - Summary -->
+        <!-- ========================== -->
+        
+        <Style x:Key="Lbl_SummaryEntries" TargetType="{x:Type Label}">
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0 -1 0 0"/>
+        </Style>
+
+        <Style x:Key="Tbx_SummaryEntries" TargetType="{x:Type TextBox}">
+            <Setter Property="BorderBrush" Value="LightGray"/>
+            <Setter Property="Cursor" Value="Arrow"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Margin" Value="0 1 0 0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="Stkp_SummaryEntries" TargetType="{x:Type StackPanel}">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="0 1 0 0"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <!-- ========================== -->
+        <!-- Styles resources - Options -->
+        <!-- ========================== -->
+
+        <Style x:Key="Btn_OptionsTemp" TargetType="{x:Type Button}">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="Padding" Value="0 8"/>
+        </Style>
+
+    </Window.Resources>
+    
+    
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="19*" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="63*" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="32*" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="25*" />
-            <RowDefinition Height="20" />
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="12*" />
-            <ColumnDefinition Width="20" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="20" />
+            <ColumnDefinition Width="16" />
+            <ColumnDefinition Width="18*" />
+            <ColumnDefinition Width="13" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="16" />
         </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="16" />
+            <RowDefinition Height="Auto" /> <!-- Port -->
+            <RowDefinition Height="12" />
+            <RowDefinition Height="45*" /> <!-- Levels -->
+            <RowDefinition Height="12" />
+            <RowDefinition Height="35*" /> <!-- Mods -->
+            <RowDefinition Height="12" />
+            <RowDefinition Height="21*" /> <!-- Summary -->
+            <RowDefinition Height="16" />
+        </Grid.RowDefinitions>
 
-        <GroupBox Grid.Row="1"
-                    Grid.Column="1"
-                    Header="Port">
+        <!-- Port -->
+        <GroupBox Grid.Column="1" Grid.Row="1" Header="Port">
             <Grid Margin="8">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="2*" />
-                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="10*" />
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="80"/>
                 </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
 
-                <TextBox 
-                    x:Name="TextBox_Port"
-                    Grid.Column="0"
-                    Margin="0,0,0,1"
-                    HorizontalContentAlignment="Center"
-                    VerticalContentAlignment="Center"
-                    Foreground="Gray"
-                    FontStyle="Italic"
-                    Text="Drop Doom port .exe file here... (GZDoom, Zandronum, etc.)"
-                    Cursor="Arrow"
-                    IsReadOnly="True"
-                    AllowDrop="True"
-                    PreviewDragOver="TextBox_Port_PreviewDragOver"
-                    Drop="TextBox_Port_Drop"
-                    TextWrapping="Wrap"
-                    />
-                <Grid Grid.Row="0"
-                        Grid.Column="1"
-                        Margin="0,0,0,1"
-                        >
+                <TextBox Style="{StaticResource Tbx_Port}" x:Name="Tbx_Port"/>
+                <Grid Grid.Column="1">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="1*"/>
                     </Grid.RowDefinitions>
-                    <Button 
-                        x:Name="Button_Port_Browse"
-                        Grid.Row="0"
-                        VerticalAlignment="Top"
-                        Margin="0,0,0,-1"
-                        Content="Browse..."
-                        />
-                    <Button 
-                        x:Name="Button_Port_Clear"
-                        Grid.Row="1"
-                        VerticalAlignment="Bottom"
-                        Content="Clear &#x21ba;"
-                        Click="Button_Port_Clear_Click"
-                        />
+                    <Button Content="Browse..." VerticalAlignment="Top" Click="Btn_PortBrowse_Click"/>
+                    <Button Content="Clear &#x21ba;" Grid.Row="1" VerticalAlignment="Bottom" Click="Btn_PortClear_Click"/>
                 </Grid>
-                <StackPanel x:Name="StackPanel_PortParams"
-                            Grid.Row="1"
-                            Orientation="Horizontal"/>
-                <TextBox x:Name="TextBox_PortParameters"
-                            Grid.Row="1"
-                            HorizontalContentAlignment="Center"
-                            VerticalContentAlignment="Center"
-                            Text="+ 0 parameters"
-                            Cursor="Arrow"
-                            IsReadOnly="True"/>
-                <Button x:Name="Button_EngineParams_Edit"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Content="Edit..."/>
+
+                <TextBox x:Name="Tbx_PortParameters" Cursor="Arrow" Foreground="Gray" Grid.Row="1" HorizontalContentAlignment="Center" IsReadOnly="True"
+                         Text="+ 0 parameters" ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="10000" VerticalContentAlignment="Center"/>
+                <Button x:Name="Btn_PortParamsEdit" Content="Edit..." Grid.Column="1" Grid.Row="1" Click="Btn_PortParamsEdit_Click"/>
             </Grid>
         </GroupBox>
 
         <!-- Levels -->
-        <GroupBox x:Name="GroupBox_Levels"
-                    Grid.Row="3"
-                    Grid.Column="1"
-                    Header="Levels"
-                    AllowDrop="True"
-                    PreviewDragOver="GroupBox_Levels_PreviewDragOver"
-                    Drop="GroupBox_Levels_Drop">
-            <Grid>
-                <TabControl x:Name="TabControl_Levels" Margin="8">
-                    <!-- Add Name ? -->
-                    <TabItem Header="Base presets">
+        <GroupBox AllowDrop="True" Grid.Column="1" Grid.Row="3" Header="Levels" Drop="Gbx_Levels_Drop" PreviewDragOver="Gbx_Levels_PreviewDragOver">
+            <Grid Margin="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6.5*"/>
+                    <ColumnDefinition Width="3.5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*"/>
+                    <RowDefinition Height="15*"/>
+                </Grid.RowDefinitions>
+                <TabControl x:Name="Tbc_Levels" Grid.ColumnSpan="2" Grid.RowSpan="2" SelectionChanged="Tbc_Levels_SelectionChanged">
 
+                    <TabItem x:Name="Tbi_LevelsBasePresets" Header="Base presets">
                         <Grid>
-                            <!--<Grid.RowDefinitions>
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="5*" />
-                                <RowDefinition Height="10" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="8*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="14*" />
-                                <ColumnDefinition Width="10" />
-                            </Grid.ColumnDefinitions>-->
-
-
-                            <!--Grid.Row="0"
-                                Grid.Column="0"
-                                Grid.RowSpan="3"
-                                Grid.ColumnSpan="2"-->
-                            <ListView 
-                                x:Name="ListView_Levels_BasePresets"
-                                            
-                                Margin="-3"
-                                SelectionChanged="ListView_Levels_BasePresets_SelectionChanged"
-                                >
+                            <ListView x:Name="Lvw_LevelsBasePresets" Margin="-3" SelectionChanged="Lvw_LevelsBasePresets_SelectionChanged">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
-                                            <Image 
-                                                Source="{Binding ImagePath,Converter={StaticResource ImgConverter}}"
-                                                Margin="-3,0,0,0"
-                                                Height="64"
-                                                />
-                                            <TextBlock
-                                                Margin="8,0,0,0"
-                                                VerticalAlignment="Center"
-                                                FontWeight="DemiBold"
-                                                FontSize="16"
-                                                Text="{Binding Name}"
-                                                />
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-
-                        </Grid>
-                    </TabItem>
-                    <TabItem Header="User presets">
-                        <Grid>
-                            <Label x:Name="Label_Levels_NoUserPresets"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontSize="20"
-                                    Foreground="Gray"
-                                    Content="No user presets found"/>
-                            <ListView x:Name="ListView_Levels_UserPresets"
-                                        SelectionChanged="ListView_Levels_UserPresets_SelectionChanged"
-                                        Margin="-3"
-                                        Visibility="Collapsed">
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
+                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource LvlImgConverter}}">
+                                                <Image.ToolTip>
+                                                    <StackPanel>
+                                                        <Image Height="128" Margin="0 1 0 4" Source="{Binding Pict,Converter={StaticResource LvlImgConverter}}"/>
+                                                        <TextBlock TextAlignment="Center">
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="Year : {0}&#x0a;Type : {1}">
+                                                                    <Binding Path="Year"/>
+                                                                    <Binding Path="Type"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </StackPanel>
+                                                </Image.ToolTip>
+                                            </Image>
+                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="8 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Add new preset">
+                    
+                    <TabItem x:Name="Tbi_LevelsUserPresets" Header="User presets">
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="20"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="1*"/>
-                                <RowDefinition Height="3*"/>
-                                <RowDefinition Height="20"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="20"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="12*"/>
-                                <ColumnDefinition Width="1*"/>
-                                <ColumnDefinition Width="20"/>
-                            </Grid.ColumnDefinitions>
-
-                            <Label Grid.Row="1"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Iwad :"/>
-                            <TextBox 
-                                x:Name="TextBox_NewLevel_Iwad"
-                                Grid.Row="1"
-                                Grid.Column="2"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                Cursor="Arrow"
-                                IsReadOnly="True"
-                                FontStyle="Italic"
-                                Foreground="Gray"
-                                Text="Drop an IWAD file here..."
-                                AllowDrop="True"
-                                PreviewDragOver="TextBox_NewLevel_Iwad_PreviewDragOver"
-                                Drop="TextBox_NewLevel_Iwad_Drop"
-                                />
-                            <Button Grid.Row="1" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="1" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
-                            <Button 
-                                x:Name="Button_NewLevel_Iwad_Clear"
-                                Grid.Row="1" 
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom" 
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Iwad_Clear_Click"
-                                />
-
-                            <Label Grid.Row="3"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Level :"/>
-                            <TextBox x:Name="TextBox_NewLevel_Level"
-                                        Grid.Row="3" 
-                                        Grid.Column="2"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Cursor="Arrow"
-                                        IsReadOnly="True"
-                                        FontStyle="Italic"
-                                        Foreground="Gray"
-                                        Text="Drop a .wad/.pk3 file here..."
-                                        AllowDrop="True"
-                                        PreviewDragOver="TextBox_NewLevel_Level_PreviewDragOver"
-                                        Drop="TextBox_NewLevel_Level_Drop"
-                                        />
-                            <Button Grid.Row="3" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="3" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
-                            <Button 
-                                x:Name="Button_NewLevel_Level_Clear"
-                                Grid.Row="3"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Level_Clear_Click"
-                                />
-
-                            <Label Grid.Row="5"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Misc. :"/>
-                            <TextBox x:Name="TextBox_NewLevel_Misc"
-                                        Grid.Row="5" 
-                                        Grid.Column="2"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        Cursor="Arrow"
-                                        IsReadOnly="True"
-                                        FontStyle="Italic"
-                                        Foreground="Gray"
-                                        Text="Drop a .deh/.bex file here..."
-                                        AllowDrop="True"
-                                        PreviewDragOver="TextBox_NewLevel_Misc_PreviewDragOver"
-                                        Drop="TextBox_NewLevel_Misc_Drop"
-                                        />
-                            <Button Grid.Row="5" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="5" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
-                            <Button 
-                                x:Name="Button_NewLevel_Misc_Clear"
-                                Grid.Row="5"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Misc_Clear_Click"
-                                />
-
-                            <Label Grid.Row="7"
-                                    Grid.Column="1"
-                                    Grid.ColumnSpan="2"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Image :"/>
-                            <!--<TextBox Grid.Row="7" 
-                                        Grid.Column="2"
-                                        Margin="50,0,50,0"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        HorizontalContentAlignment="Center"
-                                        VerticalContentAlignment="Center"
-                                        FontStyle="Italic"
-                                        Foreground="Gray"
-                                        Text="Enter preset name..."/>-->
-                            <TextBox 
-                                x:Name="TextBox_NewLevel_Image"
-                                Grid.Row="7" 
-                                Grid.Column="2"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                Cursor="Arrow"
-                                IsReadOnly="True"
-                                FontStyle="Italic"
-                                Foreground="Gray"
-                                Text="Drop a .jpg/.png file here..."
-                                AllowDrop="True"
-                                PreviewDragOver="TextBox_NewLevel_Image_PreviewDragOver"
-                                Drop="TextBox_NewLevel_Image_Drop"     
-                                />
-                            <Button Grid.Row="7" 
-                                    Grid.Column="3"
-                                    VerticalAlignment="Top" 
-                                    Content="Browse..."/>
-                            <!--<Button Grid.Row="7" 
-                                    Grid.Column="3"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" 
-                                    Content="->"/>-->
-                            <Button 
-                                x:Name="Button_NewLevel_Image_Clear"
-                                Grid.Row="7"
-                                Grid.Column="3"
-                                VerticalAlignment="Bottom"
-                                Content="Clear &#x21ba;"
-                                Click="Button_NewLevel_Image_Clear_Click"
-                                />
-
-                            <Label Grid.Row="9"
-                                    Grid.Column="1"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Content="Options :"/>
-                            <Grid Grid.Row="9"
-                                    Grid.Column="2"
-                                    Margin="150,0,150,0">
+                            <Label x:Name="Lbl_LevelsNoUserPresets" Style="{StaticResource Lbl_NoUserPresets}"/>
+                            <ListView x:Name="Lvw_LevelsUserPresets" Margin="-3" Visibility="Collapsed"
+                                      MouseDoubleClick="Lvw_LevelsUserPresets_MouseDoubleClick" SelectionChanged="Lvw_LevelsUserPresets_SelectionChanged">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource LvlImgConverter}}"/>
+                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="6 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="View details" Click="Mitm_ViewUserLevel_Click"/>
+                                        <MenuItem Header="Delete preset" Click="Mitm_DeleteUserLevel_Click"/>
+                                    </ContextMenu>
+                                </ListView.ContextMenu>
+                            </ListView>
+                        </Grid>
+                    </TabItem>
+                    
+                    <TabItem x:Name="Tbi_LevelsNewPresets" Header="Add new preset">
+                        <Grid>
+                            <Grid>
+                                <!-- TODO? Simplify definitions -->
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="6"/>
+                                    <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
-                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="80"/>
+                                    <ColumnDefinition Width="6"/>
                                 </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="6"/>
+                                    <RowDefinition Height="3*"/>
+                                    <RowDefinition Height="4"/>
+                                    <RowDefinition Height="3*"/>
+                                    <RowDefinition Height="4"/>
+                                    <RowDefinition Height="3*"/>
+                                    <RowDefinition Height="4"/>
+                                    <RowDefinition Height="3*"/>
+                                    <RowDefinition Height="8"/>
+                                    <RowDefinition Height="2*"/>
+                                    <RowDefinition Height="4"/>
+                                </Grid.RowDefinitions>
 
-                                <Button 
-                                    x:Name="Button_NewLevel_Try" 
-                                    Grid.Column="0"
-                                    Margin="6,0,6,0"
-                                    FontSize="13"
-                                    Content="Try  &#x2193;"
-                                    Click="Button_NewLevel_Try_Click"
-                                    />
-                                <Button 
-                                    x:Name="Button_NewLevel_SaveAs"
-                                    Grid.Column="1"
-                                    Margin="6,0,6,0"
-                                    FontSize="13"
-                                    Content="Save as...  &#x1f5ab;"
-                                    Click="Button_NewLevel_SaveAs_Click"
-                                    />
-                                <Button 
-                                    x:Name="Button_NewLevel_ClearAll"
-                                    Grid.Column="2"
-                                    Margin="6,0,6,0"
-                                    FontSize="13"
-                                    Content="Clear all  &#x21ba;"
-                                    Click="Button_NewLevel_ClearAll_Click"
-                                    />
+                                <Label Style="{StaticResource Lbl_NewLevel}"  Content="Iwad :" Grid.Column="1" Grid.Row="1"/>
+                                <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelIwad" Grid.Column="2" Grid.Row="1" Tag="Iwad"
+                                     Text="Drop IWAD file... (Doom, Doom2, Freedoom, etc.)"/>
+                                <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="1" Tag="Iwad"/>
+                                <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="1" Tag="Iwad"/>
 
+                                <Label Style="{StaticResource Lbl_NewLevel}" Content="Maps :" Grid.Column="1" Grid.Row="3"/>
+                                <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelMaps" Grid.Column="2" Grid.Row="3" Tag="Maps"
+                                     Text="Drop Maps file... (.wad/.pk3)"/>
+                                <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="3" Tag="Maps"/>
+                                <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="3" Tag="Maps"/>
+
+                                <Label Style="{StaticResource Lbl_NewLevel}" Content="Misc. :" Grid.Column="1" Grid.Row="5"/>
+                                <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelMisc" Grid.Column="2" Grid.Row="5" Tag="Misc"
+                                     Text="Drop Misc. file... (.deh/.bex/.txt)"/>
+                                <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="5" Tag="Misc"/>
+                                <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="5" Tag="Misc"/>
+
+                                <Label Style="{StaticResource Lbl_NewLevel}" Content="Image :" Grid.Column="1" Grid.Row="7"/>
+                                <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_NewLevelPict" Grid.Column="2" Grid.Row="7" Tag="Pict"
+                                     Text="Drop Image file... (.jpg/.png)" />
+                                <Button Style="{StaticResource Btn_NewLevelBrowse}" Grid.Column="3" Grid.Row="7" Tag="Pict"/>
+                                <Button Style="{StaticResource Btn_NewLevelClear}" Grid.Column="3" Grid.Row="7" Tag="Pict"/>
+
+                                <!-- TODO
+                            <Label Style="{StaticResource Lbl_NewLevel}" Content="Name :" Grid.Column="1" Grid.Row="9"/>
+                            <TextBox Style="{StaticResource Tbx_NewLevel}" x:Name="Tbx_Newevel_Name" Grid.Column="2" Grid.Row="9" Text="Choose name..."/>
+                            -->
+
+                                <StackPanel Grid.ColumnSpan="5" Grid.Row="9" HorizontalAlignment="Center" Orientation="Horizontal" >
+                                    <Button Style="{StaticResource Btn_NewLevelActions}" Content="Try  &#x2193;" Click="Btn_NewLevelTry_Click"/>
+                                    <Button Style="{StaticResource Btn_NewLevelActions}" Content="Save as ...  &#x1f5ab;" Click="Btn_NewLevelSaveAs_Click"/>
+                                    <Button Style="{StaticResource Btn_NewLevelActions}" Content="Clear all  &#x21ba;" Click="Btn_NewLevelClearAll_Click"/>
+                                </StackPanel>
                             </Grid>
                         </Grid>
-
                     </TabItem>
                 </TabControl>
-
+                
+                <!-- TODO? Improve (v3+) -->
+                <StackPanel x:Name="Stkp_BaseLevelsSorting" Grid.Column="1" Margin="0 -4 0 0" Orientation="Horizontal" Visibility="Hidden">
+                    <Label Content="Sorting :" Margin="0 0 6 0" Padding="0"/>
+                    <ComboBox x:Name="Cmbx_BaseLevelsSorting" Width="90" Margin="0 -3 12 0" SelectionChanged="Cmbx_BaseLevelsSorting_SelectionChanged"
+                              ToolTip="Sort Preset by :&#x0a;- Name (Displayed text)&#x0a;- Type (Doom1, Doom2)&#x0a;- Year (Last published release)"
+                              ToolTipService.InitialShowDelay="50" ToolTipService.ShowDuration="10000">
+                        <ComboBoxItem Content="None" IsSelected="True"/>
+                        <ComboBoxItem Content="Name"/>
+                        <ComboBoxItem Content="Type"/>
+                        <ComboBoxItem Content="Year"/>
+                    </ComboBox>
+                    <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortAsc" Content="Ascending" Margin="0 -2 0 0"/>
+                    <RadioButton Style="{StaticResource Rbtn_Sorting}" x:Name="Rbtn_SortDesc" Content="Descending" Margin="9 -2 0 0"/>
+                </StackPanel >
+                
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="5"
-                    Grid.Column="1"
-                    Header="Mods">
+        <!-- Mods -->
+        <GroupBox AllowDrop="True" Grid.Column="1" Grid.Row="5" Header="Mods" Drop="Gbx_Mods_Drop" PreviewDragOver="Gbx_Mods_PreviewDragOver">
             <Grid Margin="8">
-                <TabControl x:Name="TabControl_Mods">
-                    <TabItem Header="Base presets">
+                <TabControl x:Name="Tbc_Mods" AllowDrop="True" SelectionChanged="Tbc_Mods_SelectionChanged">
+                    
+                    <TabItem x:Name="Tbi_ModsBasePresets" Header="Base presets">
                         <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="10" />
-                                <RowDefinition Height="4*" />
-                                <RowDefinition Height="18*" />
-                                <RowDefinition Height="10" />
-                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="8*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="2*" />
-                                <ColumnDefinition Width="10" />
-                                <ColumnDefinition Width="15*" />
-                                <ColumnDefinition Width="10" />
+                                <ColumnDefinition Width="44*" />
+                                <ColumnDefinition Width="6" />
+                                <ColumnDefinition Width="10*" />
+                                <ColumnDefinition Width="12" />
+                                <ColumnDefinition Width="44*" />
+                                <ColumnDefinition Width="6" />
                             </Grid.ColumnDefinitions>
-                            <ListView 
-                                x:Name="ListView_Mods_BasePresets"
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Grid.RowSpan="4"
-                                Grid.ColumnSpan="2"
-                                Margin="-3"
-                                SelectionChanged="ListView_Mods_BasePresets_SelectionChanged"
-                                >
-                                <!-- Use templates to bind -->
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="1*" />
+                                <RowDefinition Height="6" />
+                            </Grid.RowDefinitions>
+                            
+                            <ListView x:Name="Lvw_ModsBasePresets" Grid.RowSpan="3" Margin="-3" SelectionChanged="Lvw_ModsBasePresets_SelectionChanged">
                                 <ListView.ItemTemplate>
                                     <DataTemplate>
-                                        <!--<StackPanel
-                                            x:Name="StackPanel_Mods"
-                                            Orientation="Vertical"
-                                            >-->
-                                        <TextBlock
-                                                VerticalAlignment="Center"
-                                                FontWeight="DemiBold"
-                                                FontSize="13"
-                                                Text="{Binding Name}"
-                                                />
-                                        <!--</StackPanel>-->
+                                        <TextBlock FontSize="14" FontWeight="DemiBold" Text="{Binding Name}" VerticalAlignment="Center"/>
                                     </DataTemplate>
                                 </ListView.ItemTemplate>
                             </ListView>
-                            <Label 
-                                x:Name="Label_Mods_Desc"
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="3"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center"
-                                Margin="0,-2,0,0"
-                                Content="Description :"
-                                />
-                            <TextBlock
-                                x:Name="TextBlock_Mods_Desc"
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Grid.Column="5"
-                                Grid.ColumnSpan="2"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
-                                Margin="6,-1,0,0"
-                                FontWeight="DemiBold"
-                                />
 
-                            <Label 
-                                x:Name="Label_Mods_Files"
-                                Grid.Row="2"
-                                Grid.Column="3"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Top"
-                                Margin="0,-2,0,0"
-                                Content="Mod files :"
-                                />
-                            <ListView
-                                x:Name="ListView_Mods_Files"
-                                Grid.Row="2"
-                                Grid.RowSpan="2"
-                                Grid.Column="5"
-                                Grid.ColumnSpan="2"
-                                Margin="0,0,0,0"
-                                BorderBrush="LightGray"
-                                FontSize="11"
-                                IsManipulationEnabled="False"
-                                >
+                            <Label Content="Description :" Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="Tbk_ModsDesc" FontWeight="DemiBold" Grid.Column="4" HorizontalAlignment="Stretch" 
+                                       Padding="4" TextWrapping="Wrap" VerticalAlignment="Center"/>
+
+                            <Label Content="Files :" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                            <ListView x:Name="Lvw_ModsFiles" FontSize="11" Grid.Column="4" Grid.Row="1" IsManipulationEnabled="False" Margin="0"/>
+                        </Grid>
+                    </TabItem>
+                    
+                    <TabItem x:Name="Tbi_ModsUserPresets" Header="User presets">
+                        <Grid>
+                            <Label x:Name="Lbl_ModsNoUserPresets" Style="{StaticResource Lbl_NoUserPresets}"/>
+                            <ListView x:Name="Lvw_ModsUserPresets" Margin="-3" Visibility="Collapsed"
+                                      MouseDoubleClick="Lvw_ModsUserPresets_MouseDoubleClick" SelectionChanged="Lvw_ModsUserPresets_SelectionChanged">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Height="32" Margin="-3 0 0 0" Source="{Binding Pict,Converter={StaticResource ModImgConverter}}"/>
+                                            <TextBlock FontSize="14" FontWeight="DemiBold" Margin="8 0 0 0" Text="{Binding Name}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="11" Foreground="DimGray" FontStyle="Italic" Margin="12 0 0 0" Text="{Binding ShortDesc}" VerticalAlignment="Center"/>
+                                            <TextBlock FontSize="11" Margin="12 0 0 0" Text="{Binding FilesTotalResult}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                                <ListView.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="View details" Click="Mitm_ViewUserMod_Click"/>
+                                        <MenuItem Header="Delete preset" Click="Mitm_DeleteUserMod_Click"/>
+                                    </ContextMenu>
+                                </ListView.ContextMenu>
                             </ListView>
                         </Grid>
                     </TabItem>
-                    <TabItem Header="User presets">
+                    
+                    <TabItem x:Name="Tbi_ModsNewPresets" Header="Add new preset">
                         <Grid>
-                            <Label x:Name="Label_Mods_NoUserPresets"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    FontSize="20"
-                                    Foreground="Gray"
-                                    Content="No user presets found"/>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="6"/>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition Width="41*"/>
+                                <ColumnDefinition Width="10*"/>
+                                <ColumnDefinition Width="12"/>
+                                <ColumnDefinition Width="47.5*"/>
+                                <ColumnDefinition Width="6"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="6"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="3"/>
+                                <RowDefinition Height="1.5*"/>
+                                <RowDefinition Height="6"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="3"/>
+                            </Grid.RowDefinitions>
+
+                            <Label Content="Name :" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <TextBox x:Name="Tbx_NewModName" FontSize="11" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch" MaxLength="60" VerticalContentAlignment="Center"/>
+
+                            <Label Content="Desc. :" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <TextBox x:Name="Tbx_NewModDesc" FontSize="11" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch" MaxLength="100" Padding="0 3" TextWrapping="Wrap"/>
+
+                            <!-- Implement image submit under Desc. -->
+                            
+                            <!-- TODO: Implement Static styles -->
+                            <Label Content="Files :" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                            <Border BorderBrush="DarkGray" BorderThickness="1" Grid.Column="5" Grid.Row="1" Grid.RowSpan="3" SnapsToDevicePixels="True">
+                                <Grid AllowDrop="True" Drop="Grid_NewModFiles_Drop" PreviewDragOver="Grid_NewModFiles_PreviewDragOver">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="1*"/>
+                                        <ColumnDefinition Width="80"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Label x:Name="Lbl_NewModFiles" Content="Drop mod files..." FontSize="16" Foreground="Gray"
+                                           Grid.ColumnSpan="2" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" />
+                                    <DataGrid x:Name="Dtg_NewModFiles"
+                                              AutoGenerateColumns="False"
+                                              BorderThickness="0"
+                                              FontSize="12"
+                                              HorizontalGridLinesBrush="LightGray"
+                                              HeadersVisibility="Row"
+                                              IsReadOnly="True"
+                                              ItemsSource="{Binding}"
+                                              SelectionMode="Single"
+                                              VerticalGridLinesBrush="LightGray"
+                                              Visibility="Collapsed"
+                                              LoadingRow="Dtg_NewModFiles_LoadingRow">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding Name}">
+                                                <DataGridTextColumn.CellStyle>
+                                                    <Style TargetType="{x:Type DataGridCell}">
+                                                        <Setter Property="ToolTip">
+                                                            <Setter.Value>
+                                                                <TextBlock>
+                                                                    <TextBlock.Text>
+                                                                        <MultiBinding StringFormat="{} Filename : &quot;{0}&quot; &#x0d;&#x0a; Directory : &quot;{1}&quot; ">
+                                                                            <Binding Path="Name"/>
+                                                                            <Binding Path="Directory"/>
+                                                                            <!-- 
+                                                                            TODO: Implement proper readable file size from IOHelper
+                                                                            <Binding Path="Size" />
+                                                                            -->
+                                                                        </MultiBinding>
+                                                                    </TextBlock.Text>
+                                                                </TextBlock>
+                                                            </Setter.Value>
+                                                        </Setter>
+                                                        <Setter Property="ToolTipService.InitialShowDelay" Value="50"/>
+                                                        <Setter Property="ToolTipService.ShowDuration" Value="10000"/>
+                                                    </Style>
+                                                </DataGridTextColumn.CellStyle>
+                                            </DataGridTextColumn>
+                                        </DataGrid.Columns>
+                                        <DataGrid.RowHeaderStyle>
+                                            <Style TargetType="{x:Type DataGridRowHeader}">
+                                                <Setter Property="FontSize" Value="11"/>
+                                                <Setter Property="Padding" Value="2"/>
+                                            </Style>
+                                        </DataGrid.RowHeaderStyle>
+                                    </DataGrid>
+                                    <Border x:Name="Brd_NewModFiles"
+                                            BorderBrush="DarkGray" BorderThickness="1" Grid.Column="1" Margin="-1" SnapsToDevicePixels="True" Visibility="Collapsed">
+                                        <Grid>
+                                            <StackPanel VerticalAlignment="Center">
+                                                <Border Style="{StaticResource Brd_NewModFileSideControls}">
+                                                    <Button Content="Move 🡅" Style="{StaticResource Btn_NewModFileSideControls}" Click="Btn_MoveNewModFileUp_Click"/>
+                                                </Border>
+                                                <Border Style="{StaticResource Brd_NewModFileSideControls}">
+                                                    <Button Content="Directory &#128193;" Style="{StaticResource Btn_NewModFileSideControls}" Click="Btn_OpenNewModFileDir_Click"/>
+                                                </Border>
+                                                <Border Style="{StaticResource Brd_NewModFileSideControls}">
+                                                    <Button Content="Remove &#10005;" Style="{StaticResource Btn_NewModFileSideControls}" Click="Btn_RemoveNewModFile_Click"/>
+                                                </Border>
+                                                <Border Style="{StaticResource Brd_NewModFileSideControls}">
+                                                    <Button Content="Move 🡇" Style="{StaticResource Btn_NewModFileSideControls}" Click="Btn_MoveNewModFileDown_Click"/>
+                                                </Border>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <StackPanel Grid.ColumnSpan="8" Grid.Row="5" HorizontalAlignment="Center" Orientation="Horizontal">
+                                <Button Style="{StaticResource Btn_NewModActions}" Content="Try  &#x2193;" Click="Btn_NewModTry_Click"/>
+                                <Button Style="{StaticResource Btn_NewModActions}" Content="Save  &#x1f5ab;" Click="Btn_NewModSave_Click"/>
+                                <Button Style="{StaticResource Btn_NewModActions}" Content="Clear all  &#x21ba;" Click="Btn_NewModClearAll_Click"/>
+                            </StackPanel>
+
                         </Grid>
                     </TabItem>
-                    <TabItem Header="Add new preset">
-
-                    </TabItem>
                 </TabControl>
-                <!--<Grid.RowDefinitions>
-                    <RowDefinition Height="2*" />
-                    <RowDefinition Height="1*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="18*" />
-                    <ColumnDefinition Width="2*" />
-                </Grid.ColumnDefinitions>
-                <Border BorderThickness="1"
-                        BorderBrush="DarkGray">
-                    <StackPanel x:Name="StackPanel_Mods"
-                            Orientation="Horizontal">
-
-                    </StackPanel>
-                </Border>
-                <Button x:Name="Button_ModInfo"
-                        Grid.Column="1"
-                        Content="Get more info..."/>
-                <Border Grid.Row="1"
-                        BorderThickness="1"
-                        BorderBrush="DarkGray">
-                                
-                </Border>-->
             </Grid>
         </GroupBox>
 
-        <GroupBox Grid.Row="7"
-                    Grid.Column="1"
-                    Header="Summary">
+        <!-- Summary -->
+        <GroupBox x:Name="Grp_Summary" Grid.Column="1" Grid.Row="7" Header="Summary">
             <Grid>
-                <Grid x:Name="Grid_Summary" 
-                        Visibility="Visible"
-                        >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="10" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="10" />
-                    </Grid.RowDefinitions>
+                <Grid x:Name="Grid_Summary" Visibility="Visible">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="8" />
                         <ColumnDefinition Width="1*" />
                         <ColumnDefinition Width="15*" />
-                        <ColumnDefinition Width="10" />
+                        <ColumnDefinition Width="8" />
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="1*" />
+                        <RowDefinition Height="8" />
+                    </Grid.RowDefinitions>
 
-                    <Label Grid.Row="1" 
-                        Grid.Column="1" 
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="0,-1,0,0"
-                        Content="Port :"/>
-                    <TextBox 
-                        x:Name="TextBox_Summary_Port" 
-                        Grid.Row="1"
-                        Grid.Column="2"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Margin="0,1,0,0"
-                        Cursor="Arrow"
-                        IsReadOnly="True"
-                        AllowDrop="False"
-                        />
+                    <Label Style="{StaticResource Lbl_SummaryEntries}" Content="Port :" Grid.Column="1" Grid.Row="1"/>
+                    <TextBox Style="{StaticResource Tbx_SummaryEntries}" x:Name="TextBox_Summary_Port" Grid.Column="2" Grid.Row="1"/>
 
-                    <Label 
-                        Grid.Row="2"
-                        Grid.Column="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="0,-1,0,0"
-                        Content="Params :"
-                        />
-                    <StackPanel 
-                        x:Name="StackPanel_Summary_PortParameters"
-                        Grid.Row="4" 
-                        Grid.Column="2"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Margin="0,1,0,0"
-                        Orientation="Horizontal"
-                        />
-                    <!--<TextBox Grid.Row="2" 
-                            Grid.Column="2"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Center"
-                            Margin="0,1,0,0"
-                            Cursor="Arrow"
-                            IsReadOnly="True"/>-->
+                    <Label Style="{StaticResource Lbl_SummaryEntries}" Content="Params :" Grid.Column="1" Grid.Row="2"/>
+                    <StackPanel Style="{StaticResource Stkp_SummaryEntries}" x:Name="Stkp_SummaryPortParameters" Grid.Column="2" Grid.Row="2"/>
 
-                    <Label 
-                        Grid.Row="3"
-                        Grid.Column="1"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Center"
-                        Margin="0,-1,0,0"
-                        Content="Iwad :"
-                        />
-                    <TextBox
-                        x:Name="TextBox_Summary_Iwad"
-                        Grid.Row="3" 
-                        Grid.Column="2"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Margin="0,1,0,0"
-                        Cursor="Arrow"
-                        IsReadOnly="True"
-                        />
+                    <Label Style="{StaticResource Lbl_SummaryEntries}" Content="Iwad :" Grid.Column="1" Grid.Row="3"/>
+                    <TextBox Style="{StaticResource Tbx_SummaryEntries}" x:Name="TextBox_Summary_Iwad" Grid.Column="2" Grid.Row="3"/>
 
-                    <Label Grid.Row="4"
-                            Grid.Column="1"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Margin="0,-1,0,0"
-                            Content="File(s) :"
-                            />
-
-                    <StackPanel 
-                        x:Name="StackPanel_Summary_FilesMods"
-                        Grid.Row="4" 
-                        Grid.Column="2"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Center"
-                        Margin="0,1,0,0"
-                        Orientation="Horizontal"
-                        />
+                    <Label Style="{StaticResource Lbl_SummaryEntries}" Content="Files :" Grid.Column="1" Grid.Row="4"/>
+                    <StackPanel Style="{StaticResource Stkp_SummaryEntries}" x:Name="Stkp_SummaryFilesMods" Grid.Column="2" Grid.Row="4"/>
                 </Grid>
-                <Grid 
-                    x:Name="Grid_Command" 
-                    Visibility="Collapsed" 
-                    Margin="8"
-                    >
-                    <RichTextBox x:Name="RichTextBox_Command" 
-                                Grid.Row="1"
-                                Grid.RowSpan="4"
-                                Grid.Column="1"
-                                Grid.ColumnSpan="2"       
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                IsReadOnly="True"/>
+                
+                <Grid x:Name="Grid_Command" Margin="8" Visibility="Collapsed">
+                    <RichTextBox x:Name="Rtb_Command" BorderBrush="LightGray" HorizontalAlignment="Stretch" IsReadOnly="True" VerticalAlignment="Stretch"/>
                 </Grid>
             </Grid>
         </GroupBox>
 
         <!-- Sidebar options -->
-        <GroupBox Grid.Row="1"
-                    Grid.RowSpan="7"
-                    Grid.Column="3"
-                    Margin="10,0,0,0"
-                    Header="Options">
+        <GroupBox Grid.Column="3" Grid.Row="1" Grid.RowSpan="7" Header="Options">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="15*" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="63*" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="44*" />
-                    <RowDefinition Height="30" />
-                    <RowDefinition Height="24*" />
+                    <!-- Estimated visually as best aligments -->
+                    <RowDefinition Height="78" />
+                    <RowDefinition Height="22" />
+                    <RowDefinition Height="280" />
+                    <RowDefinition Height="14" />
+                    <RowDefinition Height="218" />
+                    <RowDefinition Height="10" />
+                    <RowDefinition Height="140" />
                 </Grid.RowDefinitions>
-                <Button 
-                    x:Name="Button_Options_HelpAbout"
-                    Grid.Row="0"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Cursor="Hand"
-                    Click="Button_Options_HelpAbout_Click"
-                    >
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <ContentPresenter Content="{TemplateBinding Content}"/>
-                        </ControlTemplate>
-                    </Button.Template>
-                    <Image Source="pack://application:,,,/Resources/Images/index.png" />
-                </Button>
 
-                <Button
-                    x:Name="Button_TestMySettings_Check"
-                    Grid.Row="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Center"
-                    Height="46"
-                    Content="Settings"
-                    Click="Button_TestMySettings_Check_Click"
-                    Visibility="Hidden"
-                    />
+                <StackPanel VerticalAlignment="Center">
+                    <Button Content="Help / About" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionHelpAbout_Click"/>
+                </StackPanel>
 
-                <Button
-                    x:Name="Button_TestMySettings_Reset"
-                    Grid.Row="2"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Bottom"
-                    Margin="0,0,0,80"
-                    Height="46"
-                    Content="-> Reset"
-                    Click="Button_TestMySettings_Reset_Click"
-                    Visibility="Hidden"
-                    />
+                <StackPanel Grid.Row="2" VerticalAlignment="Center">
+                    <Button Content="Root directory" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionOpenRootDir_Click"/>
+                    <Button Content="DoomWorld" IsEnabled="True" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionDoomWorld_Click"/>
+                </StackPanel>
 
-                <Grid Grid.Row="6">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="1*" />
-                        <RowDefinition Height="1*" />
-                    </Grid.RowDefinitions>
-                    <Button 
-                        x:Name="Button_ToggleSummaryView"
-                        Grid.Row="0"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        FontSize="32"
-                        Content="&#x1F441;"
-                        Cursor="Hand"
-                        ToolTip="Toogle view"
-                        Click="Button_Options_ToggleView_Click"
-                        />
-                    <Button
-                        x:Name="Button_Options_LaunchSave"
-                        Grid.Row="1"
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Cursor="Hand"
-                        ToolTip="Play and Save"
-                        Click="Button_Options_LaunchSave_Click"
-                        >
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <ContentPresenter Content="{TemplateBinding Content}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                        <Image Source="pack://application:,,,/Resources/Images/play_darker.png" />
-                    </Button>
-                </Grid>
+                <StackPanel Grid.Row="6" VerticalAlignment="Center">
+                    <Button Background="#d6e0f5" Content="Switch view &#128065;" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionSwitchView_Click"/>
+                    <Button Background="#c6ecc6" Content="Save &amp; Play &#10148;" Style="{StaticResource Btn_OptionsTemp}" Click="Button_OptionSavePlay_Click"/>
+                </StackPanel>
             </Grid>
         </GroupBox>
 
-        <!--<Button Grid.Row="1"
-                Grid.Column="3"
-                Margin="8,8,8,0"
-                VerticalAlignment="Bottom"
-                Height="72"
-                Content="?"/>
-
-        <StackPanel Grid.Row="3"
-                    Grid.Column="3"
-                    VerticalAlignment="Center"
-                    Margin="0,12,0,0"
-                    Orientation="Vertical">
-            <Button Margin="0,0,0,12" Height="56" Content="1"/>
-            <Button Margin="0,0,0,12" Height="56" Content="2"/>
-            <Button Margin="0,0,0,12" Height="56" Content="3"/>
-            <Button Margin="0,0,0,12" Height="56" Content="4"/>
-            <Button Margin="0,0,0,12" Height="56" Content="5"/>
-        </StackPanel>-->
-
-        <!--<StackPanel Grid.Row="7"
-                    Grid.Column="3"
-                    VerticalAlignment="Center"
-                    Margin="0,12,0,0"
-                    Orientation="Vertical">-->
-
-        <!--<TextBlock TextAlignment="Center"
-                        FontSize="14">
-                Toggle view
-                <LineBreak />
-                <Bold>> _</Bold>
-            </TextBlock>-->
-
-
-        <!--<TextBlock TextAlignment="Center"
-                        FontSize="14">
-                Play
-                <LineBreak />
-                &#x23F5;
-            </TextBlock>-->
-        <!--</StackPanel>-->
-
-
-        <!--<GroupBox Grid.Row="7" 
-                    Grid.Column="3"
-                    Header="Preset info">
-            <StackPanel Orientation="Vertical">
-                -->
-        <!-- Image -->
-        <!-- Presets attribute 1 -->
-        <!-- Presets attribute 2 -->
-        <!-- Presets attribute 3 -->
-        <!--
-            </StackPanel>
-        </GroupBox>-->
-
-
-        <!--<TabControl Grid.Row="3"
-                    Grid.Column="3">
-            <TabItem Header="Preset info">
-                <StackPanel Orientation="Vertical">
-                    -->
-        <!-- Image -->
-        <!-- Presets attribute 1 -->
-        <!-- Presets attribute 2 -->
-        <!-- Presets attribute 3 -->
-        <!--
-                </StackPanel>
-            </TabItem>
-            <TabItem Header="Something else">
-                -->
-        <!-- Content ? -->
-        <!--
-            </TabItem>
-        </TabControl>-->
-
-        <!-- Manage engine, config, mod -->
     </Grid>
 </Window>

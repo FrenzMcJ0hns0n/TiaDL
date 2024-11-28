@@ -1,0 +1,69 @@
+{
+    "type": "object",
+    "default": {},
+    "title": "TiaDL settings",
+    "required": [
+        "Port",
+        "PortParameters",
+        "Iwad",
+        "Level",
+        "Misc",
+        "Mods"
+    ],
+    "properties": {
+        "Port": {
+            "type": "string",
+            "default": "",
+            "title": "Selected Port filepath",
+            "examples": [
+                "C:\\Path\\to\\gzdoom.exe"
+            ]
+        },
+        "PortParameters": {
+            "type": "array",
+            "default": [],
+            "title": "Selected Port parameters",
+            "items": {},
+            "examples": [
+                []
+            ]
+        },
+        "Iwad": {
+            "type": "string",
+            "default": "",
+            "title": "Selected Iwad filepath",
+            "examples": [
+                "C:\\Path\\to\\Doom2.wad"
+            ]
+        },
+        "Level": {
+            "type": "string",
+            "default": "",
+            "title": "Selected Level filepath",
+            "examples": [
+                "C:\\Path\\to\\DTS-T.pk3"
+            ]
+        },
+        "Misc": {
+            "type": "string",
+            "default": "",
+            "title": "Selected Misc filepath",
+            "examples": [
+                "C:\\Path\\to\\DOOMZERO.DEH"
+            ]
+        },
+        "Mods": {
+            "type": "array",
+            "default": [],
+            "title": "Selected Mods filepaths",
+            "items": {
+                "type": "string",
+                "title": "Each mod filepath",
+                "examples": [
+                    "C:\\Path\\to\\brutalv21.pk3",
+                    "C:\\Path\\to\\BrutalDoom PowerFantasy v2.pk3"
+                ]
+            }
+        }
+    }
+}

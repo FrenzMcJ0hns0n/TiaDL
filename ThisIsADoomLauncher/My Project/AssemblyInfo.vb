@@ -12,10 +12,10 @@ Imports System.Windows
 ' Vérifiez les valeurs des attributs de l'assembly
 
 <Assembly: AssemblyTitle("ThisIsADoomLauncher")>
-<Assembly: AssemblyDescription("")>
+<Assembly: AssemblyDescription("This is a Doom Launcher")>
 <Assembly: AssemblyCompany("")>
 <Assembly: AssemblyProduct("ThisIsADoomLauncher")>
-<Assembly: AssemblyCopyright("Copyright ©  2017")>
+<Assembly: AssemblyCopyright("")>
 <Assembly: AssemblyTrademark("")>
 <Assembly: ComVisible(false)>
 
@@ -55,5 +55,5 @@ Imports System.Windows
 ' en utilisant '*', comme indiqué ci-dessous :
 ' <Assembly: AssemblyVersion("1.0.*")>
 
-<Assembly: AssemblyVersion("1.0.0.0")>
-<Assembly: AssemblyFileVersion("1.0.0.0")>
+<Assembly: AssemblyVersion("3.1.0.0")>
+<Assembly: AssemblyFileVersion("3.1.0.0")>

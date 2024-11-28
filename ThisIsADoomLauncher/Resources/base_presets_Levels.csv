@@ -1,25 +1,29 @@
 #BASE PRESETS - LEVELS
-#Name						#Iwad			#Level				#Misc.				#Image
+#Name									#Type	#Year	#Iwad			#Maps				#Misc.			#Pict.
 
-Ultimate Doom; 				Doom.wad;		;					;					doom_icon.jpg
-Ultimate Doom + Sigil;		Doom.wad; 		SIGIL_v1_21.wad;	;					Sigil_cover.jpg
-Doom II: Hell on Earth; 	Doom2.wad;		;					;					doom2_icon.jpg
-TNT: Evilution; 			TNT.wad;		;					;					final_doom_icon.jpg
-The Plutonia Experiment;	Plutonia.wad;	;					;					final_doom_icon.jpg
-Doom Zero;					Doom2.wad; 		DoomZero.wad;		DOOMZERO.DEH;		DE_DOOM_Zero_edit.jpg
-Freedoom: Phase 1;			freedoom1.wad;	;					;					freedoom_icon_edit.png
-Freedoom: Phase 2;			freedoom2.wad;	;					;					freedoom_icon_edit.png
-2002 A Doom Odyssey;		Doom.wad; 		2002ad10.wad
-Icarus: Alien Vanguard;		Doom2.wad; 		ICARUS.wad
-Requiem; 					Doom2.wad;		Requiem.wad
-Plutonia Revisited;			Doom2.wad; 		PRCP.wad
-Plutonia 2;					Doom2.wad;		PL2.wad
-Hell Revealed;				Doom2.wad; 		hr.wad
-Hell Revealed 2;			Doom2.wad; 		hr2final.wad
-Doom 2 Reloaded;			Doom2.wad; 		D2RELOAD.WAD
-Doom 2 The Way id Did;		Doom2.wad; 		D2TWID.wad; 		D2TWID.deh
-DTS-T;						Doom2.wad; 		DTS-T.pk3
-Zone 300;					Doom2.wad; 		zone300.wad
-Dark Encounters 2019;		Doom2.wad;		drkenctr2019.wad
-1000 Lines 2;				Doom2.wad;		1klinecp2.wad;		1klinecp2.deh
-Wolfenstein 3D;				Wolf3D.pk3;		Wolf3D_*.pk3;		Wolf3DGL.pk3;		Blazkowicz_sprite.png
+Ultimate Doom; 							Doom 1;	1993;	Doom.wad;		;					;				doom_icon.jpg
+Ultimate Doom + Sigil;					Doom 1;	2019;	Doom.wad; 		SIGIL_v1_21.wad;	;				Sigil_cover.jpg
+2002 A Doom Odyssey (10th Anniversary);	Doom 1;	2012;	Doom.wad; 		2002ad10.wad
+Doom II: Hell on Earth; 				Doom 2;	1994;	Doom2.wad;		;					;				doom2_icon.jpg
+TNT: Evilution; 						Doom 2;	1996;	TNT.wad;		;					;				final_doom_icon.jpg
+The Plutonia Experiment;				Doom 2;	1996;	Plutonia.wad;	;					;				final_doom_icon.jpg
+Freedoom: Phase 1;						Doom 1;	2019;	freedoom1.wad;	;					;				freedoom_icon_edit.png
+Freedoom: Phase 2;						Doom 2;	2019;	freedoom2.wad;	;					;				freedoom_icon_edit.png
+1000 Lines;								Doom 2; 2019;	Doom2.wad;		1klinecp.wad;		1klinecp.deh
+1000 Lines 2;							Doom 2;	2020;	Doom2.wad;		1klinecp2.wad;		1klinecp2.deh
+1000 Lines 3;							Doom 2; 2021;	Doom2.wad;		1k3v1.0.wad;		1k3v1.0.deh
+Alien Vendetta;							Doom 2;	2002;	Doom2.wad;		AV.WAD;				AV.DEH
+Dark Encounters;						Doom 2;	2019;	Doom2.wad;		drkenctr2019.wad
+Doom Zero;								Doom 2;	2021;	Doom2.wad; 		DoomZero.wad;		DOOMZERO.DEH;	DE_DOOM_Zero_edit.jpg
+Doom 2 Reloaded;						Doom 2;	2009;	Doom2.wad; 		D2RELOAD.WAD
+Doom 2 The Way id Did;					Doom 2;	2013;	Doom2.wad; 		D2TWID.wad; 		D2TWID.deh
+DTS-T;									Doom 2;	2012;	Doom2.wad; 		DTS-T.pk3
+Going down;								Doom 2;	2014;	Doom2.wad;		gd.wad
+Hell Revealed;							Doom 2;	1997;	Doom2.wad; 		hr.wad
+Hell Revealed 2;						Doom 2;	2003;	Doom2.wad; 		hr2final.wad
+Icarus: Alien Vanguard;					Doom 2;	1996;	Doom2.wad; 		ICARUS.wad
+Requiem; 								Doom 2;	1997;	Doom2.wad;		Requiem.wad
+Plutonia 2;								Doom 2;	2008;	Doom2.wad;		PL2.wad
+Plutonia Revisited;						Doom 2;	2011;	Doom2.wad; 		PRCP.wad
+Zone 300;								Doom 2;	2013;	Doom2.wad; 		zone300.wad
+Wolfenstein 3D;							Other;	1992;	Wolf3D.pk3;		Wolf3D_*.pk3;		Wolf3DGL.pk3;	Blazkowicz_sprite.png

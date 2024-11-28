@@ -7,7 +7,8 @@
     Startup="Application_Startup">
     <Application.Resources>
         <ResourceDictionary>
-            <conv:ImagePathConverter x:Key="ImgConverter"/>
+            <conv:LvlImagePathConverter x:Key="LvlImgConverter"/>
+            <conv:ModImagePathConverter x:Key="ModImgConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,0 +1,7 @@
+﻿[*.vb]
+
+# IDE0058: La valeur d'expression n'est jamais utilisée
+dotnet_diagnostic.IDE0058.severity = none
+
+# IDE0010: Ajouter les instructions case manquantes
+dotnet_diagnostic.IDE0010.severity = none

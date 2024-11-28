@@ -1,0 +1,157 @@
+﻿<UserControl x:Class="Views.UserControls.DoomWorld.SelectedLevel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:converters="clr-namespace:ThisIsADoomLauncher.Helpers.Converters.DoomWorld"
+             xmlns:local="clr-namespace:ThisIsADoomLauncher" Loaded="Usc_SelectedLevel_Loaded">
+    <UserControl.Resources>
+        <ResourceDictionary>
+
+            <converters:LevelSizeConverter x:Key="LevelSizeConverter"/>
+
+            <Style TargetType="Run" x:Key="RunBoldStyle">
+                <Setter Property="FontWeight" Value="Bold"/>
+            </Style>
+
+            <Style TargetType="TextBlock" x:Key="TextActionStyle">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="Padding" Value="0,4,0,0"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
+            <Style TargetType="TextBlock">
+                <Setter Property="Margin" Value="8"/>
+                <Setter Property="TextWrapping" Value="Wrap"/>
+            </Style>
+
+            <Style TargetType="Image" x:Key="ImgActionStyle">
+                <Setter Property="Height" Value="35"/>
+                <Setter Property="Width" Value="35"/>
+            </Style>
+
+            <Style TargetType="Button" x:Key="OptionButtonStyle">
+                <Setter Property="Margin" Value="15"/>
+                <Setter Property="Padding" Value="15"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <!-- Level selected : Level infos -->
+    <ScrollViewer>
+        <StackPanel Margin="20">
+            <TextBlock>
+                <Run Text="Dir:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+                <Run Text="{Binding Dir}"/>
+            </TextBlock>
+            <TextBlock Text="{Binding Title}" 
+                       HorizontalAlignment="Center"
+                       FontSize="22"
+                       FontWeight="Bold"/>
+
+            <Border BorderBrush="#2986CC" BorderThickness="1" CornerRadius="7" Margin="25" Padding="15">
+                <!-- Level info -->
+                <StackPanel>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Download icon + label -->
+                        <StackPanel x:Name="Stk_DownloadLevel" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Horizontal" Margin="16" Cursor="Hand">
+                            <StackPanel>
+                                <Image x:Name="Img_DownloadLevel"
+                                       Source="pack://application:,,,/Resources/Images/doomworld_dl.png"
+                                       Height="30" Width="30">
+                                </Image>
+                                <TextBlock x:Name="Txt_DownloadLevel"
+                                           Text="Download" 
+                                           Style="{StaticResource ResourceKey=TextActionStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <!-- / Download icon + label -->
+                        <StackPanel Grid.Column="2">
+                            <!-- Filename -->
+                            <TextBlock>
+                                <Run Text="Filename :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+                                <Run Text="{Binding Filename}"/>
+                            </TextBlock>
+                            <!-- Size -->
+                            <TextBlock>
+                                <Run Text="Size :" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+                                <Run Text="{Binding Size, Converter={StaticResource ResourceKey=LevelSizeConverter}}"/>
+                            </TextBlock>
+                            <!-- Open in browser -->
+                            <TextBlock>
+                                <Hyperlink NavigateUri="{Binding Url}" Click="Url_OpenBrowser_Click">
+                                    <Run Text="Open in browser"/>
+                                </Hyperlink>
+                            </TextBlock>
+                            <!-- Open in file explorer -->
+                            <TextBlock x:Name="Txt_OpenFileExplorer">
+                                <Hyperlink Click="Txt_OpenFileExplorer_Click">
+                                    <Run Text="Open in file explorer"/>
+                                </Hyperlink>
+                            </TextBlock>
+                        </StackPanel>
+                    </Grid>
+                    <!-- Download progress -->
+                    <StackPanel x:Name="Stk_LevelDownload" 
+                                Margin="0,10" 
+                                Visibility="Collapsed">
+                        <ProgressBar x:Name="Pgb_LevelDownload" Margin="5"/>
+                        <TextBlock x:Name="Txt_LevelDownload" Text="Downloading..."/>
+                    </StackPanel>
+                    <!-- / Download progress -->
+                </StackPanel>
+            </Border>
+
+            <TextBlock>
+            <Run Text="Author:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Author}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Release date:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding ReleaseDate}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Description:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Description}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Credits:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Credits}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Base:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Base}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Build time:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Buildtime}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Editors:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Editors}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Idgamesurl:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Idgamesurl}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Bugs:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Bugs}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Ratings:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Rating}"/>
+            </TextBlock>
+            <TextBlock>
+            <Run Text="Text file:" Style="{StaticResource ResourceKey=RunBoldStyle}"/>
+            <Run Text="{Binding Textfile}"/>
+            </TextBlock>
+        </StackPanel>
+    </ScrollViewer>
+    <!-- End Level selected : Level infos -->
+</UserControl>

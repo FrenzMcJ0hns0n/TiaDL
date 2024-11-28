@@ -1,45 +1,38 @@
 ﻿Namespace Models
     Public Class ModPreset
+        Inherits Preset
 
-        Private _name As String
-        Public Property Name As String
-            Get
-                Return _name
-            End Get
-            Set(value As String)
-                _name = value
-            End Set
-        End Property
-
-        Private _desc As String
         Public Property Desc As String
+
+        Private _shortDesc As String
+        Public ReadOnly Property ShortDesc As String
             Get
-                Return _desc
+                If _shortDesc = Nothing Then
+                    If Desc.Length > 80 Then
+                        _shortDesc = $"{Desc.Substring(0, 80).Trim}[...]"
+                    Else
+                        _shortDesc = Desc
+                    End If
+                End If
+                    Return _shortDesc
             End Get
-            Set(value As String)
-                _desc = value
-            End Set
         End Property
 
-        Private _imagePath As String
-        Public Property ImagePath As String
+        Private _filesTotalResult As String
+        Public ReadOnly Property FilesTotalResult As String
             Get
-                Return _imagePath
+                If _filesTotalResult = Nothing Then
+                    If Files.Count = 1 Then
+                        _filesTotalResult = $"({Files.Count} file)"
+                    Else
+                        _filesTotalResult = $"({Files.Count} files)"
+                    End If
+                End If
+                Return _filesTotalResult
             End Get
-            Set(value As String)
-                _imagePath = value
-            End Set
         End Property
 
-        Private _files As List(Of String)
         Public Property Files As List(Of String)
-            Get
-                Return _files
-            End Get
-            Set(value As List(Of String))
-                _files = value
-            End Set
-        End Property
 
     End Class
 End Namespace
