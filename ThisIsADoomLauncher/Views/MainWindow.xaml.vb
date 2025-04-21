@@ -546,10 +546,12 @@ Namespace Views
 
             'At least 2 contents (including Iwad) are required
             If iwadInput = TBX_DROP_IWAD Then Return
-            If mapsInput = TBX_DROP_MAPS And miscInput = TBX_DROP_MISC Then
+            If mapsInput = TBX_DROP_MAPS AndAlso miscInput = TBX_DROP_MISC Then
                 MessageBox.Show(ERR_ONLY_IWAD, ERR_MISSING_INPUT, MessageBoxButton.OK, MessageBoxImage.Error)
                 Return
             End If
+
+            miscInput = If(miscInput = TBX_DROP_MISC, String.Empty, miscInput) 'Fix: miscInput is optional!
 
             'Update Summary "Fields" view
             TextBox_Summary_Iwad.Text = iwadInput
