@@ -316,13 +316,17 @@ Namespace Views
                 End If
 
                 Lvw_SearchResults.ItemsSource = SortLevels(_lstSearchResults, _selectedSortingCriterion)
-                Me.SetTxtResultText($"{_lstSearchResults.Count} results", Txt_Lvw_SearchResults_Count)
+                Me.SetTxtResultText($"{_lstSearchResults.Count} results for '" + searchText + "'.", Txt_Lvw_SearchResults_Count)
             Catch ex As OverflowException
                 _lstSearchResults = New List(Of Level)
-                Me.SetTxtResultText("Error : Too many results (100 max)", Txt_Lvw_SearchResults_Count, True)
+                Me.SetTxtResultText("Error: '" + searchText + "' returned too many results (100 max).", Txt_Lvw_SearchResults_Count, True)
                 Lvw_SearchResults.ItemsSource = SortLevels(_lstSearchResults, _selectedSortingCriterion)
+            Catch ex As Helpers.Exceptions.NoResultsException
+                Me.SetTxtResultText("No results for '" + searchText + "'", Txt_Lvw_SearchResults_Count, False)
+                Lvw_SearchResults.ItemsSource = Nothing
             Catch ex As Exception
-
+                Me.SetTxtResultText("Error: Something wrong happened", Txt_Lvw_SearchResults_Count, True)
+                Lvw_SearchResults.ItemsSource = Nothing
             End Try
         End Sub
 
@@ -394,13 +398,24 @@ Namespace Views
         End Sub
 
         ''' <summary>
+        ''' Init search process when user presses Enter or clicks Search button.
+        ''' </summary>
+        Private Sub InitSearch()
+            If Txt_DWSearchText.Text.Length < 3 Then
+                Me.SetTxtResultText($"Enter at least 3 characters.", Txt_Lvw_SearchResults_Count, True)
+            Else
+                Me.GetSearchResults(Txt_DWSearchText.Text)
+            End If
+        End Sub
+
+        ''' <summary>
         ''' When user enters Return key from "Search" Textbox.
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         Private Sub Txt_DWSearchText_KeyDown(sender As Object, e As KeyEventArgs)
-            If e.Key = Key.Return AndAlso Txt_DWSearchText.Text.Length >= 3 Then
-                Me.GetSearchResults(Txt_DWSearchText.Text)
+            If e.Key = Key.Return Then
+                Me.InitSearch()
             End If
         End Sub
 
@@ -410,20 +425,20 @@ Namespace Views
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
         Private Sub Btn_DWSearch_Click(sender As Object, e As RoutedEventArgs)
-            If Txt_DWSearchText.Text.Length >= 3 Then
-                Me.GetSearchResults(Txt_DWSearchText.Text)
-            End If
+            Me.InitSearch()
         End Sub
+
+
 
         ''' <summary>
         ''' Set "X results" UI (content and color).
         ''' </summary>
-        ''' <param name="text">Text to be displayed.</param>
-        ''' <param name="txtControl">Target Textblock</param>
+        ''' <param name="displayText">Text to be displayed.</param>
+        ''' <param name="targetTextBlockControl">Target Textblock</param>
         ''' <param name="isError">True : red text. False : black text.</param>
-        Private Sub SetTxtResultText(text As String, txtControl As TextBlock, Optional isError As Boolean = False)
-            txtControl.Text = text
-            txtControl.Foreground = If(isError, Windows.Media.Brushes.Red, Windows.Media.Brushes.Black)
+        Private Sub SetTxtResultText(displayText As String, targetTextBlockControl As TextBlock, Optional isError As Boolean = False)
+            targetTextBlockControl.Text = displayText
+            targetTextBlockControl.Foreground = If(isError, Windows.Media.Brushes.DarkRed, Windows.Media.Brushes.Black)
         End Sub
 
         ''' <summary>

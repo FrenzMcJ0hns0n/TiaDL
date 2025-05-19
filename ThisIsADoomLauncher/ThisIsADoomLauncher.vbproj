@@ -117,6 +117,7 @@
     <Compile Include="Helpers\DoomWorld\Models\InstalledLevel.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Level.vb" />
     <Compile Include="Helpers\DoomWorld\Models\Review.vb" />
+    <Compile Include="Helpers\Exceptions\NoResultsException.vb" />
     <Compile Include="Helpers\General.vb" />
     <Compile Include="Helpers\Serializer.vb" />
     <Compile Include="Models\InputFile.vb" />

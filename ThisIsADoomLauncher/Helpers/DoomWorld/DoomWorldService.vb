@@ -171,6 +171,8 @@ Namespace Helpers.DoomWorld
                     If .SelectToken("warning") IsNot Nothing Then
                         If .SelectToken("warning.type").Value(Of String) = "Limit Reached" Then
                             Throw New OverflowException("Search query returned too many results.")
+                        ElseIf .SelectToken("warning.type").Value(Of String) = "No Results" Then
+                            Throw New Helpers.Exceptions.NoResultsException("Search query returned no results.")
                         End If
                         Throw New Exception($"Warning: { .SelectToken("warning.message") }")
 
