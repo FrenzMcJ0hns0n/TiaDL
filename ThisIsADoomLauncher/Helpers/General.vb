@@ -8,6 +8,7 @@ Friend Module General
         Dim executingAssembly As Assembly = Assembly.GetExecutingAssembly()
         Dim eaName As AssemblyName = executingAssembly.GetName()
         Dim eaFilePath As String = executingAssembly.Location
+        Dim eaLastGeneration As Date = If(Debugger.IsAttached, Now, File.GetLastWriteTime(eaFilePath))
 
         Dim hasMinor As Boolean = eaName.Version.Minor > 0
         Dim hasBuild As Boolean = eaName.Version.Build > 0
@@ -20,7 +21,7 @@ Friend Module General
 
         Dim eaLastEdit As String = File.GetLastWriteTime(eaFilePath).ToString("yyyy-MM-dd")
 
-        Return $"This is a Doom Launcher - v{major}{minor}{build}{revis} ({eaLastEdit})"
+        Return $"This is a Doom Launcher - v{major}{minor}{build}{revis} ({eaLastGeneration:yyyy-MM-dd})"
     End Function
 
     ''' <summary>
