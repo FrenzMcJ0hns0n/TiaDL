@@ -316,17 +316,21 @@ Namespace Views
                 End If
 
                 Lvw_SearchResults.ItemsSource = SortLevels(_lstSearchResults, _selectedSortingCriterion)
-                Me.SetTxtResultText($"{_lstSearchResults.Count} results for '" + searchText + "'.", Txt_Lvw_SearchResults_Count)
+                Me.SetTxtResultText($"{_lstSearchResults.Count} results for ""{searchText}""", Txt_Lvw_SearchResults_Count)
+
             Catch ex As OverflowException
                 _lstSearchResults = New List(Of Level)
-                Me.SetTxtResultText("Error: '" + searchText + "' returned too many results (100 max).", Txt_Lvw_SearchResults_Count, True)
+                Me.SetTxtResultText($"Error: ""{searchText}"" returned too many results (100 max)", Txt_Lvw_SearchResults_Count, True)
                 Lvw_SearchResults.ItemsSource = SortLevels(_lstSearchResults, _selectedSortingCriterion)
+
             Catch ex As Helpers.Exceptions.NoResultsException
-                Me.SetTxtResultText("No results for '" + searchText + "'", Txt_Lvw_SearchResults_Count, False)
+                Me.SetTxtResultText($"No results for ""{searchText}""", Txt_Lvw_SearchResults_Count, False)
                 Lvw_SearchResults.ItemsSource = Nothing
+
             Catch ex As Exception
                 Me.SetTxtResultText("Error: Something wrong happened", Txt_Lvw_SearchResults_Count, True)
                 Lvw_SearchResults.ItemsSource = Nothing
+
             End Try
         End Sub
 
@@ -402,7 +406,7 @@ Namespace Views
         ''' </summary>
         Private Sub InitSearch()
             If Txt_DWSearchText.Text.Length < 3 Then
-                Me.SetTxtResultText($"Enter at least 3 characters.", Txt_Lvw_SearchResults_Count, True)
+                Me.SetTxtResultText($"You must enter at least 3 characters", Txt_Lvw_SearchResults_Count, True)
             Else
                 Me.GetSearchResults(Txt_DWSearchText.Text)
             End If
