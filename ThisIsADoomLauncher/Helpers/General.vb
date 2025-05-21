@@ -19,8 +19,6 @@ Friend Module General
         Dim build As String = If(hasBuild Or hasRevis, $".{eaName.Version.Build}", "")
         Dim revis As String = If(hasRevis, $".{eaName.Version.Revision}", "")
 
-        Dim eaLastEdit As String = File.GetLastWriteTime(eaFilePath).ToString("yyyy-MM-dd")
-
         Return $"This is a Doom Launcher - v{major}{minor}{build}{revis} ({eaLastGeneration:yyyy-MM-dd})"
     End Function
 
