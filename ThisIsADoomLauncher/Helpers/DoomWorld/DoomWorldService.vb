@@ -5,6 +5,7 @@ Imports System.Reflection
 Imports Newtonsoft.Json
 Imports Newtonsoft.Json.Linq
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
+Imports ThisIsADoomLauncher.Helpers.Exceptions
 
 Namespace Helpers.DoomWorld
     Public Class DoomWorldService
@@ -191,6 +192,12 @@ Namespace Helpers.DoomWorld
                     End If
                 End With
 
+            Catch ex As OverflowException
+                WriteToLog($"{Date.Now} - Warning: {ex.Message}")
+                Throw
+            Catch ex As NoResultsException
+                WriteToLog($"{Date.Now} - Warning: {ex.Message}")
+                Throw
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf} Parameter(s) : {searchText}")
