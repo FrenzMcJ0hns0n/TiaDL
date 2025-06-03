@@ -25,10 +25,25 @@ Namespace Views
             End Set
         End Property
 
+
         Public Sub New()
             InitializeComponent()
-
             InitUI()
+            CheckApiAccess()
+        End Sub
+
+        Private Async Sub CheckApiAccess()
+            Dim success As Boolean = Await _doomworldService.CheckDoomWorldAccess()
+            If Not success Then
+                Cnv_InternetError.Visibility = Visibility.Visible
+                Img_Browse_NoInternet.Visibility = Visibility.Visible
+                Img_DWSearch_NoInternet.Visibility = Visibility.Visible
+            Else
+                Cnv_InternetError.Visibility = Visibility.Collapsed
+                Img_Browse_NoInternet.Visibility = Visibility.Collapsed
+                Img_DWSearch_NoInternet.Visibility = Visibility.Collapsed
+            End If
+
         End Sub
 
         Public Function GetDWServiceInstance() As DoomWorldService

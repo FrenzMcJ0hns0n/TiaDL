@@ -1,4 +1,6 @@
-﻿Imports System.IO
+﻿Imports System.Diagnostics.Eventing.Reader
+Imports System.IO
+Imports System.Net
 Imports System.Net.Http
 Imports System.Reflection
 
@@ -67,6 +69,31 @@ Namespace Helpers.DoomWorld
         '===========================================================================
         ' Public methods
         '===========================================================================
+
+        ''' <summary>
+        ''' This merthod checks if DoomWorld endpoint is available.
+        ''' </summary>
+        ''' <returns>True/False</returns>
+        Public Async Function CheckApiStatus() As Task(Of Boolean)
+            Dim result As Boolean = False
+            Try
+                Dim client As HttpClient = DoomWorldHttpClient.GetInstance()
+                Dim serverUri As New Uri(DoomWorldHttpClient.BASE_URL)
+                Dim httpResponse As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance.GetAsync(serverUri)
+
+                If httpResponse.StatusCode = HttpStatusCode.OK Then
+                    result = True
+                End If
+
+            Catch ex As Exception
+                result = False
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
+            End Try
+
+            Return result
+        End Function
+
         ''' <summary>
         ''' This method is dedicated to API calls towards the idGames Archive Public API.
         ''' Properties 'Action' and 'Params' are required (must not be Nothing)

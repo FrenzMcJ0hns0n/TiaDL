@@ -16,6 +16,24 @@ Namespace Helpers.DoomWorld
         Private Const DOOMWORLD_MIRRORS_FILE As String = "doomworld_mirrors.json"
 
         ''' <summary>
+        ''' Checks if DoomWorld API is reachable.
+        ''' </summary>
+        ''' <returns>True if reachable.<br/> False if not.</returns>
+        Public Async Function CheckDoomWorldAccess() As Task(Of Boolean)
+            Dim success As Boolean = False
+
+            Try
+                Dim apiRequest As New RequestManager()
+                success = Await apiRequest.CheckApiStatus()
+            Catch ex As Exception
+                Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
+                WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
+            End Try
+
+            Return success
+        End Function
+
+        ''' <summary>
         ''' Gets DoomWorld Directories or Levels. 
         ''' <br> This method can replace both GetDirectories and GetLevel. (but returns not all Level properties).</br>
         ''' </summary>

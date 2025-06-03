@@ -335,5 +335,7 @@
   <ItemGroup>
     <Resource Include="Resources\Images\open_external.png" />
   </ItemGroup>
+    <Resource Include="Resources\Images\offline_internet_red.png" />
+    <Resource Include="Resources\Images\offline_internet_white.png" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

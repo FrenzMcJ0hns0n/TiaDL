@@ -99,6 +99,13 @@
                                     Grid.Row="0"
                                     BorderThickness="0,0,0,0.7">
                                 <StackPanel Orientation="Horizontal">
+                                    <Image x:Name="Img_Browse_NoInternet" 
+                                           Source="pack://application:,,,/Resources/Images/offline_internet_red.png"
+                                           Visibility="Collapsed"
+                                           Height="25"
+                                           Width="25"
+                                           Margin="10,0"
+                                           ToolTip="You are offline"/>
                                     <!-- Up arrow -->
                                     <Button Content="↑"
                                             BorderThickness="0.7"
@@ -112,7 +119,6 @@
                                             <Run Text="Dir: "/>
                                             <Run x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
                                     </TextBlock>
-
                                 </StackPanel>
                             </Border>
                             <!-- / Separator -->
@@ -127,7 +133,7 @@
                                            HorizontalAlignment="Center"
                                            Margin="2">
                                 </TextBlock>
-                                <ListView Grid.Row="1" x:Name="Lvw_BrowseResults"                                       
+                                <ListView Grid.Row="1" x:Name="Lvw_BrowseResults"
                                           BorderThickness="1">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
@@ -145,6 +151,13 @@
                                 <RowDefinition Height="11*"/>
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Image x:Name="Img_DWSearch_NoInternet"
+                                       Source="pack://application:,,,/Resources/Images/offline_internet_red.png"
+                                       Visibility="Collapsed"
+                                       Height="25"
+                                       Width="25"
+                                       Margin="10,0"
+                                       ToolTip="You are offline"/>
                                 <TextBox x:Name="Txt_DWSearchText"
                                      VerticalContentAlignment="Center"
                                      Width="200"
@@ -215,12 +228,35 @@
         <!-- Right column-->
 
         <Border Grid.Column="1" Style="{StaticResource ResourceKey=Brd_BorderStyle}"  Margin="8,16,16,16">
-            <Grid  Background="Transparent">
+            <Grid Background="Transparent">
                 <ContentPresenter x:Name="ctpDisplayLevel"/>
             </Grid>
         </Border>
-
         <!-- End Right column-->
+
+        <!--Bottom fixed error span-->
+        <Canvas x:Name="Cnv_InternetError" 
+                Grid.Row="1"
+                Visibility="Collapsed">
+            <Border Background="#AA2222" 
+                    Canvas.Bottom="0" 
+                    Width="1000" 
+                    Height="50" 
+                    Margin="30,10"
+                    CornerRadius="2"
+                    BorderThickness="1"
+                    BorderBrush="#222222">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="pack://application:,,,/Resources/Images/offline_internet_white.png"
+                           Margin="10,10"/>
+                    <TextBlock Text="No Internet connection." 
+                               Foreground="White"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
+        </Canvas>
+        <!--End bottom fixed error span-->
+
     </Grid>
     <!-- End container -->
 </Window>

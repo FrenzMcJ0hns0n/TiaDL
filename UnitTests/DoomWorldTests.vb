@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Net
 Imports System.Net.NetworkInformation
 Imports System.Reflection
 Imports System.Text.RegularExpressions
@@ -6,6 +7,46 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
 
 <TestClass()> Public Class DoomWorldTests
+
+    ''' <summary>
+    ''' Check if DoomWorld server is reachable.
+    ''' </summary>
+    <TestMethod()> Public Sub CheckDoomWorldApi_OK()
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim result As Boolean = False
+        Try
+
+            Dim task As Task(Of Boolean) = _doomWorldService.CheckDoomWorldAccess()
+
+            result = task.Result
+        Catch ex As Exception
+            'result = False
+        End Try
+
+
+        Assert.AreEqual(True, result)
+    End Sub
+
+    ''' <summary>
+    ''' Check if DoomWorld server is not reachable.
+    ''' </summary>
+    <TestMethod()> Public Sub CheckDoomWorldApi_KO()
+
+        Dim _doomWorldService As New DoomWorldService()
+        Dim result As Boolean = False
+        Try
+
+            Dim task As Task(Of Boolean) = _doomWorldService.CheckDoomWorldAccess()
+
+            result = task.Result
+        Catch ex As Exception
+            'result = False
+        End Try
+
+
+        Assert.AreEqual(False, result)
+    End Sub
 
     ''' <summary>
     ''' Test get root directories
