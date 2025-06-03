@@ -14,10 +14,10 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     <TestMethod()> Public Sub CheckDoomWorldApi_OK()
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim result As Boolean = False
+        Dim result As Boolean = 0
         Try
 
-            Dim task As Task(Of Boolean) = _doomWorldService.CheckDoomWorldAccess()
+            Dim task As Task(Of Integer) = _doomWorldService.CheckDoomWorldAccess()
 
             result = task.Result
         Catch ex As Exception
@@ -25,7 +25,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         End Try
 
 
-        Assert.AreEqual(True, result)
+        Assert.AreEqual(200, result)
     End Sub
 
     ''' <summary>
@@ -34,10 +34,10 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
     <TestMethod()> Public Sub CheckDoomWorldApi_KO()
 
         Dim _doomWorldService As New DoomWorldService()
-        Dim result As Boolean = False
+        Dim result As Integer = 0
         Try
 
-            Dim task As Task(Of Boolean) = _doomWorldService.CheckDoomWorldAccess()
+            Dim task As Task(Of Integer) = _doomWorldService.CheckDoomWorldAccess()
 
             result = task.Result
         Catch ex As Exception
@@ -45,7 +45,7 @@ Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
         End Try
 
 
-        Assert.AreEqual(False, result)
+        Assert.AreNotEqual(200, result)
     End Sub
 
     ''' <summary>

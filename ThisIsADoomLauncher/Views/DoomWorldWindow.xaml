@@ -249,7 +249,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Image Source="pack://application:,,,/Resources/Images/offline_internet_white.png"
                            Margin="10,10"/>
-                    <TextBlock Text="No Internet connection." 
+                    <TextBlock x:Name="Txt_CanvasErrorText"
                                Foreground="White"
                                VerticalAlignment="Center"/>
                 </StackPanel>

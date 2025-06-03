@@ -19,18 +19,18 @@ Namespace Helpers.DoomWorld
         ''' Checks if DoomWorld API is reachable.
         ''' </summary>
         ''' <returns>True if reachable.<br/> False if not.</returns>
-        Public Async Function CheckDoomWorldAccess() As Task(Of Boolean)
-            Dim success As Boolean = False
+        Public Async Function CheckDoomWorldAccess() As Task(Of Integer)
+            Dim resultCode As Integer = 0
 
             Try
                 Dim apiRequest As New RequestManager()
-                success = Await apiRequest.CheckApiStatus()
+                resultCode = Await apiRequest.CheckApiStatus()
             Catch ex As Exception
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
             End Try
 
-            Return success
+            Return resultCode
         End Function
 
         ''' <summary>

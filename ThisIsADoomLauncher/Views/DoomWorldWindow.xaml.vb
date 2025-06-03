@@ -15,6 +15,10 @@ Namespace Views
         Private _lstInstalledLevelsResults As List(Of InstalledLevel)
 
         Private _selectedLevel As ThisIsADoomLauncher.Helpers.DoomWorld.Models.Level
+
+        Public Const ERR_NO_INTERNET As String = "No Internet connection."
+        Public Const ERR_DW_UNREACHABLE As String = "DoomWorld server unreachable. Error code: "
+
         Public Property SelectedLevel() As ThisIsADoomLauncher.Helpers.DoomWorld.Models.Level
             Get
                 Return _selectedLevel
@@ -33,8 +37,13 @@ Namespace Views
         End Sub
 
         Private Async Sub CheckApiAccess()
-            Dim success As Boolean = Await _doomworldService.CheckDoomWorldAccess()
-            If Not success Then
+            Dim responseCode As Integer = Await _doomworldService.CheckDoomWorldAccess()
+            If Not responseCode = 200 Then
+                If responseCode = 0 Then
+                    Txt_CanvasErrorText.Text = ERR_NO_INTERNET
+                Else
+                    Txt_CanvasErrorText.Text = $"{ERR_DW_UNREACHABLE & responseCode}."
+                End If
                 Cnv_InternetError.Visibility = Visibility.Visible
                 Img_Browse_NoInternet.Visibility = Visibility.Visible
                 Img_DWSearch_NoInternet.Visibility = Visibility.Visible

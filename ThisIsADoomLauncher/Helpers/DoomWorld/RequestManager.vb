@@ -74,19 +74,16 @@ Namespace Helpers.DoomWorld
         ''' This merthod checks if DoomWorld endpoint is available.
         ''' </summary>
         ''' <returns>True/False</returns>
-        Public Async Function CheckApiStatus() As Task(Of Boolean)
-            Dim result As Boolean = False
+        Public Async Function CheckApiStatus() As Task(Of Integer)
+            Dim result As Integer = 0
             Try
                 Dim client As HttpClient = DoomWorldHttpClient.GetInstance()
                 Dim serverUri As New Uri(DoomWorldHttpClient.BASE_URL)
                 Dim httpResponse As HttpResponseMessage = Await DoomWorldHttpClient.GetInstance.GetAsync(serverUri)
 
-                If httpResponse.StatusCode = HttpStatusCode.OK Then
-                    result = True
-                End If
+                result = httpResponse.StatusCode
 
             Catch ex As Exception
-                result = False
                 Dim currentMethodName As String = MethodBase.GetCurrentMethod().Name
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
             End Try
