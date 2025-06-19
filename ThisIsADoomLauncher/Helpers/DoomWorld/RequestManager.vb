@@ -71,9 +71,9 @@ Namespace Helpers.DoomWorld
         '===========================================================================
 
         ''' <summary>
-        ''' This merthod checks if DoomWorld endpoint is available.
+        ''' This method returns the status code from a HTTP request to the DW server
         ''' </summary>
-        ''' <returns>True/False</returns>
+        ''' <returns>HTTP status code</returns>
         Public Async Function CheckApiStatus() As Task(Of Integer)
             Dim result As Integer = 0
             Try
