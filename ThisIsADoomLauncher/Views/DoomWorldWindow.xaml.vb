@@ -1,4 +1,6 @@
-﻿Imports System.IO
+﻿Imports System.Drawing
+Imports System.Globalization
+Imports System.IO
 Imports System.Reflection
 Imports ThisIsADoomLauncher.Helpers.DoomWorld
 Imports ThisIsADoomLauncher.Helpers.DoomWorld.Models
@@ -71,8 +73,47 @@ Namespace Views
         End Sub
 
         Private Sub UpdateDirPathUI(resourcePath As String)
-            Txt_BrowseDirPath.Text = resourcePath
+            Me.SetDynamicBreadcrumb(resourcePath)
             Me.ToggleParentFolderButtonEnabled(_resourcePath)
+        End Sub
+
+        ''' <summary>
+        ''' Creates a dynamic clickable path for user to navigate easier in folder tree.
+        ''' </summary>
+        ''' <param name="resourcePath"></param>
+        Private Sub SetDynamicBreadcrumb(resourcePath As String)
+            Dim pathForHyperlink As String = String.Empty
+            Dim pathArray As String() = resourcePath.Split(CChar("/"))?.Where(
+                Function(pathItem As String) Not String.IsNullOrWhiteSpace(pathItem)).ToArray()
+
+            Txt_BrowseDirPath.Inlines.Clear()
+
+            For index As Integer = 0 To pathArray.Length - 1
+                If index > 0 Then Txt_BrowseDirPath.Inlines.Add(New Run(" / ") With {.FontWeight = FontWeights.Regular})
+                pathForHyperlink += String.Concat(pathArray(index), "/")
+
+                Dim runTextSegment As New System.Windows.Documents.Run(pathArray(index))
+                Dim pathHyperlink As New System.Windows.Documents.Hyperlink(runTextSegment) With {
+                    .Tag = pathForHyperlink}
+                AddHandler pathHyperlink.Click, Sub(hyperlinkSender, hyperlinkEventArgs) HyperlinkPath_Clicked(hyperlinkSender, hyperlinkEventArgs)
+
+                Txt_BrowseDirPath.Inlines.Add(pathHyperlink)
+            Next
+        End Sub
+
+        ''' <summary>
+        ''' Event when UI breadcrumb hyperlink is clicked.
+        ''' </summary>
+        ''' <param name="hyperlinkSender"></param>
+        ''' <param name="hyperlinkEventArgs"></param>
+        Private Sub HyperlinkPath_Clicked(hyperlinkSender As Object, hyperlinkEventArgs As RoutedEventArgs)
+            Dim hlink As Hyperlink = DirectCast(hyperlinkSender, Hyperlink)
+
+            Dim resPath As String = hlink.Tag.ToString()
+            _resourcePath = resPath
+
+            Me.GetBrowseResults(_resourcePath)
+
         End Sub
 
         ''' <summary>
@@ -90,6 +131,19 @@ Namespace Views
                 WriteToLog($"{Date.Now} - Error in '{currentMethodName}'{vbCrLf} Exception : {ex}{vbCrLf}")
 
             End Try
+        End Sub
+
+        ''' <summary>
+        ''' Get content from API,
+        ''' Refreshes Browse ListView,
+        ''' Refreshes path breadcrumb.
+        ''' </summary>
+        ''' <param name="resourcePath"></param>
+        Private Async Sub GetBrowseResults(resourcePath As String)
+            _lstBrowseResults = Await _doomworldService.GetContents(_resourcePath)
+
+            LoadResultsItemsSource(_lstBrowseResults)
+            Me.UpdateDirPathUI(_resourcePath)
         End Sub
 
         ''' <summary>
@@ -299,12 +353,10 @@ Namespace Views
         ''' Get selected Folder content and displays it in the left side List.
         ''' </summary>
         ''' <param name="folder"></param>
-        Private Async Sub GetFolder(folder As Helpers.DoomWorld.Models.Folder)
+        Private Sub GetFolder(folder As Helpers.DoomWorld.Models.Folder)
             _resourcePath = folder.Name
-            _lstBrowseResults = Await _doomworldService.GetContents(_resourcePath)
-            LoadResultsItemsSource(_lstBrowseResults)
 
-            Me.UpdateDirPathUI(_resourcePath)
+            Me.GetBrowseResults(_resourcePath)
         End Sub
 
         ''' <summary>

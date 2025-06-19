@@ -115,10 +115,10 @@
                                             Click="Btn_ParentFolder_Click"/>
                                     <!-- / Up arrow -->
 
-                                    <TextBlock VerticalAlignment="Center">
-                                            <Run Text="Dir: "/>
-                                            <Run x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
-                                    </TextBlock>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                            <TextBlock Text="Dir: "/>
+                                            <TextBlock x:Name="Txt_BrowseDirPath" FontWeight="DemiBold"/>
+                                    </StackPanel>
                                 </StackPanel>
                             </Border>
                             <!-- / Separator -->
